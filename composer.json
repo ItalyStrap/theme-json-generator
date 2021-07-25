@@ -1,0 +1,87 @@
+{
+    "name": "italystrap/themejsongenerator",
+    "description": "A WordPress theme.json generator from PHP arrays",
+    "keywords": ["WordPress", "WordPress theme.json"],
+    "type": "composer-plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Enea Overclokk",
+            "email": "info@overclokk.net",
+            "homepage": "https://www.italystrap.com",
+            "role": "Developer"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php" : ">=7.2",
+        "composer-plugin-api": "^2.0"
+    },
+    "require-dev": {
+        "lucatume/wp-browser": "^3.0",
+        "lucatume/function-mocker-le": "^1.0.1",
+        "codeception/c3": "2.*",
+        "codeception/module-asserts": "^1.0",
+        "codeception/module-phpbrowser": "^1.0",
+        "codeception/module-webdriver": "^1.0",
+        "codeception/module-db": "^1.0",
+        "codeception/module-filesystem": "^1.0",
+        "codeception/module-cli": "^1.0",
+        "codeception/util-universalframework": "^1.0",
+        "squizlabs/php_codesniffer": "*",
+        "phpcompatibility/php-compatibility": "*",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.7",
+        "phpstan/phpstan": "^0.12",
+        "szepeviktor/phpstan-wordpress": "^0.5",
+        "vimeo/psalm": "^4.8",
+        "phpbench/phpbench": "@dev",
+        "phpmetrics/phpmetrics": "^2.5",
+        "italystrap/debug": "^2.0",
+        "phpspec/prophecy-phpunit": "^1.1",
+        "composer/composer": "^2.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "ItalyStrap\\ThemeJsonGenerator\\": "src/"
+        },
+        "files": [
+            "functions/autoload.php"
+        ]
+    },
+    "provide": {},
+    "suggest": {},
+    "extra": {
+        "class": "ItalyStrap\\ThemeJsonGenerator\\ComposerPlugin",
+        "theme-json": ""
+    },
+    "scripts": {
+        "cs": [
+            "vendor\\bin\\phpcbf -p --ignore=./tests/_support/* ./src/ ./tests/ && vendor\\bin\\phpcs -p --ignore=./tests/_support/* ./src/ ./tests/"
+        ],
+        "analyze": [
+            "vendor\\bin\\phpstan analyze --level=max && vendor\\bin\\psalm"
+        ],
+        "unit": [
+            "vendor\\bin\\codecept run unit && vendor\\bin\\codecept run wpunit && vendor\\bin\\infection --threads=4"
+        ],
+        "bench": [
+            "vendor\\bin\\phpbench run --report=performance"
+        ],
+        "metrics": [
+            "vendor\\bin\\phpmetrics --report-html='./tests/_output/report' ./src"
+        ],
+        "insights": [
+            "vendor\\bin\\phpinsights"
+        ],
+        "clean": [
+            "vendor\\bin\\codecept clean"
+        ],
+        "json": [
+            "ItalyStrap\\ThemeJsonGenerator\\ComposerPlugin::run"
+        ]
+    },
+    "support"    : {
+        "issues": "https://github.com/ItalyStrap/themejsongenerator/issues",
+        "source": "https://github.com/ItalyStrap/themejsongenerator"
+    }
+}

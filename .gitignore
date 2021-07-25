@@ -1,0 +1,13 @@
+# Directory
+/vendor/
+/_others/
+
+# File
+*.local
+*.testing
+codeception.yml
+*.lock
+*.phar
+*.bak
+infection.json.dist
+c3.php

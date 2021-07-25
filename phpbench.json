@@ -1,0 +1,17 @@
+{
+  "bootstrap": "vendor/autoload.php",
+  "php_disable_ini": true,
+  "php_config": {
+    "extension": []
+  },
+  "path": "tests/benchmarks",
+  "reports": {
+    "performance": {
+      "extends": "aggregate",
+      "title": "Finder",
+      "description": "Benchmark how long it takes to run finder",
+      "cols": [ "subject", "mode" ]
+    }
+  },
+  "time_unit": "milliseconds"
+}
