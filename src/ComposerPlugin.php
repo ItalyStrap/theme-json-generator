@@ -31,9 +31,9 @@ final class ComposerPlugin implements PluginInterface, EventSubscriberInterface 
 	 */
 	public static function getSubscribedEvents(): array { // @phpstan-ignore-line
 		return [
-//			'post-autoload-dump'	=> 'createThemeJson',
-			'pre-update-cmd'	=> 'createThemeJson',
-//			'command'	=> 'createThemeJson',
+			'post-autoload-dump'	=> 'run',
+			'post-install-cmd'	=> 'run',
+			'post-update-cmd'	=> 'run',
 		];
 	}
 
@@ -45,7 +45,7 @@ final class ComposerPlugin implements PluginInterface, EventSubscriberInterface 
 		$composer = $event->getComposer();
 
 		$instance = new self();
-		$instance->activate( $composer, $io );
+		$instance->createThemeJson( $composer, $io );
 	}
 
 	/**
@@ -60,23 +60,6 @@ final class ComposerPlugin implements PluginInterface, EventSubscriberInterface 
 	public function activate( Composer $composer, IOInterface $io ): void {
 		$this->composer = $composer;
 		$this->io = $io;
-
-		$this->io->write('CIAO');
-
-		$this->composer->getConfig()->all();
-
-		$package = $this->composer->getPackage();
-
-		$this->io->write($package->getType());
-
-		// wordpress-theme
-
-		foreach ($package->getExtra() as $key => $item) {
-			$this->io->write($key);
-			$this->io->write($item);
-		}
-
-		$this->createThemeJson();
 	}
 
 	/**
@@ -85,10 +68,47 @@ final class ComposerPlugin implements PluginInterface, EventSubscriberInterface 
 	public function deactivate( Composer $composer, IOInterface $io ): void {
 	}
 
-	public function createThemeJson(): void {
-		$theme_json = 'tests/_data/fixtures/theme.json';
+	/**
+	 * @param Composer $composer
+	 * @param IOInterface $io
+	 */
+	public function createThemeJson( Composer $composer, IOInterface $io ) {
+		$rootPackage = $composer->getPackage();
 
-		$json_file = new ComposerFileJsonAdapter( new JsonFile( $theme_json ) );
-		$json_file->write( ['ciao'=>'bello'] );
+		if ( $rootPackage->getType() !== 'wordpress-theme' ) {
+			return;
+		}
+
+		$default_extra = [
+			'theme-json'	=> [
+				'callable'	=> false,
+			],
+		];
+
+		$composer_extra = \array_replace_recursive( $default_extra, $rootPackage->getExtra() );
+
+		$theme_json_config = $composer_extra['theme-json'];
+
+		$io->write('BEFORE CALLABLE CHECK');
+
+		if ( ! \is_callable( $theme_json_config['callable'] ) ) {
+			return;
+		}
+
+		$callable = $theme_json_config['callable'];
+
+		$vendorPath = $composer->getConfig()->get('vendor-dir');
+		$theme_json = dirname( $vendorPath ) . '/theme.json';
+
+//		"callable": "\\ItalyStrap\\ExperimentalTheme\\getJsonData"
+//		$array = \ItalyStrap\ExperimentalTheme\getJsonData();
+//		$array = \ItalyStrap\ExperimentalTheme\getJsonData();
+
+		try {
+			$json_file = new ComposerFileJsonAdapter( new JsonFile( $theme_json ) );
+			$json_file->write( $callable() );
+		} catch ( \Exception $e ) {
+			$io->write( $e->getMessage() );
+		}
 	}
 }

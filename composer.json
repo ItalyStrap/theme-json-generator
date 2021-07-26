@@ -1,6 +1,6 @@
 {
     "name": "italystrap/themejsongenerator",
-    "description": "A WordPress theme.json generator from PHP arrays",
+    "description": "A WordPress theme.json generator from a PHP array",
     "keywords": ["WordPress", "WordPress theme.json"],
     "type": "composer-plugin",
     "license": "MIT",
@@ -51,8 +51,7 @@
     "provide": {},
     "suggest": {},
     "extra": {
-        "class": "ItalyStrap\\ThemeJsonGenerator\\ComposerPlugin",
-        "theme-json": ""
+        "class": "ItalyStrap\\ThemeJsonGenerator\\ComposerPlugin"
     },
     "scripts": {
         "cs": [
