@@ -31,7 +31,8 @@ final class ComposerPlugin implements PluginInterface, EventSubscriberInterface 
 	/**
 	 * @inheritDoc
 	 */
-	public static function getSubscribedEvents(): array { // @phpstan-ignore-line
+	public static function getSubscribedEvents(): array {
+ // @phpstan-ignore-line
 		return [
 			'post-autoload-dump'	=> 'run',
 			'post-install-cmd'		=> 'run',

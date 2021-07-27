@@ -10,12 +10,12 @@ use Prophecy\Argument;
 use Prophecy\Prophet;
 use UnitTester;
 
-class ComposerFileJsonAdapterTest extends Unit
-{
-    /**
-     * @var UnitTester
-     */
-    protected $tester;
+class ComposerFileJsonAdapterTest extends Unit {
+
+	/**
+	 * @var UnitTester
+	 */
+	protected $tester;
 
 	/**
 	 * @var Prophet

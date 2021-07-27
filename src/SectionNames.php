@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator;
 
-final class SectionNames
-{
+final class SectionNames {
+
 
 	const VERSION = 'version';
 	const SETTINGS = 'settings';
