@@ -52,7 +52,7 @@ class ThemeJsonGeneratorTest extends Unit {
 	public function itShouldFileExists() {
 
 		$input_data = require \codecept_data_dir('fixtures/input-data.php');
-		$theme_json = \codecept_data_dir('fixtures/theme.json');
+		$theme_json = \codecept_output_dir('theme.json');
 
 //		$file = new \SplFileObject( $theme_json, 'w' );
 //		$json = JsonFile::encode( $input_data );

@@ -22,10 +22,6 @@ class Generator {
 		return (string) \json_encode( $this->config );
 	}
 
-	public function setCallable( callable $callable ): array {
-		return $callable();
-	}
-
 	public function generate() {
 //		$theme_json = \codecept_data_dir('fixtures/theme.json');
 		$theme_json = 'tests/_data/fixtures/theme.json';

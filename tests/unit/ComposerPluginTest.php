@@ -37,8 +37,8 @@ class ComposerPluginTest extends Unit {
 	/**
 	 * @test
 	 */
-	public function itShouldBeInstantiatableefwewe() {
-		$sut = $this->getInstance();
-		$sut->createThemeJson();
-	}
+//	public function itShouldBeInstantiatableefwewe() {
+//		$sut = $this->getInstance();
+//		$sut->createThemeJson();
+//	}
 }
