@@ -12,6 +12,8 @@ use Composer\Plugin\PluginInterface;
 
 final class ComposerPlugin implements PluginInterface, EventSubscriberInterface {
 
+	const TYPE_THEME = 'wordpress-theme';
+
 	/**
 	 * @psalm-suppress MissingConstructor
 	 * @var Composer    $composer
@@ -32,8 +34,8 @@ final class ComposerPlugin implements PluginInterface, EventSubscriberInterface 
 	public static function getSubscribedEvents(): array { // @phpstan-ignore-line
 		return [
 			'post-autoload-dump'	=> 'run',
-			'post-install-cmd'	=> 'run',
-			'post-update-cmd'	=> 'run',
+			'post-install-cmd'		=> 'run',
+			'post-update-cmd'		=> 'run',
 		];
 	}
 
@@ -74,41 +76,60 @@ final class ComposerPlugin implements PluginInterface, EventSubscriberInterface 
 	 */
 	public function createThemeJson( Composer $composer, IOInterface $io ) {
 		$rootPackage = $composer->getPackage();
-
-		if ( $rootPackage->getType() !== 'wordpress-theme' ) {
-			return;
-		}
-
-		$default_extra = [
-			'theme-json'	=> [
-				'callable'	=> false,
-			],
-		];
-
-		$composer_extra = \array_replace_recursive( $default_extra, $rootPackage->getExtra() );
-
-		$theme_json_config = $composer_extra['theme-json'];
-
-		$io->write('BEFORE CALLABLE CHECK');
-
-		if ( ! \is_callable( $theme_json_config['callable'] ) ) {
-			return;
-		}
-
-		$callable = $theme_json_config['callable'];
-
 		$vendorPath = $composer->getConfig()->get('vendor-dir');
-		$theme_json = dirname( $vendorPath ) . '/theme.json';
+		$rootPackagePath = \dirname( $vendorPath );
 
-//		"callable": "\\ItalyStrap\\ExperimentalTheme\\getJsonData"
-//		$array = \ItalyStrap\ExperimentalTheme\getJsonData();
-//		$array = \ItalyStrap\ExperimentalTheme\getJsonData();
+		if ( $rootPackage->getType() === self::TYPE_THEME ) {
+			$this->writeFile( $rootPackage, $rootPackagePath, $io );
+			return;
+		}
+
+		$repo = $composer->getRepositoryManager();
+		/** @var \Composer\Package\Link $link */
+		foreach ( $rootPackage->getRequires() as $link ) {
+			$constraint = $link->getConstraint();
+			$package = $repo->findPackage($link->getTarget(), $constraint);
+			$packagePath = $vendorPath . '/' . $link->getTarget();
+			if ($package && $package->getType() === self::TYPE_THEME ) {
+				$this->writeFile( $package, $packagePath, $io );
+			}
+		}
+	}
+
+	/**
+	 * @param \Composer\Package\PackageInterface $package
+	 * @param string $path
+	 * @param IOInterface $io
+	 */
+	private function writeFile( \Composer\Package\PackageInterface $package, string $path, IOInterface $io ): void {
+		$composer_extra = \array_replace_recursive( $this->getDefaultExtra(), $package->getExtra() );
+
+		$theme_json_config = $composer_extra[ 'theme-json' ];
+
+		if ( ! \is_callable( $theme_json_config[ 'callable' ] ) ) {
+			return;
+		}
+
+		$callable = $theme_json_config[ 'callable' ];
+
+		$path = $path . '/theme.json';
 
 		try {
-			$json_file = new ComposerFileJsonAdapter( new JsonFile( $theme_json ) );
+			$json_file = new ComposerFileJsonAdapter( new JsonFile( $path ) );
 			$json_file->write( $callable() );
 		} catch ( \Exception $e ) {
 			$io->write( $e->getMessage() );
 		}
+	}
+
+	/**
+	 * @return \false[][]
+	 */
+	private function getDefaultExtra(): array {
+		return [
+			'theme-json' => [
+				'callable' => false,
+			],
+		];
 	}
 }
