@@ -5,7 +5,7 @@ function foo_command( $args ) {
 //	\WP_CLI::success( $args[0] );
 //	\WP_CLI::success( $args[1] );
 
-	$generator = new  \ItalyStrap\ThemeJsonGenerator\Generator(['ciao'=>'bello']);
+	$generator = new  \ItalyStrap\ThemeJsonGenerator\JsonFileBuilder(['ciao'=>'bello']);
 	$is_generated = $generator->generate();
 
 	\WP_CLI::success( $is_generated );

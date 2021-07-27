@@ -9,6 +9,7 @@ use Composer\Config;
 use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\IO\IOInterface;
 use Composer\Package\Link;
+use Composer\Package\PackageInterface;
 use Composer\Package\RootPackageInterface;
 use Composer\Plugin\PluginInterface;
 use Composer\Repository\RepositoryManager;
@@ -62,6 +63,11 @@ class ComposerPluginTest extends Unit {
 	private $repositoryManager;
 
 	/**
+	 * @var ObjectProphecy
+	 */
+	private $package;
+
+	/**
 	 * @return Composer
 	 */
 	public function getComposer(): Composer {
@@ -103,6 +109,13 @@ class ComposerPluginTest extends Unit {
 		return $this->repositoryManager->reveal();
 	}
 
+	/**
+	 * @return PackageInterface
+	 */
+	public function getPackage(): PackageInterface {
+		return $this->package->reveal();
+	}
+
 	// phpcs:ignore
 	protected function _before() {
 		$this->prophet = new Prophet;
@@ -112,11 +125,10 @@ class ComposerPluginTest extends Unit {
 		$this->rootPackage = $this->prophet->prophesize( RootPackageInterface::class );
 		$this->link = $this->prophet->prophesize( Link::class );
 		$this->repositoryManager = $this->prophet->prophesize( RepositoryManager::class );
+		$this->package = $this->prophet->prophesize( PackageInterface::class );
 
 		$this->composer->getConfig()->willReturn( $this->getConfig() );
 		$this->composer->getPackage()->willReturn( $this->getRootPackage() );
-		$this->composer->getRepositoryManager()->willReturn( $this->getRepositoryManager() );
-		$this->rootPackage->getRequires()->willReturn( [ $this->getLink() ] );
 	}
 
 	// phpcs:ignore
@@ -195,32 +207,45 @@ class ComposerPluginTest extends Unit {
 	 */
 	public function itShouldCreateThemeJsonFileFromRequiredPackage() {
 		$theme_json_file_path = codecept_output_dir(\rand() .  '/vendor');
+
 		$this->config
 			->get( Argument::type('string') )
 			->willReturn( $theme_json_file_path );
 
-		$this->rootPackage->getType()->willReturn('any-string');
+		$this->composer->getRepositoryManager()->willReturn( $this->getRepositoryManager() );
+		$this->link->getConstraint()->willReturn( 'dev-master' );
+		$this->rootPackage->getRequires()->willReturn( [ $this->getLink() ] );
 
-//		$this->rootPackage->getExtra()->willReturn([
-//			'theme-json' => [
-//				'callable' => function (): array {
-//					return ['key' => 'value'];
-//				},
-//			],
-//		]);
+		$this->link->getTarget()->willReturn( 'italystrap/themejsongenerator' );
+		$this->repositoryManager
+			->findPackage( 'italystrap/themejsongenerator', 'dev-master' )
+			->willReturn( $this->getPackage() );
+		$this->package->getType()->willReturn( 'wordpress-theme' );
 
-//		$this->repositoryManager
-//			->findPackage( Argument::type('string'), Argument::type('string') )
-//		->willReturn( $this->getRootPackage() );
+		$this->package->getExtra()->willReturn([
+			'theme-json' => [
+				'callable' => function (): array {
+					return ['key' => 'value'];
+				},
+			],
+		]);
 
 		$sut = $this->getInstance();
 		$sut->createThemeJson( $this->getComposer(), $this->getIo() );
 
-		$theme_json_file_path = dirname( $theme_json_file_path ) . '/theme.json';
+		$theme_json_file_path = $theme_json_file_path . '/italystrap/themejsongenerator/theme.json';
 		$this->assertFileExists( $theme_json_file_path, '');
 		$this->assertFileIsReadable( $theme_json_file_path, '');
 		$this->assertFileIsWritable( $theme_json_file_path, '');
 
 		\unlink($theme_json_file_path);
+
+		$this->link->getConstraint()->shouldHaveBeenCalled();
+		$this->link->getTarget()->shouldHaveBeenCalled();
+		$this->repositoryManager
+			->findPackage( Argument::type('string'), Argument::type('string'))
+			->shouldHaveBeenCalled();
+		$this->package->getType()->shouldHaveBeenCalled();
+		$this->package->getExtra()->shouldHaveBeenCalled();
 	}
 }

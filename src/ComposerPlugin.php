@@ -5,10 +5,16 @@ namespace ItalyStrap\ThemeJsonGenerator;
 
 use Composer\Composer;
 use Composer\Json\JsonFile;
+use Composer\Package\Link;
+use Composer\Package\PackageInterface;
 use Composer\Script\Event;
 use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
+use Exception;
+use function array_replace_recursive;
+use function dirname;
+use function is_callable;
 
 final class ComposerPlugin implements PluginInterface, EventSubscriberInterface {
 
@@ -78,7 +84,7 @@ final class ComposerPlugin implements PluginInterface, EventSubscriberInterface 
 	public function createThemeJson( Composer $composer, IOInterface $io ): void {
 		$rootPackage = $composer->getPackage();
 		$vendorPath = $composer->getConfig()->get('vendor-dir');
-		$rootPackagePath = \dirname( $vendorPath );
+		$rootPackagePath = dirname( $vendorPath );
 
 		if ( $rootPackage->getType() === self::TYPE_THEME ) {
 			$this->writeFile( $rootPackage, $rootPackagePath, $io );
@@ -86,7 +92,7 @@ final class ComposerPlugin implements PluginInterface, EventSubscriberInterface 
 		}
 
 		$repo = $composer->getRepositoryManager();
-		/** @var \Composer\Package\Link $link */
+		/** @var Link $link */
 		foreach ( $rootPackage->getRequires() as $link ) {
 			$constraint = $link->getConstraint();
 			$package = $repo->findPackage( $link->getTarget(), $constraint );
@@ -98,16 +104,16 @@ final class ComposerPlugin implements PluginInterface, EventSubscriberInterface 
 	}
 
 	/**
-	 * @param \Composer\Package\PackageInterface $package
+	 * @param PackageInterface $package
 	 * @param string $path
 	 * @param IOInterface $io
 	 */
-	private function writeFile( \Composer\Package\PackageInterface $package, string $path, IOInterface $io ): void {
-		$composer_extra = \array_replace_recursive( $this->getDefaultExtra(), $package->getExtra() );
+	private function writeFile( PackageInterface $package, string $path, IOInterface $io ): void {
+		$composer_extra = array_replace_recursive( $this->getDefaultExtra(), $package->getExtra() );
 
 		$theme_json_config = $composer_extra[ 'theme-json' ];
 
-		if ( ! \is_callable( $theme_json_config[ 'callable' ] ) ) {
+		if ( ! is_callable( $theme_json_config[ 'callable' ] ) ) {
 			return;
 		}
 
@@ -116,9 +122,8 @@ final class ComposerPlugin implements PluginInterface, EventSubscriberInterface 
 		$path = $path . '/theme.json';
 
 		try {
-			$json_file = new ComposerFileJsonAdapter( new JsonFile( $path ) );
-			$json_file->write( $callable() );
-		} catch ( \Exception $e ) {
+			( new JsonFileBuilder( $path ) )->build( $callable );
+		} catch ( Exception $e ) {
 			$io->write( $e->getMessage() );
 		}
 	}

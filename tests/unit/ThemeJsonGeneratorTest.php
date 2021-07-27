@@ -4,8 +4,7 @@ declare(strict_types=1);
 namespace ItalyStrap\Tests;
 
 use Codeception\Test\Unit;
-use Composer\Json\JsonFile;
-use ItalyStrap\ThemeJsonGenerator\Generator;
+use ItalyStrap\ThemeJsonGenerator\JsonFileBuilder;
 
 class ThemeJsonGeneratorTest extends Unit {
 
@@ -13,6 +12,11 @@ class ThemeJsonGeneratorTest extends Unit {
 	 * @var \UnitTester
 	 */
 	protected $tester;
+
+	/**
+	 * @var string
+	 */
+	private $theme_json_path;
 
 	// phpcs:ignore
 	protected function _before() {
@@ -22,9 +26,10 @@ class ThemeJsonGeneratorTest extends Unit {
 	protected function _after() {
 	}
 
-	protected function getInstance(): Generator {
-		$sut = new Generator(['ciao'=> 'bello']);
-		$this->assertInstanceOf( Generator::class, $sut, '' );
+	protected function getInstance(): JsonFileBuilder {
+		$this->theme_json_path = \codecept_output_dir(\rand() . '/theme.json');
+		$sut = new JsonFileBuilder( $this->theme_json_path );
+		$this->assertInstanceOf( JsonFileBuilder::class, $sut, '' );
 		return $sut;
 	}
 
@@ -40,36 +45,15 @@ class ThemeJsonGeneratorTest extends Unit {
 	 */
 	public function itShouldReturnValidJson() {
 		$sut = $this->getInstance();
-		$expected = '{"ciao": "bello"}';
+		$expected = '{"key": "value"}';
+		$callable = function (): array {
+			return [
+				'key'	=> 'value',
+			];
+		};
 
-		$this->assertJson( $sut->toJson(), '' );
-		$this->assertJsonStringEqualsJsonString( $expected, $sut->toJson(), '' );
-	}
+		$sut->build( $callable );
 
-	/**
-	 * @test
-	 */
-	public function itShouldFileExists() {
-
-		$input_data = require \codecept_data_dir('fixtures/input-data.php');
-		$theme_json = \codecept_output_dir('theme.jsons');
-
-//		$file = new \SplFileObject( $theme_json, 'w' );
-//		$json = JsonFile::encode( $input_data );
-//		$is_file_ok = $file->fwrite( $json );
-//
-//		if ( ! $is_file_ok ) {
-//			throw new \RuntimeException('Failed to create theme.json file', \intval( $is_file_ok  ));
-//		}
-
-//		$json = new \Composer\Json\JsonFile( $theme_json );
-//		$json->write( $input_data );
-//
-//		$this->assertFileExists( $theme_json, '');
-//		$this->assertFileIsReadable( $theme_json, '');
-//		$this->assertFileIsWritable( $theme_json, '');
-//
-//		$file = null;
-//		\unlink($theme_json);
+		$this->assertJsonStringEqualsJsonFile($this->theme_json_path, $expected, '');
 	}
 }

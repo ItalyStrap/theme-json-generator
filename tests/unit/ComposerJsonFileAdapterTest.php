@@ -5,12 +5,12 @@ namespace ItalyStrap\Tests;
 
 use Codeception\Test\Unit;
 use Composer\Json\JsonFile;
-use ItalyStrap\ThemeJsonGenerator\ComposerFileJsonAdapter;
+use ItalyStrap\ThemeJsonGenerator\ComposerJsonFileAdapter;
 use Prophecy\Argument;
 use Prophecy\Prophet;
 use UnitTester;
 
-class ComposerFileJsonAdapterTest extends Unit {
+class ComposerJsonFileAdapterTest extends Unit {
 
 	/**
 	 * @var UnitTester
@@ -51,9 +51,9 @@ class ComposerFileJsonAdapterTest extends Unit {
 		$this->prophet->checkPredictions();
 	}
 
-	protected function getInstance(): ComposerFileJsonAdapter {
-		$sut = new ComposerFileJsonAdapter( $this->getJsonFile() );
-		$this->assertInstanceOf( ComposerFileJsonAdapter::class, $sut, '' );
+	protected function getInstance(): ComposerJsonFileAdapter {
+		$sut = new ComposerJsonFileAdapter( $this->getJsonFile() );
+		$this->assertInstanceOf( ComposerJsonFileAdapter::class, $sut, '' );
 		return $sut;
 	}
 

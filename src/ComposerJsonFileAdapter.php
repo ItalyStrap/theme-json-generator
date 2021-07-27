@@ -5,7 +5,7 @@ namespace ItalyStrap\ThemeJsonGenerator;
 
 use Composer\Json\JsonFile;
 
-final class ComposerFileJsonAdapter {
+final class ComposerJsonFileAdapter {
 
 	/**
 	 * @var JsonFile

@@ -63,6 +63,9 @@
         "unit": [
             "vendor\\bin\\codecept run unit && vendor\\bin\\codecept run wpunit && vendor\\bin\\infection --threads=4"
         ],
+        "unit:debug": [
+            "vendor\\bin\\codecept run unit --debug"
+        ],
         "bench": [
             "vendor\\bin\\phpbench run --report=performance"
         ],
