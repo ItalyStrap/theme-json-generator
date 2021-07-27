@@ -89,7 +89,7 @@ final class ComposerPlugin implements PluginInterface, EventSubscriberInterface 
 		/** @var \Composer\Package\Link $link */
 		foreach ( $rootPackage->getRequires() as $link ) {
 			$constraint = $link->getConstraint();
-			$package = $repo->findPackage($link->getTarget(), $constraint);
+			$package = $repo->findPackage( $link->getTarget(), $constraint );
 			$packagePath = $vendorPath . '/' . $link->getTarget();
 			if ($package && $package->getType() === self::TYPE_THEME ) {
 				$this->writeFile( $package, $packagePath, $io );

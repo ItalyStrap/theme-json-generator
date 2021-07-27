@@ -200,6 +200,7 @@ class ComposerPluginTest extends Unit {
 			->willReturn( $theme_json_file_path );
 
 		$this->rootPackage->getType()->willReturn('any-string');
+
 //		$this->rootPackage->getExtra()->willReturn([
 //			'theme-json' => [
 //				'callable' => function (): array {
@@ -207,6 +208,10 @@ class ComposerPluginTest extends Unit {
 //				},
 //			],
 //		]);
+
+//		$this->repositoryManager
+//			->findPackage( Argument::type('string'), Argument::type('string') )
+//		->willReturn( $this->getRootPackage() );
 
 		$sut = $this->getInstance();
 		$sut->createThemeJson( $this->getComposer(), $this->getIo() );
