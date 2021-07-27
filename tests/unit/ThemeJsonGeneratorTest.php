@@ -52,7 +52,7 @@ class ThemeJsonGeneratorTest extends Unit {
 	public function itShouldFileExists() {
 
 		$input_data = require \codecept_data_dir('fixtures/input-data.php');
-		$theme_json = \codecept_output_dir('theme.json');
+		$theme_json = \codecept_output_dir('theme.jsons');
 
 //		$file = new \SplFileObject( $theme_json, 'w' );
 //		$json = JsonFile::encode( $input_data );
@@ -62,12 +62,12 @@ class ThemeJsonGeneratorTest extends Unit {
 //			throw new \RuntimeException('Failed to create theme.json file', \intval( $is_file_ok  ));
 //		}
 
-		$json = new \Composer\Json\JsonFile( $theme_json );
-		$json->write( $input_data );
-
-		$this->assertFileExists( $theme_json, '');
-		$this->assertFileIsReadable( $theme_json, '');
-		$this->assertFileIsWritable( $theme_json, '');
+//		$json = new \Composer\Json\JsonFile( $theme_json );
+//		$json->write( $input_data );
+//
+//		$this->assertFileExists( $theme_json, '');
+//		$this->assertFileIsReadable( $theme_json, '');
+//		$this->assertFileIsWritable( $theme_json, '');
 //
 //		$file = null;
 //		\unlink($theme_json);

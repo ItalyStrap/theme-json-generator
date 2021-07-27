@@ -75,7 +75,7 @@ final class ComposerPlugin implements PluginInterface, EventSubscriberInterface 
 	 * @param Composer $composer
 	 * @param IOInterface $io
 	 */
-	public function createThemeJson( Composer $composer, IOInterface $io ) {
+	public function createThemeJson( Composer $composer, IOInterface $io ): void {
 		$rootPackage = $composer->getPackage();
 		$vendorPath = $composer->getConfig()->get('vendor-dir');
 		$rootPackagePath = \dirname( $vendorPath );
