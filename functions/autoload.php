@@ -9,4 +9,4 @@ function test_callable(): array {
 	return ['key'=>'value'];
 }
 
-WP_CLI::add_command( 'foo', '\ItalyStrap\ThemeJsonGenerator\CLI\Command' );
+WP_CLI::add_command( 'theme json', '\ItalyStrap\ThemeJsonGenerator\CLI\Command' );
