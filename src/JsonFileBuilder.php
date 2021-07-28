@@ -20,8 +20,11 @@ class JsonFileBuilder {
 		$this->path = $path;
 	}
 
+	/**
+	 * @throws \Exception
+	 */
 	public function build( callable $callable ) {
 		$json_file = new ComposerJsonFileAdapter( new JsonFile( $this->path ) );
-		$json_file->write( $callable() );
+		$json_file->write( $callable( $this->path ) );
 	}
 }

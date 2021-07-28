@@ -46,7 +46,14 @@ class ThemeJsonGeneratorTest extends Unit {
 	public function itShouldReturnValidJson() {
 		$sut = $this->getInstance();
 		$expected = '{"key": "value"}';
-		$callable = function (): array {
+
+
+//		$callable = function ( array $args ): array {
+//			return $this->getInputData();
+//		};
+
+		$callable = function ( string $path ): array {
+			$this->assertStringContainsString($path, $this->theme_json_path, '');
 			return [
 				'key'	=> 'value',
 			];

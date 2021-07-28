@@ -46,6 +46,13 @@ class ComposerJsonFileAdapterTest extends Unit {
 		$this->input_data = require \codecept_data_dir('fixtures/input-data.php');
 	}
 
+	/**
+	 * @return array
+	 */
+	public function getInputData(): array {
+		return $this->input_data;
+	}
+
 	// phpcs:ignore
 	protected function _after() {
 		$this->prophet->checkPredictions();
@@ -70,7 +77,7 @@ class ComposerJsonFileAdapterTest extends Unit {
 	 */
 	public function itShouldWrite() {
 		$sut = $this->getInstance();
-		$sut->write( $this->input_data );
+		$sut->write( $this->getInputData() );
 		$this->jsonFile->write( Argument::type('array'), Argument::any() )->shouldHaveBeenCalled();
 	}
 }

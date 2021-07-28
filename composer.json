@@ -1,5 +1,5 @@
 {
-    "name": "italystrap/themejsongenerator",
+    "name": "italystrap/theme-json-generator",
     "description": "A WordPress theme.json generator from a PHP array",
     "keywords": ["WordPress", "WordPress theme.json"],
     "type": "composer-plugin",
@@ -83,7 +83,7 @@
         ]
     },
     "support"    : {
-        "issues": "https://github.com/ItalyStrap/themejsongenerator/issues",
-        "source": "https://github.com/ItalyStrap/themejsongenerator"
+        "issues": "https://github.com/ItalyStrap/theme-json-generator/issues",
+        "source": "https://github.com/ItalyStrap/theme-json-generator"
     }
 }

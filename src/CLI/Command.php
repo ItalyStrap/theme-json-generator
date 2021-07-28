@@ -14,8 +14,13 @@ use function is_child_theme;
 use function sprintf;
 use function strval;
 
-final class Command
-{
+/**
+ * @todo Add a system to generate the file for parent and child but not with the same config...
+ * Class Command
+ * @package ItalyStrap\ThemeJsonGenerator\CLI
+ */
+final class Command {
+
 	public function __invoke( array $args, array $assoc_args ) {
 
 		/**
