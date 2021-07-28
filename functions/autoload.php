@@ -1,13 +1,12 @@
 <?php
+declare(strict_types=1);
 
-function foo_command( $args ) {
-	\WP_CLI::success( "The script has run!" );
-//	\WP_CLI::success( $args[0] );
-//	\WP_CLI::success( $args[1] );
+namespace ItalyStrap\ThemeJsonGenerator;
 
-	$generator = new  \ItalyStrap\ThemeJsonGenerator\JsonFileBuilder(['ciao'=>'bello']);
-	$is_generated = $generator->generate();
+use WP_CLI;
 
-	\WP_CLI::success( $is_generated );
+function test_callable(): array {
+	return ['key'=>'value'];
 }
-\WP_CLI::add_command( 'foo', 'foo_command' );
+
+WP_CLI::add_command( 'foo', '\ItalyStrap\ThemeJsonGenerator\CLI\Command' );

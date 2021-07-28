@@ -119,7 +119,7 @@ final class ComposerPlugin implements PluginInterface, EventSubscriberInterface 
 
 		$callable = $theme_json_config[ 'callable' ];
 
-		$path = $path . '/theme.json';
+		$path .= '/theme.json';
 
 		try {
 			( new JsonFileBuilder( $path ) )->build( $callable );
