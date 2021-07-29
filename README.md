@@ -57,8 +57,7 @@ That's it.
 Basically, this plugin executes the following steps:
 
 * This plugin searches for a custom callback you provide trough `composer.json` inside `extra` field.
-* The callback needs to return an array with your [theme config](https://developer.wordpress.
-  org/block-editor/how-to-guides/themes/theme-json/) and accept a string argument where you get the path of the theme.
+* The callback needs to return an array with your [theme config](https://developer.wordpress.org/block-editor/how-to-guides/themes/theme-json/) and accept a string argument where you get the path of the theme.
 * And it generates the theme.json in the root folder of the theme you are developing.
 
 ### Example project
