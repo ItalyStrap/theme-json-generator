@@ -1,13 +1,6 @@
 # ItalyStrap Theme Json Generator
 
-[![Build Status](https://github.com/ItalyStrap/theme-json-generator/workflows/test/badge.svg)](https://github.com/ItalyStrap/theme-json-generator/actions)
-[![Latest Stable Version](https://img.shields.io/packagist/v/italystrap/theme-json-generator.svg)](https://packagist.org/packages/italystrap/theme-json-generator)
-[![Total Downloads](https://img.shields.io/packagist/dt/italystrap/theme-json-generator.svg)](https://packagist.org/packages/italystrap/theme-json-generator)
-[![Latest Unstable Version](https://img.shields.io/packagist/vpre/italystrap/theme-json-generator.svg)](https://packagist.org/packages/italystrap/theme-json-generator)
-[![License](https://img.shields.io/packagist/l/italystrap/theme-json-generator.svg)](https://packagist.org/packages/italystrap/theme-json-generator)
-![PHP from Packagist](https://img.shields.io/packagist/php-v/italystrap/theme-json-generator)
-//@TODO https://infection.github.io/guide/mutation-badge.html
-[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2FItalyStrap%2Fmodule-sample%2Fmaster)](https://dashboard.stryker-mutator.io/reports/github.com/ItalyStrap/module-sample/master)
+[![Build Status](https://github.com/ItalyStrap/theme-json-generator/actions/workflows/test.yml/badge.svg)](https://github.com/ItalyStrap/theme-json-generator/actions)
 
 WordPress Theme Json Generator the OOP way
 
