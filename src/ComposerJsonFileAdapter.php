@@ -21,9 +21,11 @@ final class ComposerJsonFileAdapter {
 	}
 
 	/**
+	 * @param array<int|string, mixed> $input_data
+	 * @param int $options
 	 * @throws \Exception
 	 */
-	public function write( array $input_data, $options = null ) {
+	public function write( array $input_data, int $options = 448 ): void {
 		$this->jsonFile->write( $input_data, $options );
 	}
 }

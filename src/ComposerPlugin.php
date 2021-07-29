@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator;
 
 use Composer\Composer;
-use Composer\Json\JsonFile;
 use Composer\Package\Link;
 use Composer\Package\PackageInterface;
 use Composer\Script\Event;
@@ -21,24 +20,10 @@ final class ComposerPlugin implements PluginInterface, EventSubscriberInterface 
 	const TYPE_THEME = 'wordpress-theme';
 
 	/**
-	 * @psalm-suppress MissingConstructor
-	 * @var Composer    $composer
-	 *
-	 * @psalm-suppress MissingConstructor
-	 */
-	private $composer;
-
-	/**
-	 * @psalm-suppress MissingConstructor
-	 * @var IOInterface $io
-	 */
-	private $io;
-
-	/**
 	 * @inheritDoc
+	 * @return array<string, string>
 	 */
 	public static function getSubscribedEvents(): array {
-		// @phpstan-ignore-line
 		return [
 			'post-autoload-dump'	=> 'run',
 			'post-install-cmd'		=> 'run',
@@ -67,8 +52,6 @@ final class ComposerPlugin implements PluginInterface, EventSubscriberInterface 
 	 * @inheritDoc
 	 */
 	public function activate( Composer $composer, IOInterface $io ): void {
-		$this->composer = $composer;
-		$this->io = $io;
 	}
 
 	/**
@@ -83,6 +66,7 @@ final class ComposerPlugin implements PluginInterface, EventSubscriberInterface 
 	 */
 	public function createThemeJson( Composer $composer, IOInterface $io ): void {
 		$rootPackage = $composer->getPackage();
+		/** @var string $vendorPath */
 		$vendorPath = $composer->getConfig()->get('vendor-dir');
 		$rootPackagePath = dirname( $vendorPath );
 
@@ -92,7 +76,6 @@ final class ComposerPlugin implements PluginInterface, EventSubscriberInterface 
 		}
 
 		$repo = $composer->getRepositoryManager();
-		/** @var Link $link */
 		foreach ( $rootPackage->getRequires() as $link ) {
 			$constraint = $link->getConstraint();
 			$package = $repo->findPackage( $link->getTarget(), $constraint );
@@ -111,6 +94,7 @@ final class ComposerPlugin implements PluginInterface, EventSubscriberInterface 
 	private function writeFile( PackageInterface $package, string $path, IOInterface $io ): void {
 		$composer_extra = array_replace_recursive( $this->getDefaultExtra(), $package->getExtra() );
 
+		/** @var array<string, mixed> $theme_json_config */
 		$theme_json_config = $composer_extra[ 'theme-json' ];
 
 		if ( ! is_callable( $theme_json_config[ 'callable' ] ) ) {
@@ -129,7 +113,7 @@ final class ComposerPlugin implements PluginInterface, EventSubscriberInterface 
 	}
 
 	/**
-	 * @return \false[][]
+	 * @return array<string, mixed>
 	 */
 	private function getDefaultExtra(): array {
 		return [

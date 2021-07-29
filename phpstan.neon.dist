@@ -1,6 +1,3 @@
-#$ composer update --optimize-autoloader
-#$ vendor/bin/phpstan analyze
-
 includes:
     # @see https://github.com/phpstan/phpstan/blob/master/conf/bleedingEdge.neon
     - vendor/phpstan/phpstan/conf/bleedingEdge.neon
@@ -12,9 +9,6 @@ parameters:
         - %currentWorkingDirectory%/src/
     excludes_analyse:
         #- %currentWorkingDirectory%/src/Config/
-    autoload_files:
-        # Procedural code
-        #- %currentWorkingDirectory%/functions/autoload.php
     ignoreErrors:
         # Uses func_get_args()
         #- '#^Function apply_filters invoked with [34567] parameters, 2 required\.$#'

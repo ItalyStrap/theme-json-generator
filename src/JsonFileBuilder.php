@@ -8,7 +8,7 @@ use Composer\Json\JsonFile;
 class JsonFileBuilder {
 
 	/**
-	 * @var array<string>
+	 * @var string
 	 */
 	private $path;
 
@@ -23,8 +23,9 @@ class JsonFileBuilder {
 	/**
 	 * @throws \Exception
 	 */
-	public function build( callable $callable ) {
+	public function build( callable $callable ): void {
 		$json_file = new ComposerJsonFileAdapter( new JsonFile( $this->path ) );
+		/** @psalm-suppress MixedArgument */
 		$json_file->write( $callable( $this->path ) );
 	}
 }

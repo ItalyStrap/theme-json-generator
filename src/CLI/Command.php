@@ -9,24 +9,28 @@ use WP_CLI;
 use function array_replace_recursive;
 use function get_stylesheet_directory;
 use function get_template_directory;
+use function GuzzleHttp\Psr7\str;
 use function is_callable;
 use function is_child_theme;
 use function sprintf;
 use function strval;
 
 /**
- * @todo Add a system to generate the file for parent and child but not with the same config...
  * Class Command
  * @package ItalyStrap\ThemeJsonGenerator\CLI
  */
 final class Command {
 
-	public function __invoke( array $args, array $assoc_args ) {
+	/**
+	 * @param array<string, mixed> $args
+	 * @param array<string, mixed> $assoc_args
+	 */
+	public function __invoke( array $args, array $assoc_args ): void {
 
 		/**
 		 * --parent
 		 * : Argument to generate theme.json also for parent theme
-		 * @var array
+		 * @var array<string, mixed>
 		 */
 		$assoc_args_default = [
 			'parent'	=> false,
@@ -34,12 +38,22 @@ final class Command {
 
 		$assoc_args = array_replace_recursive( $assoc_args_default, $assoc_args );
 
-		$callable = strval( WP_CLI::get_runner()->extra_config['THEME_JSON_CALLABLE'] );
+		/**
+		 * @var array<string, string|int> $extra_config
+		 * @psalm-suppress MixedPropertyFetch
+		 */
+		$extra_config = WP_CLI::get_runner()->extra_config;
+
+		$callable = \array_key_exists( 'THEME_JSON_CALLABLE', $extra_config )
+			? $extra_config['THEME_JSON_CALLABLE']
+			: '';
 
 		if ( ! is_callable( $callable ) ) {
-			WP_CLI::line( strval( $callable ) . " is not a valid callable" );
+			WP_CLI::line( $callable . " is not a valid callable" );
+			return;
 		}
 
+		$theme_json_path = [];
 		$theme_json_path[] = get_stylesheet_directory() . '/theme.json';
 
 		if ( is_child_theme() && (bool) $assoc_args['parent'] ) {
@@ -57,12 +71,12 @@ final class Command {
 	 */
 	private function loopsThemePathAndGenerateFile( string $path, callable $callable ): void {
 		try {
-			(new JsonFileBuilder( $path ))->build( $callable );
+			( new JsonFileBuilder( $path ) )->build( $callable );
 			WP_CLI::success( sprintf(
 				'%s was generated!',
 				$path
 			) );
-		} catch (Exception $e) {
+		} catch ( Exception $e ) {
 			WP_CLI::line( $e->getMessage() );
 		}
 	}
