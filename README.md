@@ -1,6 +1,6 @@
 # ItalyStrap Theme Json Generator
 
-[![Build Status](https://travis-ci.org/ItalyStrap/module-sample.svg?branch=master)](https://travis-ci.org/ItalyStrap/module-sample)
+[![Build Status](https://github.com/ItalyStrap/theme-json-generator/workflows/test/badge.svg)](https://github.com/ItalyStrap/theme-json-generator/actions)
 [![Latest Stable Version](https://img.shields.io/packagist/v/italystrap/theme-json-generator.svg)](https://packagist.org/packages/italystrap/theme-json-generator)
 [![Total Downloads](https://img.shields.io/packagist/dt/italystrap/theme-json-generator.svg)](https://packagist.org/packages/italystrap/theme-json-generator)
 [![Latest Unstable Version](https://img.shields.io/packagist/vpre/italystrap/theme-json-generator.svg)](https://packagist.org/packages/italystrap/theme-json-generator)
