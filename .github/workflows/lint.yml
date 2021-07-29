@@ -1,0 +1,35 @@
+name: Lint and CS
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  tests:
+    name: Linting
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.4
+
+      - uses: ramsey/composer-install@v1
+        with:
+          composer-options: "--prefer-dist --ignore-platform-reqs"
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
+
+      - name: Validate php files
+        run: find ./src/ ./tests/ -type f -name '*.php' -print0 | xargs -0 -L 1 -P 4 -- php -l
+
+      - name: Coding standard
+        run: vendor/bin/phpcs --ignore=./tests/_support/* ./src/ ./tests/
