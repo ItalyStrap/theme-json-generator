@@ -63,15 +63,21 @@ The following is an example Composer project.
     "description": "Experimental theme",
     "type": "wordpress-theme",
     "require-dev": {
-        "italystrap/theme-json-generator": "*"
+        "italystrap/theme-json-generator": "dev-master"
     },
     "extra": {
         "theme-json": {
             "callable": "\\YourVendor\\YourProject::your_callback"
         }
-    }
+    },
+    "repositories": [{
+        "type": "vcs",
+        "url": "https://github.com/ItalyStrap/theme-json-generator.git"
+    }]
 }
 ```
+
+It is not yet on packagist and you have to add also the "repositories" field with the github url.
 
 The callable must be a valid PHP callable and must return an array with your configuration following the schema 
 provided from the [documentation](https://developer.wordpress.org/block-editor/how-to-guides/themes/theme-json/).
