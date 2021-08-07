@@ -153,14 +153,14 @@ THEME_JSON_CALLABLE: '\YourVendor\YourProject\your_callback'
 And in the command line just use the command:
 
 ```shell
-wp theme json
+wp theme-json generate
 ```
 
 This will generate the theme.json on the root of the active theme, parent **or** child.
 If you want to generate the theme.json for both add the option `--parent`
 
 ```shell
-wp theme json --parent
+wp theme-json generate --parent
 ```
 
 And remember to check inside the callback the path to provide the right config for the theme you want to generate 
