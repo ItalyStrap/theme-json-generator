@@ -9,7 +9,6 @@ use WP_CLI;
 use function array_replace_recursive;
 use function get_stylesheet_directory;
 use function get_template_directory;
-use function GuzzleHttp\Psr7\str;
 use function is_callable;
 use function is_child_theme;
 use function sprintf;
