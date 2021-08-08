@@ -12,7 +12,6 @@ use function get_template_directory;
 use function is_callable;
 use function is_child_theme;
 use function sprintf;
-use function strval;
 
 /**
  * Class Command
@@ -55,7 +54,7 @@ final class Command {
 		$theme_json_path = [];
 		$theme_json_path[] = get_stylesheet_directory() . '/theme.json';
 
-		if ( is_child_theme() && (bool) $assoc_args['parent'] ) {
+		if ( is_child_theme() && $assoc_args['parent'] ) {
 			$theme_json_path[] = get_template_directory() . '/theme.json';
 		}
 
