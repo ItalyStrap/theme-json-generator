@@ -75,6 +75,7 @@ return [
 		],
 		'custom' => [
 			'alignment' => [
+				'center' => 'center',
 				'alignedMaxWidth' => '50%',
 			],
 			'button' => [
