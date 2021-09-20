@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace ItalyStrap\Tests;
 
 use Codeception\Test\Unit;
-use ItalyStrap\ThemeJsonGenerator\SectionNames;
 use UnitTester;
 use function codecept_data_dir;
 
@@ -75,7 +74,6 @@ class CSSPropertyTest extends Unit {
 		$this->expectException('\Throwable');
 		$this->expectException('\RuntimeException');
 		$result = $this->flattenTree( $custom, '--wp--custom--' );
-
 	}
 
 	/**
