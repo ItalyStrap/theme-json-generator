@@ -48,6 +48,11 @@
             "functions/autoload.php"
         ]
     },
+    "autoload-dev": {
+        "psr-4": {
+            "ItalyStrap\\Tests\\": "tests/"
+        }
+    },
     "provide": {},
     "suggest": {},
     "extra": {

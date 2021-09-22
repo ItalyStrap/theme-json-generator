@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator;
 
 use Composer\Composer;
-use Composer\Package\Link;
 use Composer\Package\PackageInterface;
 use Composer\Script\Event;
 use Composer\EventDispatcher\EventSubscriberInterface;

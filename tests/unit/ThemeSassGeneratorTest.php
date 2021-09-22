@@ -1,12 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace ItalyStrap\Tests;
+namespace ItalyStrap\Tests\Unit;
 
 use ItalyStrap\ThemeJsonGenerator\ScssFileBuilder;
-
-// phpcs:ignore
-include_once 'UnitTest.php';
 
 class ThemeSassGeneratorTest extends UnitTest {
 
