@@ -184,7 +184,11 @@ class ThemeSassGeneratorTest extends UnitTest {
 	 * @test
 	 * @dataProvider presetSettingsProvider
 	 */
-	public function itShouldIteratePresetSettingsFor( $data, $expected_slug, $expected_css_variable ) {
+	public function itShouldIteratePresetSettingsFor(
+		array $data,
+		string $expected_slug,
+		string $expected_css_variable
+	) {
 		$sut = $this->getInstance();
 
 		$sut->build( function () use ( $data ) {
@@ -203,6 +207,35 @@ class ThemeSassGeneratorTest extends UnitTest {
 			),
 			''
 		);
+
+		\unlink( $this->theme_sass_path );
+	}
+
+	/**
+	 * @test
+	 */
+	public function itShouldThrowError() {
+		$sut = $this->getInstance();
+
+		$custom = [
+			'alignment' => [
+				'global' => [
+					'left'
+				],
+			]
+		];
+
+		$this->expectException('\Throwable');
+		$this->expectException('\RuntimeException');
+
+		$sut->build( function () use ( $custom ) {
+			$theme = [
+				'settings' => [
+					'custom'	=> $custom
+				]
+			];
+			return	$theme;
+		} );
 
 		\unlink( $this->theme_sass_path );
 	}
