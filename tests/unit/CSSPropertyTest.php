@@ -51,7 +51,7 @@ class CSSPropertyTest extends Unit {
 		 * 	'--wp--custom--color--white' => '--wp--custom--color--white'
 		 * ];
 		 */
-		codecept_debug( $result );
+//		codecept_debug( $result );
 
 		$this->assertArrayHasKey('alignment--center', $result, '');
 		$this->assertArrayHasKey('alignment--aligned-max-width', $result, '');

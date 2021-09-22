@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator;
 
-class ScssFileBuilder implements FileBuilder {
+use ItalyStrap\Config\Config;
+use ItalyStrap\Config\ConfigInterface;
 
+class ScssFileBuilder implements FileBuilder {
 
 	/**
 	 * @var string
@@ -12,11 +14,17 @@ class ScssFileBuilder implements FileBuilder {
 	private $path;
 
 	/**
+	 * @var Config|ConfigInterface
+	 */
+	private $config;
+
+	/**
 	 * ThemeJsonGenerator constructor.
 	 * @param string $path
 	 */
-	public function __construct( string $path ) {
+	public function __construct( string $path, ConfigInterface $config = null ) {
 		$this->path = $path;
+		$this->config = $config ?? new Config();
 	}
 
 	/**
@@ -37,48 +45,32 @@ class ScssFileBuilder implements FileBuilder {
 	}
 
 	private function generateScssContent( array $data ): string {
+		if ( $data === [] ) {
+			return '// No data are provided!';
+		}
+
+		$this->config->merge( $data );
+
 		$content = '';
-		$settings = $data['settings'];
 
 		$schema = [
 			'settings.color.palette'			=> '--wp--preset--color',
 			'settings.color.gradients'			=> '--wp--preset--gradient',
 			'settings.typography.fontFamilies'	=> '--wp--preset--font-family',
 			'settings.typography.fontSizes'		=> '--wp--preset--font-size',
-			'settings.custom'					=> '--wp-custom',
 		];
 
-		// --wp--preset--color--<slug>
-		$items = $settings['color']['palette'] ?? [];
-		foreach ( $items as $item ) {
-			$content .= $this->generateScssVariableAndCssVariable( $item['slug'], '--wp--preset--color' );
+		foreach ( $schema as $slug => $prefix ) {
+			foreach ( (array) $this->config->get( $slug ) as $item ) {
+				$content .= $this->generateScssVariableAndCssVariable( $item['slug'], $prefix );
+			}
 		}
 
-		// --wp--preset--gradient--<slug>
-		$items = $settings['color']['gradients'] ?? [];
-		foreach ( $items as $item ) {
-			$content .= $this->generateScssVariableAndCssVariable( $item['slug'], '--wp--preset--gradient' );
-		}
+		$custom = (array) $this->config->get( 'settings.custom' );
+		$custom = $this->flattenTree( $custom );
 
-//		--wp--preset--font-family--<slug>
-		$items = $settings['typography']['fontFamilies'] ?? [];
-		foreach ( $items as $item ) {
-			$content .= $this->generateScssVariableAndCssVariable( $item['slug'], '--wp--preset--font-family' );
-		}
-
-//		--wp--preset--font-size--<slug>
-		$items = $settings['typography']['fontSizes'] ?? [];
-		foreach ( $items as $item ) {
-			$content .= $this->generateScssVariableAndCssVariable( $item['slug'], '--wp--preset--font-size' );
-		}
-
-		// --wp--custom--<slug>
-		$custom = $settings['custom'] ?? [];
 		foreach ( $custom as $property_name => $value ) {
-//			codecept_debug( $this->flattenTree( $custom, '--wp-custom--' ) );
-//			$content .= $this->flattenTree( $custom, '--wp-custom' );
 			$content .= $this->generateScssVariableAndCssVariable( $property_name, '--wp-custom' );
-//			break;
 		}
 
 		return $content;
@@ -90,10 +82,24 @@ class ScssFileBuilder implements FileBuilder {
 	 */
 	private function generateScssVariableAndCssVariable( string $slug, string $prefix ): string {
 		return \sprintf(
-			'$%1$s: %2$s--%1$s;' . PHP_EOL,
-			$slug,
+			'$%1$s: %2$s--%1$s !default;' . PHP_EOL,
+			$this->camelToUnderscore( $slug ),
 			$prefix
 		);
+	}
+
+	/**
+	 * @link https://stackoverflow.com/a/40514305/7486194
+	 * @param string $string
+	 * @param string $us
+	 * @return string
+	 */
+	private function camelToUnderscore( string $string, string $us = '-' ): string {
+		return \strtolower( \preg_replace(
+			'/(?<=\d)(?=[A-Za-z])|(?<=[A-Za-z])(?=\d)|(?<=[a-z])(?=[A-Z])/',
+			$us,
+			$string
+		) );
 	}
 
 	/**
@@ -116,10 +122,10 @@ class ScssFileBuilder implements FileBuilder {
 			}
 
 			$new_key = $prefix . str_replace(
-					'/',
-					'-',
-					\strtolower( \preg_replace( '/(?<!^)[A-Z]/', '-$0', $property ) ) // CamelCase to kebab-case.
-				);
+				'/',
+				'-',
+				\strtolower( \preg_replace( '/(?<!^)[A-Z]/', '-$0', $property ) ) // CamelCase to kebab-case.
+			);
 
 			if ( is_array( $value ) ) {
 				$new_prefix = $new_key . $token;
