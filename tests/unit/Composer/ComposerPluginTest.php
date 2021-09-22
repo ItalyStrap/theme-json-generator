@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace ItalyStrap\Tests\Unit;
+namespace ItalyStrap\Tests\Unit\Composer;
 
 use Codeception\Test\Unit;
 use Composer\Composer;

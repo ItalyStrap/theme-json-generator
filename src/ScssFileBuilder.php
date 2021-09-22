@@ -5,8 +5,11 @@ namespace ItalyStrap\ThemeJsonGenerator;
 
 use ItalyStrap\Config\Config;
 use ItalyStrap\Config\ConfigInterface;
+use ItalyStrap\ThemeJsonGenerator\Helper\ConvertCase;
 
 class ScssFileBuilder implements FileBuilder {
+
+	use ConvertCase;
 
 	/**
 	 * @var string
@@ -14,13 +17,14 @@ class ScssFileBuilder implements FileBuilder {
 	private $path;
 
 	/**
-	 * @var Config|ConfigInterface
+	 * @var ConfigInterface<string, mixed>|null
 	 */
 	private $config;
 
 	/**
 	 * ThemeJsonGenerator constructor.
 	 * @param string $path
+	 * @param ConfigInterface<string, mixed>|null $config
 	 */
 	public function __construct( string $path, ConfigInterface $config = null ) {
 		$this->path = $path;
@@ -44,12 +48,16 @@ class ScssFileBuilder implements FileBuilder {
 		$file = null;
 	}
 
+	/**
+	 * @param array<mixed, mixed> $data
+	 * @return string
+	 */
 	private function generateScssContent( array $data ): string {
 		if ( $data === [] ) {
 			return '// No data are provided!';
 		}
 
-		$this->config->merge( $data );
+		$this->config->merge( $data ); /** @phpstan-ignore-line */
 
 		$content = '';
 
@@ -61,12 +69,12 @@ class ScssFileBuilder implements FileBuilder {
 		];
 
 		foreach ( $schema as $slug => $prefix ) {
-			foreach ( (array) $this->config->get( $slug ) as $item ) {
+			foreach ( (array) $this->config->get( $slug ) as $item ) { /** @phpstan-ignore-line */
 				$content .= $this->generateScssVariableAndCssVariable( $item['slug'], $prefix );
 			}
 		}
 
-		$custom = (array) $this->config->get( 'settings.custom' );
+		$custom = (array) $this->config->get( 'settings.custom' ); /** @phpstan-ignore-line */
 		$custom = $this->flattenTree( $custom );
 
 		foreach ( $custom as $property_name => $value ) {
@@ -89,28 +97,19 @@ class ScssFileBuilder implements FileBuilder {
 	}
 
 	/**
-	 * @link https://stackoverflow.com/a/40514305/7486194
-	 * @param string $string
-	 * @param string $us
-	 * @return string
-	 */
-	private function camelToUnderscore( string $string, string $us = '-' ): string {
-		return \strtolower( \preg_replace(
-			'/(?<=\d)(?=[A-Za-z])|(?<=[A-Za-z])(?=\d)|(?<=[a-z])(?=[A-Z])/',
-			$us,
-			$string
-		) );
-	}
-
-	/**
-	 * @author \WP_Theme_Json::flatten_tree
-	 * @param array $tree
+	 * @param array<string, string> $tree
 	 * @param string $prefix
 	 * @param string $token
-	 * @return array
+	 * @return array<string, string>
+	 *@author \WP_Theme_Json::flatten_tree
 	 */
-	private function flattenTree( array $tree, $prefix = '', $token = '--' ): array {
+	private function flattenTree( array $tree, string $prefix = '', string $token = '--' ): array {
 		$result = [];
+
+		/**
+		 * @var string $property
+		 * @var string|array<string, string> $value
+		 */
 		foreach ( $tree as $property => $value ) {
 			if ( ! \is_string( $property ) ) {
 				throw new \RuntimeException(
@@ -121,15 +120,15 @@ class ScssFileBuilder implements FileBuilder {
 				);
 			}
 
-			$new_key = $prefix . str_replace(
+			$new_key = $prefix . \str_replace(
 				'/',
 				'-',
-				\strtolower( \preg_replace( '/(?<!^)[A-Z]/', '-$0', $property ) ) // CamelCase to kebab-case.
+				$this->camelToUnderscore( $property )
 			);
 
-			if ( is_array( $value ) ) {
+			if ( \is_array( $value ) ) {
 				$new_prefix = $new_key . $token;
-				$result     = array_merge(
+				$result     = \array_merge(
 					$result,
 					$this->flattenTree( $value, $new_prefix, $token )
 				);
