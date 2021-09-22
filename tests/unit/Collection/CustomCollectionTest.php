@@ -6,13 +6,14 @@ namespace ItalyStrap\Tests\Unit\Collection;
 use ItalyStrap\ThemeJsonGenerator\Collection\CollectionInterface;
 use ItalyStrap\ThemeJsonGenerator\Collection\Custom;
 
-class CustomCollectionTest extends BaseCollectionTest
-{
-    /**
-     * @var \UnitTester
-     */
-    protected $tester;
+class CustomCollectionTest extends BaseCollectionTest {
 
+	/**
+	 * @var \UnitTester
+	 */
+	protected $tester;
+
+	// phpcs:ignore
 	protected function _before() {
 
 		$this->collection = [

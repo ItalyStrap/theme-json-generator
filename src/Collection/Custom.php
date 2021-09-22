@@ -7,8 +7,8 @@ use ItalyStrap\Config\Config;
 use ItalyStrap\Config\ConfigInterface;
 use ItalyStrap\ThemeJsonGenerator\Helper\ConvertCase;
 
-final class Custom implements CollectionInterface
-{
+final class Custom implements CollectionInterface {
+
 	use Collectible, ConvertCase;
 
 	/**
@@ -98,7 +98,6 @@ final class Custom implements CollectionInterface
 		$this->config->merge( $this->collection );
 
 		foreach ( $this->config as $key => $item ) {
-
 			$item = (array) $item;
 
 			\array_walk_recursive($item, function ( &$input, $index ) {

@@ -93,7 +93,6 @@ final class Preset implements CollectionInterface {
 	public function toArray(): array {
 
 		foreach ( $this->collection as $key => $item ) {
-
 			\preg_match_all(
 				'/(?:{{.*?}})+/',
 				$item[ $this->key ],

@@ -13,6 +13,7 @@ final class ColorPaletteCollectionTest extends BaseCollectionTest {
 	 */
 	protected $tester;
 
+	// phpcs:ignore
 	protected function _before() {
 		$this->collection = [
 			[
@@ -23,6 +24,7 @@ final class ColorPaletteCollectionTest extends BaseCollectionTest {
 		$this->category = 'color';
 	}
 
+	// phpcs:ignore
 	protected function _after() {
 	}
 

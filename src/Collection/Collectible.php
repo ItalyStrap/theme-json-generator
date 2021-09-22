@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Collection;
 
-trait Collectible
-{
+trait Collectible {
+
 	/**
 	 * @var CollectionInterface[]
 	 */

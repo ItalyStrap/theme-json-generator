@@ -6,12 +6,12 @@ namespace ItalyStrap\Tests\Unit\Collection;
 use Codeception\Test\Unit;
 use ItalyStrap\ThemeJsonGenerator\Collection\CollectionInterface;
 
-abstract class BaseCollectionTest extends Unit
-{
-    /**
-     * @var \UnitTester
-     */
-    protected $tester;
+abstract class BaseCollectionTest extends Unit {
+
+	/**
+	 * @var \UnitTester
+	 */
+	protected $tester;
 
 	/**
 	 * @var \string[][]
@@ -28,13 +28,13 @@ abstract class BaseCollectionTest extends Unit
 	 */
 	protected $key = '';
 
-    protected function _before()
-    {
-    }
+	// phpcs:ignore
+	protected function _before() {
+	}
 
-    protected function _after()
-    {
-    }
+	// phpcs:ignore
+	protected function _after() {
+	}
 
 	abstract protected function getInstance(): CollectionInterface;
 
