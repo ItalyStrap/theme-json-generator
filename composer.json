@@ -55,7 +55,9 @@
         }
     },
     "provide": {},
-    "suggest": {},
+    "suggest": {
+        "spatie/color": "Allows to convert CSS color"
+    },
     "extra": {
         "class": "ItalyStrap\\ThemeJsonGenerator\\ComposerPlugin"
     },
