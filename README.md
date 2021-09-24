@@ -32,19 +32,6 @@ This package adheres to the [SemVer](http://semver.org/) specification and will 
 
 ## Basic Usage
 
-This library works on composer events:
-
-```php
-function getSubscribedEvents(): array {
-    return [
-        'post-autoload-dump'	=> 'run',
-        'post-install-cmd'		=> 'run',
-        'post-update-cmd'		=> 'run',
-    ];
-}
-```
-That's it.
-
 ### How it works
 
 Basically, this plugin executes the following steps:
@@ -174,7 +161,144 @@ This command is still experimental, could be changed in future.
 
 Now we know how to generate the theme.json file so what next?
 
-If you want to do more with PHP you can use some classes I added to this library to bettere manage the settings.
+If you want to do more with PHP you can use some helper classes I added to this library to manage the settings better.
+
+The first class you can use are the `\ItalyStrap\ThemeJsonGenerator\Collection\Preset::class` and the 
+`ItalyStrap\ThemeJsonGenerator\Collection\Custom::class` that extends 
+`\ItalyStrap\ThemeJsonGenerator\Collection\CollectionInterface::class`, those classes can manage settigs for color, 
+tyèpgrafy and custom, let start with color:
+
+```php
+$palette = new Preset(
+    [
+        [
+            "slug" => "text",
+            "color" => '#000000',
+            "name" => "Black for text, headings, links"
+        ],
+        [
+            "slug" => "background",
+            "color" => '#ffffff',
+            "name" => "White for body background"
+        ],
+        [
+            "slug" => "base",
+            "color" => '#3986E0',
+            "name" => "Brand base color"
+        ],
+    ],
+    'color'
+);
+```
+
+As you can see the `Preset::class` accept an array with the preset configuration following the json schema for color, 
+and then you can also provide a `category` name and `key` value, the `category` name is used to define that the config is 
+for color, the key is optional and is used to know what is the key for value, in this case the key and category are 
+"color" so you can omit (you will need it when you will set fontSize).
+
+Now we can set gradient:
+```php
+$gradient = new Preset(
+    [
+        [
+            "slug"		=> "black-to-white",
+            "gradient"	=> \sprintf(
+                'linear-gradient(160deg,%s,%s)',
+                '{{color.text}}',
+                '{{color.background}}'
+            ),
+            "name"		=> "Black to white"
+        ],
+    ],
+    'gradient'
+);
+```
+
+As you can see we define `gradient` as `category`, and `gradient` is also the key for value.
+
+Now instead of define the value `gradient` manually `'linear-gradient(160deg,--wp--preset--color--text,
+--wp--preset--color--background)'` we can handle the power of the `CollectionInterface::class` and use a simple 
+syntax to define the value we need: `'{{color.text}}'` where the parenthesis `{{` `}}` are used to wrap the value 
+name we need, in the example is `text`, in case we need a value from another collection of preset we have to add 
+also the category of the preset with the name separated by a dot like this `color.text`, so the object knows that it 
+needs a text value from a color collection, also we need to add the collection of colors to the collection of 
+gradients with this snippet:
+
+```php
+$gradient->withCollection( $palette );
+```
+
+This way allows us to avoid syntax errors when writing CSS properties manually.
+In case there is no value with the slug we need the object will throw a `\RuntimeException::class`, useful for 
+future refactoring of the theme style.
+
+Here an example for `fontSize` and `fontFamily`:
+
+```php
+$font_sizes = new Preset(
+    [
+        [
+            "slug" => "base",
+            "size" => "20px",
+            "name" => "Base font size 16px"
+        ],
+        [
+            "slug" => "h1",
+            "size" => "calc({{base}} * 2.5)",
+            "name" => "Used in H1 titles"
+        ],
+        [
+            "slug" => "h2",
+            "size" => "calc({{base}} * 2)",
+            "name" => "Used in H2 titles"
+        ],
+        [
+            "slug" => "h3",
+            "size" => "calc({{base}} * 1.75)",
+            "name" => "Used in H3 titles"
+        ],
+        [
+            "slug" => "h4",
+            "size" => "calc({{base}} * 1.5)",
+            "name" => "Used in H4 titles"
+        ],
+        [
+            "slug" => "h5",
+            "size" => "calc({{base}} * 1.25)",
+            "name" => "Used in H5 titles"
+        ],
+        [
+            "slug" => "h6",
+            "size" => "{{base}}",
+            "name" => "Used in H6 titles"
+        ],
+    ],
+    'fontSize',
+    'size'
+);
+
+$font_family = new Preset(
+    [
+        [
+            'fontFamily' => 'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+            'slug' => "base",
+            "name" => "Default font family",
+        ],
+        [
+            'fontFamily' => 'SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+            'slug' => "monospace",
+            "name" => "Font family for code",
+        ],
+    ],
+    'fontFamily'
+);
+```
+
+As you can see in the above `fontSize` config we call value name without the category `{{base}}` this is because the 
+`base` slug is declared in the configuration of the same object, so, we don't need to add the category.
+
+Also, you can notice that for `fontSize` we use the key `size`, this is because is the key used for the preset of 
+font sizes.
 
 ## Contributing
 
