@@ -64,7 +64,7 @@ The following is an example Composer project.
 }
 ```
 
-It is not yet on packagist and you have to add also the "repositories" field with the github url.
+It is not yet on packagist and you have to add also the "repositories" field with the GitHub url.
 
 The callable must be a valid PHP callable and must return an array with your configuration following the schema 
 provided from the [documentation](https://developer.wordpress.org/block-editor/how-to-guides/themes/theme-json/).
@@ -85,6 +85,7 @@ function your_callback( string $path ): array {
                 'contentSize' => '620px',
                 'wideSize' => '1000px',
             ],
+            [...] // All the rest of config
         ]
     ];
 }
@@ -104,7 +105,7 @@ And this will generate the following json:
 }
 ```
 
-If you want to load manually using composer add your command inside the `script` field and load the
+To load manually using composer add your command inside the `script` field and load the
 `ItalyStrap\\ThemeJsonGenerator\\ComposerPlugin::run` method like below:
 
 ```json
@@ -122,6 +123,8 @@ And then run:
 ```shell
 composer run your-command
 ```
+
+Change `your-command` with the command you want to use.
 
 ### WP_CLI command
 
@@ -143,8 +146,8 @@ And in the command line just use the command:
 wp theme-json generate
 ```
 
-This will generate the theme.json on the root of the active theme, parent **or** child.
-If you want to generate the theme.json for both add the option `--parent`
+This will generate the theme.json at the root level of the active theme, parent **or** child.
+If you want to generate the theme.json for both from inside the child root add the option `--parent`
 
 ```shell
 wp theme-json generate --parent
@@ -153,20 +156,22 @@ wp theme-json generate --parent
 And remember to check inside the callback the path to provide the right config for the theme you want to generate 
 the file.
 
-This command is still experimental, could be changed in future.
+This command is still experimental, could be changed in the future.
 
 ## Advanced Usage
 
 > This part is optional, if you want to provide your own data just skip this part.
+> I use a naming convention for defining CSS properties, you can use your own if you don't like mine.
 
-Now we know how to generate the theme.json file so what next?
+Now we know how to generate the theme.json file so, what next?
 
-If you want to do more with PHP you can use some helper classes I added to this library to manage the settings better.
+If you want to do more with PHP you can use some helper classes I added to this library to better manage the 
+settings.
 
-The first class you can use are the `\ItalyStrap\ThemeJsonGenerator\Collection\Preset::class` and the 
+The first classes you can use are the `\ItalyStrap\ThemeJsonGenerator\Collection\Preset::class` and the 
 `ItalyStrap\ThemeJsonGenerator\Collection\Custom::class` that extends 
-`\ItalyStrap\ThemeJsonGenerator\Collection\CollectionInterface::class`, those classes can manage settigs for color, 
-tyèpgrafy and custom, let start with color:
+`\ItalyStrap\ThemeJsonGenerator\Collection\CollectionInterface::class`, those classes can manage settings for color, 
+typography and custom, lets start with color:
 
 ```php
 $palette = new Preset(
@@ -193,10 +198,11 @@ $palette = new Preset(
 
 As you can see the `Preset::class` accept an array with the preset configuration following the json schema for color, 
 and then you can also provide a `category` name and `key` value, the `category` name is used to define that the config is 
-for color, the key is optional and is used to know what is the key for value, in this case the key and category are 
-"color" so you can omit (you will need it when you will set fontSize).
+for color, the key is optional and is used to know what is the key of the value, in this case the key and category are 
+the same so you can omit it (you will need it when you will set fontSize).
 
-Now we can set gradient:
+Now we can set the gradient:
+
 ```php
 $gradient = new Preset(
     [
@@ -214,14 +220,14 @@ $gradient = new Preset(
 );
 ```
 
-As you can see we define `gradient` as `category`, and `gradient` is also the key for value.
+As you can see we define `gradient` as `category`, and `gradient` is also the key for the value.
 
 Now instead of define the value `gradient` manually `'linear-gradient(160deg,--wp--preset--color--text,
 --wp--preset--color--background)'` we can handle the power of the `CollectionInterface::class` and use a simple 
 syntax to define the value we need: `'{{color.text}}'` where the parenthesis `{{` `}}` are used to wrap the value 
-name we need, in the example is `text`, in case we need a value from another collection of preset we have to add 
+name we want, in the example is `text`, in case we need a value from another collection of preset we have to add 
 also the category of the preset with the name separated by a dot like this `color.text`, so the object knows that it 
-needs a text value from a color collection, also we need to add the collection of colors to the collection of 
+needs a `text` value from a color collection, also we need to add the collection of colors to the collection of 
 gradients with this snippet:
 
 ```php
@@ -294,11 +300,85 @@ $font_family = new Preset(
 );
 ```
 
-As you can see in the above `fontSize` config we call value name without the category `{{base}}` this is because the 
-`base` slug is declared in the configuration of the same object, so, we don't need to add the category.
+As you can see in the above `fontSize` config we call value slug without the category like this `{{base}}` this is 
+because the `base` slug is declared in the configuration of the same object, so, we don't need to add the category.
 
-Also, you can notice that for `fontSize` we use the key `size`, this is because is the key used for the preset of 
+Also, you can notice that for `fontSize` we use the key `size`, this because is the key used for the preset of 
 font sizes.
+
+It's time for an example of custom:
+
+```php
+$custom = new Custom(
+    [
+        'contentSize'	=> '60vw',
+        'wideSize'	=> '80vw',
+        'baseFontSize' => "1rem",
+        'spacer' => [
+            'base'	=> '1rem',
+            'v'		=> 'calc( {{spacer.base}} * 4 )',
+            'h'		=> 'calc( {{spacer.base}} * 4 )',
+            'test'		=> 'calc( {{fontSize.base}} * 4 )',
+        ],
+        'blockGap'	=> [
+            'base'	=> '{{spacer.base}}',
+            'm'	=> 'calc( {{spacer.base}} * 2 )',
+            'l'	=> 'calc( {{spacer.base}} * 4 )',
+        ],
+        'lineHeight' => [
+            'small' => 1.2,
+            'medium' => 1.4,
+            'large' => 1.8
+        ],
+        'button'	=> [
+            'bg'	=> '{{color.base}}',
+            'text'	=> '{{color.background}}',
+        ],
+    ]
+);
+
+$custom->withCollection(
+    $palette,
+    $gradient,
+    $font_sizes,
+    $font_family
+);
+```
+
+Custom properties is useful for declaring "custom" prop names, if we want to use the preset Properties we have to add 
+the collections we need, I added all preset collection.
+
+Now in the setting section we need to use the `CollectionInterface::toArray()` method to add the configurations we 
+just made above:
+
+```php
+return [
+    'settings' => [
+        'color' => [
+            'palette'	=> $palette->toArray(),
+            'gradients'	=> $gradient->toArray(),
+        ],
+        'typography' => [
+            'fontSizes'			=> $font_sizes->toArray(),
+            'fontFamilies'		=> $font_family->toArray(),
+        ],
+        'custom' => $custom->toArray(),
+        'layout' => [
+            'contentSize' => $custom->varOf( 'contentSize' ),
+            'wideSize' => $custom->varOf( 'wideSize' ),
+        ],
+    ],
+];
+```
+
+`CollectionInterface::class` also provide other method you can use in the config:
+
+`CollectionInterface::propOf( string $slug )` will return the css property like `--wp--preset--color--base`
+`CollectionInterface::varOf( string $slug )` will return the css property and css var function like 
+`var(--wp--preset--color--base)`
+`CollectionInterface::value( string $slug )` will return the value of the CSS property.
+
+The `styles` section coming soon.
 
 ## Contributing
 
