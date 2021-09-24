@@ -14,7 +14,7 @@ use function array_replace_recursive;
 use function dirname;
 use function is_callable;
 
-final class ComposerPlugin implements PluginInterface, EventSubscriberInterface {
+final class ComposerPlugin implements PluginInterface {
 
 	const TYPE_THEME = 'wordpress-theme';
 
@@ -22,13 +22,13 @@ final class ComposerPlugin implements PluginInterface, EventSubscriberInterface 
 	 * @inheritDoc
 	 * @return array<string, string>
 	 */
-	public static function getSubscribedEvents(): array {
-		return [
-			'post-autoload-dump'	=> 'run',
-			'post-install-cmd'		=> 'run',
-			'post-update-cmd'		=> 'run',
-		];
-	}
+//	public static function getSubscribedEvents(): array {
+//		return [
+//			'post-autoload-dump'	=> 'run',
+//			'post-install-cmd'		=> 'run',
+//			'post-update-cmd'		=> 'run',
+//		];
+//	}
 
 	/**
 	 * @param Event $event

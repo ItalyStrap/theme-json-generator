@@ -170,6 +170,12 @@ This command is still experimental, could be changed in future.
 
 ## Advanced Usage
 
+> This part is optional, if you want to provide your own data just skip this part.
+
+Now we know how to generate the theme.json file so what next?
+
+If you want to do more with PHP you can use some classes I added to this library to bettere manage the settings.
+
 ## Contributing
 
 All feedback / bug reports / pull requests are welcome.

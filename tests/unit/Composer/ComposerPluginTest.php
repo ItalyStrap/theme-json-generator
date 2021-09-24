@@ -138,7 +138,7 @@ class ComposerPluginTest extends Unit {
 	protected function getInstance(): ComposerPlugin {
 		$sut = new ComposerPlugin();
 		$this->assertInstanceOf( ComposerPlugin::class, $sut, '' );
-		$this->assertInstanceOf( EventSubscriberInterface::class, $sut, '' );
+//		$this->assertInstanceOf( EventSubscriberInterface::class, $sut, '' );
 		$this->assertInstanceOf( PluginInterface::class, $sut, '' );
 		return $sut;
 	}
