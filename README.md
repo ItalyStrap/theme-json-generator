@@ -37,8 +37,10 @@ This package adheres to the [SemVer](http://semver.org/) specification and will 
 Basically, this plugin executes the following steps:
 
 * This plugin searches for a custom callback you provide trough `composer.json` inside `extra` field.
-* The callback needs to return an array with your [theme config](https://developer.wordpress.org/block-editor/how-to-guides/themes/theme-json/) and accept a string argument where you get the path of the theme.
-* And it generates the theme.json in the root folder of the theme you are developing.
+* The callback needs to return an array with your [theme config](https://developer.wordpress.
+  org/block-editor/how-to-guides/themes/theme-json/) and the callback accepts a string argument where you get the 
+  path of the theme.
+* At the end it generates the theme.json in the root folder of the theme you are developing.
 
 ### Example project
 
@@ -54,40 +56,39 @@ The following is an example Composer project.
     },
     "extra": {
         "theme-json": {
-            "callable": "\\YourVendor\\YourProject::your_callback"
+            "callable": "\\YourVendor\\YourProject\\YourCustomClass::yourCallback"
         }
-    },
-    "repositories": [{
-        "type": "vcs",
-        "url": "https://github.com/ItalyStrap/theme-json-generator.git"
-    }]
+    }
 }
 ```
 
-It is not yet on packagist and you have to add also the "repositories" field with the GitHub url.
-
 The callable must be a valid PHP callable and must return an array with your configuration following the schema 
-provided from the [documentation](https://developer.wordpress.org/block-editor/how-to-guides/themes/theme-json/).
+provided by the [documentation](https://developer.wordpress.org/block-editor/how-to-guides/themes/theme-json/).
 
 Example:
+
 ```php
 namespace YourVendor\YourProject;
-/**
- * @argument string $path The path of the theme
- */
-function your_callback( string $path ): array {
-    // You can check against the $path argument in case you have parent and child theme.
 
-    return [
-        'version'   => 1,
-        'settings'  => 	[
-            'layout' => [
-                'contentSize' => '620px',
-                'wideSize' => '1000px',
-            ],
-            [...] // All the rest of config
-        ]
-    ];
+final class YourCustomClass {
+
+    /**
+     * @argument string $path The path of the theme
+     */
+    function yourCallback( string $path ): array {
+        // You can check against the $path argument in case you have parent and child theme.
+    
+        return [
+            'version'   => 1,
+            'settings'  => 	[
+                'layout' => [
+                    'contentSize' => '620px',
+                    'wideSize' => '1000px',
+                ],
+                [...] // All the rest of config
+            ]
+        ];
+    }
 }
 ```
 
