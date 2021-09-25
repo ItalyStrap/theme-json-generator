@@ -115,7 +115,10 @@ final class Custom implements CollectionInterface {
 				}
 			});
 
+			/** @psalm-suppress PossiblyInvalidArgument */
 			if ( $this->hasSingleValue( $item ) ) {
+
+				/** @psalm-suppress PossiblyInvalidArgument */
 				$item = $this->convertToString( $item );
 			}
 
