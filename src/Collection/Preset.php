@@ -10,7 +10,7 @@ final class Preset implements CollectionInterface {
 	use Collectible, ConvertCase;
 
 	/**
-	 * @var array[]
+	 * @var array<int|string, array<string,string>>
 	 */
 	private $collection;
 
@@ -25,7 +25,7 @@ final class Preset implements CollectionInterface {
 	private $key;
 
 	/**
-	 * @param array[] $collection
+	 * @param array<int|string, array<string,string>> $collection
 	 * @param string $category
 	 * @param string $key
 	 */
@@ -47,6 +47,7 @@ final class Preset implements CollectionInterface {
 	 */
 	public function propOf( string $slug ): string {
 
+		/** @var array<string, mixed> $item */
 		foreach ( $this->collection as $item ) {
 			if ( \in_array( $slug, $item, true ) ) {
 				return \sprintf(
@@ -75,12 +76,10 @@ final class Preset implements CollectionInterface {
 	 */
 	public function value( string $slug ): string {
 
-		/**
-		 * @var $item array
-		 */
+		/** @var array<string, mixed> $item */
 		foreach ( $this->toArray() as $item ) {
 			if ( \in_array( $slug, $item, true ) ) {
-				return $item[ $this->key ];
+				return (string) $item[ $this->key ];
 			}
 		}
 
@@ -92,14 +91,18 @@ final class Preset implements CollectionInterface {
 	 */
 	public function toArray(): array {
 
+		/**
+		 * @var array<string, mixed> $item
+		 */
 		foreach ( $this->collection as $key => $item ) {
 			\preg_match_all(
 				'/(?:{{.*?}})+/',
-				$item[ $this->key ],
+				(string) $item[ $this->key ],
 				$matches
 			);
 
 			foreach ( $matches[0] as $match ) {
+				/** @psalm-suppress MixedArrayAssignment */
 				$this->collection[ $key ][ $this->key ] = \str_replace(
 					$match,
 					$this->findCssVariable( \str_replace( ['{{', '}}' ], '', $match ) ),

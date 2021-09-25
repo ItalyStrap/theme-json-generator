@@ -17,14 +17,15 @@ class ScssFileBuilder implements FileBuilder {
 	private $path;
 
 	/**
-	 * @var ConfigInterface<string, mixed>|null
+	 * @psalm-suppress TooManyTemplateParams
+	 * @var ConfigInterface<mixed>|null
 	 */
 	private $config;
 
 	/**
-	 * ThemeJsonGenerator constructor.
+	 * @psalm-suppress TooManyTemplateParams
 	 * @param string $path
-	 * @param ConfigInterface<string, mixed>|null $config
+	 * @param ConfigInterface<mixed>|null $config
 	 */
 	public function __construct( string $path, ConfigInterface $config = null ) {
 		$this->path = $path;
@@ -35,21 +36,23 @@ class ScssFileBuilder implements FileBuilder {
 	 * @inheritDoc
 	 */
 	public function build( callable $callable ): void {
-		$file = new \SplFileObject( $this->path, 'a' );
+		$_file = new \SplFileObject( $this->path, 'a' );
 
-		if ( ! $file->isWritable() ) {
+		if ( ! $_file->isWritable() ) {
 			throw new \RuntimeException('Ciccia culo');
 		}
 
-//		codecept_debug($callable());
-//		codecept_debug($this->generateScssContent( $callable() ));
+		/**
+		 * @var array<string|int, mixed>
+		 */
+		$data = $callable();
 
-		$file->fwrite( $this->generateScssContent( $callable() ) );
-		$file = null;
+		$_file->fwrite( $this->generateScssContent( $data ) );
+		$_file = null;
 	}
 
 	/**
-	 * @param array<mixed, mixed> $data
+	 * @param array<string|int, mixed> $data
 	 * @return string
 	 */
 	private function generateScssContent( array $data ): string {
@@ -57,6 +60,9 @@ class ScssFileBuilder implements FileBuilder {
 			return '// No data are provided!';
 		}
 
+		/**
+		 * @psalm-suppress PossiblyNullReference
+		 */
 		$this->config->merge( $data ); /** @phpstan-ignore-line */
 
 		$content = '';
@@ -69,15 +75,17 @@ class ScssFileBuilder implements FileBuilder {
 		];
 
 		foreach ( $schema as $slug => $prefix ) {
+			/** @var array<string, string> $item */
 			foreach ( (array) $this->config->get( $slug ) as $item ) { /** @phpstan-ignore-line */
 				$content .= $this->generateScssVariableAndCssVariable( $item['slug'], $prefix );
 			}
 		}
 
+		/** @var array<string|int, string> $custom */
 		$custom = (array) $this->config->get( 'settings.custom' ); /** @phpstan-ignore-line */
 		$custom = $this->flattenTree( $custom );
 
-		foreach ( $custom as $property_name => $value ) {
+		foreach ( $custom as $property_name => $_value ) {
 			$content .= $this->generateScssVariableAndCssVariable( $property_name, '--wp-custom' );
 		}
 
@@ -97,7 +105,7 @@ class ScssFileBuilder implements FileBuilder {
 	}
 
 	/**
-	 * @param array<string, string> $tree
+	 * @param array<string|int, string> $tree
 	 * @param string $prefix
 	 * @param string $token
 	 * @return array<string, string>
@@ -107,7 +115,6 @@ class ScssFileBuilder implements FileBuilder {
 		$result = [];
 
 		/**
-		 * @var string $property
 		 * @var string|array<string, string> $value
 		 */
 		foreach ( $tree as $property => $value ) {

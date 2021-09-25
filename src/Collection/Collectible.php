@@ -20,10 +20,10 @@ trait Collectible {
 	/**
 	 * @param string $slug_or_default
 	 * @return string
+	 * @psalm-suppress RedundantCast
 	 */
 	private function findCssVariable( string $slug_or_default ): string {
 
-		/** @var array $slugs_or_default */
 		$slugs_or_default = (array) \explode( '|', $slug_or_default, 2 );
 
 		$css_variable = $slugs_or_default[ 1 ] ?? '';

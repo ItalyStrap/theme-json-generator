@@ -29,7 +29,7 @@ interface CollectionInterface {
 	public function value( string $slug ): string;
 
 	/**
-	 * @return array[]
+	 * @return array<int|string, mixed>
 	 */
 	public function toArray(): array;
 

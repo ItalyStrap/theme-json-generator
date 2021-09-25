@@ -12,7 +12,7 @@ final class Custom implements CollectionInterface {
 	use Collectible, ConvertCase;
 
 	/**
-	 * @var array[]
+	 * @var array<int|string, mixed>
 	 */
 	private $collection;
 
@@ -22,10 +22,16 @@ final class Custom implements CollectionInterface {
 	private $category;
 
 	/**
-	 * @var Config|ConfigInterface
+	 * @psalm-suppress TooManyTemplateParams
+	 * @var ConfigInterface<mixed>
 	 */
 	private $config;
 
+	/**
+	 * @psalm-suppress TooManyTemplateParams
+	 * @param array<int|string, mixed> $collection
+	 * @param ConfigInterface<mixed>|null $config
+	 */
 	public function __construct(
 		array $collection,
 		ConfigInterface $config = null
@@ -84,7 +90,7 @@ final class Custom implements CollectionInterface {
 		$this->toArray();
 
 		if ( $this->config->has( $slug ) ) {
-			return $this->config->get( $slug );
+			return (string) $this->config->get( $slug );
 		}
 
 		throw new \RuntimeException("Value of {$slug} does not exists." );
@@ -97,11 +103,15 @@ final class Custom implements CollectionInterface {
 
 		$this->config->merge( $this->collection );
 
+		/**
+		 * @var int|string $key
+		 * @var mixed $item
+		 */
 		foreach ( $this->config as $key => $item ) {
 			$item = (array) $item;
 
-			\array_walk_recursive($item, function ( &$input, $index ) {
-				if (  \strpos( (string) $input, '{{' ) !== false ) {
+			\array_walk_recursive( $item, function ( string &$input ) {
+				if (  \strpos( $input, '{{' ) !== false ) {
 					$input = $this->replacePlaceholder( $input );
 				}
 			});
@@ -121,8 +131,7 @@ final class Custom implements CollectionInterface {
 
 	/**
 	 * @param string $item
-	 * @param $matches
-	 * @return array
+	 * @return string
 	 */
 	private function replacePlaceholder( string $item ): string {
 		\preg_match_all(
