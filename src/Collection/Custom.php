@@ -104,7 +104,7 @@ final class Custom implements CollectionInterface {
 
 		/**
 		 * @var int|string $key
-		 * @var mixed $item
+		 * @var string|array<int|string, mixed> $item
 		 */
 		foreach ( $this->config as $key => $item ) {
 			$item = (array) $item;
