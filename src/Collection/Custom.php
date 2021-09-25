@@ -22,10 +22,9 @@ final class Custom implements CollectionInterface {
 	private $category;
 
 	/**
-	 * @psalm-suppress TooManyTemplateParams
-	 * @var ConfigInterface<mixed>
+	 * @var ConfigInterface
 	 */
-	private $config;
+	private $config; // @phpstan-ignore-line
 
 	/**
 	 * @psalm-suppress TooManyTemplateParams
@@ -116,8 +115,8 @@ final class Custom implements CollectionInterface {
 				}
 			});
 
-			if ( \count( $item ) === 1 && \array_key_exists( 0, $item ) ) {
-				$item = (string) $item[0];
+			if ( $this->hasSingleValue( $item ) ) {
+				$item = $this->convertToString( $item );
 			}
 
 			$this->config->add(
@@ -148,5 +147,21 @@ final class Custom implements CollectionInterface {
 			);
 		}
 		return $item;
+	}
+
+	/**
+	 * @param array<int|string, mixed> $item
+	 * @return bool
+	 */
+	private function hasSingleValue( array $item ): bool {
+		return \count( $item ) === 1 && \array_key_exists( 0, $item );
+	}
+
+	/**
+	 * @param array<int|string, mixed> $item
+	 * @return string
+	 */
+	private function convertToString( array $item ): string {
+		return (string) $item[ 0 ];
 	}
 }
