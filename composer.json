@@ -41,7 +41,9 @@
         "infection/codeception-adapter": "^0.4.0",
         "italystrap/debug": "^2.0",
         "phpspec/prophecy-phpunit": "^1.1",
-        "composer/composer": "^2.1"
+        "composer/composer": "^2.1",
+        "mexitek/phpcolors": "^1.0",
+        "spatie/color": "^1.1"
     },
     "autoload": {
         "psr-4": {
