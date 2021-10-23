@@ -6,7 +6,6 @@ namespace ItalyStrap\Tests\Unit\Composer;
 use Codeception\Test\Unit;
 use Composer\Composer;
 use Composer\Config;
-use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\IO\IOInterface;
 use Composer\Package\Link;
 use Composer\Package\PackageInterface;

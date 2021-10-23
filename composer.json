@@ -14,7 +14,7 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "php" : ">=7.2",
+        "php" : ">=7.4",
         "composer-plugin-api": "^2.0",
         "italystrap/config": "^2.4"
     },
@@ -37,6 +37,8 @@
         "vimeo/psalm": "^4.8",
         "phpbench/phpbench": "@dev",
         "phpmetrics/phpmetrics": "^2.5",
+        "infection/infection": "^0.25",
+        "infection/codeception-adapter": "^0.4.0",
         "italystrap/debug": "^2.0",
         "phpspec/prophecy-phpunit": "^1.1",
         "composer/composer": "^2.1"
