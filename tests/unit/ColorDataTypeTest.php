@@ -6,8 +6,8 @@ namespace ItalyStrap\Tests;
 use Codeception\Test\Unit;
 use ItalyStrap\ThemeJsonGenerator\ColorDataType;
 
-class ColorDataTypeTest extends Unit
-{
+class ColorDataTypeTest extends Unit {
+
 	use BaseUnitTrait;
 
 	protected string $color = '';

@@ -7,8 +7,8 @@ use Mexitek\PHPColors\Color as PHPColor;
 use Spatie\Color\Color;
 use Spatie\Color\Factory as ColorFactory;
 
-final class ColorDataType
-{
+final class ColorDataType {
+
 
 	private Color $s_color;
 
