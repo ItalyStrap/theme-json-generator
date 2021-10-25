@@ -79,8 +79,8 @@ class ThemeSassGeneratorTest extends UnitTest {
 			[
 				'alignmentCenter'	=> 'center',
 			],
-			'$alignment-center',
-			'--wp-custom--alignment-center !default;',
+			'$wp-custom--alignment-center',
+			'--wp-custom--alignment-center;',
 		];
 
 		yield 'Custom with child' => [
@@ -89,8 +89,8 @@ class ThemeSassGeneratorTest extends UnitTest {
 					'center'	=> 'center',
 				],
 			],
-			'$alignment--center',
-			'--wp-custom--alignment--center !default;',
+			'$wp-custom--alignment--center',
+			'--wp-custom--alignment--center;',
 		];
 	}
 
@@ -133,8 +133,8 @@ class ThemeSassGeneratorTest extends UnitTest {
 					],
 				],
 			],
-			'$primary',
-			'--wp--preset--color--primary !default',
+			'$wp--preset--color--primary',
+			'--wp--preset--color--primary',
 		];
 
 		yield 'Color gradients' => [
@@ -147,8 +147,8 @@ class ThemeSassGeneratorTest extends UnitTest {
 					],
 				],
 			],
-			'$blush-light-purple',
-			'--wp--preset--gradient--blush-light-purple !default',
+			'$wp--preset--gradient--blush-light-purple',
+			'--wp--preset--gradient--blush-light-purple',
 		];
 
 		yield 'Typography fontSizes' => [
@@ -161,8 +161,8 @@ class ThemeSassGeneratorTest extends UnitTest {
 					],
 				],
 			],
-			'$normal',
-			'--wp--preset--font-size--normal !default',
+			'$wp--preset--font-size--normal',
+			'--wp--preset--font-size--normal',
 		];
 
 		yield 'Typography fontFamilies' => [
@@ -175,8 +175,8 @@ class ThemeSassGeneratorTest extends UnitTest {
 					],
 				],
 			],
-			'$system-font',
-			'--wp--preset--font-family--system-font !default',
+			'$wp--preset--font-family--system-font',
+			'--wp--preset--font-family--system-font',
 		];
 	}
 

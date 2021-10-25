@@ -39,7 +39,7 @@ class ScssFileBuilder implements FileBuilder {
 		$_file = new \SplFileObject( $this->path, 'a' );
 
 		if ( ! $_file->isWritable() ) {
-			throw new \RuntimeException('Ciccia culo');
+			throw new \RuntimeException('The file is not writable');
 		}
 
 		/**
@@ -85,22 +85,36 @@ class ScssFileBuilder implements FileBuilder {
 		$custom = (array) $this->config->get( 'settings.custom' ); /** @phpstan-ignore-line */
 		$custom = $this->flattenTree( $custom );
 
+//		$map = '$wp-custom: (' . PHP_EOL;
 		foreach ( $custom as $property_name => $_value ) {
 			$content .= $this->generateScssVariableAndCssVariable( $property_name, '--wp-custom' );
+//			$map .= $this->generateScssMap( $property_name, '--wp-custom' );
 		}
+//		$map .= ');' . PHP_EOL;
 
+//		return $content . $map;
 		return $content;
 	}
 
+//	private function generateScssMap( string $slug, string $prefix ): string {
+//		return \sprintf(
+//			'"%1$s": %2$s--%1$s,' . PHP_EOL,
+//			$this->camelToUnderscore( $slug ),
+//			$prefix
+//		);
+//	}
+
 	/**
 	 * @param string $slug
+	 * @param string $prefix
 	 * @return string
 	 */
 	private function generateScssVariableAndCssVariable( string $slug, string $prefix ): string {
 		return \sprintf(
-			'$%1$s: %2$s--%1$s !default;' . PHP_EOL,
+			'$%3$s--%1$s: %2$s--%1$s;' . PHP_EOL,
 			$this->camelToUnderscore( $slug ),
-			$prefix
+			$prefix,
+			\ltrim( $prefix, '-' )
 		);
 	}
 
