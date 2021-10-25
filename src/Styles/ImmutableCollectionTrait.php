@@ -26,6 +26,9 @@ trait ImmutableCollectionTrait {
 				$bt[1] = ['file' => '', 'line' => ''];
 			}
 
+			/**
+			 * @psalm-suppress PossiblyUndefinedArrayOffset
+			 */
 			throw new \RuntimeException( \sprintf(
 				'The key "%s" is already provided | File:  %s | Line: %s',
 				$key,

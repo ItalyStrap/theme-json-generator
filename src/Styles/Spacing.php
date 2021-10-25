@@ -56,7 +56,7 @@ final class Spacing implements ArrayableInterface {
 	}
 
 	/**
-	 * @param array $collection
+	 * @param array<string, string> $collection
 	 * @return bool
 	 */
 	private function assertCollectionHasAllFourValuesAreEqual( array $collection ): bool {

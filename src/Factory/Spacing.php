@@ -12,12 +12,14 @@ final class Spacing {
 	}
 
 	/**
+	 * @todo https://3v4l.org/4ia5Dt#v7.4.24
+	 * This is not a todo but only a reference https://3v4l.org/EtCFE
 	 * One value => 0px => 0px 0px 0px 0px
 	 * Two values => 5px 0px => 5px 0px 5px 0px
 	 * Three values => 10px auto 0px => 10px auto 0px auto
 	 * For values => 1px 2px 3px 4px => 1px 2px 3px 4px
-	 * @param array $values
-	 * @return array
+	 * @param array<string> $values
+	 * @return BaseSpacing
 	 */
 	public static function shorthand( array $values ): BaseSpacing {
 		$map = [
@@ -26,8 +28,6 @@ final class Spacing {
 			'bottom'	=> '',
 			'left'		=> '',
 		];
-
-		$obj = self::make();
 
 		switch ( \count( $values ) ) {
 			case 1:
@@ -58,11 +58,19 @@ final class Spacing {
 				break;
 		}
 
+		$spacing_obj = self::make();
+
 		foreach ( \array_filter( $map ) as $method => $value ) {
-			\call_user_func( [ $obj, $method ], $value );
+
+			$callback = [ $spacing_obj, $method ];
+			if( ! \is_callable( $callback ) ) {
+				throw new \RuntimeException( 'Method not found' );
+			}
+
+			\call_user_func( $callback, $value );
 		}
 
-		return $obj;
+		return $spacing_obj;
 	}
 
 	public static function top( string $value ): BaseSpacing {

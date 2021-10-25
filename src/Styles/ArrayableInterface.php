@@ -5,5 +5,8 @@ namespace ItalyStrap\ThemeJsonGenerator\Styles;
 
 interface ArrayableInterface {
 
+	/**
+	 * @return array<string|int, string>
+	 */
 	public function toArray(): array;
 }
