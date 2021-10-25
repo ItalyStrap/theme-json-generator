@@ -100,12 +100,10 @@ final class ComposerPlugin implements PluginInterface {
 			return;
 		}
 
-		$callable = $theme_json_config[ 'callable' ];
-
 		$path .= '/theme.json';
 
 		try {
-			( new JsonFileBuilder( $path ) )->build( $callable );
+			( new JsonFileBuilder( $path ) )->build( $theme_json_config[ 'callable' ] );
 		} catch ( Exception $e ) {
 			$io->write( $e->getMessage() );
 		}

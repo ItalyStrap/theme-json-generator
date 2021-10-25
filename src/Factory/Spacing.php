@@ -61,9 +61,8 @@ final class Spacing {
 		$spacing_obj = self::make();
 
 		foreach ( \array_filter( $map ) as $method => $value ) {
-
 			$callback = [ $spacing_obj, $method ];
-			if( ! \is_callable( $callback ) ) {
+			if ( ! \is_callable( $callback ) ) {
 				throw new \RuntimeException( 'Method not found' );
 			}
 
