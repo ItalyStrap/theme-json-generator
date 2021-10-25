@@ -79,8 +79,8 @@ class ThemeSassGeneratorTest extends UnitTest {
 			[
 				'alignmentCenter'	=> 'center',
 			],
-			'$wp-custom--alignment-center',
-			'--wp-custom--alignment-center;',
+			'$wp--custom--alignment-center',
+			'--wp--custom--alignment-center;',
 		];
 
 		yield 'Custom with child' => [
@@ -89,8 +89,8 @@ class ThemeSassGeneratorTest extends UnitTest {
 					'center'	=> 'center',
 				],
 			],
-			'$wp-custom--alignment--center',
-			'--wp-custom--alignment--center;',
+			'$wp--custom--alignment--center',
+			'--wp--custom--alignment--center;',
 		];
 	}
 

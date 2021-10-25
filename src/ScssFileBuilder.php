@@ -87,7 +87,7 @@ class ScssFileBuilder implements FileBuilder {
 
 //		$map = '$wp-custom: (' . PHP_EOL;
 		foreach ( $custom as $property_name => $_value ) {
-			$content .= $this->generateScssVariableAndCssVariable( $property_name, '--wp-custom' );
+			$content .= $this->generateScssVariableAndCssVariable( $property_name, '--wp--custom' );
 //			$map .= $this->generateScssMap( $property_name, '--wp-custom' );
 		}
 //		$map .= ');' . PHP_EOL;
