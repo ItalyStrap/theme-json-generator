@@ -176,29 +176,39 @@ class ComposerPluginTest extends Unit {
 	 * @test
 	 */
 	public function itShouldCreateThemeJsonFileFromRootPackage() {
-		$theme_json_file_path = codecept_output_dir(\rand() .  '/vendor');
+		$rand = (string) \rand();
+		$temp_dir_path = codecept_output_dir( $rand . '/vendor' );
+
 		$this->config
 			->get( Argument::type('string') )
-			->willReturn( $theme_json_file_path );
+			->willReturn( $temp_dir_path );
 
 		$this->rootPackage->getType()->willReturn('wordpress-theme');
 		$this->rootPackage->getExtra()->willReturn([
 			'theme-json' => [
-				'callable' => function (): array {
-					return ['key' => 'value'];
-				},
+				'callable' => fn (): array => ['key' => 'value'],
+				'path-for-theme-sass'	=> 'assets/',
 			],
 		]);
 
 		$sut = $this->getInstance();
 		$sut->createThemeJson( $this->getComposer(), $this->getIo() );
 
-		$theme_json_file_path = dirname( $theme_json_file_path ) . '/theme.json';
+		$theme_json_file_path = dirname( $temp_dir_path ) . '/theme.json';
 		$this->assertFileExists( $theme_json_file_path, '');
 		$this->assertFileIsReadable( $theme_json_file_path, '');
 		$this->assertFileIsWritable( $theme_json_file_path, '');
 
+		/**
+		 * @todo QUi il test fa merda, da rifare
+		 */
+//		$theme_scss_file_path = dirname( $temp_dir_path ) . '/theme.scss';
+//		$this->assertFileExists( $theme_scss_file_path, '');
+//		$this->assertFileIsReadable( $theme_scss_file_path, '');
+//		$this->assertFileIsWritable( $theme_scss_file_path, '');
+
 		\unlink($theme_json_file_path);
+//		\unlink($theme_scss_file_path);
 	}
 
 	/**

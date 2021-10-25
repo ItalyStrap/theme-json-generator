@@ -100,10 +100,19 @@ final class ComposerPlugin implements PluginInterface {
 			return;
 		}
 
-		$path .= '/theme.json';
+//		$path .= '/theme.json';
 
 		try {
-			( new JsonFileBuilder( $path ) )->build( $theme_json_config[ 'callable' ] );
+			( new JsonFileBuilder( $path . '/theme.json' ) )
+				->build( $theme_json_config[ 'callable' ] );
+
+			$path_for_theme_sass = $path . '/' . $theme_json_config[ 'path-for-theme-sass' ];
+			if ( \is_writable( $path_for_theme_sass ) ) {
+				( new ScssFileBuilder(
+					\rtrim( $path_for_theme_sass, '/' ) . '/theme.scss'
+				) )->build( $theme_json_config[ 'callable' ] );
+			}
+
 		} catch ( Exception $e ) {
 			$io->write( $e->getMessage() );
 		}
@@ -116,6 +125,7 @@ final class ComposerPlugin implements PluginInterface {
 		return [
 			'theme-json' => [
 				'callable' => false,
+				'path-for-theme-sass'	=> '',
 			],
 		];
 	}
