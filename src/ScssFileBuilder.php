@@ -36,6 +36,10 @@ class ScssFileBuilder implements FileBuilder {
 	 * @inheritDoc
 	 */
 	public function build( callable $callable ): void {
+		if ( \file_exists( $this->path ) && \is_file( $this->path ) ) {
+			\unlink( $this->path );
+		}
+
 		$_file = new \SplFileObject( $this->path, 'a' );
 
 		if ( ! $_file->isWritable() ) {
