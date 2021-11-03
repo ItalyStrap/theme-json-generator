@@ -97,7 +97,10 @@ final class ComposerPlugin implements PluginInterface {
 		$theme_json_config = $composer_extra[ 'theme-json' ];
 
 		if ( ! is_callable( $theme_json_config[ 'callable' ] ) ) {
-			return;
+			throw new \RuntimeException( \sprintf(
+				'Maybe the %s is not a valid callable',
+				$theme_json_config[ 'callable' ]
+			) );
 		}
 
 //		$path .= '/theme.json';
