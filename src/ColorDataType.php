@@ -58,8 +58,60 @@ final class ColorDataType {
 		return new self( '#' . $this->m_color->lighten( $amount ) );
 	}
 
-	public function mix( string $hex2, int $amount = 0 ): self {
-		return new self( '#' . $this->m_color->mix( $hex2, $amount ) );
+	public function tint( float $weight = 0 ): self {
+		return $this->mix( '#ffffff', $weight );
+	}
+
+	public function shade( float $weight = 0 ): self {
+		return $this->mix( '#000000', $weight );
+	}
+
+	public function mix( string $mixedWithThisColor, float $weight = 0 ): self {
+
+		$rgb = $this->s_color->toRgb();
+		$rgb2 = ColorFactory::fromString( $mixedWithThisColor )->toRgb() ;
+
+		$result = $this->mixRgb(
+			[
+				$rgb2->red(),
+				$rgb2->green(),
+				$rgb2->blue(),
+			],
+			[
+				$rgb->red(),
+				$rgb->green(),
+				$rgb->blue(),
+			],
+			$weight > 1 ? $weight / 100 : $weight
+		);
+
+		return new self( \sprintf(
+			'rgb(%s)',
+			\implode(',', $result)
+		) );
+	}
+
+	/**
+	 * @author https://gist.github.com/andrewrcollins/4570993
+	 * @param int[] $color_1
+	 * @param int[] $color_2
+	 * @param float $weight
+	 * @return array
+	 */
+	private function mixRgb( array $color_1 = [0, 0, 0], array $color_2 = [0, 0, 0], float $weight = 0.5): array {
+		$f = function ($x) use ($weight): float {
+			return $weight * $x;
+		};
+
+		$g = function ($x) use ($weight): float {
+			return (1 - $weight) * $x;
+		};
+
+		$h = function ($x, $y): float {
+			return round($x + $y);
+		};
+
+		return \array_map( $h, \array_map( $f, $color_1 ), \array_map( $g, $color_2 ) );
 	}
 
 	public function complementary(): self {
