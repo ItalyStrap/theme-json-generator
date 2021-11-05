@@ -165,6 +165,8 @@ class ComposerPluginTest extends Unit {
 			],
 		]);
 
+		$this->expectException( \RuntimeException::class );
+
 		$sut = $this->getInstance();
 		$sut->createThemeJson( $this->getComposer(), $this->getIo() );
 
