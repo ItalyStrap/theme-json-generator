@@ -380,7 +380,17 @@ return [
 `var(--wp--preset--color--base)`
 `CollectionInterface::value( string $slug )` will return the value of the CSS property.
 
-The `styles` section coming soon.
+The `styles` section coming soon, I'm working on it.
+
+## Changelog
+
+Refactored the files structure:
+You have to change the Composer Plugin call -> You should call "ItalyStrap\\ThemeJsonGenerator\\Composer\\Plugin::run" See above in the docs
+Changed Preset::class and Custom::class, use:
+\ItalyStrap\ThemeJsonGenerator\Settings\PresetCollection::class
+\ItalyStrap\ThemeJsonGenerator\Settings\CustomCollection::class
+
+The directory Collection is here only for back compat.
 
 ## Contributing
 
