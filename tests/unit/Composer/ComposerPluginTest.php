@@ -12,7 +12,7 @@ use Composer\Package\PackageInterface;
 use Composer\Package\RootPackageInterface;
 use Composer\Plugin\PluginInterface;
 use Composer\Repository\RepositoryManager;
-use ItalyStrap\ThemeJsonGenerator\ComposerPlugin;
+use ItalyStrap\ThemeJsonGenerator\Composer\Plugin;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Prophet;
@@ -134,9 +134,9 @@ class ComposerPluginTest extends Unit {
 	protected function _after() {
 	}
 
-	protected function getInstance(): ComposerPlugin {
-		$sut = new ComposerPlugin();
-		$this->assertInstanceOf( ComposerPlugin::class, $sut, '' );
+	protected function getInstance(): Plugin {
+		$sut = new Plugin();
+		$this->assertInstanceOf( Plugin::class, $sut, '' );
 //		$this->assertInstanceOf( EventSubscriberInterface::class, $sut, '' );
 		$this->assertInstanceOf( PluginInterface::class, $sut, '' );
 		return $sut;

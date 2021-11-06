@@ -1,11 +1,8 @@
 <?php
 declare(strict_types=1);
 
-namespace ItalyStrap\ThemeJsonGenerator\Collection;
+namespace ItalyStrap\ThemeJsonGenerator\Settings;
 
-/**
- * @deprecated
- */
 trait Collectible {
 
 	/**

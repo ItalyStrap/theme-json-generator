@@ -271,6 +271,9 @@ class ColorDataTypeTest extends Unit {
 		$sut = $this->getInstance();
 
 		$this->assertStringMatchesFormat( $expected, $sut->mix( $mixedWith, $weight  )->toHex(), '' );
+
+		codecept_debug( $sut->toHex() );
+		codecept_debug( $sut->mix( $this->base_color, 0.2  )->toHex() );
 	}
 
 	/**
@@ -283,6 +286,17 @@ class ColorDataTypeTest extends Unit {
 
 		$this->assertStringMatchesFormat( '#cccccc', $sut->tint( 0.6 )->toHex(), '' );
 		$this->assertStringMatchesFormat( '#333333', $sut->shade( 0.6 )->toHex(), '' );
+	}
+
+	/**
+	 * @test
+	 */
+	public function itShouldTone() {
+
+		$this->base_color = '#ff0000';
+		$sut = $this->getInstance();
+
+		$this->assertStringMatchesFormat( '#c04040', $sut->tone( 0.5 )->toHex(), '' );
 	}
 
 	/**

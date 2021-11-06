@@ -1,11 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace ItalyStrap\Tests\Unit;
+namespace ItalyStrap\Tests\Unit\Files;
 
 use ItalyStrap\Config\ConfigInterface;
-use ItalyStrap\ThemeJsonGenerator\FileBuilder;
-use ItalyStrap\ThemeJsonGenerator\ScssFileBuilder;
+use ItalyStrap\Tests\Unit\UnitTest;
+use ItalyStrap\ThemeJsonGenerator\Files\FileBuilder;
+use ItalyStrap\ThemeJsonGenerator\Files\ScssFileBuilder;
 use Prophecy\Prophet;
 
 class ThemeSassGeneratorTest extends UnitTest {

@@ -1,9 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace ItalyStrap\ThemeJsonGenerator;
+namespace ItalyStrap\ThemeJsonGenerator\Files;
 
 use Composer\Json\JsonFile;
+use ItalyStrap\ThemeJsonGenerator\Composer\ComposerJsonFileAdapter;
 
 class JsonFileBuilder implements FileBuilder {
 

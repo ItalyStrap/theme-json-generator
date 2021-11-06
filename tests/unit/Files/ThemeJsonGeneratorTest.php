@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace ItalyStrap\Tests\Unit;
+namespace ItalyStrap\Tests\Unit\Files;
 
 use Codeception\Test\Unit;
-use ItalyStrap\ThemeJsonGenerator\JsonFileBuilder;
+use ItalyStrap\ThemeJsonGenerator\Files\JsonFileBuilder;
 
 class ThemeJsonGeneratorTest extends Unit {
 

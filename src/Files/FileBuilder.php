@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace ItalyStrap\ThemeJsonGenerator;
+namespace ItalyStrap\ThemeJsonGenerator\Files;
 
 interface FileBuilder {
 

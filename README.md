@@ -75,7 +75,7 @@ final class YourCustomClass {
     /**
      * @argument string $path The path of the theme
      */
-    function yourCallback( string $path ): array {
+    public static function yourCallback( string $path ): array {
         // You can check against the $path argument in case you have parent and child theme.
     
         return [
@@ -113,7 +113,7 @@ To load manually using composer add your command inside the `script` field and l
 {
   "scripts": {
     "your-command": [
-      "ItalyStrap\\ThemeJsonGenerator\\ComposerPlugin::run"
+      "ItalyStrap\\ThemeJsonGenerator\\Composer\\Plugin::run"
     ]
   }
 }
@@ -169,13 +169,13 @@ Now we know how to generate the theme.json file so, what next?
 If you want to do more with PHP you can use some helper classes I added to this library to better manage the 
 settings.
 
-The first classes you can use are the `\ItalyStrap\ThemeJsonGenerator\Collection\Preset::class` and the 
-`ItalyStrap\ThemeJsonGenerator\Collection\Custom::class` that extends 
-`\ItalyStrap\ThemeJsonGenerator\Collection\CollectionInterface::class`, those classes can manage settings for color, 
+The first classes you can use are the `\ItalyStrap\ThemeJsonGenerator\Settings\PresetCollection::class` and the 
+`ItalyStrap\ThemeJsonGenerator\Settings\CustomCollection::class` that extends 
+`\ItalyStrap\ThemeJsonGenerator\Settings\CollectionInterface::class`, those classes can manage settings for color, 
 typography and custom, lets start with color:
 
 ```php
-$palette = new Preset(
+$palette = new \ItalyStrap\ThemeJsonGenerator\Settings\PresetCollection(
     [
         [
             "slug" => "text",
@@ -197,7 +197,8 @@ $palette = new Preset(
 );
 ```
 
-As you can see the `Preset::class` accept an array with the preset configuration following the json schema for color, 
+As you can see the `PresetCollection::class` accept an array with the preset configuration following the json schema 
+for color, 
 and then you can also provide a `category` name and `key` value, the `category` name is used to define that the config is 
 for color, the key is optional and is used to know what is the key of the value, in this case the key and category are 
 the same so you can omit it (you will need it when you will set fontSize).
@@ -205,7 +206,7 @@ the same so you can omit it (you will need it when you will set fontSize).
 Now we can set the gradient:
 
 ```php
-$gradient = new Preset(
+$gradient = new \ItalyStrap\ThemeJsonGenerator\Settings\PresetCollection(
     [
         [
             "slug"		=> "black-to-white",
@@ -242,7 +243,7 @@ future refactoring of the theme style.
 Here an example for `fontSize` and `fontFamily`:
 
 ```php
-$font_sizes = new Preset(
+$font_sizes = new \ItalyStrap\ThemeJsonGenerator\Settings\PresetCollection(
     [
         [
             "slug" => "base",
@@ -284,7 +285,7 @@ $font_sizes = new Preset(
     'size'
 );
 
-$font_family = new Preset(
+$font_family = new \ItalyStrap\ThemeJsonGenerator\Settings\PresetCollection(
     [
         [
             'fontFamily' => 'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
@@ -310,7 +311,7 @@ font sizes.
 It's time for an example of custom:
 
 ```php
-$custom = new Custom(
+$custom = new \ItalyStrap\ThemeJsonGenerator\Settings\CustomCollection(
     [
         'contentSize'	=> '60vw',
         'wideSize'	=> '80vw',

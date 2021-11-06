@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace ItalyStrap\Tests\Unit\Collection;
+namespace ItalyStrap\Tests\Unit\Settings;
 
 use Codeception\Test\Unit;
-use ItalyStrap\ThemeJsonGenerator\Collection\CollectionInterface;
+use ItalyStrap\ThemeJsonGenerator\Settings\CollectionInterface;
 
 abstract class BaseCollectionTest extends Unit {
 

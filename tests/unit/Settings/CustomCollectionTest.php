@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace ItalyStrap\Tests\Unit\Collection;
+namespace ItalyStrap\Tests\Unit\Settings;
 
-use ItalyStrap\ThemeJsonGenerator\Collection\CollectionInterface;
-use ItalyStrap\ThemeJsonGenerator\Collection\Custom;
+use ItalyStrap\ThemeJsonGenerator\Settings\CollectionInterface;
+use ItalyStrap\ThemeJsonGenerator\Settings\CustomCollection;
 
 class CustomCollectionTest extends BaseCollectionTest {
 
@@ -41,9 +41,9 @@ class CustomCollectionTest extends BaseCollectionTest {
 	}
 
 	protected function getInstance(): CollectionInterface {
-		$sut = new Custom( $this->collection );
+		$sut = new CustomCollection( $this->collection );
 		$this->assertInstanceOf( CollectionInterface::class, $sut, '' );
-		$this->assertInstanceOf( Custom::class, $sut, '' );
+		$this->assertInstanceOf( CustomCollection::class, $sut, '' );
 		return $sut;
 	}
 

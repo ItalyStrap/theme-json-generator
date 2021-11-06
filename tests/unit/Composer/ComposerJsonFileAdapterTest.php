@@ -5,7 +5,7 @@ namespace ItalyStrap\Tests\Unit\Composer;
 
 use Codeception\Test\Unit;
 use Composer\Json\JsonFile;
-use ItalyStrap\ThemeJsonGenerator\ComposerJsonFileAdapter;
+use ItalyStrap\ThemeJsonGenerator\Composer\ComposerJsonFileAdapter;
 use Prophecy\Argument;
 use Prophecy\Prophet;
 use UnitTester;

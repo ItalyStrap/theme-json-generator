@@ -1,11 +1,8 @@
 <?php
 declare(strict_types=1);
 
-namespace ItalyStrap\ThemeJsonGenerator\Collection;
+namespace ItalyStrap\ThemeJsonGenerator\Settings;
 
-/**
- * @deprecated
- */
 interface CollectionInterface {
 
 	/**
@@ -35,10 +32,4 @@ interface CollectionInterface {
 	 * @return array<int|string, mixed>
 	 */
 	public function toArray(): array;
-
-	/**
-	 * @param \ItalyStrap\ThemeJsonGenerator\Settings\CollectionInterface ...$collections
-	 * @return void
-	 */
-	public function withCollection( \ItalyStrap\ThemeJsonGenerator\Settings\CollectionInterface ...$collections ): void;
 }

@@ -66,6 +66,10 @@ final class ColorDataType {
 		return $this->mix( '#000000', $weight );
 	}
 
+	public function tone( float $weight = 0 ): self {
+		return $this->mix( '#808080', $weight );
+	}
+
 	public function mix( string $mixedWithThisColor, float $weight = 0 ): self {
 
 		$rgb = $this->s_color->toRgb();
@@ -99,17 +103,11 @@ final class ColorDataType {
 	 * @return array
 	 */
 	private function mixRgb( array $color_1 = [0, 0, 0], array $color_2 = [0, 0, 0], float $weight = 0.5): array {
-		$f = function ($x) use ($weight): float {
-			return $weight * $x;
-		};
+		$f = fn( int $x ): float => $weight * $x;
 
-		$g = function ($x) use ($weight): float {
-			return (1 - $weight) * $x;
-		};
+		$g = fn ( int $x ): float => ( 1 - $weight ) * $x;
 
-		$h = function ($x, $y): float {
-			return round($x + $y);
-		};
+		$h = fn ( float $x, float $y ): float => \round( $x + $y );
 
 		return \array_map( $h, \array_map( $f, $color_1 ), \array_map( $g, $color_2 ) );
 	}
