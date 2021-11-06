@@ -43,6 +43,15 @@ final class ComposerPlugin implements PluginInterface {
 
 		$instance = new \ItalyStrap\ThemeJsonGenerator\Composer\Plugin();
 		$instance->createThemeJson( $composer, $io );
+
+		\trigger_error(
+			\sprintf(
+				'Deprecated %s called. Use %s instead',
+				__CLASS__,
+				'ItalyStrap\\ThemeJsonGenerator\\Composer\\Plugin::run'
+			),
+			E_USER_DEPRECATED
+		);
 	}
 
 	/**
