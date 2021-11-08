@@ -24,8 +24,25 @@ class ColorDataTypeTest extends Unit {
 	}
 
 	public function colorProvider() {
-		yield 'Dark'	=> [
-			'#000000'
+		yield 'Dark hex'	=> [
+			'#000000', // Color
+			'00', // Red
+			'00', // Green
+			'00', // Blue
+		];
+
+		yield 'Red hex'	=> [
+			'#ff0000', // Color
+			'ff', // Red
+			'00', // Green
+			'00', // Blue
+		];
+
+		yield 'Red rgb'	=> [
+			'rgb(255,0,0)', // Color
+			255, // Red
+			0, // Green
+			0, // Blue
 		];
 	}
 
@@ -33,18 +50,79 @@ class ColorDataTypeTest extends Unit {
 	 * @dataProvider colorProvider
 	 * @test
 	 */
-//	public function itShouldBe() {
-//		$this->color = '#000000';
-//		$sut = $this->getInstance();
-//
-//		$this->assertTrue( $sut->isDark() );
-//	}
+	public function itShouldGerRed( string $color, $r, $g, $b ) {
+		$this->base_color = $color;
+		$sut = $this->getInstance();
+
+		$this->assertSame( $r, $sut->red(), 'It should be red' );
+		$this->assertSame( $g, $sut->green(), 'It should be green' );
+		$this->assertSame( $b, $sut->blue(), 'It should be blue' );
+	}
+
+	public function colorProviderForArray() {
+		yield 'Dark hex'	=> [
+			'#000000', // Color
+			[
+				'00', // Red
+				'00', // Green
+				'00', // Blue
+			]
+		];
+
+		yield 'Red hex'	=> [
+			'#ff0000', // Color
+			[
+				'ff', // Red
+				'00', // Green
+				'00', // Blue
+			]
+		];
+
+		yield 'Red rgb'	=> [
+			'rgb(255,0,0)', // Color
+			[
+				255, // Red
+				0, // Green
+				0, // Blue
+			]
+		];
+	}
 
 	/**
+	 * @dataProvider colorProviderForArray
 	 * @test
 	 */
-	public function itShouldBeDark() {
-		$this->base_color = '#000000';
+	public function itShouldReturnArray( string $color, $expected ) {
+		$this->base_color = $color;
+		$sut = $this->getInstance();
+
+		$this->assertSame( $expected, $sut->toArray(), 'It should be an array' );
+	}
+
+	public function darkerColorProvider() {
+		yield 'Black' => [
+			'#000000'
+		];
+
+		yield 'Hsl gray1' => [
+			'hsl(0, 0%, 50%)'
+		];
+
+		yield 'Hsl gray2' => [
+			'hsl(0, 0%, 49%)'
+		];
+
+		yield 'Hsl red' => [
+			'hsl(0, 100%, 49%)'
+		];
+	}
+
+	/**
+	 * @dataProvider darkerColorProvider
+	 * @test
+	 */
+	public function itShouldBeDark( string $color ) {
+		$this->base_color = $color;
 		$sut = $this->getInstance();
 
 		$this->assertTrue( $sut->isDark() );
@@ -272,8 +350,8 @@ class ColorDataTypeTest extends Unit {
 
 		$this->assertStringMatchesFormat( $expected, $sut->mix( $mixedWith, $weight  )->toHex(), '' );
 
-		codecept_debug( $sut->toHex() );
-		codecept_debug( $sut->mix( $this->base_color, 0.2  )->toHex() );
+//		codecept_debug( $sut->toHex() );
+//		codecept_debug( $sut->mix( $this->base_color, 0.2  )->toHex() );
 	}
 
 	/**
@@ -307,5 +385,42 @@ class ColorDataTypeTest extends Unit {
 		$sut = $this->getInstance();
 
 		$this->assertStringMatchesFormat('#00ffff', $sut->complementary()->toHex(), '' );
+	}
+
+	/**
+	 * @test
+	 */
+	public function itShouldReturnLuminanceValue() {
+		$this->base_color = '#ff0000';
+		$sut = $this->getInstance();
+
+		$this->assertSame( 0.2126, $sut->luminance(), '' );
+	}
+
+	/**
+	 * @test
+	 */
+	public function itShouldReturnRelativeLuminanceValue() {
+		$this->base_color = '#000000';
+		$sut = $this->getInstance();
+
+		$this->base_color = '#ffffff';
+		$color = $this->getInstance();
+
+		$this->assertSame( 21.0, $sut->relativeLuminance( $color ), '' );
+	}
+
+	/**
+	 * @test
+	 */
+	public function itShouldReturnRelativeLuminanceValue2() {
+		$this->base_color = '#000000';
+		$sut = $this->getInstance();
+
+		$this->base_color = '#bada55';
+		$color = $this->getInstance();
+
+		codecept_debug( $sut->relativeLuminance( $color ) );
+		$this->assertTrue( $sut->relativeLuminance( $color ) >= 4.5, '' );
 	}
 }
