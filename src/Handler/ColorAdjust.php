@@ -8,26 +8,27 @@ use Exception;
 final class ColorAdjust {
 
 	private ColorValue $color;
-	private ColorsBlender $blender;
+
+	private ColorFactory $color_factory;
 
 	/**
 	 * @throws Exception
 	 */
-	public function __construct( ColorValue $color, ColorsBlender $blender ) {
+	public function __construct( ColorValue $color, ColorFactory $factory = null ) {
 		$this->color = $color;
-		$this->blender = $blender;
+		$this->color_factory = $factory ?? new ColorFactory();
 	}
 
 	public function tint( float $weight = 0 ): ColorValue {
-		return $this->blender->mixBy( 'rgb(255,255,255)', $weight );
+		return $this->mixWith( 'rgb(255,255,255)', $weight );
 	}
 
 	public function shade( float $weight = 0 ): ColorValue {
-		return $this->blender->mixBy( 'rgb(0,0,0)', $weight );
+		return $this->mixWith( 'rgb(0,0,0)', $weight );
 	}
 
 	public function tone( float $weight = 0 ): ColorValue {
-		return $this->blender->mixBy( 'rgb(128,128,128)', $weight );
+		return $this->mixWith( 'rgb(128,128,128)', $weight );
 	}
 
 	public function opacity( float $alpha = 1 ): ColorValue {
@@ -40,6 +41,35 @@ final class ColorAdjust {
 
 	public function lighten( int $amount = 0 ): ColorValue {
 		return $this->createNewColorWithChangedLightnessOrOpacity( $amount );
+	}
+
+	private function mixWith( string $black_or_white_or_gray, float $weight = 0 ): ColorValue {
+
+		$rgb = $this->color_factory->fromColorString( $black_or_white_or_gray );
+		$rgb2 = $this->color;
+
+		$result = $this->mixRgb(
+			$rgb->toRgb(),
+			$rgb2->toRgb(),
+			$weight > 1 ? $weight / 100 : $weight
+		);
+
+		return $this->color_factory->fromColorString( \sprintf(
+			'rgb(%s)',
+			\implode(',', $result)
+		) );
+	}
+
+	private function mixRgb( ColorValue $color_1, ColorValue $color_2, float $weight = 0.5): array {
+		$f = fn( int $x ): float => $weight * $x;
+		$g = fn ( int $x ): float => ( 1 - $weight ) * $x;
+		$h = fn ( float $x, float $y ): float => \round( $x + $y );
+
+		return \array_map(
+			$h,
+			\array_map( $f, [ $color_1->red(), $color_1->green(),$color_1->blue() ] ),
+			\array_map( $g, [ $color_2->red(), $color_2->green(), $color_2->blue() ] )
+		);
 	}
 
 	/**

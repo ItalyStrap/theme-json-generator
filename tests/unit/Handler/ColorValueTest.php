@@ -35,6 +35,12 @@ class ColorValueTest extends Unit
 
 	public function colorProvider() {
 		yield [
+			'#ffc107', // HEX
+			'rgb(255,193,7)', // RGB
+			'hsla(45,100%,51%,1)', // HSLA
+		];
+
+		yield [
 			'#dc3545', // HEX
 			'rgb(220,53,69)', // RGB
 			'hsla(354,70%,54%,1)', // HSLA

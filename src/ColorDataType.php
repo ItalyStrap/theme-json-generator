@@ -16,13 +16,15 @@ final class ColorDataType {
 
 	private PHPColor $m_color;
 
+	private ColorAdjust $color_adjust;
+
 	/**
 	 * @throws \Exception
 	 */
 	public function __construct( string $color ) {
 		$this->color_value = new ColorValue( $color );
 		$this->m_color = new PHPColor( (string) $this->color_value->toHex() );
-		$this->color_adjust = new ColorAdjust( $this->color_value, new ColorsBlender( $this->color_value ) );
+		$this->color_adjust = new ColorAdjust( $this->color_value );
 	}
 
 	public function red() {
