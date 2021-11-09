@@ -25,7 +25,7 @@ final class MonochromaticScheme {
 			yield $this->color->tint( $weight );
 		}
 
-		yield $this->color;
+		yield $this->color->tint();
 
 		\asort( $this->step );
 		foreach ( $this->step as $weight ) {

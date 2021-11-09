@@ -5,11 +5,16 @@ namespace ItalyStrap\ThemeJsonGenerator\Handler;
 
 final class ComplementaryScheme {
 
+	private ColorValue $color;
+
 	public function __construct( ColorValue $color ) {
 		$this->color = $color;
 	}
 
 	public function generate(): iterable {
+
+		yield $this->color;
+
 		$hsl = $this->color->toHsl();
 
 		$hue = $hsl->hue() > 180
