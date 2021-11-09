@@ -18,6 +18,9 @@ final class ColorValue {
 	 */
 	const MEDIUM_LUMINANCE = 0.21951971807487;
 
+	/**
+	 * @throws \Exception
+	 */
 	public static function fromColorValue( ColorValue $colorValue ) {
 		return new self( (string) $colorValue->toHex() );
 	}
@@ -27,44 +30,7 @@ final class ColorValue {
 	 */
 	public function __construct( string $color ) {
 		$this->s_color = ColorFactory::fromString( $color );
-		$this->hsla = $this->s_color->toHsla();
-	}
-
-	/**
-	 * @return mixed
-	 */
-	public function red() {
-		return $this->s_color->red();
-	}
-
-	/**
-	 * @return mixed
-	 */
-	public function green() {
-		return $this->s_color->green();
-	}
-
-	/**
-	 * @return mixed
-	 */
-	public function blue() {
-		return $this->s_color->blue();
-	}
-
-	public function hue(): float {
-		return $this->hsla->hue();
-	}
-
-	public function saturation(): float {
-		return $this->hsla->saturation();
-	}
-
-	public function lightness(): float {
-		return $this->hsla->lightness();
-	}
-
-	public function alpha(): float {
-		return $this->hsla->alpha();
+		$this->hsla = clone $this->s_color->toHsla();
 	}
 
 	public function isDark(): bool {
@@ -126,5 +92,42 @@ final class ColorValue {
 			$this->green(),
 			$this->blue(),
 		];
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function red() {
+		return $this->s_color->red();
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function green() {
+		return $this->s_color->green();
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function blue() {
+		return $this->s_color->blue();
+	}
+
+	public function hue(): float {
+		return $this->hsla->hue();
+	}
+
+	public function saturation(): float {
+		return $this->hsla->saturation();
+	}
+
+	public function lightness(): float {
+		return $this->hsla->lightness();
+	}
+
+	public function alpha(): float {
+		return $this->hsla->alpha();
 	}
 }

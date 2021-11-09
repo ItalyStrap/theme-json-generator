@@ -420,7 +420,7 @@ class ColorDataTypeTest extends Unit {
 		$this->base_color = '#bada55';
 		$color = $this->getInstance();
 
-		codecept_debug( $sut->relativeLuminance( $color ) );
+//		codecept_debug( $sut->relativeLuminance( $color ) );
 		$this->assertTrue( $sut->relativeLuminance( $color ) >= 4.5, '' );
 	}
 }
