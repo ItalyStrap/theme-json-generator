@@ -69,11 +69,12 @@ final class ColorDataType {
 
 	public function complementary() {
 		$schemes = new ComplementaryScheme( $this->color_value );
+		$colors = [];
 		foreach ( $schemes->generate() as $color ) {
-			return new self( (string) $color );
+			$colors[] = new self( (string) $color );
 		}
 
-		return null;
+		return $colors[1];
 	}
 
 	public function darken( int $amount = PHPColor::DEFAULT_ADJUST ): self {
