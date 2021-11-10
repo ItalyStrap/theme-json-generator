@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Handler;
 
-final class MonochromaticScheme implements SchemeInterface {
+final class MonochromaticColorScheme implements SchemeInterface {
 
 	private ColorAdjust $color;
 

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Handler;
 
-final class ComplementarySchemeInterface implements SchemeInterface {
+final class ComplementaryColorScheme implements SchemeInterface {
 
 	private ColorValue $color;
 
