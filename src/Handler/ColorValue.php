@@ -130,4 +130,8 @@ final class ColorValue {
 	public function alpha(): float {
 		return $this->hsla->alpha();
 	}
+
+	public function type(): string {
+		return '';
+	}
 }

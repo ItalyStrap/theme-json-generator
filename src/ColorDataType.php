@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator;
 
 use ItalyStrap\ThemeJsonGenerator\Handler\ColorAdjust;
-use ItalyStrap\ThemeJsonGenerator\Handler\ColorsBlender;
 use ItalyStrap\ThemeJsonGenerator\Handler\ComplementaryScheme;
 use ItalyStrap\ThemeJsonGenerator\Handler\ColorValue;
 use Mexitek\PHPColors\Color as PHPColor;

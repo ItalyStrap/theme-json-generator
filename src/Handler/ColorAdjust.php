@@ -43,9 +43,9 @@ final class ColorAdjust {
 		return $this->createNewColorWithChangedLightnessOrOpacity( $amount );
 	}
 
-	private function mixWith( string $black_or_white_or_gray, float $weight = 0 ): ColorValue {
+	private function mixWith( string $color_string, float $weight = 0 ): ColorValue {
 
-		$rgb = $this->color_factory->fromColorString( $black_or_white_or_gray );
+		$rgb = $this->color_factory->fromColorString( $color_string );
 		$rgb2 = $this->color;
 
 		$result = $this->mixRgb(
@@ -56,7 +56,7 @@ final class ColorAdjust {
 
 		return $this->color_factory->fromColorString( \sprintf(
 			'rgb(%s)',
-			\implode(',', $result)
+			\implode(',', $result )
 		) );
 	}
 
