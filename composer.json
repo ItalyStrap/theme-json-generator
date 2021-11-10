@@ -18,7 +18,7 @@
         "composer-plugin-api": "^2.0",
         "italystrap/config": "^2.4",
         "mexitek/phpcolors": "^1.0",
-        "spatie/color": "^1.3"
+        "spatie/color": "dev-master"
     },
     "require-dev": {
         "lucatume/wp-browser": "^3.0",
