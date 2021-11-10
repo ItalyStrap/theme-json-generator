@@ -89,6 +89,10 @@
             "vendor\\bin\\codecept run unit --debug",
             "@clean"
         ],
+        "unit:debug:coverage": [
+            "vendor\\bin\\codecept run unit --debug --coverage-text",
+            "@clean"
+        ],
         "bench": [
             "vendor\\bin\\phpbench run --report=performance"
         ],

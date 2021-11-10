@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator;
 
 use ItalyStrap\ThemeJsonGenerator\Handler\ColorAdjust;
-use ItalyStrap\ThemeJsonGenerator\Handler\ComplementaryScheme;
+use ItalyStrap\ThemeJsonGenerator\Handler\ComplementarySchemeInterface;
 use ItalyStrap\ThemeJsonGenerator\Handler\ColorValue;
 use Mexitek\PHPColors\Color as PHPColor;
 use Spatie\Color\Factory as ColorFactory;
@@ -67,7 +67,7 @@ final class ColorDataType {
 	}
 
 	public function complementary() {
-		$schemes = new ComplementaryScheme( $this->color_value );
+		$schemes = new ComplementarySchemeInterface( $this->color_value );
 		$colors = [];
 		foreach ( $schemes->generate() as $color ) {
 			$colors[] = new self( (string) $color );
