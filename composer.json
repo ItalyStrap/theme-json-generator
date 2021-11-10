@@ -13,6 +13,12 @@
         }
     ],
     "minimum-stability": "stable",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/overclokk/color"
+        }
+    ],
     "require": {
         "php" : ">=7.4",
         "composer-plugin-api": "^2.0",
