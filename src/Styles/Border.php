@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Styles;
 
-final class Border implements ArrayableInterface {
+final class Border implements ArrayableInterface, StylesInterface {
 
 	use ImmutableCollectionTrait, CollectionToArray, UserDefinedPropertyTrait;
 

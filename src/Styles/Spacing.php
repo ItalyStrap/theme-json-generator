@@ -6,7 +6,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Styles;
 use function array_replace;
 use function implode;
 
-final class Spacing implements ArrayableInterface {
+final class Spacing implements ArrayableInterface, StylesInterface {
 
 	use ImmutableCollectionTrait, CollectionToArray, UserDefinedPropertyTrait;
 

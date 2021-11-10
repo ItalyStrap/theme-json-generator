@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Styles;
 
-final class Color implements ArrayableInterface {
+final class Color implements ArrayableInterface, StylesInterface {
 
 	use ImmutableCollectionTrait, CollectionToArray, UserDefinedPropertyTrait;
 
