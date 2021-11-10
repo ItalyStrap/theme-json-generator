@@ -5,7 +5,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Styles;
 
 final class Typography implements ArrayableInterface {
 
-	use ImmutableCollectionTrait, CollectionToArray;
+	use ImmutableCollectionTrait, CollectionToArray, UserDefinedPropertyTrait;
 
 	const FONT_FAMILY		= 'fontFamily';
 	const FONT_SIZE			= 'fontSize';

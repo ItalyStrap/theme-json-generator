@@ -8,7 +8,7 @@ use function implode;
 
 final class Spacing implements ArrayableInterface {
 
-	use ImmutableCollectionTrait, CollectionToArray;
+	use ImmutableCollectionTrait, CollectionToArray, UserDefinedPropertyTrait;
 
 	const TOP = 'top';
 	const RIGHT = 'right';

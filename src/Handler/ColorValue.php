@@ -7,7 +7,8 @@ use Spatie\Color\Color;
 use Spatie\Color\Factory as ColorFactory;
 use Spatie\Color\Hsla;
 
-final class ColorValue {
+final class ColorValue implements ColorInfoInterface {
+
 
 	private Color $s_color;
 

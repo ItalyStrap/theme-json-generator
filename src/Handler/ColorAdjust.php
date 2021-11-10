@@ -5,16 +5,17 @@ namespace ItalyStrap\ThemeJsonGenerator\Handler;
 
 use Exception;
 
-final class ColorAdjust {
+final class ColorAdjust implements ColorAdjustInterface {
 
-	private ColorValue $color;
 
-	private ColorFactory $color_factory;
+	private ColorInfoInterface $color;
+
+	private ColorFactoryInterface $color_factory;
 
 	/**
 	 * @throws Exception
 	 */
-	public function __construct( ColorValue $color, ColorFactory $factory = null ) {
+	public function __construct( ColorInfoInterface $color, ColorFactoryInterface $factory = null ) {
 		$this->color = $color;
 		$this->color_factory = $factory ?? new ColorFactory();
 	}
@@ -45,12 +46,9 @@ final class ColorAdjust {
 
 	private function mixWith( string $color_string, float $weight = 0 ): ColorValue {
 
-		$rgb = $this->color_factory->fromColorString( $color_string );
-		$rgb2 = $this->color;
-
 		$result = $this->mixRgb(
-			$rgb->toRgb(),
-			$rgb2->toRgb(),
+			$this->color_factory->fromColorString( $color_string )->toRgb(),
+			$this->color->toRgb(),
 			$weight > 1 ? $weight / 100 : $weight
 		);
 
@@ -80,7 +78,7 @@ final class ColorAdjust {
 	 */
 	private function createNewColorWithChangedLightnessOrOpacity( int $amount, float $alpha = 1 ): ColorValue {
 		$hsla = $this->color->toHsla();
-		return new ColorValue(
+		return $this->color_factory->fromColorString(
 			\sprintf(
 				'hsla(%s, %s%%, %s%%, %s)',
 				$hsla->hue(),

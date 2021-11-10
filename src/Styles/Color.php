@@ -5,7 +5,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Styles;
 
 final class Color implements ArrayableInterface {
 
-	use ImmutableCollectionTrait, CollectionToArray;
+	use ImmutableCollectionTrait, CollectionToArray, UserDefinedPropertyTrait;
 
 	const BACKGROUND = 'background';
 	const GRADIENT = 'gradient';

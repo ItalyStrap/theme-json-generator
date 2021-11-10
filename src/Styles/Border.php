@@ -5,7 +5,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Styles;
 
 final class Border implements ArrayableInterface {
 
-	use ImmutableCollectionTrait, CollectionToArray;
+	use ImmutableCollectionTrait, CollectionToArray, UserDefinedPropertyTrait;
 
 	const COLOR = 'color';
 	const RADIUS = 'radius';
