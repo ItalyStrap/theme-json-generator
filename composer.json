@@ -43,7 +43,8 @@
         "infection/codeception-adapter": "^0.4.0",
         "italystrap/debug": "^2.0",
         "phpspec/prophecy-phpunit": "^1.1",
-        "composer/composer": "^2.1"
+        "composer/composer": "^2.1",
+        "wp-cli/wp-cli": "^2.7"
     },
     "autoload": {
         "psr-4": {

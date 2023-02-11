@@ -5,6 +5,10 @@ namespace ItalyStrap\ThemeJsonGenerator;
 
 use WP_CLI;
 
+if ( !class_exists('WP_CLI') ) {
+	return;
+}
+
 function test_callable( string $path ): array {
 	return ['key'=>'value'];
 }
