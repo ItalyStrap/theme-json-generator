@@ -6,12 +6,7 @@ namespace ItalyStrap\Tests\Unit\Settings;
 use ItalyStrap\ThemeJsonGenerator\Settings\CollectionInterface;
 use ItalyStrap\ThemeJsonGenerator\Settings\PresetCollection;
 
-final class PresetCollectionTest extends BaseCollectionTest {
-
-	/**
-	 * @var \UnitTester
-	 */
-	protected $tester;
+class PresetCollectionTest extends BaseCollectionTest {
 
 	// phpcs:ignore
 	protected function _before() {
@@ -24,11 +19,7 @@ final class PresetCollectionTest extends BaseCollectionTest {
 		$this->category = 'color';
 	}
 
-	// phpcs:ignore
-	protected function _after() {
-	}
-
-	protected function getInstance(): CollectionInterface {
+	protected function makeInstance(): CollectionInterface {
 		$sut = new PresetCollection( $this->collection, $this->category, $this->key );
 		$this->assertInstanceOf( CollectionInterface::class, $sut, '' );
 		$this->assertInstanceOf( PresetCollection::class, $sut, '' );
@@ -41,7 +32,7 @@ final class PresetCollectionTest extends BaseCollectionTest {
 	public function itShouldHaveCategory() {
 		$expected = 'expected';
 		$this->category = $expected;
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 
 		$this->assertStringMatchesFormat(
 			$expected,
@@ -83,7 +74,7 @@ final class PresetCollectionTest extends BaseCollectionTest {
 
 		$this->category = $category;
 
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 
 		$this->assertIsString( $sut->value( $slug ) );
 
@@ -189,7 +180,7 @@ final class PresetCollectionTest extends BaseCollectionTest {
 
 		$this->category = 'color';
 
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 
 		$this->assertStringMatchesFormat(
 			$expected,
@@ -202,7 +193,7 @@ final class PresetCollectionTest extends BaseCollectionTest {
 	 * @test
 	 */
 	public function itShouldReturnVarFunctionCssWithVariableCss() {
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 
 		$this->assertStringMatchesFormat(
 			'var(--wp--preset--color--primary)',
@@ -293,7 +284,7 @@ final class PresetCollectionTest extends BaseCollectionTest {
 		$this->category = $category;
 		$this->key = $key;
 
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 
 		$this->assertStringMatchesFormat(
 			$expected,
@@ -322,7 +313,7 @@ final class PresetCollectionTest extends BaseCollectionTest {
 		$this->category = 'color';
 		$this->key = 'color';
 
-		$palette = $this->getInstance();
+		$palette = $this->makeInstance();
 
 		$this->collection = [
 			[
@@ -338,7 +329,7 @@ final class PresetCollectionTest extends BaseCollectionTest {
 		$this->category = 'gradient';
 		$this->key = 'gradient';
 
-		$gradient = $this->getInstance();
+		$gradient = $this->makeInstance();
 
 		$gradient->withCollection( $palette );
 //		$gradient->withCollection( $palette, $palette, $palette );

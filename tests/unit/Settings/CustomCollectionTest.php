@@ -8,11 +8,6 @@ use ItalyStrap\ThemeJsonGenerator\Settings\CustomCollection;
 
 class CustomCollectionTest extends BaseCollectionTest {
 
-	/**
-	 * @var \UnitTester
-	 */
-	protected $tester;
-
 	// phpcs:ignore
 	protected function _before() {
 
@@ -40,7 +35,7 @@ class CustomCollectionTest extends BaseCollectionTest {
 		];
 	}
 
-	protected function getInstance(): CollectionInterface {
+	protected function makeInstance(): CollectionInterface {
 		$sut = new CustomCollection( $this->collection );
 		$this->assertInstanceOf( CollectionInterface::class, $sut, '' );
 		$this->assertInstanceOf( CustomCollection::class, $sut, '' );
@@ -52,7 +47,7 @@ class CustomCollectionTest extends BaseCollectionTest {
 	 */
 	public function itShouldHaveCategory() {
 		$expected = 'custom';
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 
 		$this->assertStringMatchesFormat(
 			$expected,
@@ -68,7 +63,7 @@ class CustomCollectionTest extends BaseCollectionTest {
 
 		$this->category = 'custom';
 
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 		$sut->value('contentSize');
 		$sut->toArray();
 	}
@@ -115,7 +110,7 @@ class CustomCollectionTest extends BaseCollectionTest {
 
 		$this->category = $category;
 
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 
 		$this->assertIsString( $sut->value( $slug ) );
 
@@ -147,7 +142,7 @@ class CustomCollectionTest extends BaseCollectionTest {
 	 */
 	public function itShouldReturnCssPropertyFor( string $expected, string $slug ) {
 
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 
 		$this->assertStringMatchesFormat(
 			$expected,
@@ -255,7 +250,7 @@ class CustomCollectionTest extends BaseCollectionTest {
 		$this->category = $category;
 		$this->key = $key;
 
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 
 		$this->assertStringMatchesFormat(
 			$expected,

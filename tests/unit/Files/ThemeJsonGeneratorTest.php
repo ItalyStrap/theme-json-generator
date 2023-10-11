@@ -3,30 +3,14 @@ declare(strict_types=1);
 
 namespace ItalyStrap\Tests\Unit\Files;
 
-use Codeception\Test\Unit;
+use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Files\JsonFileBuilder;
 
-class ThemeJsonGeneratorTest extends Unit {
+class ThemeJsonGeneratorTest extends UnitTestCase {
 
-	/**
-	 * @var \UnitTester
-	 */
-	protected $tester;
+	private string $theme_json_path;
 
-	/**
-	 * @var string
-	 */
-	private $theme_json_path;
-
-	// phpcs:ignore
-	protected function _before() {
-	}
-
-	// phpcs:ignore
-	protected function _after() {
-	}
-
-	protected function getInstance(): JsonFileBuilder {
+	protected function makeInstance(): JsonFileBuilder {
 		$this->theme_json_path = \codecept_output_dir(\rand() . '/theme.json');
 		$sut = new JsonFileBuilder( $this->theme_json_path );
 		$this->assertInstanceOf( JsonFileBuilder::class, $sut, '' );
@@ -37,14 +21,14 @@ class ThemeJsonGeneratorTest extends Unit {
 	 * @test
 	 */
 	public function itShouldBeInstantiatable() {
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 	}
 
 	/**
 	 * @test
 	 */
 	public function itShouldReturnValidJson() {
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 		$expected = '{"key": "value"}';
 
 

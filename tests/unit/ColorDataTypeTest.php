@@ -1,24 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace ItalyStrap\Tests;
+namespace ItalyStrap\Tests\Unit;
 
-use Codeception\Test\Unit;
+use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\ColorDataType;
 
-class ColorDataTypeTest extends Unit {
+class ColorDataTypeTest extends UnitTestCase {
 
 	use BaseUnitTrait;
 
-	protected string $base_color = '';
-
-
-	// phpcs:ignore
-	protected function _before() {
-		$this->base_color = '#000000';
-	}
-
-	protected function getInstance(): ColorDataType {
+	protected function makeInstance(): ColorDataType {
 		$sut = new ColorDataType( $this->base_color );
 		return $sut;
 	}
@@ -52,7 +44,7 @@ class ColorDataTypeTest extends Unit {
 	 */
 	public function itShouldGerRed( string $color, $r, $g, $b ) {
 		$this->base_color = $color;
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 
 		$this->assertSame( $r, $sut->red(), 'It should be red' );
 		$this->assertSame( $g, $sut->green(), 'It should be green' );
@@ -94,7 +86,7 @@ class ColorDataTypeTest extends Unit {
 	 */
 	public function itShouldReturnArray( string $color, $expected ) {
 		$this->base_color = $color;
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 
 		$this->assertSame( $expected, $sut->toArray(), 'It should be an array' );
 	}
@@ -123,7 +115,7 @@ class ColorDataTypeTest extends Unit {
 	 */
 	public function itShouldBeDark( string $color ) {
 		$this->base_color = $color;
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 
 		$this->assertTrue( $sut->isDark() );
 	}
@@ -133,7 +125,7 @@ class ColorDataTypeTest extends Unit {
 	 */
 	public function itShouldNotBeDark() {
 		$this->base_color = '#ffffff';
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 
 		$this->assertFalse( $sut->isDark() );
 	}
@@ -143,7 +135,7 @@ class ColorDataTypeTest extends Unit {
 	 */
 	public function itShouldBeLight() {
 		$this->base_color = '#ffffff';
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 
 		$this->assertTrue( $sut->isLight() );
 	}
@@ -153,7 +145,7 @@ class ColorDataTypeTest extends Unit {
 	 */
 	public function itShouldNotBeLight() {
 		$this->base_color = '#000000';
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 
 		$this->assertFalse( $sut->isLight() );
 	}
@@ -163,7 +155,7 @@ class ColorDataTypeTest extends Unit {
 	 */
 	public function itShouldReturnHex() {
 		$this->base_color = '#000000';
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 
 		$this->assertStringMatchesFormat( $this->base_color, $sut->toHex(), '' );
 	}
@@ -173,7 +165,7 @@ class ColorDataTypeTest extends Unit {
 	 */
 	public function itShouldReturnRgb() {
 		$this->base_color = '#000000';
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 
 		$this->assertStringMatchesFormat('rgb(0,0,0)', $sut->toRgb(), '' );
 	}
@@ -183,7 +175,7 @@ class ColorDataTypeTest extends Unit {
 	 */
 	public function itShouldReturnRgba() {
 		$this->base_color = '#000000';
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 
 		$this->assertStringMatchesFormat('rgba(0,0,0,1.00)', $sut->toRgba(), '' );
 	}
@@ -193,7 +185,7 @@ class ColorDataTypeTest extends Unit {
 	 */
 	public function itShouldReturnHsl() {
 		$this->base_color = '#000000';
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 
 		$this->assertStringMatchesFormat('hsl(0,0%,0%)', $sut->toHsl(), '' );
 	}
@@ -203,7 +195,7 @@ class ColorDataTypeTest extends Unit {
 	 */
 	public function itShouldReturnHsla() {
 		$this->base_color = '#000000';
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 
 		$this->assertStringMatchesFormat('hsla(0,0%,0%,1)', $sut->toHsla(), '' );
 	}
@@ -213,7 +205,7 @@ class ColorDataTypeTest extends Unit {
 	 */
 	public function itShouldReturnDarkenColor() {
 		$this->base_color = '#ffffff';
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 
 		$this->assertStringMatchesFormat('#cccccc', $sut->darken( 20 )->toHex(), '' );
 	}
@@ -223,7 +215,7 @@ class ColorDataTypeTest extends Unit {
 	 */
 	public function itShouldReturnLightenColor() {
 		$this->base_color = '#000000';
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 
 		$this->assertStringMatchesFormat('#333333', $sut->lighten( 20 )->toHex(), '' );
 	}
@@ -346,7 +338,7 @@ class ColorDataTypeTest extends Unit {
 	public function itShouldReturnMixedColorByWeight( float $weight, string $expected, string $mixedWith ) {
 
 		$this->base_color = '#7f7f7f';
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 
 		$this->assertStringMatchesFormat( $expected, $sut->mix( $mixedWith, $weight  )->toHex(), '' );
 
@@ -360,7 +352,7 @@ class ColorDataTypeTest extends Unit {
 	public function itShouldTintAndShade() {
 
 		$this->base_color = '#7f7f7f';
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 
 		$this->assertStringMatchesFormat( '#cccccc', $sut->tint( 0.6 )->toHex(), '' );
 		$this->assertStringMatchesFormat( '#333333', $sut->shade( 0.6 )->toHex(), '' );
@@ -372,7 +364,7 @@ class ColorDataTypeTest extends Unit {
 	public function itShouldTone() {
 
 		$this->base_color = '#ff0000';
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 
 		$this->assertStringMatchesFormat( '#c04040', $sut->tone( 0.5 )->toHex(), '' );
 	}
@@ -382,7 +374,7 @@ class ColorDataTypeTest extends Unit {
 	 */
 	public function itShouldReturnComplementaryColor() {
 		$this->base_color = '#ff0000';
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 
 		$this->assertStringMatchesFormat('#00ffff', $sut->complementary()->toHex(), '' );
 	}
@@ -392,7 +384,7 @@ class ColorDataTypeTest extends Unit {
 	 */
 	public function itShouldReturnLuminanceValue() {
 		$this->base_color = '#ff0000';
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 
 		$this->assertSame( 0.2126, $sut->luminance(), '' );
 	}
@@ -402,10 +394,10 @@ class ColorDataTypeTest extends Unit {
 	 */
 	public function itShouldReturnRelativeLuminanceValue() {
 		$this->base_color = '#000000';
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 
 		$this->base_color = '#ffffff';
-		$color = $this->getInstance();
+		$color = $this->makeInstance();
 
 		$this->assertSame( 21.0, $sut->relativeLuminance( $color ), '' );
 	}
@@ -415,10 +407,10 @@ class ColorDataTypeTest extends Unit {
 	 */
 	public function itShouldReturnRelativeLuminanceValue2() {
 		$this->base_color = '#000000';
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 
 		$this->base_color = '#bada55';
-		$color = $this->getInstance();
+		$color = $this->makeInstance();
 
 //		codecept_debug( $sut->relativeLuminance( $color ) );
 		$this->assertTrue( $sut->relativeLuminance( $color ) >= 4.5, '' );

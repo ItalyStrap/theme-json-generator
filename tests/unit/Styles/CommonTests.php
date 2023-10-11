@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace ItalyStrap\Tests\Styles;
+namespace ItalyStrap\Tests\Unit\Styles;
 
 trait CommonTests {
 
@@ -9,7 +9,7 @@ trait CommonTests {
 	 * @test
 	 */
 	public function itShouldCreateUserDefinedProperty() {
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 		$result = $sut->property( 'style', '#000000' )->toArray();
 
 		$this->assertStringMatchesFormat( '#000000', $result['style'], '' );
@@ -19,7 +19,7 @@ trait CommonTests {
 	 * @test
 	 */
 	public function itShouldBeImmutable() {
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 		$sut->property( 'style', '#000000' );
 
 		$this->expectException( \RuntimeException::class );
@@ -30,7 +30,7 @@ trait CommonTests {
 	 * @test
 	 */
 	public function itShouldBeImmutableAlsoIfICloneIt() {
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 		$sut->property( 'style', '#000000' );
 
 		$sut_cloned = clone $sut;

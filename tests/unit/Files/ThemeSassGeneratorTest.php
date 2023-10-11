@@ -3,35 +3,19 @@ declare(strict_types=1);
 
 namespace ItalyStrap\Tests\Unit\Files;
 
-use ItalyStrap\Config\ConfigInterface;
-use ItalyStrap\Tests\Unit\UnitTest;
+
+use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Files\FileBuilder;
 use ItalyStrap\ThemeJsonGenerator\Files\ScssFileBuilder;
-use Prophecy\Prophet;
 
-class ThemeSassGeneratorTest extends UnitTest {
-
-	/**
-	 * @var \UnitTester
-	 */
-	protected $tester;
+class ThemeSassGeneratorTest extends UnitTestCase {
 
 	/**
 	 * @var string
 	 */
 	private $theme_sass_path;
 
-	// phpcs:ignore
-	protected function _before() {
-		$this->prophet = new Prophet;
-		$this->config = $this->prophet->prophesize( ConfigInterface::class );
-	}
-
-	// phpcs:ignore
-    protected function _after() {
-	}
-
-	protected function getInstance(): ScssFileBuilder {
+	protected function makeInstance(): ScssFileBuilder {
 //		$this->theme_sass_path = \codecept_output_dir(\rand() . '/theme.scss');
 		$this->theme_sass_path = \codecept_output_dir('/theme.scss');
 		$sut = new ScssFileBuilder( $this->theme_sass_path );
@@ -44,7 +28,7 @@ class ThemeSassGeneratorTest extends UnitTest {
 	 * @test
 	 */
 	public function itShouldBeInstantiatable() {
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 	}
 
 	/**
@@ -52,7 +36,7 @@ class ThemeSassGeneratorTest extends UnitTest {
 	 */
 	public function itShouldCreateScssFile() {
 
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 		$sut->build( function () {
 			return	[
 				'settings' => [
@@ -101,7 +85,7 @@ class ThemeSassGeneratorTest extends UnitTest {
 	 */
 	public function itShouldIterateCustomSettingsFor( array $settings, string $variable, string $css_prop ) {
 
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 		$sut->build( function () use ( $settings ) {
 			return	[
 				'settings' => [
@@ -190,7 +174,7 @@ class ThemeSassGeneratorTest extends UnitTest {
 		string $expected_slug,
 		string $expected_css_variable
 	) {
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 
 		$sut->build( function () use ( $data ) {
 			$theme = [
@@ -216,7 +200,7 @@ class ThemeSassGeneratorTest extends UnitTest {
 	 * @test
 	 */
 	public function itShouldThrowError() {
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 
 		$custom = [
 			'alignment' => [

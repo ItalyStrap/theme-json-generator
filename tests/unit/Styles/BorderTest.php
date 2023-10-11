@@ -1,27 +1,25 @@
 <?php
 declare(strict_types=1);
 
-namespace ItalyStrap\Tests\Styles;
+namespace ItalyStrap\Tests\Unit\Styles;
 
-use Codeception\Test\Unit;
+use ItalyStrap\Tests\Unit\BaseUnitTrait;
+use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Styles\Border;
-use ItalyStrap\Tests\BaseUnitTrait;
 
-class BorderTest extends Unit {
+class BorderTest extends UnitTestCase {
 
 	use BaseUnitTrait, CommonTests;
 
-	protected function getInstance(): Border {
-		$sut = new Border();
-		$this->assertInstanceOf( Border::class, $sut, '' );
-		return $sut;
+	protected function makeInstance(): Border {
+		return new Border();
 	}
 
 	/**
 	 * @test
 	 */
 	public function itShouldCreateCorrectArray() {
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 		$result = $sut
 			->color('#000000')
 			->style('solid')

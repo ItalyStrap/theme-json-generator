@@ -3,15 +3,11 @@ declare(strict_types=1);
 
 namespace ItalyStrap\Tests\Unit\Settings;
 
-use Codeception\Test\Unit;
+use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Settings\CollectionInterface;
 
-abstract class BaseCollectionTest extends Unit {
+abstract class BaseCollectionTest extends UnitTestCase {
 
-	/**
-	 * @var \UnitTester
-	 */
-	protected $tester;
 
 	/**
 	 * @var \string[][]
@@ -28,15 +24,7 @@ abstract class BaseCollectionTest extends Unit {
 	 */
 	protected $key = '';
 
-	// phpcs:ignore
-	protected function _before() {
-	}
-
-	// phpcs:ignore
-	protected function _after() {
-	}
-
-	abstract protected function getInstance(): CollectionInterface;
+	abstract protected function makeInstance(): CollectionInterface;
 
 	abstract public function valueProvider();
 
@@ -44,7 +32,7 @@ abstract class BaseCollectionTest extends Unit {
 	 * @test
 	 */
 	public function itShouldReturnTheCollection() {
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 		$collection = $sut->toArray();
 
 		$this->assertEquals($this->collection, $collection, '');
@@ -54,7 +42,7 @@ abstract class BaseCollectionTest extends Unit {
 	 * @test
 	 */
 	public function itShouldThrownExceptionIfValueDoesNotExist() {
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 		$this->expectException( \RuntimeException::class );
 		$this->expectExceptionMessage('Value of secondary does not exists.');
 		$val = $sut->value('secondary' );
@@ -64,7 +52,7 @@ abstract class BaseCollectionTest extends Unit {
 	 * @test
 	 */
 	public function itShouldThrownExceptionIfPropDoesNotExist() {
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 		$this->expectException( \RuntimeException::class );
 		$this->expectExceptionMessage('secondary does not exists.');
 		$prop = $sut->propOf('secondary' );

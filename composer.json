@@ -1,7 +1,7 @@
 {
     "name": "italystrap/theme-json-generator",
-    "description": "A WordPress theme.json generator from a PHP array",
-    "keywords": ["WordPress", "WordPress theme.json"],
+    "description": "WordPress theme.json generator from a PHP array",
+    "keywords": ["WordPress", "WordPress theme.json", "theme.json"],
     "type": "composer-plugin",
     "license": "MIT",
     "authors": [
@@ -21,28 +21,33 @@
         "spatie/color": "~1.5.0"
     },
     "require-dev": {
-        "lucatume/wp-browser": "^3.0",
-        "lucatume/function-mocker-le": "^1.0.1",
-        "codeception/c3": "2.*",
+        "lucatume/wp-browser": "^3.1",
+        "lucatume/function-mocker-le": "^1.0",
         "codeception/module-asserts": "^1.0",
+        "phpspec/prophecy-phpunit": "^2.0",
+
         "codeception/module-phpbrowser": "^1.0",
         "codeception/module-webdriver": "^1.0",
         "codeception/module-db": "^1.0",
         "codeception/module-filesystem": "^1.0",
         "codeception/module-cli": "^1.0",
         "codeception/util-universalframework": "^1.0",
+
         "squizlabs/php_codesniffer": "*",
         "phpcompatibility/php-compatibility": "*",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7",
-        "phpstan/phpstan": "^0.12",
-        "szepeviktor/phpstan-wordpress": "^0.5",
-        "vimeo/psalm": "^4.8",
-        "phpbench/phpbench": "@dev",
-        "phpmetrics/phpmetrics": "^2.5",
-        "infection/infection": "^0.25",
-        "infection/codeception-adapter": "^0.4.0",
-        "italystrap/debug": "^2.0",
-        "phpspec/prophecy-phpunit": "^1.1",
+
+        "vimeo/psalm": "^5.6",
+
+        "phpbench/phpbench": "^1.2",
+        "phpmetrics/phpmetrics": "^2.8",
+
+        "infection/infection": "^0.26.6",
+        "infection/codeception-adapter": "^0.4.1",
+
+        "rector/rector": "^0.15.17",
+
+        "italystrap/debug": "dev-master",
         "composer/composer": "^2.1",
         "wp-cli/wp-cli": "^2.7"
     },
@@ -55,14 +60,11 @@
         ]
     },
     "autoload-dev": {
-        "classmap": [
-            "tests/"
-        ],
         "psr-4": {
-            "ItalyStrap\\Tests\\": "tests/"
+            "ItalyStrap\\Tests\\": "tests/src/",
+            "ItalyStrap\\Tests\\Unit\\": "tests/unit/"
         }
     },
-    "provide": {},
     "suggest": {
         "spatie/color": "Allows to convert CSS color"
     },
@@ -71,34 +73,49 @@
     },
     "scripts": {
         "cs": [
-            "vendor\\bin\\phpcbf -p --ignore=./tests/_support/* ./src/ ./tests/ && vendor\\bin\\phpcs -p --ignore=./tests/_support/* ./src/ ./tests/"
+            "@php vendor/bin/phpcs -p"
         ],
-        "analyze": [
-            "vendor\\bin\\phpstan analyze --level=max && vendor\\bin\\psalm"
+        "cs:fix": [
+            "@php vendor/bin/phpcbf -p"
+        ],
+        "psalm": [
+            "@php ./vendor/bin/psalm --no-cache"
         ],
         "unit": [
-            "vendor\\bin\\codecept run unit && vendor\\bin\\infection --threads=4",
-            "@clean"
+            "@php ./vendor/bin/codecept run unit"
         ],
-        "unit:debug": [
-            "vendor\\bin\\codecept run unit --debug",
-            "@clean"
+        "integration": [
+            "@php ./vendor/bin/codecept run integration"
         ],
-        "unit:debug:coverage": [
-            "vendor\\bin\\codecept run unit --debug --coverage-text",
-            "@clean"
+        "infection": [
+            "echo \"Running Infection...\"",
+            "echo \"Also remember to escape suite correctly, example --skip=integration or --skip=wpunit\"",
+            "@php ./vendor/bin/infection --threads=max"
         ],
         "bench": [
-            "vendor\\bin\\phpbench run --report=performance"
+            "@php ./vendor/bin/phpbench run tests/Benchmark --report=performance"
         ],
         "metrics": [
-            "vendor\\bin\\phpmetrics --report-html='./tests/_output/report' ./src"
+            "@php ./vendor/bin/phpmetrics --report-html='./tests/_output/report' ./src"
         ],
         "insights": [
-            "vendor\\bin\\phpinsights"
+            "@php ./vendor/bin/phpinsights"
         ],
         "clean": [
-            "vendor\\bin\\codecept clean"
+            "@php ./vendor/bin/codecept clean"
+        ],
+        "qa": [
+            "@cs",
+            "@psalm",
+            "@unit",
+            "@integration",
+            "@infection"
+        ],
+        "rector": [
+            "@php ./vendor/bin/rector process --dry-run"
+        ],
+        "rector:fix": [
+            "@php ./vendor/bin/rector process"
         ],
         "json": [
             "ItalyStrap\\ThemeJsonGenerator\\ComposerPlugin::run"

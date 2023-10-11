@@ -1,27 +1,25 @@
 <?php
 declare(strict_types=1);
 
-namespace ItalyStrap\Tests\Styles;
+namespace ItalyStrap\Tests\Unit\Styles;
 
-use Codeception\Test\Unit;
+use ItalyStrap\Tests\Unit\BaseUnitTrait;
+use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Styles\Typography;
-use ItalyStrap\Tests\BaseUnitTrait;
 
-class TypographyTest extends Unit {
+class TypographyTest extends UnitTestCase {
 
 	use BaseUnitTrait;
 
-	protected function getInstance(): Typography {
-		$sut = new Typography();
-		$this->assertInstanceOf( Typography::class, $sut, '' );
-		return $sut;
+	protected function makeInstance(): Typography {
+		return new Typography();
 	}
 
 	/**
 	 * @test
 	 */
 	public function itShouldCreateCorrectArray() {
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 		$result = $sut
 			->textDecoration( 'none' )
 			->lineHeight( '1' )

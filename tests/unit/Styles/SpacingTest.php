@@ -1,20 +1,19 @@
 <?php
 declare(strict_types=1);
 
-namespace ItalyStrap\Tests\Styles;
+namespace ItalyStrap\Tests\Unit\Styles;
 
-use Codeception\Test\Unit;
+
+use ItalyStrap\Tests\Unit\BaseUnitTrait;
+use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Styles\Spacing;
-use ItalyStrap\Tests\BaseUnitTrait;
 
-class SpacingTest extends Unit {
+class SpacingTest extends UnitTestCase {
 
 	use BaseUnitTrait, CommonTests;
 
-	protected function getInstance(): Spacing {
-		$sut = new Spacing();
-		$this->assertInstanceOf( Spacing::class, $sut, '' );
-		return $sut;
+	protected function makeInstance(): Spacing {
+		return new Spacing();
 	}
 
 	public function methodsProvider(): \Generator {
@@ -45,7 +44,7 @@ class SpacingTest extends Unit {
 	 */
 	public function itShouldReturnAnArray( string $method, string $value ) {
 
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 //		$sut->top('25px')
 //			->right('25px')
 //			->bottom( '25px' )
@@ -63,7 +62,7 @@ class SpacingTest extends Unit {
 	 */
 	public function itShouldReturnTheCorrectValue() {
 
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 		$sut->top('25px')
 			->right('25px')
 			->bottom( '50px' )
@@ -85,7 +84,7 @@ class SpacingTest extends Unit {
 	 */
 	public function itShouldBeImmutable() {
 
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 		$sut->top('25px')
 			->left('25px');
 
@@ -98,7 +97,7 @@ class SpacingTest extends Unit {
 	 */
 	public function itShouldBeImmutableAlsoIfICloneIt() {
 
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 		$sut->top('25px')
 			->left('25px');
 
@@ -115,7 +114,7 @@ class SpacingTest extends Unit {
 	 */
 	public function itShouldBeStringable() {
 
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 
 		$sut->top('25px');
 		$this->assertStringMatchesFormat( '25px 0 0 0', (string) $sut, '' );
@@ -164,7 +163,7 @@ class SpacingTest extends Unit {
 	 */
 	public function itShouldBeStringableAndReturnOnly( array $value, string $expected ) {
 
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 
 		$sut->top( $value[0] );
 		$sut->bottom( $value[1] );

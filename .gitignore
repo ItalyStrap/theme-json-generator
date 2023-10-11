@@ -1,11 +1,15 @@
-# Directory
+# Composer
 /vendor/
 /_others/
 
-# File
-*.local
-*.testing
+# Codeception
 codeception.yml
+
+# Rector
+rector.php
+
+# Common File
+*.local
 *.lock
 *.phar
 *.bak

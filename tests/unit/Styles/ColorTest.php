@@ -1,16 +1,17 @@
 <?php
 declare(strict_types=1);
 
-namespace ItalyStrap\Tests\Styles;
+namespace ItalyStrap\Tests\Unit\Styles;
 
+use ItalyStrap\Tests\Unit\BaseUnitTrait;
+use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Styles\Color;
-use ItalyStrap\Tests\BaseUnitTrait;
 
-class ColorTest extends \Codeception\Test\Unit {
+class ColorTest extends UnitTestCase {
 
 	use BaseUnitTrait;
 
-	protected function getInstance(): Color {
+	protected function makeInstance(): Color {
 		$sut = new Color();
 		$this->assertInstanceOf( Color::class, $sut, '' );
 		return $sut;
@@ -20,7 +21,7 @@ class ColorTest extends \Codeception\Test\Unit {
 	 * @test
 	 */
 	public function itShouldCreateCorrectArray() {
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 		$result = $sut
 			->text( '#000000' )
 			->background( 'transparent' )

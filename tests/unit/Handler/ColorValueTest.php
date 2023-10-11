@@ -1,31 +1,19 @@
 <?php
 declare(strict_types=1);
 
-namespace ItalyStrap\Tests;
+namespace ItalyStrap\Tests\Unit\Handler;
 
-use Codeception\Test\Unit;
+use ItalyStrap\Tests\Unit\BaseUnitTrait;
+use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Handler\ColorValue;
-use UnitTester;
 
-class ColorValueTest extends Unit {
+class ColorValueTest extends UnitTestCase {
 
 	use BaseUnitTrait;
 
-	/**
-	 * @var UnitTester
-	 */
-	protected $tester;
-
-	private $color;
-
-	// phpcs:ignore
-	protected function _before() {
-		$this->color = '#000000';
-	}
-
-	protected function getInstance() {
-		$sut = new ColorValue( $this->color );
-		return $sut;
+	protected function makeInstance(): ColorValue
+	{
+		return new ColorValue( $this->color );
 	}
 
 	public function colorProvider() {
@@ -108,7 +96,7 @@ class ColorValueTest extends Unit {
 	 */
 	public function itShouldConvertEdgeCase( $hex, $rgb, $hsla ) {
 		$this->color = $hex;
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 
 		$this->assertStringMatchesFormat( $hex, (string) $sut->toHex(), '' );
 		$this->assertStringMatchesFormat( $rgb, (string) $sut->toRgb(), '' );

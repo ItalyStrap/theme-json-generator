@@ -1,12 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace ItalyStrap\Tests;
+namespace ItalyStrap\Tests\Unit\Factory;
 
-use Codeception\Test\Unit;
+use ItalyStrap\Tests\Unit\BaseUnitTrait;
+use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Factory\Spacing;
 
-class SpacingFactoryTest extends Unit {
+class SpacingFactoryTest extends UnitTestCase {
 
 	use BaseUnitTrait;
 
@@ -70,7 +71,7 @@ class SpacingFactoryTest extends Unit {
 		$this->assertEquals($expected, $sut->toArray(), '');
 	}
 
-	protected function getInstance() {
+	protected function makeInstance() {
 		// TODO: Implement getInstance() method.
 	}
 }

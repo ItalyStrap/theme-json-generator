@@ -3,141 +3,17 @@ declare(strict_types=1);
 
 namespace ItalyStrap\Tests\Unit\Composer;
 
-use Codeception\Test\Unit;
-use Composer\Composer;
-use Composer\Config;
-use Composer\IO\IOInterface;
-use Composer\Package\Link;
-use Composer\Package\PackageInterface;
-use Composer\Package\RootPackageInterface;
 use Composer\Plugin\PluginInterface;
-use Composer\Repository\RepositoryManager;
+use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Composer\Plugin;
 use Prophecy\Argument;
-use Prophecy\Prophecy\ObjectProphecy;
-use Prophecy\Prophet;
-use UnitTester;
+
 use function codecept_output_dir;
 
-class ComposerPluginTest extends Unit {
+class ComposerPluginTest extends UnitTestCase {
 
-	/**
-	 * @var UnitTester
-	 */
-	protected $tester;
-
-	/**
-	 * @var Prophet
-	 */
-	private $prophet;
-
-	/**
-	 * @var ObjectProphecy
-	 */
-	private $composer;
-
-	/**
-	 * @var ObjectProphecy
-	 */
-	private $io;
-
-	/**
-	 * @var ObjectProphecy
-	 */
-	private $config;
-
-	/**
-	 * @var ObjectProphecy
-	 */
-	private $rootPackage;
-
-	/**
-	 * @var Link
-	 */
-	private $link;
-
-	/**
-	 * @var ObjectProphecy
-	 */
-	private $repositoryManager;
-
-	/**
-	 * @var ObjectProphecy
-	 */
-	private $package;
-
-	/**
-	 * @return Composer
-	 */
-	public function getComposer(): Composer {
-		return $this->composer->reveal();
-	}
-
-	/**
-	 * @return IOInterface
-	 */
-	public function getIo(): IOInterface {
-		return $this->io->reveal();
-	}
-
-	/**
-	 * @return Config
-	 */
-	public function getConfig(): Config {
-		return $this->config->reveal();
-	}
-
-	/**
-	 * @return RootPackageInterface
-	 */
-	public function getRootPackage(): RootPackageInterface {
-		return $this->rootPackage->reveal();
-	}
-
-	/**
-	 * @return Link
-	 */
-	public function getLink(): Link {
-		return $this->link->reveal();
-	}
-
-	/**
-	 * @return RepositoryManager
-	 */
-	public function getRepositoryManager(): RepositoryManager {
-		return $this->repositoryManager->reveal();
-	}
-
-	/**
-	 * @return PackageInterface
-	 */
-	public function getPackage(): PackageInterface {
-		return $this->package->reveal();
-	}
-
-	// phpcs:ignore
-	protected function _before() {
-		$this->prophet = new Prophet;
-		$this->composer = $this->prophet->prophesize( Composer::class );
-		$this->io = $this->prophet->prophesize( IOInterface::class );
-		$this->config = $this->prophet->prophesize( Config::class );
-		$this->rootPackage = $this->prophet->prophesize( RootPackageInterface::class );
-		$this->link = $this->prophet->prophesize( Link::class );
-		$this->repositoryManager = $this->prophet->prophesize( RepositoryManager::class );
-		$this->package = $this->prophet->prophesize( PackageInterface::class );
-
-		$this->composer->getConfig()->willReturn( $this->getConfig() );
-		$this->composer->getPackage()->willReturn( $this->getRootPackage() );
-	}
-
-	// phpcs:ignore
-	protected function _after() {
-	}
-
-	protected function getInstance(): Plugin {
+	protected function makeInstance(): Plugin {
 		$sut = new Plugin();
-		$this->assertInstanceOf( Plugin::class, $sut, '' );
-//		$this->assertInstanceOf( EventSubscriberInterface::class, $sut, '' );
 		$this->assertInstanceOf( PluginInterface::class, $sut, '' );
 		return $sut;
 	}
@@ -146,7 +22,7 @@ class ComposerPluginTest extends Unit {
 	 * @test
 	 */
 	public function itShouldBeInstantiatable() {
-		$sut = $this->getInstance();
+		$sut = $this->makeInstance();
 	}
 
 	/**
@@ -167,8 +43,8 @@ class ComposerPluginTest extends Unit {
 
 		$this->expectException( \RuntimeException::class );
 
-		$sut = $this->getInstance();
-		$sut->createThemeJson( $this->getComposer(), $this->getIo() );
+		$sut = $this->makeInstance();
+		$sut->createThemeJson( $this->makeComposer(), $this->makeIo() );
 
 		$theme_json_file_path = dirname( $theme_json_file_path );
 		$this->assertFileNotExists( $theme_json_file_path . '/theme.json', '');
@@ -181,7 +57,7 @@ class ComposerPluginTest extends Unit {
 		$rand = (string) \rand();
 		$temp_dir_path = codecept_output_dir( $rand . '/vendor' );
 
-		$this->config
+		$this->composerConfig
 			->get( Argument::type('string') )
 			->willReturn( $temp_dir_path );
 
@@ -193,8 +69,8 @@ class ComposerPluginTest extends Unit {
 			],
 		]);
 
-		$sut = $this->getInstance();
-		$sut->createThemeJson( $this->getComposer(), $this->getIo() );
+		$sut = $this->makeInstance();
+		$sut->createThemeJson( $this->makeComposer(), $this->makeIo() );
 
 		$theme_json_file_path = dirname( $temp_dir_path ) . '/theme.json';
 		$this->assertFileExists( $theme_json_file_path, '');
@@ -219,18 +95,18 @@ class ComposerPluginTest extends Unit {
 	public function itShouldCreateThemeJsonFileFromRequiredPackage() {
 		$theme_json_file_path = codecept_output_dir(\rand() .  '/vendor');
 
-		$this->config
+		$this->composerConfig
 			->get( Argument::type('string') )
 			->willReturn( $theme_json_file_path );
 
-		$this->composer->getRepositoryManager()->willReturn( $this->getRepositoryManager() );
+		$this->composer->getRepositoryManager()->willReturn( $this->makeRepositoryManager() );
 		$this->link->getConstraint()->willReturn( 'dev-master' );
-		$this->rootPackage->getRequires()->willReturn( [ $this->getLink() ] );
+		$this->rootPackage->getRequires()->willReturn( [ $this->makeLink() ] );
 
 		$this->link->getTarget()->willReturn( 'italystrap/themejsongenerator' );
 		$this->repositoryManager
 			->findPackage( 'italystrap/themejsongenerator', 'dev-master' )
-			->willReturn( $this->getPackage() );
+			->willReturn( $this->makePackage() );
 		$this->package->getType()->willReturn( 'wordpress-theme' );
 
 		$this->package->getExtra()->willReturn([
@@ -241,8 +117,8 @@ class ComposerPluginTest extends Unit {
 			],
 		]);
 
-		$sut = $this->getInstance();
-		$sut->createThemeJson( $this->getComposer(), $this->getIo() );
+		$sut = $this->makeInstance();
+		$sut->createThemeJson( $this->makeComposer(), $this->makeIo() );
 
 		$theme_json_file_path = $theme_json_file_path . '/italystrap/themejsongenerator/theme.json';
 		$this->assertFileExists( $theme_json_file_path, '');
