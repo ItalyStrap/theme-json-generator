@@ -1,32 +1,31 @@
 name: Static Analysis
 
 on:
-  push:
-    branches: [ master ]
   pull_request:
-    branches: [ master ]
+  push:
+    paths:
+      - '**workflows/static-analysis.yml'
+      - '**.php'
+      - '**psalm.xml'
+      - '**composer.json'
 
 jobs:
   tests:
-    name: Linting
+    name: Static Analysis for PHP
 
     runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '--skip ci') && !github.event.pull_request.draft"
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: 7.4
 
-      - uses: ramsey/composer-install@v1
-        with:
-          composer-options: "--prefer-dist --ignore-platform-reqs"
-
-      - name: PHPStan
-        run: vendor/bin/phpstan analyze
+      - uses: ramsey/composer-install@v2
 
       - name: Psalm
         run: vendor/bin/psalm
