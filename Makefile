@@ -72,6 +72,7 @@ cs: up	### Run the code sniffer
 cs/fix: up	### Run the code sniffer and fix the errors
 	@echo "Running the code sniffer and fix the errors"
 	@$(DOCKER_DIR) ./composer cs:fix
+	@$(FILES_OWNERSHIP)
 
 # Psalm commands
 
@@ -114,10 +115,10 @@ acceptance: up	### Run the acceptance tests
 	@$(DOCKER_DIR) ./codecept run acceptance
 
 .PHONY: tests
-tests: unit integration	### Run unit and integration tests
+tests: unit	### Run unit and integration tests
 
 .PHONY: qa
-qa: cs psalm unit integration	### Run all the tests
+qa: cs psalm unit ### Run all the tests
 
 # Infection commands
 

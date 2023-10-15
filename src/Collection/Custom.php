@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Collection;
@@ -12,79 +13,83 @@ use ItalyStrap\ThemeJsonGenerator\Settings\CollectionInterface;
 /**
  * @deprecated
  */
-final class Custom implements CollectionInterface {
+final class Custom implements CollectionInterface
+{
+    use Collectible;
+    use ConvertCase;
+    use DeprecationMethod;
 
-	use Collectible, ConvertCase, DeprecationMethod;
+    /**
+     * @var array<int|string, mixed>
+     */
+    private array $collection;
 
-	/**
-	 * @var array<int|string, mixed>
-	 */
-	private $collection;
+    private string $category;
 
-	/**
-	 * @var string
-	 */
-	private $category;
+    /**
+     * @var ConfigInterface
+     */
+    private $config; // @phpstan-ignore-line
 
-	/**
-	 * @var ConfigInterface
-	 */
-	private $config; // @phpstan-ignore-line
+    private \ItalyStrap\ThemeJsonGenerator\Settings\CustomCollection $custom_new;
 
-	private \ItalyStrap\ThemeJsonGenerator\Settings\CustomCollection $custom_new;
+    /**
+     * @psalm-suppress TooManyTemplateParams
+     * @param array<int|string, mixed> $collection
+     * @param ConfigInterface<mixed>|null $config
+     */
+    public function __construct(
+        array $collection,
+        ConfigInterface $config = null
+    ) {
+        $this->custom_new = new \ItalyStrap\ThemeJsonGenerator\Settings\CustomCollection(...func_get_args());
+        $this->collection = $collection;
+        $this->category = 'custom';
+        $this->config = $config ?? new Config();
+    }
 
-	/**
-	 * @psalm-suppress TooManyTemplateParams
-	 * @param array<int|string, mixed> $collection
-	 * @param ConfigInterface<mixed>|null $config
-	 */
-	public function __construct(
-		array $collection,
-		ConfigInterface $config = null
-	) {
-		$this->custom_new = new \ItalyStrap\ThemeJsonGenerator\Settings\CustomCollection( ...func_get_args() );
-		$this->collection = $collection;
-		$this->category = 'custom';
-		$this->config = $config ?? new Config();
-	}
+    /**
+     * @inerhitDoc
+     */
+    public function category(): string
+    {
+        $this->deprecateCustom();
+        return $this->custom_new->category();
+    }
 
-	/**
-	 * @inerhitDoc
-	 */
-	public function category(): string {
-		$this->deprecateCustom();
-		return $this->custom_new->category();
-	}
+    /**
+     * @inerhitDoc
+     */
+    public function propOf(string $slug): string
+    {
+        $this->deprecateCustom();
+        return $this->custom_new->propOf(...func_get_args());
+    }
 
-	/**
-	 * @inerhitDoc
-	 */
-	public function propOf( string $slug ): string {
-		$this->deprecateCustom();
-		return $this->custom_new->propOf( ...func_get_args() );
-	}
+    /**
+     * @inerhitDoc
+     */
+    public function varOf(string $slug): string
+    {
+        $this->deprecateCustom();
+        return $this->custom_new->varOf(...func_get_args());
+    }
 
-	/**
-	 * @inerhitDoc
-	 */
-	public function varOf( string $slug ): string {
-		$this->deprecateCustom();
-		return $this->custom_new->varOf( ...func_get_args() );
-	}
+    /**
+     * @inerhitDoc
+     */
+    public function value(string $slug): string
+    {
+        $this->deprecateCustom();
+        return $this->custom_new->value(...func_get_args());
+    }
 
-	/**
-	 * @inerhitDoc
-	 */
-	public function value( string $slug ): string {
-		$this->deprecateCustom();
-		return $this->custom_new->value( ...func_get_args() );
-	}
-
-	/**
-	 * @inerhitDoc
-	 */
-	public function toArray(): array {
-		$this->deprecateCustom();
-		return $this->custom_new->toArray();
-	}
+    /**
+     * @inerhitDoc
+     */
+    public function toArray(): array
+    {
+        $this->deprecateCustom();
+        return $this->custom_new->toArray();
+    }
 }

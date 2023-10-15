@@ -24,94 +24,103 @@ class UnitTestCase extends Unit
 
     protected UnitTester $tester;
 
-	protected array $input_data;
+    protected array $input_data;
 
-	protected string $color;
+    protected string $color;
 
-	protected string $base_color = '';
+    protected string $base_color = '';
 
-	protected function inputData(): array {
-		return $this->input_data;
-	}
+    protected function inputData(): array
+    {
+        return $this->input_data;
+    }
 
-	protected ObjectProphecy $config;
+    protected ObjectProphecy $config;
 
-	public function makeConfig(): ConfigInterface
-	{
-		return $this->config->reveal();
-	}
+    public function makeConfig(): ConfigInterface
+    {
+        return $this->config->reveal();
+    }
 
-	protected ObjectProphecy $jsonFile;
+    protected ObjectProphecy $jsonFile;
 
-	protected function makeJsonFile(): JsonFile {
-		return $this->jsonFile->reveal();
-	}
+    protected function makeJsonFile(): JsonFile
+    {
+        return $this->jsonFile->reveal();
+    }
 
-	protected ObjectProphecy $composer;
+    protected ObjectProphecy $composer;
 
-	protected function makeComposer(): Composer {
-		return $this->composer->reveal();
-	}
+    protected function makeComposer(): Composer
+    {
+        return $this->composer->reveal();
+    }
 
-	protected ObjectProphecy $composerConfig;
+    protected ObjectProphecy $composerConfig;
 
-	protected function makeComposerConfig(): Config {
-		return $this->composerConfig->reveal();
-	}
+    protected function makeComposerConfig(): Config
+    {
+        return $this->composerConfig->reveal();
+    }
 
-	protected ObjectProphecy $io;
+    protected ObjectProphecy $io;
 
-	protected function makeIo(): IOInterface {
-		return $this->io->reveal();
-	}
+    protected function makeIo(): IOInterface
+    {
+        return $this->io->reveal();
+    }
 
-	protected ObjectProphecy $rootPackage;
+    protected ObjectProphecy $rootPackage;
 
-	protected function makeRootPackage(): RootPackageInterface {
-		return $this->rootPackage->reveal();
-	}
+    protected function makeRootPackage(): RootPackageInterface
+    {
+        return $this->rootPackage->reveal();
+    }
 
-	protected ObjectProphecy $link;
+    protected ObjectProphecy $link;
 
-	protected function makeLink(): Link {
-		return $this->link->reveal();
-	}
+    protected function makeLink(): Link
+    {
+        return $this->link->reveal();
+    }
 
-	protected ObjectProphecy $repositoryManager;
+    protected ObjectProphecy $repositoryManager;
 
-	protected function makeRepositoryManager(): RepositoryManager {
-		return $this->repositoryManager->reveal();
-	}
+    protected function makeRepositoryManager(): RepositoryManager
+    {
+        return $this->repositoryManager->reveal();
+    }
 
-	protected ObjectProphecy $package;
+    protected ObjectProphecy $package;
 
-	protected function makePackage(): PackageInterface {
-		return $this->package->reveal();
-	}
+    protected function makePackage(): PackageInterface
+    {
+        return $this->package->reveal();
+    }
 
 	// phpcs:ignore -- Method from Codeception
 	protected function _before() {
-		$this->config = $this->prophesize( ConfigInterface::class );
-		$this->jsonFile = $this->prophesize( JsonFile::class );
-		$this->composer = $this->prophesize( Composer::class );
-		$this->composerConfig = $this->prophesize( Config::class );
-		$this->io = $this->prophesize( IOInterface::class );
-		$this->rootPackage = $this->prophesize( RootPackageInterface::class );
-		$this->link = $this->prophesize( Link::class );
-		$this->repositoryManager = $this->prophesize( RepositoryManager::class );
-		$this->package = $this->prophesize( PackageInterface::class );
+        $this->config = $this->prophesize(ConfigInterface::class);
+        $this->jsonFile = $this->prophesize(JsonFile::class);
+        $this->composer = $this->prophesize(Composer::class);
+        $this->composerConfig = $this->prophesize(Config::class);
+        $this->io = $this->prophesize(IOInterface::class);
+        $this->rootPackage = $this->prophesize(RootPackageInterface::class);
+        $this->link = $this->prophesize(Link::class);
+        $this->repositoryManager = $this->prophesize(RepositoryManager::class);
+        $this->package = $this->prophesize(PackageInterface::class);
 
-		$this->composer->getConfig()->willReturn( $this->makeComposerConfig() );
-		$this->composer->getPackage()->willReturn( $this->makeRootPackage() );
+        $this->composer->getConfig()->willReturn($this->makeComposerConfig());
+        $this->composer->getPackage()->willReturn($this->makeRootPackage());
 
-		$this->input_data = require \codecept_data_dir('fixtures/input-data.php');
-		$this->color = '#000000';
-		$this->base_color = '#000000';
+        $this->input_data = require \codecept_data_dir('fixtures/input-data.php');
+        $this->color = '#000000';
+        $this->base_color = '#000000';
     }
 
     // phpcs:ignore -- Method from Codeception
     protected function _after()
     {
-		$this->getProphet()->checkPredictions();
+        $this->getProphet()->checkPredictions();
     }
 }

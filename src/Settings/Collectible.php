@@ -1,48 +1,51 @@
 <?php
+
 declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Settings;
 
-trait Collectible {
+trait Collectible
+{
+    /**
+     * @var CollectionInterface[]
+     */
+    private $collection_of_collections = [];
 
-	/**
-	 * @var CollectionInterface[]
-	 */
-	private $collection_of_collections = [];
+    public function withCollection(CollectionInterface ...$collections): void
+    {
+        $this->collection_of_collections = \array_merge_recursive(
+            $this->collection_of_collections,
+            $collections
+        );
+    }
 
-	public function withCollection( CollectionInterface ...$collections ): void {
-		$this->collection_of_collections = \array_merge_recursive(
-			$this->collection_of_collections,
-			$collections
-		);
-	}
+    /**
+     * @param string $slug_or_default
+     * @return string
+     * @psalm-suppress RedundantCast
+     */
+    private function findCssVariable(string $slug_or_default): string
+    {
 
-	/**
-	 * @param string $slug_or_default
-	 * @return string
-	 * @psalm-suppress RedundantCast
-	 */
-	private function findCssVariable( string $slug_or_default ): string {
+        $slugs_or_default = (array) \explode('|', $slug_or_default, 2);
 
-		$slugs_or_default = (array) \explode( '|', $slug_or_default, 2 );
+        $css_variable = $slugs_or_default[ 1 ] ?? '';
 
-		$css_variable = $slugs_or_default[ 1 ] ?? '';
+        try {
+            $css_variable = $this->varOf($slugs_or_default[ 0 ]);
+        } catch (\RuntimeException $exception) {
+            // fail in silence
+        }
 
-		try {
-			$css_variable = $this->varOf( $slugs_or_default[ 0 ] );
-		} catch ( \RuntimeException $exception ) {
-			// fail in silence
-		}
+        if (false !== \strpos($slugs_or_default[0], '.')) {
+            $search_in_collection = \explode('.', $slugs_or_default[0]);
+            foreach ($this->collection_of_collections as $collection) {
+                if ($collection->category() === $search_in_collection[ 0 ]) {
+                    $css_variable = $collection->varOf($search_in_collection[ 1 ]);
+                }
+            }
+        }
 
-		if ( false !== \strpos( $slugs_or_default[0], '.' ) ) {
-			$search_in_collection = \explode('.', $slugs_or_default[0] );
-			foreach ( $this->collection_of_collections as $collection ) {
-				if ( $collection->category() === $search_in_collection[ 0 ] ) {
-					$css_variable = $collection->varOf( $search_in_collection[ 1 ] );
-				}
-			}
-		}
-
-		return $css_variable;
-	}
+        return $css_variable;
+    }
 }
