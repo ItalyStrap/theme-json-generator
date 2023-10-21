@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator\CLI;
 
 use Exception;
-use ItalyStrap\ThemeJsonGenerator\JsonFileBuilder;
+use ItalyStrap\ThemeJsonGenerator\Files\JsonFileBuilder;
 use WP_CLI;
 
 use function array_replace_recursive;

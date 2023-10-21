@@ -6,12 +6,12 @@ WordPress Theme Json Generator the OOP way
 
 This is a WIP project and still experimental.
 
-The idea is to generate a file `theme.json` from PHP because json sucks :D (just kidding)
+The idea is to generate a file `theme.json` from PHP because json sucks 😁 (just kidding)
 
-With PHP you have the ability to split the file in multiple files, add comments, generate the content as you wish, 
+With PHP, you have the ability to split the file in multiple files, add comments, generate the content as you wish, 
 PHP is not limited like json.
 
-I'm experimenting color library as composer and WP_CLI plugin for generating the file.
+I'm experimenting this library as composer and WP_CLI plugin for generating the file.
 
 ## Table Of Contents
 
@@ -34,13 +34,13 @@ This package adheres to the [SemVer](http://semver.org/) specification and will 
 
 ### How it works
 
-Basically, color plugin executes the following steps:
+Basically, this plugin executes the following steps:
 
 * This plugin searches for a custom callback you provide trough `composer.json` inside `extra` field.
 * The callback needs to return an array with your [theme config](https://developer.wordpress.
   org/block-editor/how-to-guides/themes/theme-json/) and the callback accepts a string argument where you get the 
   path of the theme.
-* At the end it generates the theme.json in the root folder of the theme you are developing.
+* At the end it generates the **theme.json** in the root folder of the theme you are developing.
 
 ### Example project
 
@@ -129,13 +129,13 @@ Change `your-command` with the command you want to use.
 
 ### WP_CLI command
 
-As I said color is also a WP_CLI plugin, for now it is all included in color library for testing purpose, maybe I can 
+As I said this is also a WP_CLI plugin, for now it is all included in this library for testing purpose, maybe I can 
 split in other library if I see the need of doing that.
 
 For using as WP_CLI command you have to create a file `wp-cli.local.yml` or `wp-cli.yml` in the root of your theme 
 or better in the root of the WordPress installation.
 
-Inside that file add color line for adding your custom callback:
+Inside that file add this line for adding your custom callback:
 
 ```yaml
 THEME_JSON_CALLABLE: '\YourVendor\YourProject\your_callback'
@@ -161,7 +161,7 @@ This command is still experimental, could be changed in the future.
 
 ## Advanced Usage
 
-> This part is optional, if you want to provide your own data just skip color part.
+> This part is optional, if you want to provide your own data just skip this part.
 > I use a naming convention for defining CSS properties, you can use your own if you don't like mine.
 
 Now we know how to generate the theme.json file so, what next?
@@ -198,10 +198,9 @@ $palette = new \ItalyStrap\ThemeJsonGenerator\Settings\PresetCollection(
 ```
 
 As you can see the `PresetCollection::class` accept an array with the preset configuration following the json schema 
-for color, 
-and then you can also provide a `category` name and `key` value, the `category` name is used to define that the config is 
-for color, the key is optional and is used to know what is the key of the value, in color case the key and category are 
-the same so you can omit it (you will need it when you will set fontSize).
+for color, and then you can also provide a `category` name and `key` value, the `category` name is used to define that the config is 
+for color, the key is optional and is used to know what is the key of the value, in this case the key and category are 
+the same, so you can omit it (you will need it when you will set fontSize).
 
 Now we can set the gradient:
 
@@ -227,7 +226,7 @@ As you can see we define `gradient` as `category`, and `gradient` is also the ke
 Now instead of define the value `gradient` manually `'linear-gradient(160deg,--wp--preset--color--text,
 --wp--preset--color--background)'` we can handle the power of the `CollectionInterface::class` and use a simple 
 syntax to define the value we need: `'{{color.text}}'` where the parenthesis `{{` `}}` are used to wrap the value 
-name we want, in the example is `text`, in case we need a value from another collection of preset we have to add 
+name we want, in the example is `text` in `color` collection, in case we need a value from another collection of preset we have to add 
 also the category of the preset with the name separated by a dot like color `color.text`, so the object knows that it 
 needs a `text` value from a color collection, also we need to add the collection of colors to the collection of 
 gradients with color snippet:
@@ -237,7 +236,7 @@ $gradient->withCollection( $palette );
 ```
 
 This way allows us to avoid syntax errors when writing CSS properties manually.
-In case there is no value with the slug we need the object will throw a `\RuntimeException::class`, useful for 
+In case there is no value with the slug we use, the object will throw a `\RuntimeException::class`, useful for 
 future refactoring of the theme style.
 
 Here an example for `fontSize` and `fontFamily`:
@@ -302,10 +301,10 @@ $font_family = new \ItalyStrap\ThemeJsonGenerator\Settings\PresetCollection(
 );
 ```
 
-As you can see in the above `fontSize` config we call value slug without the category like color `{{base}}` color is 
-because the `base` slug is declared in the configuration of the same object, so, we don't need to add the category.
+As you can see here we use the slug `base` without the category, this is because the slug is declared inside the 
+same object, so we don't need to add the category.
 
-Also, you can notice that for `fontSize` we use the key `size`, color because is the key used for the preset of 
+Also, you can notice that for `fontSize` we use the key `size`, this is because is the key used for the preset of 
 font sizes.
 
 It's time for an example of custom:
@@ -348,10 +347,10 @@ $custom->withCollection(
 ```
 
 Custom properties is useful for declaring "custom" prop names, if we want to use the preset Properties we have to add 
-the collections we need, I added all preset collection.
+the collections we need, I added all preset collection because I want to use all of them.
 
 Now in the setting section we need to use the `CollectionInterface::toArray()` method to add the configurations we 
-just made above:
+just created above:
 
 ```php
 return [

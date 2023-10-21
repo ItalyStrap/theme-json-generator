@@ -71,6 +71,9 @@
     "extra": {
         "class": "ItalyStrap\\ThemeJsonGenerator\\ComposerPlugin"
     },
+    "bin": [
+        "bin/theme-json"
+    ],
     "scripts": {
         "cs": [
             "@php vendor/bin/phpcs -p"
@@ -119,6 +122,9 @@
         ],
         "json": [
             "ItalyStrap\\ThemeJsonGenerator\\ComposerPlugin::run"
+        ],
+        "theme/json": [
+            "@php ./bin/theme-json"
         ]
     },
     "support"    : {
@@ -131,5 +137,8 @@
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "codeception/c3": true
         }
+    },
+    "provide": {
+        "italystrap/theme-json-generator": "self.version"
     }
 }
