@@ -3,6 +3,8 @@
         totallyTyped="false"
         errorLevel="1"
         resolveFromConfigFile="true"
+        findUnusedBaselineEntry="true"
+        findUnusedCode="true"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="https://getpsalm.org/schema/config"
         xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
@@ -16,9 +18,7 @@
     <issueHandlers>
         <UndefinedFunction>
             <errorLevel type="suppress">
-<!--                <referencedFunction name="get_transient"/>-->
-<!--                <referencedFunction name="set_transient"/>-->
-<!--                <referencedFunction name="delete_transient"/>-->
+
             </errorLevel>
         </UndefinedFunction>
     </issueHandlers>

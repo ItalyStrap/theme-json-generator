@@ -1,5 +1,6 @@
 {
-  "bootstrap": "vendor/autoload.php",
+  "$schema":"./vendor/phpbench/phpbench/phpbench.schema.json",
+  "runner.bootstrap": "vendor/autoload.php",
   "php_disable_ini": true,
   "php_config": {
     "extension": []

@@ -1,32 +1,21 @@
 <?php
+
 declare(strict_types=1);
 
-namespace ItalyStrap\Tests;
+namespace ItalyStrap\Tests\Unit;
 
-trait BaseUnitTrait {
+trait BaseUnitTrait
+{
+    abstract protected function makeInstance();
 
-	/**
-	 * @var \UnitTester
-	 */
-	protected $tester;
-
-	// phpcs:ignore
-	protected function _before() {
-	}
-
-	// phpcs:ignore
-	protected function _after() {
-	}
-
-	abstract protected function getInstance();
-
-	/**
-	 * @test
-	 */
-	public function itShouldBeInstantiable() {
-		$sut = $this->getInstance();
-//		if ( ! $sut ) {
-//			$this->fail( 'Create an instance' );
-//		}
-	}
+    /**
+     * @test
+     */
+    public function itShouldBeInstantiable()
+    {
+        $sut = $this->makeInstance();
+//      if ( ! $sut ) {
+//          $this->fail( 'Create an instance' );
+//      }
+    }
 }

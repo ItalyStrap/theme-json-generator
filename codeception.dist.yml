@@ -22,3 +22,5 @@ coverage:
     enabled: true
     include:
         - src/*
+settings:
+    shuffle: true
