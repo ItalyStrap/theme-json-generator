@@ -137,8 +137,5 @@
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "codeception/c3": true
         }
-    },
-    "provide": {
-        "italystrap/theme-json-generator": "self.version"
     }
 }
