@@ -8,8 +8,5 @@ final class ThemeJson
 {
 	public function __invoke(array $argv)
 	{
-		var_dump($argv);
-		var_dump(__DIR__);
-		var_dump(getcwd());
 	}
 }
