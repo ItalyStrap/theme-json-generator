@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\ThemeJsonGenerator\CLI;
+namespace ItalyStrap\ThemeJsonGenerator\Application\Commands;
 
 use Exception;
 use ItalyStrap\ThemeJsonGenerator\Files\JsonFileBuilder;
@@ -15,11 +15,7 @@ use function is_callable;
 use function is_child_theme;
 use function sprintf;
 
-/**
- * Class Command
- * @package ItalyStrap\ThemeJsonGenerator\CLI
- */
-final class Command
+final class WPCLI
 {
     /**
      * @param array<string, mixed> $args
@@ -31,8 +27,8 @@ final class Command
         /**
          * --parent
          * : Argument to generate theme.json also for parent theme
-         * @var array<string, mixed>
-         */
+         * @var array<string, mixed> $assoc_args_default
+		 */
         $assoc_args_default = [
             'parent'    => false,
         ];

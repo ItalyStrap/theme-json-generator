@@ -13,4 +13,4 @@ function test_callable( string $path ): array {
 	return ['key'=>'value'];
 }
 
-WP_CLI::add_command( 'theme-json generate', '\ItalyStrap\ThemeJsonGenerator\CLI\Command' );
+WP_CLI::add_command( 'theme-json generate', '\ItalyStrap\ThemeJsonGenerator\Appkication\Commands\WPCLI' );

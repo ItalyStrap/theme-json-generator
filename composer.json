@@ -18,7 +18,8 @@
         "composer-plugin-api": "^2.0",
         "italystrap/config": "^2.4",
         "mexitek/phpcolors": "^1.0",
-        "spatie/color": "~1.5.0"
+        "spatie/color": "~1.5.0",
+        "psr/event-dispatcher": "^1.0"
     },
     "require-dev": {
         "lucatume/wp-browser": "^3.1",
@@ -69,17 +70,17 @@
         "spatie/color": "Allows to convert CSS color"
     },
     "extra": {
-        "class": "ItalyStrap\\ThemeJsonGenerator\\ComposerPlugin"
+        "class": "ItalyStrap\\ThemeJsonGenerator\\Application\\Command\\ComposerPlugin"
     },
     "bin": [
         "bin/theme-json"
     ],
     "scripts": {
         "cs": [
-            "@php vendor/bin/phpcs -p"
+            "@php ./vendor/bin/phpcs -p"
         ],
         "cs:fix": [
-            "@php vendor/bin/phpcbf -p"
+            "@php ./vendor/bin/phpcbf -p"
         ],
         "psalm": [
             "@php ./vendor/bin/psalm --no-cache"
@@ -126,6 +127,23 @@
         "theme/json": [
             "@php ./bin/theme-json"
         ]
+    },
+    "scripts-descriptions": {
+        "cs": "Run Code Sniffer",
+        "cs:fix": "Run Code Sniffer and fix errors",
+        "psalm": "Run Psalm",
+        "unit": "Run Unit tests",
+        "integration": "Run Integration tests",
+        "infection": "Run Infection",
+        "bench": "Run Benchmark",
+        "metrics": "Run Metrics",
+        "insights": "Run Insights",
+        "clean": "Clean Codeception cache",
+        "qa": "Run all QA tools",
+        "rector": "Run Rector",
+        "rector:fix": "Run Rector and fix errors",
+        "json": "Generate theme.json file",
+        "theme/json": "Generate theme.json file"
     },
     "support"    : {
         "issues": "https://github.com/ItalyStrap/theme-json-generator/issues",

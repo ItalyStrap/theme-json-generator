@@ -2,7 +2,10 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\ThemeJsonGenerator;
+use ItalyStrap\ThemeJsonGenerator\Application\Commands\ThemeJson;
 
-var_dump(__DIR__ . '/vendor/autoload.php');
-var_dump($argv);
+require $_composer_autoload_path ?? __DIR__.'/../vendor/autoload.php';
+
+global $argv;
+array_shift($argv);
+(new ThemeJson())($argv);

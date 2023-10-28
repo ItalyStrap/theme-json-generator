@@ -2,20 +2,19 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\Tests\Unit\Composer;
+namespace ItalyStrap\Tests\ThemeJsonGenerator\Application\Commands;
+
 
 use Composer\Plugin\PluginInterface;
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Composer\Plugin;
+use ItalyStrap\ThemeJsonGenerator\Application\Commands\ComposerPlugin;
 use Prophecy\Argument;
-
-use function codecept_output_dir;
 
 class ComposerPluginTest extends UnitTestCase
 {
-    protected function makeInstance(): Plugin
+    protected function makeInstance(): ComposerPlugin
     {
-        $sut = new Plugin();
+        $sut = new ComposerPlugin();
         $this->assertInstanceOf(PluginInterface::class, $sut, '');
         return $sut;
     }

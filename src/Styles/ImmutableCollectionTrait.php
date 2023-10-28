@@ -11,14 +11,14 @@ trait ImmutableCollectionTrait
      */
     private array $collection = [];
 
-    final private function setCollection(string $key, string $value): self
+    private function setCollection(string $key, string $value): self
     {
         $this->assertIsImmutable($key);
         $this->collection[ $key ] = $value;
         return $this;
     }
 
-    final private function assertIsImmutable(string $key): void
+    private function assertIsImmutable(string $key): void
     {
         if (\array_key_exists($key, $this->collection)) {
             $bt = \debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);

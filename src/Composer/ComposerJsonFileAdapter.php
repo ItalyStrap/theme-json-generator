@@ -8,7 +8,7 @@ use Composer\Json\JsonFile;
 
 final class ComposerJsonFileAdapter
 {
-    private \Composer\Json\JsonFile $jsonFile;
+    private JsonFile $jsonFile;
 
     /**
      * FileJsonAdapter constructor.

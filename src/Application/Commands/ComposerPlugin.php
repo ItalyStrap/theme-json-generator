@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\ThemeJsonGenerator\Composer;
+namespace ItalyStrap\ThemeJsonGenerator\Application\Commands;
 
 use Composer\Composer;
 use Composer\Package\PackageInterface;
@@ -17,7 +17,7 @@ use function array_replace_recursive;
 use function dirname;
 use function is_callable;
 
-final class Plugin implements PluginInterface
+final class ComposerPlugin implements PluginInterface
 {
     public const TYPE_THEME = 'wordpress-theme';
     public const THEME_JSON_KEY = 'theme-json';
