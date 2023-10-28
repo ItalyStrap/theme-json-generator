@@ -57,7 +57,8 @@
             "ItalyStrap\\ThemeJsonGenerator\\": "src/"
         },
         "files": [
-            "functions/autoload.php"
+            "functions/autoload.php",
+            "namespace-bc-aliases.php"
         ]
     },
     "autoload-dev": {
@@ -122,7 +123,7 @@
             "@php ./vendor/bin/rector process"
         ],
         "json": [
-            "ItalyStrap\\ThemeJsonGenerator\\ComposerPlugin::run"
+            "\\ItalyStrap\\ThemeJsonGenerator\\Infrastructure\\Plugin\\Composer::run"
         ],
         "theme/json": [
             "@php ./bin/theme-json"

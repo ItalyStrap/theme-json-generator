@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\ThemeJsonGenerator\Application\Commands;
+namespace ItalyStrap\ThemeJsonGenerator\Infrastructure\Plugin;
 
-use Composer\Composer;
+use Composer\Composer as BaseComposer;
 use Composer\Package\PackageInterface;
+use Composer\Plugin\Capable;
 use Composer\Script\Event;
 use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
@@ -13,11 +14,12 @@ use Exception;
 use ItalyStrap\ThemeJsonGenerator\Files\JsonFileBuilder;
 use ItalyStrap\ThemeJsonGenerator\Files\ScssFileBuilder;
 
+use ItalyStrap\ThemeJsonGenerator\Infrastructure\Commands\Provider;
 use function array_replace_recursive;
 use function dirname;
 use function is_callable;
 
-final class ComposerPlugin implements PluginInterface
+final class Composer implements PluginInterface, Capable
 {
     public const TYPE_THEME = 'wordpress-theme';
     public const THEME_JSON_KEY = 'theme-json';
@@ -32,19 +34,19 @@ final class ComposerPlugin implements PluginInterface
         $instance->createThemeJson($composer, $io);
     }
 
-    public function uninstall(Composer $composer, IOInterface $io): void
+    public function uninstall(BaseComposer $composer, IOInterface $io): void
     {
     }
 
-    public function activate(Composer $composer, IOInterface $io): void
+    public function activate(BaseComposer $composer, IOInterface $io): void
     {
     }
 
-    public function deactivate(Composer $composer, IOInterface $io): void
+    public function deactivate(BaseComposer $composer, IOInterface $io): void
     {
     }
 
-    public function createThemeJson(Composer $composer, IOInterface $io): void
+    public function createThemeJson(BaseComposer $composer, IOInterface $io): void
     {
         $rootPackage = $composer->getPackage();
 
@@ -109,4 +111,11 @@ final class ComposerPlugin implements PluginInterface
             ],
         ];
     }
+
+	public function getCapabilities(): array
+	{
+		return [
+			'Composer\Plugin\Capability\CommandProvider' => Provider::class,
+		];
+	}
 }
