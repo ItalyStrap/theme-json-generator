@@ -71,7 +71,7 @@
         "spatie/color": "Allows to convert CSS color"
     },
     "extra": {
-        "class": "\\ItalyStrap\\ThemeJsonGenerator\\Infrastructure\\Plugin\\Composer"
+        "class": "ComposerCommandRegister"
     },
     "bin": [
         "bin/theme-json"
@@ -123,7 +123,7 @@
             "@php ./vendor/bin/rector process"
         ],
         "json": [
-            "\\ItalyStrap\\ThemeJsonGenerator\\Infrastructure\\Plugin\\Composer::run"
+            "\\ItalyStrap\\ThemeJsonGenerator\\Infrastructure\\Plugin\\ComposerCommandRegister::run"
         ],
         "theme/json": [
             "@php ./bin/theme-json"
