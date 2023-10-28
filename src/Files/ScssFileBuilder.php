@@ -81,13 +81,13 @@ class ScssFileBuilder implements FileBuilder
 
         foreach ($schema as $slug => $prefix) {
             /** @var array<string, string> $item */
-            foreach ((array) $this->config->get($slug) as $item) { /** @phpstan-ignore-line */
+            foreach ((array) $this->config->get($slug) as $item) {
                 $content .= $this->generateScssVariableAndCssVariable($item['slug'], $prefix);
             }
         }
 
         /** @var array<string|int, string> $custom */
-        $custom = (array) $this->config->get('settings.custom'); /** @phpstan-ignore-line */
+        $custom = (array) $this->config->get('settings.custom');
         $custom = $this->flattenTree($custom);
 
 //      $map = '$wp-custom: (' . PHP_EOL;
@@ -129,7 +129,7 @@ class ScssFileBuilder implements FileBuilder
      * @param string $prefix
      * @param string $token
      * @return array<string, string>
-     *@author \WP_Theme_Json::flatten_tree
+     * @author \WP_Theme_Json::flatten_tree
      */
     private function flattenTree(array $tree, string $prefix = '', string $token = '--'): array
     {

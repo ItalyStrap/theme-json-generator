@@ -28,7 +28,7 @@ final class WPCLI
          * --parent
          * : Argument to generate theme.json also for parent theme
          * @var array<string, mixed> $assoc_args_default
-		 */
+         */
         $assoc_args_default = [
             'parent'    => false,
         ];

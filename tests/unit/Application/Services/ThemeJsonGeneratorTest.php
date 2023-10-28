@@ -2,21 +2,17 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\Tests\ThemeJsonGenerator\Application\Commands;
+namespace ItalyStrap\Tests\ThemeJsonGenerator\Application\Services;
 
-
-use Composer\Plugin\PluginInterface;
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Application\Commands\ComposerPlugin;
+use ItalyStrap\ThemeJsonGenerator\Application\Services\ThemeJsonGenerator;
 use Prophecy\Argument;
 
-class ComposerPluginTest extends UnitTestCase
+class ThemeJsonGeneratorTest extends UnitTestCase
 {
-    protected function makeInstance(): ComposerPlugin
+    protected function makeInstance(): ThemeJsonGenerator
     {
-        $sut = new ComposerPlugin();
-        $this->assertInstanceOf(PluginInterface::class, $sut, '');
-        return $sut;
+        return new ThemeJsonGenerator();
     }
 
     /**
@@ -48,7 +44,7 @@ class ComposerPluginTest extends UnitTestCase
         $this->expectException(\RuntimeException::class);
 
         $sut = $this->makeInstance();
-        $sut->createThemeJson($this->makeComposer(), $this->makeIo());
+        $sut($this->makeComposer(), $this->makeIo());
 
         $theme_json_file_path = dirname($theme_json_file_path);
         $this->assertFileNotExists($theme_json_file_path . '/theme.json', '');
@@ -75,7 +71,7 @@ class ComposerPluginTest extends UnitTestCase
         ]);
 
         $sut = $this->makeInstance();
-        $sut->createThemeJson($this->makeComposer(), $this->makeIo());
+        $sut($this->makeComposer(), $this->makeIo());
 
         $theme_json_file_path = dirname($temp_dir_path) . '/theme.json';
         $this->assertFileExists($theme_json_file_path, '');
@@ -129,7 +125,7 @@ class ComposerPluginTest extends UnitTestCase
 //        ]);
 
         $sut = $this->makeInstance();
-        $sut->createThemeJson($this->makeComposer(), $this->makeIo());
+        $sut($this->makeComposer(), $this->makeIo());
 
         $theme_json_file_path = $theme_json_file_path . '/italystrap/themejsongenerator/theme.json';
         $this->assertFileExists($theme_json_file_path, '');
