@@ -10,22 +10,10 @@ use Composer\Plugin\Capable;
 use Composer\Script\Event;
 use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
-use ItalyStrap\ThemeJsonGenerator\Application\Services\ThemeJsonGenerator;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Commands\Provider;
 
 final class ComposerCommandRegister implements PluginInterface, Capable
 {
-    public static function run(Event $event): void
-    {
-        $io = $event->getIO();
-        $composer = $event->getComposer();
-
-        var_dump($event->getArguments());
-        var_dump($event->getFlags());
-
-        (new ThemeJsonGenerator())($composer, $io);
-    }
-
     public function getCapabilities(): array
     {
         return [
