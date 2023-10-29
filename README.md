@@ -23,7 +23,7 @@ I'm experimenting this library as composer and WP_CLI plugin for generating the 
 
 ## Installation
 
-The best way to use color package is through Composer:
+The best way to use this package is through Composer:
 
 ```CMD
 composer require italystrap/theme-json-generator --dev

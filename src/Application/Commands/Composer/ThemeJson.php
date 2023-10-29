@@ -12,10 +12,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class ThemeJson extends BaseCommand
 {
-	public const NAME = 'theme-json';
+    public const NAME = 'theme-json';
 
-	protected static $defaultName = 'theme-json';
-	protected static $defaultDescription = 'Generate theme.json file';
+    protected static $defaultName = 'theme-json';
+    protected static $defaultDescription = 'Generate theme.json file';
 
     protected function configure()
     {
@@ -23,13 +23,13 @@ final class ThemeJson extends BaseCommand
             ->setDescription('Generate theme.json file')
             ->setHelp('This command generate theme.json file');
 
-		// Add new flag --dry-run
-		$this->addOption(
-			'dry-run',
-			null,
-			InputOption::VALUE_NONE,
-			'If set, ' . static::NAME . ' will run in dry run mode.'
-		);
+        // Add new flag --dry-run
+        $this->addOption(
+            'dry-run',
+            null,
+            InputOption::VALUE_NONE,
+            'If set, ' . static::NAME . ' will run in dry run mode.'
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -38,9 +38,9 @@ final class ThemeJson extends BaseCommand
         $io = $this->getIO();
         $composer = $this->requireComposer();
 
-		// Get the value of --dry-run
-		$dry_run = $input->getOption('dry-run');
-		 var_dump($dry_run);
+        // Get the value of --dry-run
+        $dry_run = $input->getOption('dry-run');
+         var_dump($dry_run);
 
         (new ThemeJsonGenerator())($composer, $io);
 
