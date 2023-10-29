@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator\Infrastructure\Plugin;
 
 use Composer\Composer as BaseComposer;
+use Composer\Plugin\Capability\CommandProvider;
 use Composer\Plugin\Capable;
 use Composer\Script\Event;
 use Composer\IO\IOInterface;
@@ -28,7 +29,7 @@ final class ComposerCommandRegister implements PluginInterface, Capable
     public function getCapabilities(): array
     {
         return [
-            'Composer\Plugin\Capability\CommandProvider' => Provider::class,
+            CommandProvider::class => Provider::class,
         ];
     }
 

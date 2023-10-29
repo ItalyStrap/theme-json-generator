@@ -2,19 +2,24 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\ThemeJsonGenerator\Application\Commands;
+namespace ItalyStrap\ThemeJsonGenerator\Application\Commands\Composer;
 
 use Composer\Command\BaseCommand;
-use Composer\Console\Input\InputOption;
 use ItalyStrap\ThemeJsonGenerator\Application\Services\ThemeJsonGenerator;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Command extends BaseCommand
+final class ThemeJson extends BaseCommand
 {
+	public const NAME = 'theme-json';
+
+	protected static $defaultName = 'theme-json';
+	protected static $defaultDescription = 'Generate theme.json file';
+
     protected function configure()
     {
-        $this->setName('theme-json')
+        $this->setName(static::NAME)
             ->setDescription('Generate theme.json file')
             ->setHelp('This command generate theme.json file');
 
@@ -23,7 +28,7 @@ class Command extends BaseCommand
 			'dry-run',
 			null,
 			InputOption::VALUE_NONE,
-			'If set, the task will run in dry run mode.'
+			'If set, ' . static::NAME . ' will run in dry run mode.'
 		);
     }
 
@@ -41,6 +46,6 @@ class Command extends BaseCommand
 
         $output->writeln('End generating theme.json file');
 
-        return 0;
+        return ThemeJson::SUCCESS;
     }
 }

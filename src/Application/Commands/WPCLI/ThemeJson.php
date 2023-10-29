@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\ThemeJsonGenerator\Application\Commands;
+namespace ItalyStrap\ThemeJsonGenerator\Application\Commands\WPCLI;
 
 use Exception;
 use ItalyStrap\ThemeJsonGenerator\Files\JsonFileBuilder;
@@ -15,7 +15,7 @@ use function is_callable;
 use function is_child_theme;
 use function sprintf;
 
-final class WPCLI
+final class ThemeJson
 {
     /**
      * @param array<string, mixed> $args
