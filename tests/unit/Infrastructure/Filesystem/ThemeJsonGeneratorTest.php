@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\Tests\Unit\Files;
 
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Files\JsonFileBuilder;
+use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\JsonFileBuilder;
 
 class ThemeJsonGeneratorTest extends UnitTestCase
 {

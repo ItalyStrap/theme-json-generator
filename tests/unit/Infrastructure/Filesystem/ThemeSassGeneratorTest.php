@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\Tests\Unit\Files;
 
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Files\FileBuilder;
-use ItalyStrap\ThemeJsonGenerator\Files\ScssFileBuilder;
+use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FileBuilder;
+use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\ScssFileBuilder;
 
 class ThemeSassGeneratorTest extends UnitTestCase
 {

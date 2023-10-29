@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\ThemeJsonGenerator\Files;
+namespace ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem;
 
 interface FileBuilder
 {
