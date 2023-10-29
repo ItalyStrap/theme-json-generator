@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator\Application\Commands\WPCLI;
 
 use Exception;
-use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\JsonFileBuilder;
+use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\JsonFileWriter;
 use WP_CLI;
 
 use function array_replace_recursive;
@@ -69,7 +69,7 @@ final class ThemeJson
     private function loopsThemePathAndGenerateFile(string $path, callable $callable): void
     {
         try {
-            ( new JsonFileBuilder($path) )->build($callable);
+            ( new JsonFileWriter($path) )->build($callable);
             WP_CLI::success(sprintf(
                 '%s was generated!',
                 $path

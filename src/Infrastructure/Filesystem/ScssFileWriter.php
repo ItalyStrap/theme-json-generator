@@ -8,7 +8,7 @@ use ItalyStrap\Config\Config;
 use ItalyStrap\Config\ConfigInterface;
 use ItalyStrap\ThemeJsonGenerator\Helper\ConvertCase;
 
-class ScssFileBuilder implements FileBuilder
+class ScssFileWriter implements FileBuilder
 {
     use ConvertCase;
 

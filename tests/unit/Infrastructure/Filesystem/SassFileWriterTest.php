@@ -2,26 +2,22 @@
 
 declare(strict_types=1);
 
-
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FileBuilder;
-use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\ScssFileBuilder;
+use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\ScssFileWriter;
 
-class ThemeSassGeneratorTest extends UnitTestCase
+class SassFileWriterTest extends UnitTestCase
 {
     /**
      * @var string
      */
     private $theme_sass_path;
 
-    protected function makeInstance(): ScssFileBuilder
+    protected function makeInstance(): ScssFileWriter
     {
 //      $this->theme_sass_path = \codecept_output_dir(\rand() . '/theme.scss');
         $this->theme_sass_path = \codecept_output_dir('/theme.scss');
-        $sut = new ScssFileBuilder($this->theme_sass_path);
-        $this->assertInstanceOf(FileBuilder::class, $sut, '');
-        $this->assertInstanceOf(ScssFileBuilder::class, $sut, '');
-        return $sut;
+        return new ScssFileWriter($this->theme_sass_path);
     }
 
     /**

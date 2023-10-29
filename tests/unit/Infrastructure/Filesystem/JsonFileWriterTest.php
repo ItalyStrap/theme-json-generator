@@ -2,20 +2,17 @@
 
 declare(strict_types=1);
 
-
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\JsonFileBuilder;
+use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\JsonFileWriter;
 
-class ThemeJsonGeneratorTest extends UnitTestCase
+class JsonFileWriterTest extends UnitTestCase
 {
     private string $theme_json_path;
 
-    protected function makeInstance(): JsonFileBuilder
+    protected function makeInstance(): JsonFileWriter
     {
         $this->theme_json_path = \codecept_output_dir(random_int(0, mt_getrandmax()) . '/theme.json');
-        $sut = new JsonFileBuilder($this->theme_json_path);
-        $this->assertInstanceOf(JsonFileBuilder::class, $sut, '');
-        return $sut;
+        return new JsonFileWriter($this->theme_json_path);
     }
 
     /**

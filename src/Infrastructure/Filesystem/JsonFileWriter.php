@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem;
 
 use Composer\Json\JsonFile;
-use ItalyStrap\ThemeJsonGenerator\Composer\ComposerJsonFileAdapter;
 
-class JsonFileBuilder implements FileBuilder
+class JsonFileWriter implements FileBuilder
 {
     private string $path;
 

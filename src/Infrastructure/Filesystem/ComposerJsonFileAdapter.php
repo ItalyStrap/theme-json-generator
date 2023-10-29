@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\ThemeJsonGenerator\Composer;
+namespace ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem;
 
 use Composer\Json\JsonFile;
 
