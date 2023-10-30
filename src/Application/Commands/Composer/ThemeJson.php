@@ -22,7 +22,7 @@ final class ThemeJson extends BaseCommand
     protected static $defaultName = 'theme-json';
     protected static $defaultDescription = 'Generate theme.json file';
 
-    protected function configure()
+    protected function configure(): void
     {
 		$this->setHelp('This command generate theme.json file');
 

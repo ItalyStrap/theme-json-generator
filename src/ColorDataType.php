@@ -81,7 +81,7 @@ final class ColorDataType
         return (string) $this->color_value->toRgba($alpha);
     }
 
-    public function complementary()
+    public function complementary(): self
     {
         $schemes = new ComplementaryColorScheme($this->color_value);
         $colors = [];
@@ -180,8 +180,10 @@ final class ColorDataType
     /**
      * Calculate the relative luminance of two colors.
      *
-     * @param string $color hex color
+     * @param self $color hex color
+     *
      * @return float
+     *
      * @throws \Exception
      */
     public function relativeLuminance(ColorDataType $color): float

@@ -25,7 +25,7 @@ final class ColorValue implements ColorInfoInterface
     /**
      * @throws \Exception
      */
-    public static function fromColorValue(ColorValue $colorValue)
+    public static function fromColorValue(ColorValue $colorValue): self
     {
         return new self((string) $colorValue->toHex());
     }

@@ -106,7 +106,6 @@ final class CustomCollection implements CollectionInterface, CollectibleInterfac
     public function toArray(): array
     {
         /**
-         * @var int|string $key
          * @var string|array<int|string, mixed> $item
          */
         foreach ($this->collection as $key => $item) {
