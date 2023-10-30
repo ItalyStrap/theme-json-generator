@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Settings;
 
+/**
+ * @psalm-api
+ */
 trait Collectible
 {
     /**
@@ -22,7 +25,6 @@ trait Collectible
     /**
      * @param string $slug_or_default
      * @return string
-     * @psalm-suppress RedundantCast
      */
     private function findCssVariable(string $slug_or_default): string
     {

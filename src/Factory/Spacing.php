@@ -6,6 +6,9 @@ namespace ItalyStrap\ThemeJsonGenerator\Factory;
 
 use ItalyStrap\ThemeJsonGenerator\Styles\Spacing as BaseSpacing;
 
+/**
+ * @psalm-api
+ */
 final class Spacing
 {
     public static function make(): BaseSpacing

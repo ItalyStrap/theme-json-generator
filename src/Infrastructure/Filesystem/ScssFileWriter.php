@@ -15,13 +15,11 @@ class ScssFileWriter implements FileBuilder
     private string $path;
 
     /**
-     * @psalm-suppress TooManyTemplateParams
      * @var ConfigInterface<mixed>|null
      */
     private $config;
 
     /**
-     * @psalm-suppress TooManyTemplateParams
      * @param string $path
      * @param ConfigInterface<mixed>|null $config
      */
@@ -65,10 +63,7 @@ class ScssFileWriter implements FileBuilder
             return '// No data are provided!';
         }
 
-        /**
-         * @psalm-suppress PossiblyNullReference
-         */
-        $this->config->merge($data); /** @phpstan-ignore-line */
+        $this->config->merge($data);
 
         $content = '';
 

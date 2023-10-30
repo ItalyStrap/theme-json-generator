@@ -111,7 +111,6 @@ final class Preset implements CollectionInterface
 //          );
 //
 //          foreach ( $matches[0] as $match ) {
-//              /** @psalm-suppress MixedArrayAssignment */
 //              $this->collection[ $key ][ $this->key ] = \str_replace(
 //                  $match,
 //                  $this->findCssVariable( \str_replace( ['{{', '}}' ], '', $match ) ),

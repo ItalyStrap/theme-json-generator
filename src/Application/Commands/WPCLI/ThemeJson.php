@@ -37,7 +37,6 @@ final class ThemeJson
 
         /**
          * @var array<string, string|int> $extra_config
-         * @psalm-suppress MixedPropertyFetch
          */
         $extra_config = WP_CLI::get_runner()->extra_config;
 

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Handler;
 
+/**
+ * @psalm-api
+ */
 interface UnitInterface
 {
     public const VALID_UNITS = ['px', 'em', 'rem', '%', 'vw', 'vh', 'cm', 'mm', 'in', 'pt', 'pc', 'ex', 'ch'];

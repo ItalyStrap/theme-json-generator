@@ -25,7 +25,6 @@ class JsonFileWriter implements FileBuilder
     public function build(callable $callable): void
     {
         $json_file = new ComposerJsonFileAdapter(new JsonFile($this->path));
-        /** @psalm-suppress MixedArgument */
         $json_file->write($callable($this->path));
     }
 }

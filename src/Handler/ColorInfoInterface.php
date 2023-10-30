@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Handler;
 
+/**
+ * @psalm-api
+ */
 interface ColorInfoInterface
 {
     public function isDark(): bool;

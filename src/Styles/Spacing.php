@@ -7,6 +7,9 @@ namespace ItalyStrap\ThemeJsonGenerator\Styles;
 use function array_replace;
 use function implode;
 
+/**
+ * @psalm-api
+ */
 final class Spacing implements ArrayableInterface, StylesInterface
 {
     use ImmutableCollectionTrait;

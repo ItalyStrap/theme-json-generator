@@ -10,6 +10,7 @@ use Composer\IO\IOInterface;
 use Composer\Package\PackageInterface;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\JsonFileWriter;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\ScssFileWriter;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -23,16 +24,16 @@ final class ThemeJson extends BaseCommand
 
     protected function configure()
     {
-        $this->setName(static::NAME)
-            ->setDescription('Generate theme.json file')
-            ->setHelp('This command generate theme.json file');
+		$this->setHelp('This command generate theme.json file');
 
-        // Add new flag --dry-run
         $this->addOption(
             'dry-run',
             null,
             InputOption::VALUE_NONE,
-            'If set, ' . static::NAME . ' will run in dry run mode.'
+			\sprintf(
+				'If set, %s will run in dry run mode.',
+				self::NAME
+			)
         );
     }
 
@@ -49,7 +50,7 @@ final class ThemeJson extends BaseCommand
 
         $output->writeln('End generating theme.json file');
 
-        return ThemeJson::SUCCESS;
+        return Command::SUCCESS;
     }
 
     public const TYPE_THEME = 'wordpress-theme';

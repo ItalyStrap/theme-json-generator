@@ -6,6 +6,9 @@ namespace ItalyStrap\ThemeJsonGenerator\Handler;
 
 use Exception;
 
+/**
+ * @psalm-api
+ */
 final class ColorAdjust implements ColorAdjustInterface
 {
     private ColorInfoInterface $color;

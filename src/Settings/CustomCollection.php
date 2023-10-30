@@ -8,6 +8,9 @@ use ItalyStrap\Config\Config;
 use ItalyStrap\Config\ConfigInterface;
 use ItalyStrap\ThemeJsonGenerator\Helper\ConvertCase;
 
+/**
+ * @psalm-api
+ */
 final class CustomCollection implements CollectionInterface, CollectibleInterface
 {
     use Collectible;
@@ -23,10 +26,9 @@ final class CustomCollection implements CollectionInterface, CollectibleInterfac
     /**
      * @var ConfigInterface
      */
-    private $config; // @phpstan-ignore-line
+    private $config;
 
     /**
-     * @psalm-suppress TooManyTemplateParams
      * @param array<int|string, mixed> $collection
      * @param ConfigInterface<mixed>|null $config
      */
@@ -116,10 +118,7 @@ final class CustomCollection implements CollectionInterface, CollectibleInterfac
                 }
             });
 
-            /** @psalm-suppress PossiblyInvalidArgument */
             if ($this->hasSingleValue($item)) {
-
-                /** @psalm-suppress PossiblyInvalidArgument */
                 $item = $this->convertToString($item);
             }
 

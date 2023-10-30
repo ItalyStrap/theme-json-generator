@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Handler;
 
+/**
+ * @psalm-api
+ */
 class SupportedUnits implements UnitInterface
 {
     private array $units;

@@ -10,6 +10,9 @@ use ItalyStrap\ThemeJsonGenerator\Handler\ColorValue;
 use Mexitek\PHPColors\Color as PHPColor;
 use Spatie\Color\Factory as ColorFactory;
 
+/**
+ * @psalm-api
+ */
 final class ColorDataType
 {
     private ColorValue $color_value;

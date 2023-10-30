@@ -6,6 +6,9 @@ namespace ItalyStrap\ThemeJsonGenerator\Settings;
 
 use ItalyStrap\ThemeJsonGenerator\Helper\ConvertCase;
 
+/**
+ * @psalm-api
+ */
 final class PresetCollection implements CollectionInterface, CollectibleInterface
 {
     use Collectible;
@@ -104,7 +107,6 @@ final class PresetCollection implements CollectionInterface, CollectibleInterfac
             );
 
             foreach ($matches[0] as $match) {
-                /** @psalm-suppress MixedArrayAssignment */
                 $this->collection[ $key ][ $this->key ] = \str_replace(
                     $match,
                     $this->findCssVariable(\str_replace(['{{', '}}' ], '', $match)),

@@ -6,6 +6,9 @@ namespace ItalyStrap\ThemeJsonGenerator\Factory;
 
 use ItalyStrap\ThemeJsonGenerator\Styles\Color as BaseColor;
 
+/**
+ * @psalm-api
+ */
 final class Color
 {
     public static function make(): BaseColor

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Styles;
 
+/**
+ * @psalm-api
+ */
 final class Color implements ArrayableInterface, StylesInterface
 {
     use ImmutableCollectionTrait;

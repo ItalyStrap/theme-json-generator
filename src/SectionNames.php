@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator;
 
+/**
+ * @psalm-api
+ */
 final class SectionNames
 {
     public const VERSION = 'version';

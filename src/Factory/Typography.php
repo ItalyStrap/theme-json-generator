@@ -6,6 +6,9 @@ namespace ItalyStrap\ThemeJsonGenerator\Factory;
 
 use ItalyStrap\ThemeJsonGenerator\Styles\Typography as BaseTypo;
 
+/**
+ * @psalm-api
+ */
 final class Typography
 {
     public static function make(): BaseTypo

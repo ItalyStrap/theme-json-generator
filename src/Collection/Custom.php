@@ -29,12 +29,11 @@ final class Custom implements CollectionInterface
     /**
      * @var ConfigInterface
      */
-    private $config; // @phpstan-ignore-line
+    private $config;
 
     private \ItalyStrap\ThemeJsonGenerator\Settings\CustomCollection $custom_new;
 
     /**
-     * @psalm-suppress TooManyTemplateParams
      * @param array<int|string, mixed> $collection
      * @param ConfigInterface<mixed>|null $config
      */
