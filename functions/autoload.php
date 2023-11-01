@@ -4,11 +4,6 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator;
 
-use ItalyStrap\ThemeJsonGenerator\Application\Commands\WPCLI\ThemeJson;
-use WP_CLI;
+use ItalyStrap\ThemeJsonGenerator\Infrastructure\Commands\WPCLI\Register;
 
-if (!class_exists('WP_CLI')) {
-    return;
-}
-
-WP_CLI::add_command('theme-json generate', ThemeJson::class);
+(new Register())();

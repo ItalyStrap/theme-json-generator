@@ -20,6 +20,8 @@ use function sprintf;
  */
 final class ThemeJson
 {
+    public const NAME = 'theme-json generate';
+
     /**
      * @param array<string, mixed> $args
      * @param array<string, mixed> $assoc_args
