@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\Tests\ThemeJsonGenerator\Application\Commands\Composer;
+namespace ItalyStrap\Tests\Unit\Application\Commands\Composer;
 
 use Composer\Console\Application;
 use ItalyStrap\Tests\UnitTestCase;

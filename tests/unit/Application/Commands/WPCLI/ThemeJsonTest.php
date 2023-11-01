@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\Tests\ThemeJsonGenerator\Application\Commands\WPCLI;
+namespace ItalyStrap\Tests\Unit\Application\Commands\WPCLI;
 
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\WPCLI\ThemeJson;

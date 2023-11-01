@@ -14,14 +14,11 @@ class ScssFileWriter implements FileBuilder
 
     private string $path;
 
-    /**
-     * @var ConfigInterface<mixed>|null
-     */
-    private $config;
+    private ConfigInterface $config;
 
     /**
      * @param string $path
-     * @param ConfigInterface<mixed>|null $config
+     * @param ConfigInterface|null $config
      */
     public function __construct(string $path, ConfigInterface $config = null)
     {
@@ -29,9 +26,6 @@ class ScssFileWriter implements FileBuilder
         $this->config = $config ?? new Config();
     }
 
-    /**
-     * @inheritDoc
-     */
     public function build(callable $callable): void
     {
         if (\file_exists($this->path) && \is_file($this->path)) {

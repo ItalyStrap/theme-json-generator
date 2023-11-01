@@ -35,17 +35,11 @@ final class PresetCollection implements CollectionInterface, CollectibleInterfac
         $this->key = '' === $key ? $category : $key ;
     }
 
-    /**
-     * @inerhitDoc
-     */
     public function category(): string
     {
         return $this->category;
     }
 
-    /**
-     * @inerhitDoc
-     */
     public function propOf(string $slug): string
     {
 
@@ -63,9 +57,6 @@ final class PresetCollection implements CollectionInterface, CollectibleInterfac
         throw new \RuntimeException("{$slug} does not exists.");
     }
 
-    /**
-     * @inerhitDoc
-     */
     public function varOf(string $slug): string
     {
         return \sprintf(
@@ -74,9 +65,6 @@ final class PresetCollection implements CollectionInterface, CollectibleInterfac
         );
     }
 
-    /**
-     * @inerhitDoc
-     */
     public function value(string $slug): string
     {
 
@@ -90,9 +78,6 @@ final class PresetCollection implements CollectionInterface, CollectibleInterfac
         throw new \RuntimeException("Value of {$slug} does not exists.");
     }
 
-    /**
-     * @inerhitDoc
-     */
     public function toArray(): array
     {
 

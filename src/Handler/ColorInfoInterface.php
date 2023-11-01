@@ -33,17 +33,17 @@ interface ColorInfoInterface
     public function toRgba(float $alpha = 1): ColorInfoInterface;
 
     /**
-     * @return mixed
+     * @return string|int
      */
     public function red();
 
     /**
-     * @return mixed
+     * @return string|int
      */
     public function green();
 
     /**
-     * @return mixed
+     * @return string|int
      */
     public function blue();
 

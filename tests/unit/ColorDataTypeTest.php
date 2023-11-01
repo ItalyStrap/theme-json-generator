@@ -13,8 +13,7 @@ class ColorDataTypeTest extends UnitTestCase
 
     protected function makeInstance(): ColorDataType
     {
-        $sut = new ColorDataType($this->base_color);
-        return $sut;
+        return new ColorDataType($this->base_color);
     }
 
     public function colorProvider()

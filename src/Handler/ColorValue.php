@@ -59,9 +59,9 @@ final class ColorValue implements ColorInfoInterface
     public function luminance(): float
     {
         $rgb = $this->toRgb();
-        return 0.2126 * ($rgb->red() / 255) ** 2.2 +
-            0.7152 * ($rgb->green() / 255) ** 2.2 +
-            0.0722 * ($rgb->blue() / 255) ** 2.2;
+        return 0.2126 * ((int)$rgb->red() / 255) ** 2.2 +
+            0.7152 * ((int)$rgb->green() / 255) ** 2.2 +
+            0.0722 * ((int)$rgb->blue() / 255) ** 2.2;
     }
 
     public function toHex(): self
@@ -97,12 +97,8 @@ final class ColorValue implements ColorInfoInterface
     /**
      * TO have a return array we need to return self object
      */
-    public function toArray(): iterable
+    public function toArray(): array
     {
-//      yield $this->red();
-//      yield $this->green();
-//      yield $this->blue();
-
         return [
             $this->red(),
             $this->green(),
@@ -111,7 +107,7 @@ final class ColorValue implements ColorInfoInterface
     }
 
     /**
-     * @return mixed
+     * @return string|int
      */
     public function red()
     {
@@ -119,7 +115,7 @@ final class ColorValue implements ColorInfoInterface
     }
 
     /**
-     * @return mixed
+     * @return string|int
      */
     public function green()
     {
@@ -127,7 +123,7 @@ final class ColorValue implements ColorInfoInterface
     }
 
     /**
-     * @return mixed
+     * @return string|int
      */
     public function blue()
     {

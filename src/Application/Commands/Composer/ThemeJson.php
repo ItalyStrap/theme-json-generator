@@ -8,6 +8,7 @@ use Composer\Command\BaseCommand;
 use Composer\Composer as BaseComposer;
 use Composer\IO\IOInterface;
 use Composer\Package\PackageInterface;
+use ItalyStrap\Config\ConfigInterface;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\JsonFileWriter;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\ScssFileWriter;
 use Symfony\Component\Console\Command\Command;
@@ -15,25 +16,35 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * @psalm-api
+ */
 final class ThemeJson extends BaseCommand
 {
     public const NAME = 'theme-json';
 
     protected static $defaultName = 'theme-json';
     protected static $defaultDescription = 'Generate theme.json file';
+    private ConfigInterface $config;
+
+    public function __construct(ConfigInterface $config)
+    {
+        parent::__construct();
+        $this->config = $config;
+    }
 
     protected function configure(): void
     {
-		$this->setHelp('This command generate theme.json file');
+        $this->setHelp('This command generate theme.json file');
 
         $this->addOption(
             'dry-run',
             null,
             InputOption::VALUE_NONE,
-			\sprintf(
-				'If set, %s will run in dry run mode.',
-				self::NAME
-			)
+            \sprintf(
+                'If set, %s will run in dry run mode.',
+                self::NAME
+            )
         );
     }
 
@@ -84,6 +95,7 @@ final class ThemeJson extends BaseCommand
     private function writeFile(PackageInterface $package, string $path, IOInterface $io): void
     {
         $composer_extra = array_replace_recursive($this->getDefaultExtra(), $package->getExtra());
+        $this->config->merge($package->getExtra()[self::THEME_JSON_KEY] ?? []);
 
         /** @var array<string, mixed> $theme_json_config */
         $theme_json_config = $composer_extra[self::THEME_JSON_KEY];

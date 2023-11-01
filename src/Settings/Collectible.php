@@ -29,7 +29,7 @@ trait Collectible
     private function findCssVariable(string $slug_or_default): string
     {
 
-        $slugs_or_default = (array) \explode('|', $slug_or_default, 2);
+        $slugs_or_default = \explode('|', $slug_or_default, 2);
 
         $css_variable = $slugs_or_default[ 1 ] ?? '';
 

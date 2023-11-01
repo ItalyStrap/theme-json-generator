@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\ThemeJsonGenerator\Infrastructure\Plugin;
+namespace ItalyStrap\ThemeJsonGenerator\Infrastructure\Commands\Composer;
 
 use Composer\Composer as BaseComposer;
 use Composer\IO\IOInterface;
@@ -12,7 +12,7 @@ use Composer\Plugin\PluginInterface;
 use ItalyStrap\Config\Config;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Composer\ThemeJson;
 
-class ComposerCommandRegister implements PluginInterface, Capable, CommandProvider
+final class Register implements PluginInterface, Capable, CommandProvider
 {
     public function getCapabilities(): array
     {

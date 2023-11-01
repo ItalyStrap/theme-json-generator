@@ -31,16 +31,25 @@ final class ColorDataType
         $this->color_adjust = new ColorAdjust($this->color_value);
     }
 
+    /**
+     * @return string|int
+     */
     public function red()
     {
         return $this->color_value->red();
     }
 
+    /**
+     * @return string|int
+     */
     public function green()
     {
         return $this->color_value->green();
     }
 
+    /**
+     * @return string|int
+     */
     public function blue()
     {
         return $this->color_value->blue();

@@ -8,5 +8,5 @@ use Composer\Console\Application;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Composer\ThemeJson;
 
 $application = new Application();
-$application->add(new ThemeJson());
+$application->add(new ThemeJson(new \ItalyStrap\Config\Config()));
 $application->run();

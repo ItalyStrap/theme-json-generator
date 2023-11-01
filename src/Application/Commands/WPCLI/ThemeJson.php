@@ -15,6 +15,9 @@ use function is_callable;
 use function is_child_theme;
 use function sprintf;
 
+/**
+ * @psalm-api
+ */
 final class ThemeJson
 {
     /**

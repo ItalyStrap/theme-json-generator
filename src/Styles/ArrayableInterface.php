@@ -10,7 +10,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Styles;
 interface ArrayableInterface
 {
     /**
-     * @return array<string|int, string>
+     * @return array<array-key, string>
      */
     public function toArray(): array;
 }

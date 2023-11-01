@@ -23,14 +23,10 @@ final class CustomCollection implements CollectionInterface, CollectibleInterfac
 
     private string $category;
 
-    /**
-     * @var ConfigInterface
-     */
-    private $config;
+    private ConfigInterface $config;
 
     /**
      * @param array<int|string, mixed> $collection
-     * @param ConfigInterface<mixed>|null $config
      */
     public function __construct(
         array $collection,
@@ -41,17 +37,11 @@ final class CustomCollection implements CollectionInterface, CollectibleInterfac
         $this->config = $config ?? new Config();
     }
 
-    /**
-     * @inerhitDoc
-     */
     public function category(): string
     {
         return $this->category;
     }
 
-    /**
-     * @inerhitDoc
-     */
     public function propOf(string $slug): string
     {
         $config = clone $this->config;
@@ -75,9 +65,6 @@ final class CustomCollection implements CollectionInterface, CollectibleInterfac
         );
     }
 
-    /**
-     * @inerhitDoc
-     */
     public function varOf(string $slug): string
     {
         return \sprintf(
@@ -86,9 +73,6 @@ final class CustomCollection implements CollectionInterface, CollectibleInterfac
         );
     }
 
-    /**
-     * @inerhitDoc
-     */
     public function value(string $slug): string
     {
         $this->toArray();
@@ -100,9 +84,6 @@ final class CustomCollection implements CollectionInterface, CollectibleInterfac
         throw new \RuntimeException("Value of {$slug} does not exists.");
     }
 
-    /**
-     * @inerhitDoc
-     */
     public function toArray(): array
     {
         /**
@@ -122,7 +103,7 @@ final class CustomCollection implements CollectionInterface, CollectibleInterfac
             }
 
             $this->config->set(
-                $key,
+                (string)$key,
                 $item
             );
         }

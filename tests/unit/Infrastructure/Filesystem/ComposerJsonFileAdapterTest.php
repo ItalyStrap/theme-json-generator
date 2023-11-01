@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\Tests\Unit\Composer;
+namespace ItalyStrap\Tests\Unit\Infrastructure\Filesystem;
 
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Composer\ComposerJsonFileAdapter;
+use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\ComposerJsonFileAdapter;
 use Prophecy\Argument;
 
 class ComposerJsonFileAdapterTest extends UnitTestCase
