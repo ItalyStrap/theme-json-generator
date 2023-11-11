@@ -175,11 +175,5 @@ generate: up	### Run the codeception generate test files in unit and integration
 	else \
 		echo "FILE variable empty or file already generated"; \
 	fi
-	@if [ ! -z "$(FILE)" -a ! -f "tests/integration/$(FILE)Test.php" ]; then \
-		echo "File does not exists, generating now."; \
-		./vendor/bin/codecept generate:wpunit integration $(FILE); \
-	else \
-		echo "FILE variable empty or file already generated"; \
-	fi
 	@$(FILES_OWNERSHIP)
 	@echo "Files generated"

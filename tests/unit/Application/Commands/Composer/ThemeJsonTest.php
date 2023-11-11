@@ -14,7 +14,7 @@ class ThemeJsonTest extends UnitTestCase
 {
     protected function makeInstance(): ThemeJson
     {
-        return new ThemeJson();
+        return new ThemeJson($this->makeConfig());
     }
 
     public function testItShouldBeInstantiatable(): void

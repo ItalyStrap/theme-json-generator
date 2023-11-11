@@ -6,6 +6,9 @@ namespace ItalyStrap\ThemeJsonGenerator\Infrastructure\Commands\WPCLI;
 
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\WPCLI\ThemeJson;
 
+/**
+ * @psalm-api
+ */
 final class Register
 {
     public function __invoke(): void

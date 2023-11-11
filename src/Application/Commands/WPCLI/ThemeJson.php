@@ -20,7 +20,7 @@ use function sprintf;
  */
 final class ThemeJson
 {
-    public const NAME = 'theme-json generate';
+    public const NAME = 'theme-json';
 
     /**
      * @param array<string, mixed> $args
@@ -49,8 +49,11 @@ final class ThemeJson
             ? $extra_config['THEME_JSON_CALLABLE']
             : '';
 
-        if (! is_callable($callable)) {
-            WP_CLI::line($callable . " is not a valid callable");
+        if (!is_callable($callable)) {
+            WP_CLI::line(\sprintf(
+                "No valid callable provided, got '%s'",
+                $callable
+            ));
             return;
         }
 

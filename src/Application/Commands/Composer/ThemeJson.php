@@ -11,10 +11,13 @@ use Composer\Package\PackageInterface;
 use ItalyStrap\Config\ConfigInterface;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\JsonFileWriter;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\ScssFileWriter;
+use ItalyStrap\ThemeJsonGenerator\SectionNames;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+
+use function ItalyStrap\HTML\close_tag;
 
 /**
  * @psalm-api
@@ -50,15 +53,14 @@ final class ThemeJson extends BaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->writeln('Start generating theme.json file');
         $io = $this->getIO();
         $composer = $this->requireComposer();
 
         // Get the value of --dry-run
         $dry_run = $input->getOption('dry-run');
 
+        $output->writeln('Start generating theme.json file');
         $this->process($composer, $io);
-
         $output->writeln('End generating theme.json file');
 
         return Command::SUCCESS;
@@ -105,6 +107,25 @@ final class ThemeJson extends BaseCommand
                 'Maybe the %s is not a valid callable',
                 $theme_json_config[self::CALLBACK]
             ));
+        }
+
+        $fileInput = $path . '/theme.php';
+
+        if (!\file_exists($fileInput) || !\is_readable($fileInput)) {
+            $io->write(\sprintf(
+                'File %s not found or not readable',
+                $fileInput
+            ));
+            return;
+        }
+
+        $data = clone $this->config;
+        $data->merge((require $fileInput)());
+
+        if ($data->get(SectionNames::VERSION) > 1) {
+            // Search all php files in the `styles` directory using Glob
+            $files = \glob($path . '/styles/*.php');
+            var_dump($files);
         }
 
         try {

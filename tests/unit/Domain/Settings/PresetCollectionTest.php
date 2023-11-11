@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\Tests\Unit\Settings;
+namespace ItalyStrap\Tests\Unit\Domain\Settings;
 
-use ItalyStrap\ThemeJsonGenerator\Settings\CollectionInterface;
-use ItalyStrap\ThemeJsonGenerator\Settings\PresetCollection;
+use ItalyStrap\ThemeJsonGenerator\Domain\Settings\PresetCollection;
 
 class PresetCollectionTest extends BaseCollectionTest
 {
@@ -20,12 +19,9 @@ class PresetCollectionTest extends BaseCollectionTest
         $this->category = 'color';
     }
 
-    protected function makeInstance(): CollectionInterface
+    protected function makeInstance(): PresetCollection
     {
-        $sut = new PresetCollection($this->collection, $this->category, $this->key);
-        $this->assertInstanceOf(CollectionInterface::class, $sut, '');
-        $this->assertInstanceOf(PresetCollection::class, $sut, '');
-        return $sut;
+        return new PresetCollection($this->collection, $this->category, $this->key);
     }
 
     /**

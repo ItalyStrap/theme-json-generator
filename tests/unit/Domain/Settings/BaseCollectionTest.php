@@ -2,29 +2,28 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\Tests\Unit\Settings;
+namespace ItalyStrap\Tests\Unit\Domain\Settings;
 
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Settings\CollectionInterface;
 
 abstract class BaseCollectionTest extends UnitTestCase
 {
     /**
      * @var \string[][]
      */
-    protected $collection;
+    protected array $collection;
 
     /**
      * @var string
      */
-    protected $category;
+    protected string $category;
 
     /**
      * @var string
      */
     protected $key = '';
 
-    abstract protected function makeInstance(): CollectionInterface;
+    abstract protected function makeInstance(): object;
 
     abstract public function valueProvider();
 

@@ -69,7 +69,7 @@ final class ColorAdjust implements ColorAdjustInterface
         ));
     }
 
-    private function mixRgb(ColorValue $color_1, ColorValue $color_2, float $weight = 0.5): array
+    private function mixRgb(ColorInfoInterface $color_1, ColorInfoInterface $color_2, float $weight = 0.5): array
     {
         $f = fn(int $x): float => $weight * $x;
         $g = fn (int $x): float => ( 1 - $weight ) * $x;
@@ -103,11 +103,11 @@ final class ColorAdjust implements ColorAdjustInterface
     }
 
     /**
-     * @param ColorValue $hsl
+     * @param ColorInfoInterface $hsl
      * @param int $amount
      * @return float|int
      */
-    private function sanitizeLightness(ColorValue $hsl, int $amount)
+    private function sanitizeLightness(ColorInfoInterface $hsl, int $amount)
     {
         $lightness = $hsl->lightness() + $amount;
         return $lightness > 100 ? 100 : ( $lightness < 0 ? 0 : $lightness );

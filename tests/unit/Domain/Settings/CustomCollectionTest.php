@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\Tests\Unit\Settings;
+namespace ItalyStrap\Tests\Unit\Domain\Settings;
 
-use ItalyStrap\ThemeJsonGenerator\Settings\CollectionInterface;
-use ItalyStrap\ThemeJsonGenerator\Settings\CustomCollection;
+use ItalyStrap\ThemeJsonGenerator\Domain\Settings\CustomCollection;
 
 class CustomCollectionTest extends BaseCollectionTest
 {
@@ -38,9 +37,7 @@ class CustomCollectionTest extends BaseCollectionTest
 
     protected function makeInstance(): CustomCollection
     {
-        $sut = new CustomCollection($this->collection);
-        $this->assertInstanceOf(CollectionInterface::class, $sut, '');
-        return $sut;
+        return new CustomCollection($this->collection);
     }
 
     /**

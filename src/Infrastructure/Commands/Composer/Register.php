@@ -12,6 +12,9 @@ use Composer\Plugin\PluginInterface;
 use ItalyStrap\Config\Config;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Composer\ThemeJson;
 
+/**
+ * @psalm-api
+ */
 final class Register implements PluginInterface, Capable, CommandProvider
 {
     public function getCapabilities(): array

@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\ThemeJsonGenerator\Handler;
+namespace ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color\Utilities;
 
-use Spatie\Color\Color;
+use Spatie\Color\Color as SpatieColor;
 use Spatie\Color\Factory as ColorFactory;
 use Spatie\Color\Hsla;
 
 /**
  * @psalm-api
  */
-final class ColorValue implements ColorInfoInterface, \Stringable
+final class ColorInfo implements ColorInfoInterface
 {
-    private Color $s_color;
+    private SpatieColor $s_color;
 
     private Hsla $hsla;
 
@@ -22,17 +22,11 @@ final class ColorValue implements ColorInfoInterface, \Stringable
      */
     public const MEDIUM_LUMINANCE = 0.21951971807487;
 
-    /**
-     * @throws \Exception
-     */
-    public static function fromColor(ColorInfoInterface $colorValue): self
+    public static function fromColorInfo(ColorInfoInterface $colorValue): self
     {
         return new self((string) $colorValue->toHex());
     }
 
-    /**
-     * @throws \Exception
-     */
     public function __construct(string $color)
     {
         $this->s_color = ColorFactory::fromString($color);
@@ -62,6 +56,28 @@ final class ColorValue implements ColorInfoInterface, \Stringable
         return 0.2126 * ((int)$rgb->red() / 255) ** 2.2 +
             0.7152 * ((int)$rgb->green() / 255) ** 2.2 +
             0.0722 * ((int)$rgb->blue() / 255) ** 2.2;
+    }
+
+    /**
+     * Calculate the relative luminance of two colors.
+     *
+     * @param self $color hex color
+     *
+     * @return float
+     *
+     * @throws \Exception
+     */
+    public function relativeLuminance(ColorInfoInterface $color): float
+    {
+
+        $colors = [
+            $this->luminance(),
+            $color->luminance(),
+        ];
+
+        \sort($colors);
+
+        return ( $colors[1] + 0.05 ) / ( $colors[0] + 0.05 );
     }
 
     public function toHex(): self
@@ -95,7 +111,7 @@ final class ColorValue implements ColorInfoInterface, \Stringable
     }
 
     /**
-     * TO have a return array we need to return self object
+     * To have a return array we need to return self object
      */
     public function toArray(): array
     {
