@@ -42,7 +42,7 @@ final class PresetCollection implements CollectionInterface, CollectibleInterfac
 
     public function add(CanBeAddedToCollection $valueObject): self
     {
-		/** @psalm-suppress MixedPropertyTypeCoercion */
+        /** @psalm-suppress MixedPropertyTypeCoercion */
         $this->collection[] = $valueObject->toArray();
         return $this;
     }

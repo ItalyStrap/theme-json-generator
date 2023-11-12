@@ -11,14 +11,14 @@ class MonochromaticColors implements ColorsGenerator
 {
     private ColorModifierInterface $color;
 
-	/**
-	 * @var array<array-key, int|float>
-	 */
+    /**
+     * @var array<array-key, int|float>
+     */
     private array $steps;
 
-	/**
-	 * @param array<array-key, int|float> $steps
-	 */
+    /**
+     * @param array<array-key, int|float> $steps
+     */
     public function __construct(ColorModifierInterface $color, array $steps)
     {
         $this->color = $color;

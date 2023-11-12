@@ -6,5 +6,5 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Settings;
 
 interface CanBeAddedToCollection
 {
-	public function toArray(): array;
+    public function toArray(): array;
 }
