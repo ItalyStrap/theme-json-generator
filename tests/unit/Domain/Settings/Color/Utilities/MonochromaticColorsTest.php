@@ -38,7 +38,7 @@ class MonochromaticColorsTest extends UnitTestCase
         );
 
         $this->assertCount(1, $sut->generate());
-        $this->assertSame('#ffffff', (string)$sut->generate()[0]->toHex());
+        $this->assertSame('#ffffff', (string)$sut->generate()[0]);
     }
 
     public function testItShouldReturnArrayWithTwoColors(): void
@@ -49,11 +49,11 @@ class MonochromaticColorsTest extends UnitTestCase
         );
 
         $this->assertCount(5, $sut->generate());
-        $this->assertSame('rgb(179,179,179)', (string)$sut->generate()[0]->toRgb());
-        $this->assertSame('rgb(153,153,153)', (string)$sut->generate()[1]->toRgb());
-        $this->assertSame('rgb(128,128,128)', (string)$sut->generate()[2]->toRgb());
-        $this->assertSame('rgb(102,102,102)', (string)$sut->generate()[3]->toRgb());
-        $this->assertSame('rgb(77,77,77)', (string)$sut->generate()[4]->toRgb());
+        $this->assertSame('rgb(179,179,179)', (string)$sut->generate()[0]);
+        $this->assertSame('rgb(153,153,153)', (string)$sut->generate()[1]);
+        $this->assertSame('rgb(128,128,128)', (string)$sut->generate()[2]);
+        $this->assertSame('rgb(102,102,102)', (string)$sut->generate()[3]);
+        $this->assertSame('rgb(77,77,77)', (string)$sut->generate()[4]);
     }
 
     public function testItShouldReturnArrayWithTwoColorss(): void
@@ -64,10 +64,10 @@ class MonochromaticColorsTest extends UnitTestCase
         );
 
         $this->assertCount(5, $sut->generate());
-        $this->assertSame('rgb(179,179,179)', (string)$sut->generate()[0]->toRgb());
-        $this->assertSame('rgb(153,153,153)', (string)$sut->generate()[1]->toRgb());
-        $this->assertSame('rgb(128,128,128)', (string)$sut->generate()[2]->toRgb());
-        $this->assertSame('rgb(102,102,102)', (string)$sut->generate()[3]->toRgb());
-        $this->assertSame('rgb(77,77,77)', (string)$sut->generate()[4]->toRgb());
+        $this->assertSame('rgb(179,179,179)', (string)$sut->generate()[0]);
+        $this->assertSame('rgb(153,153,153)', (string)$sut->generate()[1]);
+        $this->assertSame('rgb(128,128,128)', (string)$sut->generate()[2]);
+        $this->assertSame('rgb(102,102,102)', (string)$sut->generate()[3]);
+        $this->assertSame('rgb(77,77,77)', (string)$sut->generate()[4]);
     }
 }

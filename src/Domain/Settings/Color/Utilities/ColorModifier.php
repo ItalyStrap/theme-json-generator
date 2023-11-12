@@ -14,20 +14,22 @@ final class ColorModifier implements ColorModifierInterface
     private ColorInfoInterface $color;
 
     private ColorFactoryInterface $color_factory;
+    private string $initialType;
 
     /**
      * @throws Exception
      */
     public function __construct(ColorInfoInterface $color, ColorFactoryInterface $factory = null)
     {
-        $this->color = $color->toHsla();
+        $this->color = $color;
         $this->color_factory = $factory ?? new ColorFactory();
+        $this->initialType = $this->color->type();
     }
 
-	public function color(): ColorInfoInterface
-	{
-		return $this->color;
-	}
+    public function color(): ColorInfoInterface
+    {
+        return $this->color;
+    }
 
     public function tint(float $weight = 0): ColorInfoInterface
     {
@@ -71,55 +73,129 @@ final class ColorModifier implements ColorModifierInterface
 
     public function complementary(): ColorInfoInterface
     {
-        $rotation = $this->color->hue() > 180 ? -180 : 180;
-        return $this->hueRotate($rotation);
+        if ((int)$this->color->hue() === 0 && (int)$this->color->saturation() === 0) {
+            return $this->color;
+        }
+
+        return $this->hueRotate((int)$this->color->hue() + 180);
     }
 
     public function invert(): ColorInfoInterface
     {
-		return $this->createNewColorFrom(
-			(string) $this->color->hue(),
-			(string) $this->color->saturation(),
-			(string) $this->sanitizeFromFloatToInteger(100 - $this->color->lightness()),
-			(string) $this->color->alpha()
-		);
+        return $this->createNewColorFrom(
+            (string) $this->color->hue(),
+            (string) $this->color->saturation(),
+            (string) $this->sanitizeFromFloatToInteger(100 - $this->color->lightness()),
+            (string) $this->color->alpha()
+        );
     }
 
-	public function hueRotate(int $amount = 0): ColorInfoInterface
-	{
-		$sumHue = $this->color->hue() + $amount;
+    public function hueRotate(int $amount = 0): ColorInfoInterface
+    {
+        $sumHue = $this->color->hue() + $amount;
 
-		if ($sumHue < 0) {
-			$sumHue = 360 + $sumHue;
-		}
+        if ($sumHue < 0) {
+            $sumHue = 360 + $sumHue;
+        }
 
-		return $this->color_factory->fromColorString(
-			\sprintf(
-				'hsla(%s, %s%%, %s%%, %s)',
-				$sumHue,
-				$this->color->saturation(),
-				$this->color->lightness(),
-				$this->color->alpha()
-			)
-		);
-	}
+        return $this->createNewColorFrom(
+            (string) $sumHue,
+            (string) $this->color->saturation(),
+            (string) $this->color->lightness(),
+            (string) $this->color->alpha()
+        );
+    }
 
-	private function mixWith(string $color_string, float $weight = 0): ColorInfoInterface
+    private function createNewColorWithChangedLightnessOrOpacity(int $amount, float $alpha = 1): ColorInfoInterface
+    {
+        return $this->createNewColorFrom(
+            (string) $this->color->hue(),
+            (string) $this->color->saturation(),
+            (string) $this->sanitizeFromFloatToInteger($this->color->lightness() + $amount),
+            (string) $alpha
+        );
+    }
+
+    private function createNewColorWithChangedSaturation(int $amount): ColorInfoInterface
+    {
+        return $this->createNewColorFrom(
+            (string) $this->color->hue(),
+            (string) $this->sanitizeFromFloatToInteger($this->color->saturation() + $amount),
+            (string) $this->color->lightness(),
+            (string) $this->color->alpha()
+        );
+    }
+
+    private function createNewColorWithChangedContrast(int $amount): ColorInfoInterface
+    {
+        return $this->createNewColorFrom(
+            (string) $this->color->hue(),
+            (string) $this->sanitizeFromFloatToInteger($this->color->saturation() + $amount),
+            (string) $this->sanitizeFromFloatToInteger($this->color->lightness() + $amount),
+            (string) $this->color->alpha()
+        );
+    }
+
+    /**
+     * @psalm-suppress MixedInferredReturnType
+     */
+    private function createNewColorFrom(
+        string $hue,
+        string $saturation,
+        string $lightness,
+        string $alpha
+    ): ColorInfoInterface {
+        $newColor = $this->color_factory->fromColorString(\sprintf(
+            'hsla(%s, %s%%, %s%%, %s)',
+            $hue,
+            $saturation,
+            $lightness,
+            $alpha
+        ));
+
+        /**
+         * Cast to original type passed to the constructor
+         * to make consistence between the original color and the new one
+         * @psalm-suppress MixedReturnStatement
+         */
+        return \call_user_func([$newColor, 'to' . $this->initialType]);
+    }
+
+    /**
+     * @psalm-suppress MixedInferredReturnType
+     */
+    private function mixWith(string $color_string, float $weight = 0): ColorInfoInterface
     {
 
+        /**
+         * I need to cast to RGB or RGBA because the mixRgb method
+         * uses calculation over `ColorInfo::red()` and `ColorInfo::green()` and `ColorInfo::blue()`
+         * as a number (0 to 255) and not as string (ff, or 00 or whatever)
+         * So the cast here is necessary
+         */
         $result = $this->mixRgb(
-            $this->color_factory->fromColorString($color_string)->toRgb(),
-            $this->color->toRgb(),
+            $this->color_factory->fromColorString($color_string)->toRgba(),
+            $this->color->toRgba(),
             $weight > 1 ? $weight / 100 : $weight
         );
 
-        return $this->color_factory->fromColorString(\sprintf(
+        $newColor = $this->color_factory->fromColorString(\sprintf(
             'rgb(%s)',
             \implode(',', $result)
         ));
+
+        /**
+         * Cast to original type passed to the constructor
+         * to make consistence between the original color and the new one
+         * @psalm-suppress MixedReturnStatement
+         */
+        return \call_user_func([$newColor, 'to' . $this->initialType]);
     }
 
-	private function mixRgb(ColorInfoInterface $color_1, ColorInfoInterface $color_2, float $weight = 0.5): array
+    /**
+     * @return array<array-key, int|float>
+     */
+    private function mixRgb(ColorInfoInterface $color_1, ColorInfoInterface $color_2, float $weight = 0.5): array
     {
         $f = fn(int $x): float => $weight * $x;
         $g = fn(int $x): float => ( 1 - $weight ) * $x;
@@ -127,58 +203,15 @@ final class ColorModifier implements ColorModifierInterface
 
         return \array_map(
             $h,
-            \array_map($f, [ $color_1->red(), $color_1->green(),$color_1->blue() ]),
-            \array_map($g, [ $color_2->red(), $color_2->green(), $color_2->blue() ])
+            \array_map($f, [ (int)$color_1->red(), (int)$color_1->green(), (int)$color_1->blue() ]),
+            \array_map($g, [ (int)$color_2->red(), (int)$color_2->green(), (int)$color_2->blue() ])
         );
     }
 
-    private function createNewColorWithChangedLightnessOrOpacity(int $amount, float $alpha = 1): ColorInfoInterface
+    private function sanitizeFromFloatToInteger(float $value): int
     {
-		return $this->createNewColorFrom(
-			(string) $this->color->hue(),
-			(string) $this->color->saturation(),
-			(string) $this->sanitizeFromFloatToInteger($this->color->lightness() + $amount),
-			(string) $alpha
-		);
+        return $value > 100
+            ? 100
+            : ( $value < 0 ? 0 : (int) $value );
     }
-
-    private function createNewColorWithChangedSaturation(int $amount): ColorInfoInterface
-    {
-		return $this->createNewColorFrom(
-			(string) $this->color->hue(),
-			(string) $this->sanitizeFromFloatToInteger($this->color->saturation() + $amount),
-			(string) $this->color->lightness(),
-			(string) $this->color->alpha()
-		);
-    }
-
-    private function createNewColorWithChangedContrast(int $amount): ColorInfoInterface
-    {
-		return $this->createNewColorFrom(
-			(string) $this->color->hue(),
-			(string) $this->sanitizeFromFloatToInteger($this->color->saturation() + $amount),
-			(string) $this->sanitizeFromFloatToInteger($this->color->lightness() + $amount),
-			(string) $this->color->alpha()
-		);
-    }
-
-	private function createNewColorFrom(string $hue, string $saturation, string $lightness, string $alpha): ColorInfoInterface
-	{
-		return $this->color_factory->fromColorString(
-			\sprintf(
-				'hsla(%s, %s%%, %s%%, %s)',
-				$hue,
-				$saturation,
-				$lightness,
-				$alpha
-			)
-		);
-	}
-
-	private function sanitizeFromFloatToInteger(float $value): int
-	{
-		return $value > 100
-			? 100
-			: ( $value < 0 ? 0 : (int) $value );
-	}
 }

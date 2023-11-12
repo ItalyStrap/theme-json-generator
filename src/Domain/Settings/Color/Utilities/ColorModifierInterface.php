@@ -25,6 +25,8 @@ interface ColorModifierInterface
 
     public function contrast(int $amount = 0): ColorInfoInterface;
 
+    public function hueRotate(int $amount = 0): ColorInfoInterface;
+
     public function complementary(): ColorInfoInterface;
 
     public function color(): ColorInfoInterface;

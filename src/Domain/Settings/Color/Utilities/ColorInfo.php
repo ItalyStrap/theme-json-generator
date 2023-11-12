@@ -74,6 +74,69 @@ final class ColorInfo implements ColorInfoInterface
 
         return ( $colors[1] + 0.05 ) / ( $colors[0] + 0.05 );
     }
+    /**
+     * @return string|int
+     */
+    public function red()
+    {
+        $red = $this->spatieColor->red();
+        if (! \is_string($red) && ! \is_int($red)) {
+            throw new \Exception('The color is not string or int');
+        }
+
+        return $red;
+    }
+
+    /**
+     * @return string|int
+     */
+    public function green()
+    {
+        $green = $this->spatieColor->green();
+        if (! \is_string($green) && ! \is_int($green)) {
+            throw new \Exception('The color is not string or int');
+        }
+
+        return $green;
+    }
+
+    /**
+     * @return string|int
+     */
+    public function blue()
+    {
+        $blue = $this->spatieColor->blue();
+        if (! \is_string($blue) && ! \is_int($blue)) {
+            throw new \Exception('The color is not string or int');
+        }
+
+        return $blue;
+    }
+
+    public function hue(): float
+    {
+        return $this->hsla->hue();
+    }
+
+    public function saturation(): float
+    {
+        return $this->hsla->saturation();
+    }
+
+    public function lightness(): float
+    {
+        return $this->hsla->lightness();
+    }
+
+    public function alpha(): float
+    {
+        return $this->hsla->alpha();
+    }
+
+    public function type(): string
+    {
+        return (new \ReflectionClass($this->spatieColor))->getShortName();
+    }
 
     public function toHex(): self
     {
@@ -103,66 +166,5 @@ final class ColorInfo implements ColorInfoInterface
     public function __toString(): string
     {
         return (string) $this->spatieColor;
-    }
-
-    /**
-     * To have a return array we need to return self object
-     */
-    public function toArray(): array
-    {
-        return [
-            $this->red(),
-            $this->green(),
-            $this->blue(),
-        ];
-    }
-
-    /**
-     * @return string|int
-     */
-    public function red()
-    {
-        return $this->spatieColor->red();
-    }
-
-    /**
-     * @return string|int
-     */
-    public function green()
-    {
-        return $this->spatieColor->green();
-    }
-
-    /**
-     * @return string|int
-     */
-    public function blue()
-    {
-        return $this->spatieColor->blue();
-    }
-
-    public function hue(): float
-    {
-        return $this->hsla->hue();
-    }
-
-    public function saturation(): float
-    {
-        return $this->hsla->saturation();
-    }
-
-    public function lightness(): float
-    {
-        return $this->hsla->lightness();
-    }
-
-    public function alpha(): float
-    {
-        return $this->hsla->alpha();
-    }
-
-    public function type(): string
-    {
-        return '';
     }
 }

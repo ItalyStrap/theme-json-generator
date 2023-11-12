@@ -6,6 +6,9 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color\Utilities;
 
 use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color\Utilities\ColorsGenerator;
 
+/**
+ * @psalm-api
+ */
 class SquareColorsExperimental implements ColorsGenerator
 {
     private ColorModifierInterface $colorModifier;

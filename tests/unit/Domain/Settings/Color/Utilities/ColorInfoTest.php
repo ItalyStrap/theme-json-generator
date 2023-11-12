@@ -175,14 +175,14 @@ class ColorInfoTest extends UnitTestCase
             ]
         ];
 
-		yield 'Red hsl' => [
-			'hsl(0, 100%, 50%)', // Color
-			[
-				255, // Red
-				0, // Green
-				0, // Blue
-			]
-		];
+        yield 'Red hsl' => [
+            'hsl(0, 100%, 50%)', // Color
+            [
+                255, // Red
+                0, // Green
+                0, // Blue
+            ]
+        ];
     }
 
     /**
@@ -192,7 +192,11 @@ class ColorInfoTest extends UnitTestCase
     {
         $sut = $this->makeInstance($color);
 
-        $this->assertSame($expected, $sut->toArray(), 'It should be an array');
+        $this->assertSame($expected, [
+            $sut->red(),
+            $sut->green(),
+            $sut->blue(),
+        ], 'It should be an array');
     }
 
     public function darkerColorProvider(): \Generator

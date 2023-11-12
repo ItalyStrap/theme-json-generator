@@ -25,14 +25,14 @@ class MonochromaticColors implements ColorsGenerator
         \arsort($this->steps);
         $colors = [];
         foreach ($this->steps as $weight) {
-            $colors[] = $this->color->tint($weight)->toHsla();
+            $colors[] = $this->color->tint($weight);
         }
 
-        $colors[] = $this->color->tint()->toHsla();
+        $colors[] = $this->color->tint();
 
         \asort($this->steps);
         foreach ($this->steps as $weight) {
-            $colors[] = $this->color->shade($weight)->toHsla();
+            $colors[] = $this->color->shade($weight);
         }
 
         return $colors;

@@ -7,6 +7,9 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color;
 use ItalyStrap\ThemeJsonGenerator\ColorDataType;
 use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color\Utilities\ColorInfoInterface;
 
+/**
+ * @psalm-api
+ */
 class Duotone
 {
     public const KEY = 'duotone';

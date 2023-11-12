@@ -6,6 +6,9 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color;
 
 use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color\Utilities\ColorInfoInterface;
 
+/**
+ * @psalm-api
+ */
 class Palette
 {
     public const KEY = 'palette';
