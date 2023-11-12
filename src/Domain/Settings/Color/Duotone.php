@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color;
 
 use ItalyStrap\ThemeJsonGenerator\ColorDataType;
+use ItalyStrap\ThemeJsonGenerator\Domain\Settings\CanBeAddedToCollection;
 use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color\Utilities\ColorInfoInterface;
 
 /**
  * @psalm-api
  */
-class Duotone
+class Duotone implements CanBeAddedToCollection
 {
     public const KEY = 'duotone';
 
@@ -62,8 +63,8 @@ class Duotone
         }
     }
 
-    private function enforceSlugFormat(string $slug): string
-    {
-        return \trim(\mb_strtolower(\str_replace(' ', '-', $slug)));
-    }
+//    private function enforceSlugFormat(string $slug): string
+//    {
+//        return \trim(\mb_strtolower(\str_replace(' ', '-', $slug)));
+//    }
 }

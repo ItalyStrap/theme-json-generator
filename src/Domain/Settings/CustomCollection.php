@@ -37,7 +37,7 @@ final class CustomCollection implements CollectionInterface, CollectibleInterfac
         $this->config = $config ?? new Config();
     }
 
-    public function add($valueObject): self
+    public function add(CanBeAddedToCollection $valueObject): self
     {
         $this->collection[] = $valueObject->toArray();
         return $this;

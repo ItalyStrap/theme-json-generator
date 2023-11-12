@@ -40,19 +40,20 @@ final class PresetCollection implements CollectionInterface, CollectibleInterfac
         return $this->category;
     }
 
-    public function add($valueObject): self
+    public function add(CanBeAddedToCollection $valueObject): self
     {
+		/** @psalm-suppress MixedPropertyTypeCoercion */
         $this->collection[] = $valueObject->toArray();
         return $this;
     }
 
-    public function addMultiple(array $valueObjects): self
-    {
-        foreach ($valueObjects as $valueObject) {
-            $this->add($valueObject);
-        }
-        return $this;
-    }
+//    public function addMultiple(array $valueObjects): self
+//    {
+//        foreach ($valueObjects as $valueObject) {
+//            $this->add($valueObject);
+//        }
+//        return $this;
+//    }
 
     public function get(string $slug): array
     {

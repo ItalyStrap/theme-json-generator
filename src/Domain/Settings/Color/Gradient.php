@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color;
 
+use ItalyStrap\ThemeJsonGenerator\Domain\Settings\CanBeAddedToCollection;
+
 /**
  * @psalm-api
  */
-class Gradient
+class Gradient implements CanBeAddedToCollection
 {
     public const KEY = 'gradient';
 

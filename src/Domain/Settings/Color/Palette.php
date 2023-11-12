@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color;
 
+use ItalyStrap\ThemeJsonGenerator\Domain\Settings\CanBeAddedToCollection;
 use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color\Utilities\ColorInfoInterface;
 
 /**
  * @psalm-api
  */
-class Palette
+class Palette implements CanBeAddedToCollection
 {
     public const KEY = 'palette';
 
