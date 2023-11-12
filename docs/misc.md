@@ -247,3 +247,10 @@ If you pass two step values to the constructor you'll get five colors:
     4 => ColorInfoInterface, // Shade color 25%
 ]
 ```
+
+Color Study https://oss.adm.ntu.edu.sg/ggoh008/category/2015-dn1002-g8/color/
+
+Example tetradic color scheme: https://www.color-hex.com/color-palette/700
+https://reusellcvs.life/product_details/79928072.html
+
+color wheel: https://www.canva.com/colors/color-wheel/

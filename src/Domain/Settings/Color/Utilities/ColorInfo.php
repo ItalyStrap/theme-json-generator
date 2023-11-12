@@ -13,24 +13,19 @@ use Spatie\Color\Hsla;
  */
 final class ColorInfo implements ColorInfoInterface
 {
-    private SpatieColor $s_color;
+    private SpatieColor $spatieColor;
 
     private Hsla $hsla;
 
     /**
-     * Luminance of #808080 or rgb(128,128,128)
+     * Luminance of #808080 or rgb(128,128,128) or hsl(0,0%,50%)
      */
     public const MEDIUM_LUMINANCE = 0.21951971807487;
 
-    public static function fromColorInfo(ColorInfoInterface $colorValue): self
-    {
-        return new self((string) $colorValue->toHex());
-    }
-
     public function __construct(string $color)
     {
-        $this->s_color = ColorFactory::fromString($color);
-        $this->hsla = clone $this->s_color->toHsla();
+        $this->spatieColor = ColorFactory::fromString($color);
+        $this->hsla = $this->spatieColor->toHsla();
     }
 
     public function isDark(): bool
@@ -82,32 +77,32 @@ final class ColorInfo implements ColorInfoInterface
 
     public function toHex(): self
     {
-        return new self((string) $this->s_color->toHex());
+        return new self((string) $this->spatieColor->toHex());
     }
 
     public function toHsl(): self
     {
-        return new self((string) $this->s_color->toHsl());
+        return new self((string) $this->spatieColor->toHsl());
     }
 
     public function toHsla(float $alpha = 1): self
     {
-        return new self((string) $this->s_color->toHsla($alpha));
+        return new self((string) $this->spatieColor->toHsla($alpha));
     }
 
     public function toRgb(): self
     {
-        return new self((string) $this->s_color->toRgb());
+        return new self((string) $this->spatieColor->toRgb());
     }
 
     public function toRgba(float $alpha = 1): self
     {
-        return new self((string) $this->s_color->toRgba($alpha));
+        return new self((string) $this->spatieColor->toRgba($alpha));
     }
 
     public function __toString(): string
     {
-        return (string) $this->s_color;
+        return (string) $this->spatieColor;
     }
 
     /**
@@ -127,7 +122,7 @@ final class ColorInfo implements ColorInfoInterface
      */
     public function red()
     {
-        return $this->s_color->red();
+        return $this->spatieColor->red();
     }
 
     /**
@@ -135,7 +130,7 @@ final class ColorInfo implements ColorInfoInterface
      */
     public function green()
     {
-        return $this->s_color->green();
+        return $this->spatieColor->green();
     }
 
     /**
@@ -143,7 +138,7 @@ final class ColorInfo implements ColorInfoInterface
      */
     public function blue()
     {
-        return $this->s_color->blue();
+        return $this->spatieColor->blue();
     }
 
     public function hue(): float

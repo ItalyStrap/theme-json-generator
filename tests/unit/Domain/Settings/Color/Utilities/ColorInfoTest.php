@@ -174,6 +174,15 @@ class ColorInfoTest extends UnitTestCase
                 0, // Blue
             ]
         ];
+
+		yield 'Red hsl' => [
+			'hsl(0, 100%, 50%)', // Color
+			[
+				255, // Red
+				0, // Green
+				0, // Blue
+			]
+		];
     }
 
     /**

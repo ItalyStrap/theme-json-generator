@@ -14,7 +14,7 @@ final class ColorFactory implements ColorFactoryInterface
      */
     public function fromColorInfo(ColorInfoInterface $colorValue): ColorInfoInterface
     {
-        return new ColorInfo((string) $colorValue->toHex());
+        return new ColorInfo((string) $colorValue);
     }
 
     /**
