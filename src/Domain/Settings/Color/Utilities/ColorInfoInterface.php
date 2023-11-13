@@ -47,11 +47,11 @@ interface ColorInfoInterface extends \Stringable
      */
     public function blue();
 
-    public function hue(): float;
+    public function hue(): int;
 
-    public function saturation(): float;
+    public function saturation(): int;
 
-    public function lightness(): float;
+    public function lightness(): int;
 
     public function alpha(): float;
 

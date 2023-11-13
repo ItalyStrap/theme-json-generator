@@ -113,19 +113,19 @@ final class ColorInfo implements ColorInfoInterface
         return $blue;
     }
 
-    public function hue(): float
-    {
-        return $this->hsla->hue();
+    public function hue(): int
+	{
+        return (int)\round($this->hsla->hue());
     }
 
-    public function saturation(): float
-    {
-        return $this->hsla->saturation();
+    public function saturation(): int
+	{
+        return (int)\round($this->hsla->saturation());
     }
 
-    public function lightness(): float
-    {
-        return $this->hsla->lightness();
+    public function lightness(): int
+	{
+        return (int)\round($this->hsla->lightness());
     }
 
     public function alpha(): float
