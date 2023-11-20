@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color;
 
-use ItalyStrap\ThemeJsonGenerator\ColorDataType;
 use ItalyStrap\ThemeJsonGenerator\Domain\Settings\CanBeAddedToCollection;
 use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color\Utilities\ColorInfoInterface;
+use ItalyStrap\ThemeJsonGenerator\Domain\Settings\CommonTrait;
 
 /**
  * @psalm-api
  */
 class Duotone implements CanBeAddedToCollection
 {
-    public const KEY = 'duotone';
+    use CommonTrait;
+
+    public const CATEGORY = 'duotone';
 
     private string $name;
     private string $slug;
@@ -25,46 +27,33 @@ class Duotone implements CanBeAddedToCollection
 
     public function __construct(string $slug, string $name, ColorInfoInterface ...$colors)
     {
+        $this->isValidSlug($slug);
+
+        if (empty($name) || empty($slug) || count($colors) < 2) {
+            throw new \LogicException('Duotone must have a name, slug, and at least two colors.');
+        }
+
         $this->slug = $slug;
         $this->name = $name;
-        $this->colors = $colors;
+        $this->colors = $this->assertValidColors(...$colors);
     }
 
     public function toArray(): array
     {
-        if (empty($this->name) || empty($this->slug) || count($this->colors) < 2) {
-            throw new \LogicException('DuotoneValue must have a name, slug, and at least two colors.');
-        }
-
-        $this->isValidSlug($this->slug);
-
-        $colors = \array_map(function ($color) {
-            $newColor = (string)$color;
-            $this->isValidColor($newColor);
-            return $newColor;
-        }, $this->colors);
-
         return [
             'slug' => $this->slug,
             'name' => $this->name,
-            'colors' => $colors,
+            'colors' => $this->colors,
         ];
     }
 
-    private function isValidColor(string $color): void
+    /**
+     * @return string[]
+     */
+    private function assertValidColors(ColorInfoInterface ...$colors): array
     {
-        new ColorDataType($color);
+        return \array_map(function (ColorInfoInterface $color) {
+            return (string)$color->toRgba();
+        }, $colors);
     }
-
-    private function isValidSlug(string $slug): void
-    {
-        if (\preg_match('/\s/', $slug) || \preg_match('/[A-Z]/', $slug)) {
-            throw new \Exception('Slug must be lowercase and without spaces');
-        }
-    }
-
-//    private function enforceSlugFormat(string $slug): string
-//    {
-//        return \trim(\mb_strtolower(\str_replace(' ', '-', $slug)));
-//    }
 }

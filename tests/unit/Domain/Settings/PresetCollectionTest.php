@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace ItalyStrap\Tests\Unit\Domain\Settings;
 
+use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Domain\Settings\PresetCollection;
 
-class PresetCollectionTest extends BaseCollectionTest
+class PresetCollectionTest extends UnitTestCase
 {
+    use CollectionTestTrait;
+
 	// phpcs:ignore
 	protected function _before() {
+        parent::_before();
         $this->collection = [
             [
                 'slug'  => 'primary',
@@ -33,11 +37,39 @@ class PresetCollectionTest extends BaseCollectionTest
         $this->category = $expected;
         $sut = $this->makeInstance();
 
-        $this->assertStringMatchesFormat(
+        $this->toCollect->toArray()->willReturn([
+            'slug'  => 'primary',
+            'color' => '#ffffff',
+        ]);
+        $sut->add($this->makeToCollect());
+
+        $this->assertSame(
             $expected,
             $sut->category(),
             ''
         );
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldHaveKey()
+    {
+        $expected = 'expected';
+        $this->key = $expected;
+        $sut = $this->makeInstance();
+
+//      $this->toCollect->toArray()->willReturn([
+//          'slug'  => 'primary',
+//          'color' => '#ffffff',
+//      ]);
+//      $sut->add($this->makeToCollect());
+
+//        $this->assertSame(
+//            $expected,
+//            $sut->category(),
+//            ''
+//        );
     }
 
     /**

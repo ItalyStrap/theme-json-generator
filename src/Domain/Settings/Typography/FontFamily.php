@@ -2,30 +2,29 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color;
+namespace ItalyStrap\ThemeJsonGenerator\Domain\Settings\Typography;
 
 use ItalyStrap\ThemeJsonGenerator\Domain\Settings\CanBeAddedToCollection;
-use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color\Utilities\GradientInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Settings\CommonTrait;
 
 /**
  * @psalm-api
  */
-class Gradient implements CanBeAddedToCollection
+class FontFamily implements CanBeAddedToCollection
 {
     use CommonTrait;
 
-    public const CATEGORY = 'gradient';
+    public const CATEGORY = 'fontFamily';
 
     private string $slug;
     private string $name;
-    private GradientInterface $gradient;
+    private string $fontFamily;
 
-    public function __construct(string $slug, string $name, GradientInterface $gradient)
+    public function __construct(string $slug, string $name, string $fontFamily)
     {
         $this->slug = $slug;
         $this->name = $name;
-        $this->gradient = $gradient;
+        $this->fontFamily = $fontFamily;
     }
 
     public function toArray(): array
@@ -33,7 +32,7 @@ class Gradient implements CanBeAddedToCollection
         return [
             'slug' => $this->slug,
             'name' => $this->name,
-            'gradient' => (string)$this->gradient,
+            'fontFamily' => $this->fontFamily,
         ];
     }
 }

@@ -267,12 +267,12 @@ class ColorModifiertTest extends UnitTestCase
   //      $this->assertSame($expected, $sut->mix($mixedWith, $weight)->toHex(), '');
     }
 
-	public function testItShouldNotThrowException()
-	{
-		$sut = $this->makeInstance('#3986E0');
-		$color = (string)$sut->darken( 20 );
-		$color = (string)$sut->lighten( 20 );
-		$color = (string)$sut->darken( 20 )->toHsla();
-		$color = (string)$sut->darken( 20 )->toHsla();
-	}
+    public function testItShouldNotThrowException()
+    {
+        $sut = $this->makeInstance('#3986E0');
+        $color = (string)$sut->darken(20);
+        $color = (string)$sut->lighten(20);
+        $color = (string)$sut->darken(20)->toHsla();
+        $color = (string)$sut->darken(20)->toHsla();
+    }
 }

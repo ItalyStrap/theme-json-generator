@@ -114,17 +114,17 @@ final class ColorInfo implements ColorInfoInterface
     }
 
     public function hue(): int
-	{
+    {
         return (int)\round($this->hsla->hue());
     }
 
     public function saturation(): int
-	{
+    {
         return (int)\round($this->hsla->saturation());
     }
 
     public function lightness(): int
-	{
+    {
         return (int)\round($this->hsla->lightness());
     }
 

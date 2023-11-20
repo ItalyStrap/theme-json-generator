@@ -57,17 +57,10 @@ final class CustomCollection implements CollectionInterface, CollectibleInterfac
             throw new \RuntimeException("{$slug} does not exists.");
         }
 
-        $keys = \explode('.', $slug);
-
-        $property = '';
-        foreach ($keys as $word) {
-            $property .= '--' . $word;
-        }
-
         return \sprintf(
-            '--wp--%s%s',
+            '--wp--%s--%s',
             $this->category(),
-            $this->camelToUnderscore($property)
+            $this->camelToUnderscore(\str_replace('.', '--', $slug))
         );
     }
 

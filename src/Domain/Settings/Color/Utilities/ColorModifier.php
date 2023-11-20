@@ -153,12 +153,7 @@ final class ColorModifier implements ColorModifierInterface
             $alpha
         ));
 
-        /**
-         * Cast to original type passed to the constructor
-         * to make consistence between the original color and the new one
-         * @psalm-suppress MixedReturnStatement
-         */
-        return \call_user_func([$newColor, 'to' . $this->initialType]);
+        return $this->callMethodOnColorObject($newColor);
     }
 
     /**
@@ -166,7 +161,6 @@ final class ColorModifier implements ColorModifierInterface
      */
     private function mixWith(string $color_string, float $weight = 0): ColorInfoInterface
     {
-
         /**
          * I need to cast to RGB or RGBA because the mixRgb method
          * uses calculation over `ColorInfo::red()` and `ColorInfo::green()` and `ColorInfo::blue()`
@@ -184,12 +178,7 @@ final class ColorModifier implements ColorModifierInterface
             \implode(',', $result)
         ));
 
-        /**
-         * Cast to original type passed to the constructor
-         * to make consistence between the original color and the new one
-         * @psalm-suppress MixedReturnStatement
-         */
-        return \call_user_func([$newColor, 'to' . $this->initialType]);
+        return $this->callMethodOnColorObject($newColor);
     }
 
     /**
@@ -213,5 +202,25 @@ final class ColorModifier implements ColorModifierInterface
         return $value > 100
             ? 100
             : ( $value < 0 ? 0 : (int) $value );
+    }
+
+    /**
+     * @param ColorInfoInterface $newColor
+     * @return mixed
+     * @throws Exception
+     */
+    private function callMethodOnColorObject(ColorInfoInterface $newColor)
+    {
+        if (\method_exists($newColor, 'to' . $this->initialType)) {
+            $methodName = 'to' . $this->initialType;
+            /**
+             * Cast to original type passed to the constructor
+             * to make consistence between the original color and the new one
+             * @psalm-suppress MixedReturnStatement
+             */
+            return $newColor->$methodName();
+        }
+
+        throw new Exception('Method not found');
     }
 }

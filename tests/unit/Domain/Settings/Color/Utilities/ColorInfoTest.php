@@ -245,21 +245,21 @@ class ColorInfoTest extends UnitTestCase
         $sut = $this->makeInstance('#000000');
 
         $this->assertStringMatchesFormat('#000000', (string)$sut->toHex(), '');
-		$this->assertStringMatchesFormat('rgb(0,0,0)', (string)$sut->toRgb(), '');
-		$this->assertStringMatchesFormat('rgba(0,0,0,1.00)', (string)$sut->toRgba(), '');
-		$this->assertStringMatchesFormat('hsl(0,0%,0%)', (string)$sut->toHsl(), '');
-		$this->assertStringMatchesFormat('hsla(0,0%,0%,1)', (string)$sut->toHsla(), '');
+        $this->assertStringMatchesFormat('rgb(0,0,0)', (string)$sut->toRgb(), '');
+        $this->assertStringMatchesFormat('rgba(0,0,0,1.00)', (string)$sut->toRgba(), '');
+        $this->assertStringMatchesFormat('hsl(0,0%,0%)', (string)$sut->toHsl(), '');
+        $this->assertStringMatchesFormat('hsla(0,0%,0%,1)', (string)$sut->toHsla(), '');
     }
 
-	public function testHueSaturationLightnessAlphaMethods(): void
-	{
-		$sut = $this->makeInstance('#91bcee');
+    public function testHueSaturationLightnessAlphaMethods(): void
+    {
+        $sut = $this->makeInstance('#91bcee');
 
-		$this->assertSame(212, $sut->hue(), '');
-		$this->assertSame(73, $sut->saturation(), '');
-		$this->assertSame(75, $sut->lightness(), '');
-		$this->assertSame(1.0, $sut->alpha(), '');
-	}
+        $this->assertSame(212, $sut->hue(), '');
+        $this->assertSame(73, $sut->saturation(), '');
+        $this->assertSame(75, $sut->lightness(), '');
+        $this->assertSame(1.0, $sut->alpha(), '');
+    }
 
     public function testItShouldReturnLuminanceValue()
     {
@@ -274,8 +274,8 @@ class ColorInfoTest extends UnitTestCase
         $color = $this->makeInstance('#ffffff');
         $this->assertSame(21.0, $sut->relativeLuminance($color), '');
 
-		$sut = $this->makeInstance('#000000');
-		$color = $this->makeInstance('#bada55');
-		$this->assertTrue($sut->relativeLuminance($color) >= 4.5, '');
+        $sut = $this->makeInstance('#000000');
+        $color = $this->makeInstance('#bada55');
+        $this->assertTrue($sut->relativeLuminance($color) >= 4.5, '');
     }
 }

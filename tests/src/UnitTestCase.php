@@ -14,6 +14,7 @@ use Composer\Package\PackageInterface;
 use Composer\Package\RootPackageInterface;
 use Composer\Repository\RepositoryManager;
 use ItalyStrap\Config\ConfigInterface;
+use ItalyStrap\ThemeJsonGenerator\Domain\Settings\CanBeAddedToCollection;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use UnitTester;
@@ -33,6 +34,13 @@ class UnitTestCase extends Unit
     protected function inputData(): array
     {
         return $this->input_data;
+    }
+
+    protected ObjectProphecy $toCollect;
+
+    protected function maketoCollect(): CanBeAddedToCollection
+    {
+        return $this->toCollect->reveal();
     }
 
     protected ObjectProphecy $config;
@@ -100,6 +108,7 @@ class UnitTestCase extends Unit
 
 	// phpcs:ignore -- Method from Codeception
 	protected function _before() {
+        $this->toCollect = $this->prophesize(CanBeAddedToCollection::class);
         $this->config = $this->prophesize(ConfigInterface::class);
         $this->jsonFile = $this->prophesize(JsonFile::class);
         $this->composer = $this->prophesize(Composer::class);

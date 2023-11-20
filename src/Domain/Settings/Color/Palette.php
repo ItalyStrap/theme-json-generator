@@ -6,13 +6,16 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color;
 
 use ItalyStrap\ThemeJsonGenerator\Domain\Settings\CanBeAddedToCollection;
 use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color\Utilities\ColorInfoInterface;
+use ItalyStrap\ThemeJsonGenerator\Domain\Settings\CommonTrait;
 
 /**
  * @psalm-api
  */
 class Palette implements CanBeAddedToCollection
 {
-    public const KEY = 'palette';
+    use CommonTrait;
+
+    public const CATEGORY = 'palette';
 
     private string $slug;
     private string $name;
@@ -32,5 +35,10 @@ class Palette implements CanBeAddedToCollection
             'name' => $this->name,
             'color' => (string)$this->color,
         ];
+    }
+
+    public function color(): ColorInfoInterface
+    {
+        return $this->color;
     }
 }
