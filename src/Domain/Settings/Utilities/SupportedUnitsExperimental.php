@@ -11,6 +11,9 @@ class SupportedUnitsExperimental implements UnitInterfaceExperimental
 {
     private array $units;
 
+    /**
+     * @param string[] $units
+     */
     public function __construct(array $units)
     {
         foreach ($units as $unit) {

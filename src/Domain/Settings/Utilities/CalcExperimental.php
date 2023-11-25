@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Settings\Utilities;
 
+/**
+ * @psalm-api
+ */
 class CalcExperimental
 {
     private string $value;

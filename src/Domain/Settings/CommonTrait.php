@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Settings;
 
+/**
+ * @psalm-api
+ */
 trait CommonTrait
 {
     public function category(): string
@@ -13,7 +16,7 @@ trait CommonTrait
 
     public function slug(): string
     {
-        $this->assertSlugIsWellFormed();
+        $this->assertSlugIsWellFormed($this->slug);
         return $this->slug;
     }
 
@@ -71,12 +74,12 @@ trait CommonTrait
         ));
     }
 
-    private function assertSlugIsWellFormed(): void
+    private function assertSlugIsWellFormed(string $slug): void
     {
-        if (\preg_match('/\s/', $this->slug)) {
+        if (\preg_match('/\s/', $slug)) {
             throw new \Exception(\sprintf(
                 'Slug with spaces is not allowed, got %s',
-                $this->slug
+                $slug
             ));
         }
     }

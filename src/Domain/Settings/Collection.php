@@ -6,6 +6,9 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Settings;
 
 use ItalyStrap\Config\AccessValueInArrayWithNotationTrait;
 
+/**
+ * @psalm-api
+ */
 class Collection implements CollectionInterface
 {
     use AccessValueInArrayWithNotationTrait;
@@ -19,13 +22,16 @@ class Collection implements CollectionInterface
 
         $this->insertValue(
             $this->collection,
-            (array)\explode('.', $key),
+            \explode('.', $key),
             $item
         );
 
         return $this;
     }
 
+    /**
+     * @param ItemInterface[] $items
+     */
     public function addMultiple(array $items): self
     {
         foreach ($items as $item) {
@@ -36,6 +42,7 @@ class Collection implements CollectionInterface
     }
 
     /**
+     * @param mixed $default
      * @return mixed|string|null|ItemInterface
      */
     public function get(string $key, $default = null)
@@ -49,7 +56,7 @@ class Collection implements CollectionInterface
     public function toArrayByCategory(string $category): array
     {
         if ($category === 'custom') {
-            return $this->processCustomCollection($this->get($category, []), 'custom');
+            return $this->processCustomCollection((array)$this->get($category, []), 'custom');
         }
 
         return $this->processPresetCollection($category);

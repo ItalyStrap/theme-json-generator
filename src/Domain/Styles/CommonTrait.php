@@ -49,8 +49,8 @@ trait CommonTrait
             throw new \RuntimeException(\sprintf(
                 'The key "%s" is already provided | File:  %s | Line: %s',
                 $key,
-                $bt[1]['file'],
-                $bt[1]['line']
+                $bt[1]['file'] ?? '',
+                $bt[1]['line'] ?? ''
             ));
         }
     }

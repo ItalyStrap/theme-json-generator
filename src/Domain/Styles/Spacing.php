@@ -59,28 +59,28 @@ final class Spacing implements ArrayableInterface
     {
         switch (\count($values)) {
             case 1:
-                $this->setProperty(self::TOP, $values[0] ?? '');
-                $this->setProperty(self::RIGHT, $values[0] ?? '');
-                $this->setProperty(self::BOTTOM, $values[0] ?? '');
-                $this->setProperty(self::LEFT, $values[0] ?? '');
+                $this->setProperty(self::TOP, (string)$values[0]);
+                $this->setProperty(self::RIGHT, (string)$values[0]);
+                $this->setProperty(self::BOTTOM, (string)$values[0]);
+                $this->setProperty(self::LEFT, (string)$values[0]);
                 break;
             case 2:
-                $this->setProperty(self::TOP, $values[0] ?? '');
-                $this->setProperty(self::RIGHT, $values[1] ?? '');
-                $this->setProperty(self::BOTTOM, $values[0] ?? '');
-                $this->setProperty(self::LEFT, $values[1] ?? '');
+                $this->setProperty(self::TOP, (string)$values[0]);
+                $this->setProperty(self::RIGHT, (string)$values[1]);
+                $this->setProperty(self::BOTTOM, (string)$values[0]);
+                $this->setProperty(self::LEFT, (string)$values[1]);
                 break;
             case 3:
-                $this->setProperty(self::TOP, $values[0] ?? '');
-                $this->setProperty(self::RIGHT, $values[1] ?? '');
-                $this->setProperty(self::BOTTOM, $values[2] ?? '');
-                $this->setProperty(self::LEFT, $values[1] ?? '');
+                $this->setProperty(self::TOP, (string)$values[0]);
+                $this->setProperty(self::RIGHT, (string)$values[1]);
+                $this->setProperty(self::BOTTOM, (string)$values[2]);
+                $this->setProperty(self::LEFT, (string)$values[1]);
                 break;
             case 4:
-                $this->setProperty(self::TOP, $values[0] ?? '');
-                $this->setProperty(self::RIGHT, $values[1] ?? '');
-                $this->setProperty(self::BOTTOM, $values[2] ?? '');
-                $this->setProperty(self::LEFT, $values[3] ?? '');
+                $this->setProperty(self::TOP, (string)$values[0]);
+                $this->setProperty(self::RIGHT, (string)$values[1]);
+                $this->setProperty(self::BOTTOM, (string)$values[2]);
+                $this->setProperty(self::LEFT, (string)$values[3]);
                 break;
         }
 
