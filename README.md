@@ -34,13 +34,55 @@ This package adheres to the [SemVer](http://semver.org/) specification and will 
 
 ### How it works
 
+#### Composer Plugin
+
 Basically, this plugin executes the following steps:
 
+* This package adds a Composer plugin and a WP_CLI command.
+* After that you can use the command `wp theme-json generate` or `composer theme-json generate` to generate the file.
+
 * This plugin searches for a custom callback you provide trough `composer.json` inside `extra` field.
-* The callback needs to return an array with your [theme config](https://developer.wordpress.
-  org/block-editor/how-to-guides/themes/theme-json/) and the callback accepts a string argument where you get the 
+* The callback needs to return an array with your [theme config](https://developer.wordpress.org/themes/global-settings-and-styles/) and the callback accepts a string argument where you get the 
   path of the theme.
 * At the end it generates the **theme.json** in the root folder of the theme you are developing.
+
+#### WP_CLI command
+
+#### Under the hood
+
+This package simply convert a PHP array you provide into a JSON file, so if you want or need to make things simpler
+just provide the PHP array with all the structure you need.
+
+So if you just follow the schema your theme.json will need to be compliant with the WordPress Theme Json schema you're ready to go, create your simple array and the package will do the rest.
+
+This is a basic example of the array you need to provide:
+
+```php
+$arrayExample = [
+    'version'   => 1,
+    'settings'  => 	[
+        'layout' => [
+            'contentSize' => '620px',
+            'wideSize' => '1000px',
+        ],
+        [...] // All the rest of config, this is just an example
+    ]
+];
+```
+
+And this package will generate the following json:
+
+```json
+{
+  "version": 1,
+  "settings": {
+    "layout": {
+      "contentSize": "620px",
+      "wideSize": "1000px"
+    }
+  }
+}
+```
 
 ### Example project
 
@@ -92,7 +134,7 @@ final class YourCustomClass {
 }
 ```
 
-And color will generate the following json:
+And this package will generate the following json:
 
 ```json
 {
@@ -166,7 +208,7 @@ This command is still experimental, could be changed in the future.
 
 Now we know how to generate the theme.json file so, what next?
 
-If you want to do more with PHP you can use some helper classes I added to color library to better manage the 
+If you want to do more with PHP you can use some helper classes I added to this package to better manage the 
 settings.
 
 The first classes you can use are the `\ItalyStrap\ThemeJsonGenerator\Settings\PresetCollection::class` and the 

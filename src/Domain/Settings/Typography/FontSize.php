@@ -6,33 +6,38 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Settings\Typography;
 
 use ItalyStrap\ThemeJsonGenerator\Domain\Settings\ItemInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Settings\CommonTrait;
+use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Typography\Utilities\Fluid;
 
 /**
  * @psalm-api
  */
-class FontFamily implements ItemInterface
+class FontSize implements ItemInterface
 {
     use CommonTrait;
 
-    public const CATEGORY = 'fontFamily';
+    public const CATEGORY = 'fontSize';
 
     private string $slug;
     private string $name;
-    private string $fontFamily;
+    private string $size;
 
-    public function __construct(string $slug, string $name, string $fontFamily)
+    private ?Fluid $fluid;
+
+    public function __construct(string $slug, string $name, string $size, ?Fluid $fluid = null)
     {
         $this->slug = $slug;
         $this->name = $name;
-        $this->fontFamily = $fontFamily;
+        $this->size = $size;
+        $this->fluid = $fluid;
     }
 
     public function toArray(): array
     {
-        return [
+        return \array_filter([
             'slug' => $this->slug,
             'name' => $this->name,
-            'fontFamily' => $this->fontFamily,
-        ];
+            'size' => $this->size,
+            'fluid' => $this->fluid,
+        ], fn($value) => null !== $value);
     }
 }

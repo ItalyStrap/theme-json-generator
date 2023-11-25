@@ -6,26 +6,15 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Settings;
 
 trait CommonTrait
 {
-    public function slug(): string
-    {
-        if (\preg_match('/\s/', $this->slug)) {
-            throw new \Exception(\sprintf(
-                'Slug with spaces is not allowed, got %s',
-                $this->slug
-            ));
-        }
-
-        return $this->slug;
-    }
-
-    public function name(): string
-    {
-        return $this->name;
-    }
-
     public function category(): string
     {
         return self::CATEGORY;
+    }
+
+    public function slug(): string
+    {
+        $this->assertSlugIsWellFormed();
+        return $this->slug;
     }
 
     public function ref(): string
@@ -55,6 +44,11 @@ trait CommonTrait
         );
     }
 
+    public function __toString(): string
+    {
+        return $this->var();
+    }
+
     private function isValidSlug(string $slug): void
     {
         if (\preg_match('/\s/', $slug) || \preg_match('/[A-Z]/', $slug)) {
@@ -75,5 +69,15 @@ trait CommonTrait
             $us,
             $string
         ));
+    }
+
+    private function assertSlugIsWellFormed(): void
+    {
+        if (\preg_match('/\s/', $this->slug)) {
+            throw new \Exception(\sprintf(
+                'Slug with spaces is not allowed, got %s',
+                $this->slug
+            ));
+        }
     }
 }

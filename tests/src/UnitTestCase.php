@@ -14,7 +14,8 @@ use Composer\Package\PackageInterface;
 use Composer\Package\RootPackageInterface;
 use Composer\Repository\RepositoryManager;
 use ItalyStrap\Config\ConfigInterface;
-use ItalyStrap\ThemeJsonGenerator\Domain\Settings\CanBeAddedToCollection;
+use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color\Utilities\ColorInfoInterface;
+use ItalyStrap\ThemeJsonGenerator\Domain\Settings\ItemInterface;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use UnitTester;
@@ -36,11 +37,11 @@ class UnitTestCase extends Unit
         return $this->input_data;
     }
 
-    protected ObjectProphecy $toCollect;
+    protected ObjectProphecy $item;
 
-    protected function maketoCollect(): CanBeAddedToCollection
+    protected function makeItem(): ItemInterface
     {
-        return $this->toCollect->reveal();
+        return $this->item->reveal();
     }
 
     protected ObjectProphecy $config;
@@ -106,9 +107,19 @@ class UnitTestCase extends Unit
         return $this->package->reveal();
     }
 
+    protected ObjectProphecy $colorInfo;
+
+    protected function makeColorInfo(): ColorInfoInterface
+    {
+        return $this->colorInfo->reveal();
+    }
+
 	// phpcs:ignore -- Method from Codeception
 	protected function _before() {
-        $this->toCollect = $this->prophesize(CanBeAddedToCollection::class);
+        $this->item = $this->prophesize(ItemInterface::class);
+        $this->colorInfo = $this->prophesize(ColorInfoInterface::class);
+
+
         $this->config = $this->prophesize(ConfigInterface::class);
         $this->jsonFile = $this->prophesize(JsonFile::class);
         $this->composer = $this->prophesize(Composer::class);

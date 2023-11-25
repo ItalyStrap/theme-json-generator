@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color;
 
-use ItalyStrap\ThemeJsonGenerator\Domain\Settings\CanBeAddedToCollection;
-use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color\Utilities\ColorInfoInterface;
+use ItalyStrap\ThemeJsonGenerator\Domain\Settings\ItemInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Settings\CommonTrait;
 
 /**
  * @psalm-api
  */
-class Duotone implements CanBeAddedToCollection
+class Duotone implements ItemInterface
 {
     use CommonTrait;
 
@@ -21,11 +20,11 @@ class Duotone implements CanBeAddedToCollection
     private string $slug;
 
     /**
-     * @var ColorInfoInterface[] $colors
+     * @var Palette [] $colors
      */
     private array $colors;
 
-    public function __construct(string $slug, string $name, ColorInfoInterface ...$colors)
+    public function __construct(string $slug, string $name, Palette ...$colors)
     {
         $this->isValidSlug($slug);
 
@@ -50,10 +49,8 @@ class Duotone implements CanBeAddedToCollection
     /**
      * @return string[]
      */
-    private function assertValidColors(ColorInfoInterface ...$colors): array
+    private function assertValidColors(Palette ...$colors): array
     {
-        return \array_map(function (ColorInfoInterface $color) {
-            return (string)$color->toRgba();
-        }, $colors);
+        return \array_map(fn(Palette $color) => (string)$color->color()->toRgba(), $colors);
     }
 }

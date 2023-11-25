@@ -25,6 +25,13 @@ class JsonFileWriter implements FileBuilder
     public function build(callable $callable): void
     {
         $json_file = new ComposerJsonFileAdapter(new JsonFile($this->path));
-        $json_file->write((array)$callable($this->path));
+
+        $result = (array)$callable($this->path);
+
+        if (\count($result) === 0) {
+            throw new \RuntimeException('The theme.json is empty');
+        }
+
+        $json_file->write($result);
     }
 }

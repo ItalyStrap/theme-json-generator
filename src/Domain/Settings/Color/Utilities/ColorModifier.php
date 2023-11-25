@@ -157,6 +157,8 @@ final class ColorModifier implements ColorModifierInterface
     }
 
     /**
+     * @todo Is it a good idea to make it public?
+     *       Evaluate possible side effects.
      * @psalm-suppress MixedInferredReturnType
      */
     private function mixWith(string $color_string, float $weight = 0): ColorInfoInterface

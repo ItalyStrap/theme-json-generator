@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color;
 
-use ItalyStrap\ThemeJsonGenerator\Domain\Settings\CanBeAddedToCollection;
+use ItalyStrap\ThemeJsonGenerator\Domain\Settings\ItemInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color\Utilities\ColorInfoInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Settings\CommonTrait;
 
 /**
  * @psalm-api
  */
-class Palette implements CanBeAddedToCollection
+class Palette implements ItemInterface
 {
     use CommonTrait;
 
-    public const CATEGORY = 'palette';
+    public const CATEGORY = 'color';
 
     private string $slug;
     private string $name;

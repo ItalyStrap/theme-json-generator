@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color;
 
-use ItalyStrap\ThemeJsonGenerator\Domain\Settings\CanBeAddedToCollection;
+use ItalyStrap\ThemeJsonGenerator\Domain\Settings\ItemInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color\Utilities\GradientInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Settings\CommonTrait;
 
 /**
  * @psalm-api
  */
-class Gradient implements CanBeAddedToCollection
+class Gradient implements ItemInterface
 {
     use CommonTrait;
 
