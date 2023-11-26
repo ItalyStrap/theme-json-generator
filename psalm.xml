@@ -13,6 +13,7 @@
         <directory name="src/Domain" />
         <ignoreFiles>
             <directory name="vendor" />
+            <file name="src/**/*Experimental*" />
         </ignoreFiles>
     </projectFiles>
 </psalm>

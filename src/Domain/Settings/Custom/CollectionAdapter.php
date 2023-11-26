@@ -9,8 +9,14 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Settings\Custom;
  */
 class CollectionAdapter
 {
+    /**
+     * @var array<string, mixed>
+     */
     private array $collection;
 
+    /**
+     * @param array<string, mixed> $collection
+     */
     public function __construct(
         array $collection = []
     ) {
@@ -25,8 +31,12 @@ class CollectionAdapter
     private function collectionToFlat(array $collection, string $prefix = ''): array
     {
         $processed = [];
+
+        /**
+         * @var string|array|\Stringable $value
+         */
         foreach ($collection as $key => $value) {
-            $fullKey = $prefix === '' ? $key : $prefix . '.' . $key;
+            $fullKey = (string)($prefix === '' ? $key : $prefix . '.' . $key);
             if (\is_array($value)) {
                 $processed = \array_merge($processed, $this->collectionToFlat($value, $fullKey));
                 continue;

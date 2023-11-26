@@ -73,11 +73,11 @@ final class ColorModifier implements ColorModifierInterface
 
     public function complementary(): ColorInfoInterface
     {
-        if ((int)$this->color->hue() === 0 && (int)$this->color->saturation() === 0) {
+        if ($this->color->hue() === 0 && $this->color->saturation() === 0) {
             return $this->color;
         }
 
-        return $this->hueRotate((int)$this->color->hue() + 180);
+        return $this->hueRotate($this->color->hue() + 180);
     }
 
     public function invert(): ColorInfoInterface
@@ -138,6 +138,7 @@ final class ColorModifier implements ColorModifierInterface
 
     /**
      * @psalm-suppress MixedInferredReturnType
+     * @psalm-suppress MixedReturnStatement
      */
     private function createNewColorFrom(
         string $hue,
@@ -160,6 +161,7 @@ final class ColorModifier implements ColorModifierInterface
      * @todo Is it a good idea to make it public?
      *       Evaluate possible side effects.
      * @psalm-suppress MixedInferredReturnType
+     * @psalm-suppress MixedReturnStatement
      */
     private function mixWith(string $color_string, float $weight = 0): ColorInfoInterface
     {
@@ -211,14 +213,13 @@ final class ColorModifier implements ColorModifierInterface
      * @return mixed
      * @throws Exception
      */
-    private function callMethodOnColorObject(ColorInfoInterface $newColor)
+    private function callMethodOnColorObject(ColorInfoInterface $newColor): ColorInfoInterface
     {
         if (\method_exists($newColor, 'to' . $this->initialType)) {
             $methodName = 'to' . $this->initialType;
             /**
              * Cast to original type passed to the constructor
              * to make consistence between the original color and the new one
-             * @psalm-suppress MixedReturnStatement
              */
             return $newColor->$methodName();
         }

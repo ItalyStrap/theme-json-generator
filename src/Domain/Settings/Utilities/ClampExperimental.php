@@ -22,4 +22,14 @@ class ClampExperimental
         $this->min = $min;
         $this->max = $max;
     }
+
+    public function __toString(): string
+    {
+        return \sprintf(
+            'clamp(%s, %s, %s)',
+            $this->value,
+            $this->min,
+            $this->max
+        );
+    }
 }
