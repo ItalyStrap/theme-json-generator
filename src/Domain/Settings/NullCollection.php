@@ -18,4 +18,9 @@ class NullCollection implements CollectionInterface
     {
         return $default;
     }
+
+    public function value(string $key, $default = null): string
+    {
+        return $default;
+    }
 }

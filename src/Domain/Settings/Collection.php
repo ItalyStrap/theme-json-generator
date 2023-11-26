@@ -43,11 +43,49 @@ class Collection implements CollectionInterface
 
     /**
      * @param mixed $default
-     * @return mixed|string|null|ItemInterface
      */
     public function get(string $key, $default = null)
     {
         return $this->findValue($this->collection, \explode('.', $key), $default);
+    }
+
+    /**
+     * This method is meant to be used only in the Styles Section or the Theme.json file
+     * that because inside the styles section you only need to get a css variable created in the
+     * Settings section.
+     *
+     * Now obviously if you need to pass other CSS accepted values you can also use them
+     * and because they are not keys of the collection they will be returned as is.
+     *
+     * In short:
+     *
+     * If you pass a key of the collection you will get the value of the item.
+     * Example:
+     * Collection::value('color.base') === 'var(--wp--preset--color--base)'
+     *
+     * If you pass a CSS value you will get the same value (because all CSS value are not keys of the collection)
+     * Example:
+     * Collection::value('nonExistentKey', 'inherit') === 'inherit'
+     *
+     * @param string $key
+     * @param mixed $default
+     * @return string
+     */
+    public function value(string $key, $default = null): string
+    {
+        /**
+         * @var ItemInterface|mixed $value
+         */
+        $value = $this->get($key, $default);
+
+        if ($value instanceof ItemInterface) {
+            $value = $value->var();
+        }
+
+        /**
+         * This prevents to return a string with the placeholder
+         */
+        return $this->extractPlaceholders((string)$value, $key);
     }
 
     /**

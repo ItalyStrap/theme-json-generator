@@ -12,6 +12,7 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color\Utilities\ColorModifier;
 use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color\Utilities\ShadesGeneratorExperimental;
 use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Custom\CollectionAdapter;
 use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Typography\FontSize;
+use ItalyStrap\ThemeJsonGenerator\Domain\Styles\Typography;
 
 class CollectionIntegrationTest extends UnitTestCase
 {
@@ -101,7 +102,18 @@ class CollectionIntegrationTest extends UnitTestCase
             $customCollection
         );
 
-        codecept_debug($sut->get('custom.grandParentField.parentField.childField')->var());
+//        codecept_debug($sut->get('custom.grandParentField.parentField.childField')->var());
+
+        $typo = (new Typography($sut))
+            ->fontSize('fontSize.h1')
+            ->toArray();
+
+        $this->assertSame(
+            [
+                'fontSize' => 'var(--wp--preset--font-size--h-1)',
+            ],
+            $typo
+        );
     }
 
     public function testItHasShadesValueFromGenerator(): void

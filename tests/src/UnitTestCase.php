@@ -14,7 +14,9 @@ use Composer\Package\PackageInterface;
 use Composer\Package\RootPackageInterface;
 use Composer\Repository\RepositoryManager;
 use ItalyStrap\Config\ConfigInterface;
+use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color\Palette;
 use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color\Utilities\ColorInfoInterface;
+use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color\Utilities\GradientInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Settings\ItemInterface;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -114,10 +116,26 @@ class UnitTestCase extends Unit
         return $this->colorInfo->reveal();
     }
 
+    protected ObjectProphecy $gradient;
+
+    protected function makeGradient(): GradientInterface
+    {
+        return $this->gradient->reveal();
+    }
+
+    protected ObjectProphecy $palette;
+
+    protected function makePalette(): Palette
+    {
+        return $this->palette->reveal();
+    }
+
 	// phpcs:ignore -- Method from Codeception
 	protected function _before() {
         $this->item = $this->prophesize(ItemInterface::class);
         $this->colorInfo = $this->prophesize(ColorInfoInterface::class);
+        $this->gradient = $this->prophesize(GradientInterface::class);
+        $this->palette = $this->prophesize(Palette::class);
 
 
         $this->config = $this->prophesize(ConfigInterface::class);

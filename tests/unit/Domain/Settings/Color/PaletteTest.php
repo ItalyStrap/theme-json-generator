@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace ItalyStrap\Tests\Unit\Domain\Settings\Color;
 
+use ItalyStrap\Tests\Unit\Domain\Settings\CommonTrait;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color\Palette;
 
 class PaletteTest extends UnitTestCase
 {
+    use CommonTrait;
+
     private string $slug = 'base';
     private string $name = 'Base';
 
@@ -19,12 +22,6 @@ class PaletteTest extends UnitTestCase
             $this->name,
             $this->makeColorInfo()
         );
-    }
-
-    public function testItShouldReturnTheSlug(): void
-    {
-        $sut = $this->makeInstance();
-        $this->assertSame($this->slug, $sut->slug());
     }
 
     public function testItShouldReturnTheName(): void

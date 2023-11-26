@@ -21,6 +21,18 @@ trait CommonTrait
         $this->collection = $collection ?? new NullCollection();
     }
 
+    /**
+     * Example:
+     * $this->property('fontFamily', 'fontFamily.base') === ['fontFamily' => 'var(--wp--preset--font-family--base)']
+     * $this->property('fontSize', '20px') === ['fontSize' => '20px']
+     *
+     * Explanation:
+     * If the $value `fontFamily.base` is found in the collection (because $value is treated as a key of the collection),
+     * then the CSS variable found in the collection will be returned.
+     *
+     * If the $value `20px` is not found in the collection (because $value is treated as a key of the collection),
+     * then the value 20px will be returned as is.
+     */
     public function property(string $property, string $value): self
     {
         $this->setProperty($property, $value);
@@ -30,8 +42,7 @@ trait CommonTrait
     private function setProperty(string $key, string $value): self
     {
         $this->assertIsImmutable($key);
-        $value = (string)$this->collection->get($value, $value);
-        $this->properties[$key] = $value;
+        $this->properties[$key] = $this->collection->value($value, $value);
         return $this;
     }
 

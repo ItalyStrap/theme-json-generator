@@ -20,7 +20,7 @@ class Duotone implements ItemInterface
     private string $slug;
 
     /**
-     * @var Palette [] $colors
+     * @var array<array-key, string> $colors
      */
     private array $colors;
 
@@ -47,7 +47,7 @@ class Duotone implements ItemInterface
     }
 
     /**
-     * @return string[]
+     * @return array<array-key, string>
      */
     private function assertValidColors(Palette ...$colors): array
     {

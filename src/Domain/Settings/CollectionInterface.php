@@ -10,7 +10,13 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Settings;
 interface CollectionInterface
 {
     /**
+     * @param mixed $default
      * @return mixed
      */
     public function get(string $key, $default = null);
+
+    /**
+     * @param mixed $default
+     */
+    public function value(string $key, $default = null): string;
 }
