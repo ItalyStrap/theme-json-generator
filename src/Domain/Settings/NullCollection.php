@@ -19,8 +19,13 @@ class NullCollection implements CollectionInterface
         return $default;
     }
 
+    /**
+     * @param string $key
+     * @param mixed $default
+     * @return string
+     */
     public function value(string $key, $default = null): string
     {
-        return $default;
+        return (string)$default;
     }
 }
