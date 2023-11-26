@@ -64,6 +64,15 @@ class ShadesGeneratorExperimental
     }
 
     /**
+     * This functionality create an array of shades of a given color
+     * The created shades are from 10% to 100% of the given color
+     * If the color is dark, the shades will be lightened
+     * If the color is light, the shades will be darkened
+     *
+     * This method create an array of Palette of shades of a color
+     * If the color generated is #000000 or #ffffff it will be skipped,
+     * and you will get only the shades of the color without duplicates values likes many #000000 or #ffffff
+     *
      * @throws \Exception
      */
     public function toArray(): array
@@ -75,9 +84,20 @@ class ShadesGeneratorExperimental
                 \sprintf('%s-%d', $this->slug, $i),
                 \sprintf("Shade of %s by %s%%", \ucfirst($this->slug), $i / 10),
                 $this->color->isDark()
-                    ? (new ColorModifier($this->color))->lighten($i)
-                    : (new ColorModifier($this->color))->darken($i)
+                    ? (new ColorModifier($this->color))->lighten($i / 10)
+                    : (new ColorModifier($this->color))->darken($i / 10)
             );
+
+            $colorToCheck = (string)$colors[$i]->color()->toHex();
+            if (
+                $colorToCheck === '#000000'
+                || $colorToCheck === '#ffffff'
+            ) {
+                // This removes the current element from the array
+                unset($colors[$i]);
+                // This ensures that the loop will stop
+                $i = $this->max;
+            }
         }
 
         return $colors;

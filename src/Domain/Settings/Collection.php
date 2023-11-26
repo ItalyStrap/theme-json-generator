@@ -59,10 +59,10 @@ class Collection implements CollectionInterface
             return $this->processCustomCollection((array)$this->get($category, []), 'custom');
         }
 
-        return $this->processPresetCollection($category);
+        return $this->processPresetCollection((array)$this->get($category, []));
     }
 
-    private function processPresetCollection(string $category): array
+    private function processPresetCollection(array $collection): array
     {
         return \array_values(
             \array_map(
@@ -76,7 +76,7 @@ class Collection implements CollectionInterface
                     }
                     return $newItems;
                 },
-                $this->get($category, [])
+                $collection
             )
         );
     }
@@ -103,8 +103,9 @@ class Collection implements CollectionInterface
         preg_match_all($pattern, $string, $matches, PREG_SET_ORDER);
 
         $found = [];
+        $shiftedItem = '';
         foreach ($matches as $match) {
-            \array_shift($match);
+            $shiftedItem = \array_shift($match);
 
             if (\strpos($match[0], '.') !== false) {
                 $match = \explode('.', $match[0]);
@@ -120,6 +121,7 @@ class Collection implements CollectionInterface
         }
 
         $newKey = \implode('.', $found);
+
         /**
          * @todo Add test for the second parameter of get()
          *       I don't remember why I put 'custom.' as prefix.
@@ -131,7 +133,7 @@ class Collection implements CollectionInterface
             throw new \RuntimeException("{{{$newKey}}} does not exists");
         }
 
-        return $item->var();
+        return \str_replace($shiftedItem, $item->var(), $string);
     }
 
     private function assertIsUnique(string $key, ItemInterface $item): void

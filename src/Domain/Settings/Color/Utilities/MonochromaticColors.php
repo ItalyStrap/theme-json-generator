@@ -9,7 +9,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color\Utilities;
  */
 class MonochromaticColors implements ColorsGenerator
 {
-    private ColorModifierInterface $color;
+    private ColorModifierInterface $colorModifier;
 
     /**
      * @var array<array-key, int|float>
@@ -21,7 +21,7 @@ class MonochromaticColors implements ColorsGenerator
      */
     public function __construct(ColorModifierInterface $color, array $steps)
     {
-        $this->color = $color;
+        $this->colorModifier = $color;
         $this->steps = $steps;
     }
 
@@ -31,14 +31,14 @@ class MonochromaticColors implements ColorsGenerator
         \arsort($this->steps);
         $colors = [];
         foreach ($this->steps as $weight) {
-            $colors[] = $this->color->tint((float)$weight);
+            $colors[] = $this->colorModifier->tint((float)$weight);
         }
 
-        $colors[] = $this->color->tint();
+        $colors[] = $this->colorModifier->tint();
 
         \asort($this->steps);
         foreach ($this->steps as $weight) {
-            $colors[] = $this->color->shade((float)$weight);
+            $colors[] = $this->colorModifier->shade((float)$weight);
         }
 
         return $colors;

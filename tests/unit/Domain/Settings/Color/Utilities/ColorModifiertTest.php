@@ -275,4 +275,40 @@ class ColorModifiertTest extends UnitTestCase
         $color = (string)$sut->darken(20)->toHsla();
         $color = (string)$sut->darken(20)->toHsla();
     }
+
+    public function testShadeVsTintVsLightenVsDarken(): void
+    {
+        $sut = $this->makeInstance('hsla(199,100%,73%,1)');
+
+        $this->assertSame(
+            'hsla(199,100%,73%,1)',
+            (string)$sut->color(),
+            'The color should be hsla(199,100%,73%,1)'
+        );
+
+        $this->assertSame(
+            'hsla(199,100%,78%,1)',
+            (string)$sut->tint(20),
+            'The color should be hsla(199,100%,78%,1)'
+        );
+
+
+        $this->assertSame(
+            'hsla(199,52%,58%,1)',
+            (string)$sut->shade(20),
+            'The color should be hsla(199,52%,58%,1)'
+        );
+
+        $this->assertSame(
+            'hsla(199,100%,93%,1)',
+            (string)$sut->lighten(20),
+            'The color should be hsla(199,100%,93%,1)'
+        );
+
+        $this->assertSame(
+            'hsla(199,100%,53%,1)',
+            (string)$sut->darken(20),
+            'The color should be hsla(199,100%,53%,1)'
+        );
+    }
 }

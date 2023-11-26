@@ -38,8 +38,8 @@ class JsonFileWriterTest extends UnitTestCase
 //          return $this->getInputData();
 //      };
 
-        $callable = function (string $path): array {
-            $this->assertStringContainsString($path, $this->theme_json_path, '');
+        $callable = function (): array {
+//            $this->assertStringContainsString($path, $this->theme_json_path, '');
             return [
                 'key'   => 'value',
             ];
