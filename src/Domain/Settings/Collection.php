@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Settings;
 
 use ItalyStrap\Config\AccessValueInArrayWithNotationTrait;
+use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Custom\Item;
 
 /**
  * @psalm-api
@@ -85,7 +86,7 @@ class Collection implements CollectionInterface
         /**
          * This prevents to return a string with the placeholder
          */
-        return $this->extractPlaceholders((string)$value, $key);
+        return $this->extractPlaceholders((string)$value);
     }
 
     /**
@@ -94,7 +95,7 @@ class Collection implements CollectionInterface
     public function toArrayByCategory(string $category): array
     {
         if ($category === 'custom') {
-            return $this->processCustomCollection((array)$this->get($category, []), 'custom');
+            return $this->processCustomCollection((array)$this->get($category, []));
         }
 
         return $this->processPresetCollection((array)$this->get($category, []));
@@ -108,7 +109,7 @@ class Collection implements CollectionInterface
                     $newItems = [];
                     foreach ($item->toArray() as $key => $value) {
                         if (\is_string($value)) {
-                            $value = $this->extractPlaceholders($value, '');
+                            $value = $this->extractPlaceholders($value);
                         }
                         $newItems[$key] = $value;
                     }
@@ -129,13 +130,13 @@ class Collection implements CollectionInterface
                 continue;
             }
 
-            $processed[$key] = $this->extractPlaceholders((string)$value, $fullKey);
+            $processed[$key] = $this->extractPlaceholders((string)$value);
         }
 
         return $processed;
     }
 
-    private function extractPlaceholders(string $string, string $key): string
+    private function extractPlaceholders(string $string): string
     {
         $pattern = '/{{([\w.]+)}}|var:(preset|custom)\|([\w.]+)\|([\w.]+)/';
         preg_match_all($pattern, $string, $matches, PREG_SET_ORDER);
@@ -162,10 +163,13 @@ class Collection implements CollectionInterface
 
         /**
          * @todo Add test for the second parameter of get()
-         *       I don't remember why I put 'custom.' as prefix.
-         *       This function is used also for the preset collection
+         *       The second parameter is needed to search also in the custom collection
+         *       Let say you define a custom value `spacer.base`, `spacer` is not any Presets category
+         *       so in this case the second $this->get() is added as default and will search in the custom collection
+         *       for `custom.spacer.base` and if found will return the value from the custom collection.
+         *       If any value in the Preset and Custom collection is found then the null default will be returned.
          */
-        $item = $this->get($newKey, $this->get('custom.' . $newKey));
+        $item = $this->get($newKey, $this->get(Item::CATEGORY . '.' . $newKey));
 
         if ($item === null) {
             throw new \RuntimeException("{{{$newKey}}} does not exists");
