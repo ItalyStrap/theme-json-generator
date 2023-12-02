@@ -7,7 +7,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color\Utilities;
 /**
  * @psalm-api
  */
-class MonochromaticColors implements ColorsGenerator
+class MonochromaticColorsExperimental implements ColorsGenerator
 {
     private ColorModifierInterface $colorModifier;
 

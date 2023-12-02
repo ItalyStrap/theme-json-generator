@@ -63,6 +63,32 @@ class ShadesGeneratorExperimental
         $this->increment_by = $increment_by;
     }
 
+	public function toColors(): array
+	{
+		$colors = [];
+		for ($i = $this->min; $i < $this->max; $i += $this->increment_by) {
+			$colors[$i] = $this->color->isDark()
+				? (new ColorModifier($this->color))->lighten($i / 10)
+				: (new ColorModifier($this->color))->darken($i / 10);
+		}
+
+		return $colors;
+	}
+
+	public function toPalettes(): array
+	{
+		$palettes = [];
+		foreach ($this->toColors() as $key => $color) {
+			$palettes[$key] = new Palette(
+				\sprintf('%s-%d', $this->slug, $key),
+				\sprintf("Shade of %s by %s%%", \ucfirst($this->slug), $key / 10),
+				$color
+			);
+		}
+
+		return $palettes;
+	}
+
     /**
      * This functionality create an array of shades of a given color
      * The created shades are from 10% to 100% of the given color
@@ -87,6 +113,19 @@ class ShadesGeneratorExperimental
                     ? (new ColorModifier($this->color))->lighten($i / 10)
                     : (new ColorModifier($this->color))->darken($i / 10)
             );
+
+			$r = $colors[$i]->color()->red();
+			$g = $colors[$i]->color()->green();
+			$b = $colors[$i]->color()->blue();
+
+//			var_dump($r, $g, $b);
+
+//			if ( $r === 0 && $g === 0 && $b === 0 ) {
+//				// This removes the current element from the array
+//				unset($colors[$i]);
+//				// This ensures that the loop will stop
+//				$i = $this->max;
+//			}
 
             $colorToCheck = (string)$colors[$i]->color()->toHex();
             if (

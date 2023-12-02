@@ -7,7 +7,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color\Utilities;
 /**
  * @psalm-api
  */
-class ComplementaryColors implements ColorsGenerator
+class ComplementaryColorsExperimental implements ColorsGenerator
 {
     private ColorModifierInterface $color;
 

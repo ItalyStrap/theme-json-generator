@@ -7,7 +7,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color\Utilities;
 /**
  * @psalm-api
  */
-class AchromaticColors implements ColorsGenerator
+class AchromaticColorsExperimental implements ColorsGenerator
 {
     public function generate(): array
     {

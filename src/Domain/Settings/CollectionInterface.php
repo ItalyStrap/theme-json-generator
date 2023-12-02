@@ -9,6 +9,8 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Settings;
  */
 interface CollectionInterface
 {
+    public function add(ItemInterface $item): self;
+
     /**
      * @param mixed $default
      * @return mixed

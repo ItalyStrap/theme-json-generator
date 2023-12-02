@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace ItalyStrap\Tests\Unit\Domain\Settings\Color\Utilities;
 
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color\Utilities\AchromaticColors;
+use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color\Utilities\AchromaticColorsExperimental;
 use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color\Utilities\ColorInfoInterface;
 
 class AchromaticColorsTest extends UnitTestCase
 {
-    protected function makeInstance(): AchromaticColors
+    protected function makeInstance(): AchromaticColorsExperimental
     {
-        return new AchromaticColors();
+        return new AchromaticColorsExperimental();
     }
 
     public function testItShouldReturnArrayWithColorInfoInterface(): void

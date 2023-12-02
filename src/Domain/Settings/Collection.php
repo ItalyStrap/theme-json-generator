@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Settings;
 
 use ItalyStrap\Config\AccessValueInArrayWithNotationTrait;
-use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Custom\Item;
+use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Custom\Custom;
 
 /**
  * @psalm-api
@@ -169,7 +169,7 @@ class Collection implements CollectionInterface
          *       for `custom.spacer.base` and if found will return the value from the custom collection.
          *       If any value in the Preset and Custom collection is found then the null default will be returned.
          */
-        $item = $this->get($newKey, $this->get(Item::CATEGORY . '.' . $newKey));
+        $item = $this->get($newKey, $this->get(Custom::CATEGORY . '.' . $newKey));
 
         if ($item === null) {
             throw new \RuntimeException("{{{$newKey}}} does not exists");

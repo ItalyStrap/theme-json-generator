@@ -10,7 +10,7 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Settings\CommonTrait;
 /**
  * @psalm-api
  */
-class Item implements ItemInterface
+class Custom implements ItemInterface
 {
     use CommonTrait;
 
@@ -32,11 +32,6 @@ class Item implements ItemInterface
     public function slug(): string
     {
         return $this->key;
-    }
-
-    public function value(): string
-    {
-        return $this->value;
     }
 
     public function prop(): string

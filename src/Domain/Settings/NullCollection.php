@@ -28,4 +28,9 @@ class NullCollection implements CollectionInterface
     {
         return (string)$default;
     }
+
+    public function add(ItemInterface $item): CollectionInterface
+    {
+        return $this;
+    }
 }

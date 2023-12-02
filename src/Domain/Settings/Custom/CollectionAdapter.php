@@ -42,7 +42,7 @@ class CollectionAdapter
                 continue;
             }
 
-            $processed[] = new Item($fullKey, (string)$value);
+            $processed[] = new Custom($fullKey, (string)$value);
         }
 
         return $processed;

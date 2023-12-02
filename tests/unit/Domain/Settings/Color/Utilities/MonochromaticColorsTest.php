@@ -8,13 +8,13 @@ use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color\Utilities\ColorInfo;
 use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color\Utilities\ColorInfoInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color\Utilities\ColorModifier;
-use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color\Utilities\MonochromaticColors;
+use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color\Utilities\MonochromaticColorsExperimental;
 
 class MonochromaticColorsTest extends UnitTestCase
 {
-    protected function makeInstance(ColorInfoInterface $color, array $steps): MonochromaticColors
+    protected function makeInstance(ColorInfoInterface $color, array $steps): MonochromaticColorsExperimental
     {
-        return new MonochromaticColors(new ColorModifier($color), $steps);
+        return new MonochromaticColorsExperimental(new ColorModifier($color), $steps);
     }
 
     public function testItShouldReturnArrayWithColorInfoInterface(): void
