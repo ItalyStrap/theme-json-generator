@@ -185,40 +185,39 @@ class CollectionIntegrationTest extends UnitTestCase
 //        codecept_debug($font->getFontPostscriptName());
 //        $font->close();
 
-		$relativePath = 'fixtures/fonts/';
-		$fontFace = [];
-		$files = \glob(\codecept_data_dir($relativePath . '**/*'), GLOB_BRACE);
-		foreach ($files as $file) {
-			break;
-			$font = \FontLib\Font::load($file);
-			if (!$font instanceof \FontLib\TrueType\File) {
-				continue;
-			}
+        $relativePath = 'fixtures/fonts/';
+        $fontFace = [];
+        $files = \glob(\codecept_data_dir($relativePath . '**/*'), GLOB_BRACE);
+        foreach ($files as $file) {
+            break;
+            $font = \FontLib\Font::load($file);
+            if (!$font instanceof \FontLib\TrueType\File) {
+                continue;
+            }
 
-			$font->parse();  // for getFontWeight() to work this call must be done first!
-//			codecept_debug($font->getFontName());
-//			codecept_debug($font->getFontSubfamily());
-//			codecept_debug($font->getFontSubfamilyID());
-//			codecept_debug($font->getFontFullName());
-//			codecept_debug($font->getFontVersion());
-//			codecept_debug($font->getFontWeight());
-			$fontFace[] = [
-				'fontFamily' => $font->getFontName(),
-				'fontStyle' => \mb_strtolower($font->getFontSubfamily()),
-				'fontWeight' => $font->getFontWeight(),
-				'src' => [
-					\sprintf(
-						'file:./%s',
-						$relativePath . \basename($file)
-					),
-				],
-			];
-			codecept_debug($font->getFontPostscriptName());
-			$font->close();
-//			break;
-		}
+            $font->parse();  // for getFontWeight() to work this call must be done first!
+//          codecept_debug($font->getFontName());
+//          codecept_debug($font->getFontSubfamily());
+//          codecept_debug($font->getFontSubfamilyID());
+//          codecept_debug($font->getFontFullName());
+//          codecept_debug($font->getFontVersion());
+//          codecept_debug($font->getFontWeight());
+            $fontFace[] = [
+                'fontFamily' => $font->getFontName(),
+                'fontStyle' => \mb_strtolower($font->getFontSubfamily()),
+                'fontWeight' => $font->getFontWeight(),
+                'src' => [
+                    \sprintf(
+                        'file:./%s',
+                        $relativePath . \basename($file)
+                    ),
+                ],
+            ];
+            codecept_debug($font->getFontPostscriptName());
+            $font->close();
+//          break;
+        }
 
-		codecept_debug($fontFace);
-
+        codecept_debug($fontFace);
     }
 }

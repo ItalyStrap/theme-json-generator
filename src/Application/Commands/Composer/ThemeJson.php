@@ -125,7 +125,7 @@ final class ThemeJson extends BaseCommand
         if ($data->get(SectionNames::VERSION) > 1) {
             // Search all php files in the `styles` directory using Glob
             $files = \glob($path . '/styles/*.php');
-            var_dump($files);
+//            var_dump($files);
         }
 
         try {
