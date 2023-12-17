@@ -29,6 +29,26 @@ class SpacingTest extends UnitTestCase
             ]
         ];
 
+        yield '1 value with int 0 without unit' => [
+            [0],
+            [
+                'top'       => '0',
+                'right'     => '0',
+                'bottom'    => '0',
+                'left'      => '0',
+            ]
+        ];
+
+        yield '1 value with string "0" without unit' => [
+            ['0'],
+            [
+                'top'       => '0',
+                'right'     => '0',
+                'bottom'    => '0',
+                'left'      => '0',
+            ]
+        ];
+
         yield '2 values'    => [
             ['0px', 'auto'],
             [
