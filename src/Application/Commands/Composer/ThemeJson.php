@@ -66,8 +66,8 @@ final class ThemeJson extends BaseCommand
         return Command::SUCCESS;
     }
 
-    public const TYPE_THEME = 'wordpress-theme';
-    public const THEME_JSON_KEY = 'theme-json';
+	public const COMPOSER_EXTRA_THEME_JSON_KEY = 'theme-json';
+	public const PACKAGE_TYPE = 'wordpress-theme';
     public const CALLBACK = 'callable';
 
     private function process(BaseComposer $composer, IOInterface $io): void
@@ -78,7 +78,7 @@ final class ThemeJson extends BaseCommand
         $vendorPath = $composer->getConfig()->get('vendor-dir');
         $rootPackagePath = dirname($vendorPath);
 
-        if ($rootPackage->getType() === self::TYPE_THEME) {
+        if ($rootPackage->getType() === self::PACKAGE_TYPE) {
             $this->writeFile($rootPackage, $rootPackagePath, $io);
             return;
         }
@@ -88,7 +88,7 @@ final class ThemeJson extends BaseCommand
             $constraint = $link->getConstraint();
             $package = $repo->findPackage($link->getTarget(), $constraint);
             $packagePath = $vendorPath . '/' . $link->getTarget();
-            if ($package && $package->getType() === self::TYPE_THEME) {
+            if ($package && $package->getType() === self::PACKAGE_TYPE) {
                 $this->writeFile($package, $packagePath, $io);
             }
         }
@@ -96,16 +96,13 @@ final class ThemeJson extends BaseCommand
 
     private function writeFile(PackageInterface $package, string $path, IOInterface $io): void
     {
-        $composer_extra = array_replace_recursive($this->getDefaultExtra(), $package->getExtra());
-        $this->config->merge($package->getExtra()[self::THEME_JSON_KEY] ?? []);
+        $this->config->merge($package->getExtra()[self::COMPOSER_EXTRA_THEME_JSON_KEY] ?? []);
 
-        /** @var array<string, mixed> $theme_json_config */
-        $theme_json_config = $composer_extra[self::THEME_JSON_KEY];
-
-        if (!is_callable($theme_json_config[self::CALLBACK])) {
+		$callback = $this->config->get(self::CALLBACK);
+        if (!is_callable($callback)) {
             throw new \RuntimeException(\sprintf(
                 'Maybe the %s is not a valid callable',
-                $theme_json_config[self::CALLBACK]
+                $callback
             ));
         }
 
@@ -130,13 +127,13 @@ final class ThemeJson extends BaseCommand
 
         try {
             ( new JsonFileWriter($path . '/theme.json') )
-                ->build($theme_json_config[self::CALLBACK]);
+                ->build($callback);
 
-            $path_for_theme_sass = $path . '/' . $theme_json_config[ 'path-for-theme-sass' ];
+			$path_for_theme_sass = $path . '/' . $this->config->get('path-for-theme-sass');
             if (\is_writable($path_for_theme_sass)) {
                 ( new ScssFileWriter(
                     \rtrim($path_for_theme_sass, '/') . '/theme.scss'
-                ) )->build($theme_json_config[self::CALLBACK]);
+                ) )->build($callback);
             }
         } catch (\Exception $e) {
             $io->write($e->getMessage());
