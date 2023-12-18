@@ -21,7 +21,8 @@
         "mexitek/phpcolors": "^1.0",
         "spatie/color": "~1.5.0",
         "psr/event-dispatcher": "^1.0",
-        "phenx/php-font-lib": "^0.5.4"
+        "phenx/php-font-lib": "^0.5.4",
+        "opis/json-schema": "^2.3"
     },
     "require-dev": {
         "lucatume/wp-browser": "^3.1",
