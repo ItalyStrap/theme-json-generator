@@ -16,11 +16,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Opis\JsonSchema\{
-	Validator,
-	ValidationResult,
-	Errors\ErrorFormatter,
-};
 
 /**
  * @psalm-api
@@ -119,8 +114,6 @@ final class ThemeJson extends BaseCommand
             return;
         }
 
-		$injector = new \Auryn\Injector();
-
         $data = clone $this->config;
         $data->merge((require $fileInput)());
 
@@ -141,7 +134,6 @@ final class ThemeJson extends BaseCommand
                 ) )->build($callback);
             }
 
-			$validator = new Validator();
         } catch (\Exception $e) {
             $io->write($e->getMessage());
         }
