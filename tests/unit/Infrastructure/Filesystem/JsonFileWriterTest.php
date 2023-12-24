@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\Tests\Unit\Infrastructure\Filesystem;
 
+use ItalyStrap\Config\Config;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\JsonFileWriter;
 
@@ -20,32 +21,16 @@ class JsonFileWriterTest extends UnitTestCase
     /**
      * @test
      */
-    public function itShouldBeInstantiatable()
-    {
-        $sut = $this->makeInstance();
-    }
-
-    /**
-     * @test
-     */
     public function itShouldReturnValidJson()
     {
         $sut = $this->makeInstance();
         $expected = '{"key": "value"}';
 
+        $data = new Config([
+            'key'   => 'value',
+        ]);
 
-//      $callable = function ( array $args ): array {
-//          return $this->getInputData();
-//      };
-
-        $callable = function (): array {
-//            $this->assertStringContainsString($path, $this->theme_json_path, '');
-            return [
-                'key'   => 'value',
-            ];
-        };
-
-        $sut->write($callable);
+        $sut->write($data);
 
         $this->assertJsonStringEqualsJsonFile($this->theme_json_path, $expected, '');
     }
