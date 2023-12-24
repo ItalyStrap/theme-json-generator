@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator\Application\Commands\WPCLI;
 
 use Exception;
+use ItalyStrap\Config\Config;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\JsonFileWriter;
 use WP_CLI;
 
@@ -73,10 +74,12 @@ final class ThemeJson
      * @param string $path
      * @param callable $callable
      */
-    private function loopsThemePathAndGenerateFile(string $path, callable $callable): void
+    private function loopsThemePathAndGenerateFile(string $path, callable $callback): void
     {
         try {
-            ( new JsonFileWriter($path) )->build($callable);
+            $result = (array)$callback();
+            $data = new Config($result);
+            ( new JsonFileWriter($path) )->write($data);
             WP_CLI::success(sprintf(
                 '%s was generated!',
                 $path

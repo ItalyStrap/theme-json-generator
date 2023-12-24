@@ -11,6 +11,7 @@ final class SectionNames
 {
     public const SCHEMA = '$schema';
     public const VERSION = 'version';
+    public const TITLE = 'title';
     public const SETTINGS = 'settings';
     public const STYLES = 'styles';
     public const CUSTOM_TEMPLATES = 'customTemplates';

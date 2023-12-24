@@ -76,7 +76,7 @@ trait CommonTrait
      */
     public function toArray(): array
     {
-        $result = \array_filter($this->properties, function ($value) {
+        $result = \array_filter($this->properties, static function ($value) {
             return $value !== '' && $value !== null;
         });
 

@@ -26,7 +26,7 @@ class ScssFileWriter implements FileBuilder
         $this->config = $config ?? new Config();
     }
 
-    public function build(callable $callable): void
+    public function write(ConfigInterface $data): void
     {
         if (\file_exists($this->path) && \is_file($this->path)) {
             \unlink($this->path);
@@ -38,11 +38,6 @@ class ScssFileWriter implements FileBuilder
             throw new \RuntimeException('The file is not writable');
         }
 
-        /**
-         * @var array<string|int, mixed>
-         */
-        $data = $callable();
-
         $_file->fwrite($this->generateScssContent($data));
         $_file = null;
     }
@@ -51,13 +46,11 @@ class ScssFileWriter implements FileBuilder
      * @param array<string|int, mixed> $data
      * @return string
      */
-    private function generateScssContent(array $data): string
+    private function generateScssContent(ConfigInterface $data): string
     {
         if ($data === []) {
             return '// No data are provided!';
         }
-
-        $this->config->merge($data);
 
         $content = '';
 
@@ -70,13 +63,13 @@ class ScssFileWriter implements FileBuilder
 
         foreach ($schema as $slug => $prefix) {
             /** @var array<string, string> $item */
-            foreach ((array) $this->config->get($slug) as $item) {
+            foreach ((array) $data->get($slug) as $item) {
                 $content .= $this->generateScssVariableAndCssVariable($item['slug'], $prefix);
             }
         }
 
         /** @var array<string|int, string> $custom */
-        $custom = (array) $this->config->get('settings.custom');
+        $custom = (array) $data->get('settings.custom');
         $custom = $this->flattenTree($custom);
 
 //      $map = '$wp-custom: (' . PHP_EOL;

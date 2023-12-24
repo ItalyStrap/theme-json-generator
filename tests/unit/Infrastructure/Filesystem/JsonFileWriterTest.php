@@ -45,7 +45,7 @@ class JsonFileWriterTest extends UnitTestCase
             ];
         };
 
-        $sut->build($callable);
+        $sut->write($callable);
 
         $this->assertJsonStringEqualsJsonFile($this->theme_json_path, $expected, '');
     }

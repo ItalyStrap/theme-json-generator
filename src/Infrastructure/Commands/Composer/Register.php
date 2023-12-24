@@ -20,14 +20,14 @@ final class Register implements PluginInterface, Capable, CommandProvider
     public function getCapabilities(): array
     {
         return [
-            CommandProvider::class => self::class,
+//            CommandProvider::class => self::class,
         ];
     }
 
     public function getCommands(): array
     {
         return [
-            new ThemeJson(new Config()),
+//            new ThemeJson(new Config()),
         ];
     }
 

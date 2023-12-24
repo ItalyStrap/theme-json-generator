@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem;
 
 use Composer\Json\JsonFile;
+use ItalyStrap\Config\ConfigInterface;
 
 class JsonFileWriter implements FileBuilder
 {
@@ -22,16 +23,14 @@ class JsonFileWriter implements FileBuilder
     /**
      * @throws \Exception
      */
-    public function build(callable $callable): void
+    public function write(ConfigInterface $data): void
     {
         $json_file = new ComposerJsonFileAdapter(new JsonFile($this->path));
 
-        $result = (array)$callable();
-
-        if (\count($result) === 0) {
-            throw new \RuntimeException('The theme.json is empty');
+        if (\count($data) === 0) {
+            throw new \RuntimeException('No data to write');
         }
 
-        $json_file->write($result);
+        $json_file->write($data->toArray());
     }
 }

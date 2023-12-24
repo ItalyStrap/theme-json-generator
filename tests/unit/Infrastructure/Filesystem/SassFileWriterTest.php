@@ -37,7 +37,7 @@ class SassFileWriterTest extends UnitTestCase
     {
 
         $sut = $this->makeInstance();
-        $sut->build(fn() => [
+        $sut->write(fn() => [
             'settings' => [
                 'custom'    => [
                     'alignment--center'             => 'center',
@@ -86,7 +86,7 @@ class SassFileWriterTest extends UnitTestCase
     {
 
         $sut = $this->makeInstance();
-        $sut->build(fn() => [
+        $sut->write(fn() => [
             'settings' => [
                 'custom'    => $settings,
             ]
@@ -175,7 +175,7 @@ class SassFileWriterTest extends UnitTestCase
     ) {
         $sut = $this->makeInstance();
 
-        $sut->build(function () use ($data) {
+        $sut->write(function () use ($data) {
             $theme = [
                 'settings' => $data
             ];
@@ -213,7 +213,7 @@ class SassFileWriterTest extends UnitTestCase
         $this->expectException('\Throwable');
         $this->expectException('\RuntimeException');
 
-        $sut->build(function () use ($custom) {
+        $sut->write(function () use ($custom) {
             $theme = [
                 'settings' => [
                     'custom'    => $custom

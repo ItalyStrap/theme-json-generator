@@ -8,8 +8,9 @@ use Composer\Command\BaseCommand;
 use Composer\Composer as BaseComposer;
 use Composer\IO\IOInterface;
 use Composer\Package\PackageInterface;
-use ItalyStrap\Config\Config;
 use ItalyStrap\Config\ConfigInterface;
+use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\FilesFinderTrait;
+use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\RootFolderTrait;
 use ItalyStrap\ThemeJsonGenerator\Domain\SectionNames;
 use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Collection;
 use ItalyStrap\ThemeJsonGenerator\Domain\Settings\CollectionInterface;
@@ -20,21 +21,19 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Opis\JsonSchema\{
-    Validator,
-    ValidationResult,
-    Errors\ErrorFormatter,
-};
 
 /**
  * @psalm-api
  */
-final class ThemeJson extends BaseCommand
+final class DumpCommand extends BaseCommand
 {
-    public const NAME = 'theme-json';
+    use RootFolderTrait;
+    use FilesFinderTrait;
 
-    protected static $defaultName = 'theme-json';
-    protected static $defaultDescription = 'Generate theme.json file';
+    public const NAME = 'dump';
+
+//    protected static $defaultName = 'dump';
+//    protected static $defaultDescription = 'Generate theme.json file';
     private ConfigInterface $config;
 
     public function __construct(ConfigInterface $config)
@@ -45,6 +44,8 @@ final class ThemeJson extends BaseCommand
 
     protected function configure(): void
     {
+        $this->setName(self::NAME);
+        $this->setDescription('Generate theme.json file');
         $this->setHelp('This command generate theme.json file');
 
         $this->addOption(
@@ -62,47 +63,25 @@ final class ThemeJson extends BaseCommand
     {
         $io = $this->getIO();
         $composer = $this->requireComposer();
+        $rootFolder = $this->rootFolder();
 
         // Get the value of --dry-run
         $dry_run = $input->getOption('dry-run');
 
-        $output->writeln('Start generating theme.json file');
-        $this->process($composer, $io);
-        $output->writeln('End generating theme.json file');
+        $output->writeln('<info>Generating theme.json file</info>');
+        $this->process($composer, $io, $rootFolder);
+        $output->writeln('<info>Generated theme.json file</info>');
 
         return Command::SUCCESS;
     }
 
     public const COMPOSER_EXTRA_THEME_JSON_KEY = 'theme-json';
-    public const PACKAGE_TYPE = 'wordpress-theme';
     public const CALLBACK = 'callable';
+    public const PATH_FOR_THEME_SASS = 'path-for-theme-sass';
 
-    private function process(BaseComposer $composer, IOInterface $io): void
+    private function process(BaseComposer $composer, IOInterface $io, string $rootFolder): void
     {
-        $rootPackage = $composer->getPackage();
-
-        /** @var string $vendorPath */
-        $vendorPath = $composer->getConfig()->get('vendor-dir');
-        $rootPackagePath = dirname($vendorPath);
-
-        if ($rootPackage->getType() === self::PACKAGE_TYPE) {
-            $this->writeFile($rootPackage, $rootPackagePath, $io);
-            return;
-        }
-
-        $repo = $composer->getRepositoryManager();
-        foreach ($rootPackage->getRequires() as $link) {
-            $constraint = $link->getConstraint();
-            $package = $repo->findPackage($link->getTarget(), $constraint);
-            $packagePath = $vendorPath . '/' . $link->getTarget();
-            if ($package && $package->getType() === self::PACKAGE_TYPE) {
-                $this->writeFile($package, $packagePath, $io);
-            }
-        }
-    }
-
-    private function writeFile(PackageInterface $package, string $path, IOInterface $io): void
-    {
+        $package = $composer->getPackage();
         $this->config->merge($package->getExtra()[self::COMPOSER_EXTRA_THEME_JSON_KEY] ?? []);
 
         $callback = $this->config->get(self::CALLBACK);
@@ -113,25 +92,33 @@ final class ThemeJson extends BaseCommand
             ));
         }
 
-        /**
-         * @todo some alternative to file name:
-         *       - theme.php
-         *       - theme.json.php
-         *       - theme.json.dist.php
-         */
-        $fileInput = $path . '/theme.php';
+        try {
+            $result = (array)$callback();
+            $data = clone $this->config;
+            $data->merge($result);
+            ( new JsonFileWriter($rootFolder . '/theme.json') )
+                ->write($data);
 
-        if (!\file_exists($fileInput) || !\is_readable($fileInput)) {
-            $io->write(\sprintf(
-                'File %s not found or not readable',
-                $fileInput
-            ));
-            return;
+            $path_for_theme_sass = $rootFolder . '/' . $this->config->get(self::PATH_FOR_THEME_SASS);
+            if (\is_writable($path_for_theme_sass)) {
+                ( new ScssFileWriter(
+                    \rtrim($path_for_theme_sass, '/') . '/theme.scss'
+                ) )->write($data);
+            }
+        } catch (\Exception $e) {
+            $io->write($e->getMessage());
         }
 
-        $validator = new Validator();
+        /**
+         * Let's test the new workflow
+         */
+        foreach ($this->findPhpFiles($rootFolder) as $file) {
+            $this->testNewWorkflow($file, $io);
+        }
+    }
 
-
+    private function testNewWorkflow(string $fileInput, IOInterface $io)
+    {
         $injector = new \Auryn\Injector();
         $collection = $injector->make(Collection::class);
         $container = $this->createContainer($injector, clone $this->config);
@@ -142,29 +129,7 @@ final class ThemeJson extends BaseCommand
 
         $data = clone $this->config;
         $data->merge((array)$injector->execute(require $fileInput));
-
-        if ($data->get(SectionNames::VERSION) > 1) {
-            // Search all php files in the `styles` directory using Glob
-            $files = \glob($path . '/styles/*.php');
-//            var_dump($files);
-        }
-
-        try {
-            $result = (array)$callback();
-            $data = clone $this->config;
-            $data->merge($result);
-            ( new JsonFileWriter($path . '/theme.json') )
-                ->write($data);
-
-            $path_for_theme_sass = $path . '/' . $this->config->get('path-for-theme-sass');
-            if (\is_writable($path_for_theme_sass)) {
-                ( new ScssFileWriter(
-                    \rtrim($path_for_theme_sass, '/') . '/theme.scss'
-                ) )->write($data);
-            }
-        } catch (\Exception $e) {
-            $io->write($e->getMessage());
-        }
+        var_dump($data);
     }
 
     private function createContainer($injector, $config): ContainerInterface
@@ -200,18 +165,5 @@ final class ThemeJson extends BaseCommand
                 return (bool) array_filter($details);
             }
         };
-    }
-
-    /**
-     * @return array<string, array<string, mixed>>
-     */
-    private function getDefaultExtra(): array
-    {
-        return [
-            'theme-json' => [
-                self::CALLBACK => false,
-                'path-for-theme-sass'   => '',
-            ],
-        ];
     }
 }
