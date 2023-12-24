@@ -143,7 +143,7 @@ class ThemeJsonTest extends UnitTestCase
         $sut = $this->makeInstance();
 //      $sut($this->makeComposer(), $this->makeIo());
 
-        $theme_json_file_path = $theme_json_file_path . '/italystrap/themejsongenerator/theme.json';
+        $theme_json_file_path .= '/italystrap/themejsongenerator/theme.json';
         $this->assertFileExists($theme_json_file_path, '');
         $this->assertFileIsReadable($theme_json_file_path, '');
         $this->assertFileIsWritable($theme_json_file_path, '');

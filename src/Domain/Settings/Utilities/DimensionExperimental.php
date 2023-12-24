@@ -14,7 +14,7 @@ final class DimensionExperimental
 
     public function __construct(string $value, string $unit = '')
     {
-         \preg_match_all('/([0-9]+)([a-z%]+)/', $value, $matches);
+         \preg_match_all('/(\d+)([a-z%]+)/', $value, $matches);
 
          $value = $matches[1][0] ?? '';
          $unit = $matches[2][0] ?? '';

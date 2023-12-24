@@ -176,10 +176,9 @@ class SassFileWriterTest extends UnitTestCase
         $sut = $this->makeInstance();
 
         $sut->write(function () use ($data) {
-            $theme = [
+            return  [
                 'settings' => $data
             ];
-            return  $theme;
         });
 
         $this->assertStringEqualsFile(
@@ -214,12 +213,11 @@ class SassFileWriterTest extends UnitTestCase
         $this->expectException('\RuntimeException');
 
         $sut->write(function () use ($custom) {
-            $theme = [
+            return  [
                 'settings' => [
                     'custom'    => $custom
                 ]
             ];
-            return  $theme;
         });
 
         \unlink($this->theme_sass_path);

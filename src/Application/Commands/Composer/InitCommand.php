@@ -102,8 +102,7 @@ TEMPLATE;
         $data = $this->associativeFromPath($themeJsonPath);
 
         $dataExported = VarExporter::export($data, VarExporter::ADD_RETURN | VarExporter::TRAILING_COMMA_IN_ARRAY, 1);
-
-        $dataExported = \str_replace(
+        return \str_replace(
             [
                 "'\$schema'",
                 "'version'",
@@ -114,6 +113,5 @@ TEMPLATE;
             ],
             $dataExported
         );
-        return $dataExported;
     }
 }

@@ -73,7 +73,7 @@ class ScssFileWriter implements FileBuilder
         $custom = $this->flattenTree($custom);
 
 //      $map = '$wp-custom: (' . PHP_EOL;
-        foreach ($custom as $property_name => $_value) {
+        foreach (\array_keys($custom) as $property_name) {
             $content .= $this->generateScssVariableAndCssVariable($property_name, '--wp--custom');
 //          $map .= $this->generateScssMap( $property_name, '--wp-custom' );
         }

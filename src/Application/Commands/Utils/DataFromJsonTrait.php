@@ -35,7 +35,7 @@ trait DataFromJsonTrait
             throw new \RuntimeException(\sprintf(
                 'Unable to decode json from file "%s"',
                 $e->getMessage()
-            ));
+            ), $e->getCode(), $e);
         }
 
         return $data;
