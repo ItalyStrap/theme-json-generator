@@ -8,14 +8,29 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color\Palette;
 
 class ShadesGeneratorExperimental
 {
+    /**
+     * @var int
+     */
     public const MIN = 100;
+
+    /**
+     * @var int
+     */
     public const MAX = 1000;
+
+    /**
+     * @var int
+     */
     public const INCREMENT_BY = 100;
 
     private ColorInfoInterface $color;
+
     private string $slug;
+
     private int $min;
+
     private int $max;
+
     private int $increment_by;
 
     public static function fromPalette(

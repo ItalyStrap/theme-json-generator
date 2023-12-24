@@ -111,8 +111,10 @@ class Collection implements CollectionInterface
                         if (\is_string($value)) {
                             $value = $this->extractPlaceholders($value);
                         }
+
                         $newItems[$key] = $value;
                     }
+
                     return $newItems;
                 },
                 $collection
@@ -172,7 +174,7 @@ class Collection implements CollectionInterface
         $item = $this->get($newKey, $this->get(Custom::CATEGORY . '.' . $newKey));
 
         if ($item === null) {
-            throw new \RuntimeException("{{{$newKey}}} does not exists");
+            throw new \RuntimeException(sprintf('{{%s}} does not exists', $newKey));
         }
 
         return \str_replace($shiftedItem, $item->var(), $string);

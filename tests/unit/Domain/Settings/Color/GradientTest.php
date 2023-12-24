@@ -13,6 +13,7 @@ class GradientTest extends UnitTestCase
     use CommonTrait;
 
     private string $slug = 'base';
+
     private string $name = 'Base';
 
     private function makeInstance(): Gradient

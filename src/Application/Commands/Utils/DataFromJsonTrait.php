@@ -31,11 +31,11 @@ trait DataFromJsonTrait
 
         try {
             $data = \json_decode($json, $associative, 512, JSON_THROW_ON_ERROR);
-        } catch (\JsonException $e) {
+        } catch (\JsonException $jsonException) {
             throw new \RuntimeException(\sprintf(
                 'Unable to decode json from file "%s"',
-                $e->getMessage()
-            ), $e->getCode(), $e);
+                $jsonException->getMessage()
+            ), $jsonException->getCode(), $jsonException);
         }
 
         return $data;

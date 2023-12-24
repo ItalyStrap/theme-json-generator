@@ -10,17 +10,18 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Settings\Utilities;
 final class DimensionExperimental
 {
     private string $value;
+
     private string $unit;
 
     public function __construct(string $value, string $unit = '')
     {
-         \preg_match_all('/(\d+)([a-z%]+)/', $value, $matches);
+         \preg_match_all('#(\d+)([a-z%]+)#', $value, $matches);
 
          $value = $matches[1][0] ?? '';
          $unit = $matches[2][0] ?? '';
 
         if (!\in_array($unit, ['px', 'rem', 'em', '%'], true)) {
-            throw new \InvalidArgumentException("Unit '{$unit}' is not supported.");
+            throw new \InvalidArgumentException(sprintf('Unit \'%s\' is not supported.', $unit));
         }
 
         $this->value = $value;

@@ -11,8 +11,19 @@ final class Color implements ArrayableInterface
 {
     use CommonTrait;
 
+    /**
+     * @var string
+     */
     public const BACKGROUND = 'background';
+
+    /**
+     * @var string
+     */
     public const GRADIENT = 'gradient';
+
+    /**
+     * @var string
+     */
     public const TEXT = 'text';
 
     public function background(string $value): self

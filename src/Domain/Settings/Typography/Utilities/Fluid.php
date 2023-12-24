@@ -9,12 +9,23 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Settings\Typography\Utilities;
  */
 class Fluid
 {
+    /**
+     * @var string
+     */
     public const KEY = 'fluid';
 
+    /**
+     * @var string
+     */
     public const MIN = 'min';
+
+    /**
+     * @var string
+     */
     public const MAX = 'max';
 
     private string $min;
+
     private string $max;
 
     public function __construct(string $min, string $max)

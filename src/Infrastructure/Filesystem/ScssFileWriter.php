@@ -77,6 +77,7 @@ class ScssFileWriter implements FileBuilder
             $content .= $this->generateScssVariableAndCssVariable($property_name, '--wp--custom');
 //          $map .= $this->generateScssMap( $property_name, '--wp-custom' );
         }
+
 //      $map .= ');' . PHP_EOL;
 
 //      return $content . $map;

@@ -15,10 +15,15 @@ class Palette implements ItemInterface
 {
     use CommonTrait;
 
+    /**
+     * @var string
+     */
     public const CATEGORY = 'color';
 
     private string $slug;
+
     private string $name;
+
     private ColorInfoInterface $color;
 
     public function __construct(string $slug, string $name, ColorInfoInterface $color)

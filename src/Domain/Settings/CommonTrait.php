@@ -54,7 +54,7 @@ trait CommonTrait
 
     private function isValidSlug(string $slug): void
     {
-        if (\preg_match('/\s/', $slug) || \preg_match('/[A-Z]/', $slug)) {
+        if (\preg_match('#\s#', $slug) || \preg_match('#[A-Z]#', $slug)) {
             throw new \Exception('Slug must be lowercase and without spaces');
         }
     }
@@ -68,7 +68,7 @@ trait CommonTrait
     private function camelToUnderscore(string $string, string $us = '-'): string
     {
         return strtolower((string)preg_replace(
-            '/(?<=\d)(?=[A-Za-z])|(?<=[A-Za-z])(?=\d)|(?<=[a-z])(?=[A-Z])/',
+            '#(?<=\d)(?=[A-Za-z])|(?<=[A-Za-z])(?=\d)|(?<=[a-z])(?=[A-Z])#',
             $us,
             $string
         ));
@@ -76,7 +76,7 @@ trait CommonTrait
 
     private function assertSlugIsWellFormed(string $slug): void
     {
-        if (\preg_match('/\s/', $slug)) {
+        if (\preg_match('#\s#', $slug)) {
             throw new \Exception(\sprintf(
                 'Slug with spaces is not allowed, got %s',
                 $slug

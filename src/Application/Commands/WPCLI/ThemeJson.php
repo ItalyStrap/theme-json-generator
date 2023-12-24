@@ -21,6 +21,9 @@ use function sprintf;
  */
 final class ThemeJson
 {
+    /**
+     * @var string
+     */
     public const NAME = 'theme-json';
 
     /**
@@ -84,8 +87,8 @@ final class ThemeJson
                 '%s was generated!',
                 $path
             ));
-        } catch (Exception $e) {
-            WP_CLI::line($e->getMessage());
+        } catch (Exception $exception) {
+            WP_CLI::line($exception->getMessage());
         }
     }
 }

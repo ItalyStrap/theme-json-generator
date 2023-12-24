@@ -37,8 +37,8 @@ class ValidateCommand extends BaseCommand
             if (!\file_exists($schemaPath) || $this->isFileSchemaOlderThanOneWeek($schemaPath)) {
                 $this->createFileSchema($schemaPath);
             }
-        } catch (\Exception $e) {
-            $output->writeln('<error>Errore: ' . $e->getMessage() . '</error>');
+        } catch (\Exception $exception) {
+            $output->writeln('<error>Errore: ' . $exception->getMessage() . '</error>');
             return Command::FAILURE;
         }
 

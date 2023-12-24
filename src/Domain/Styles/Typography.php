@@ -11,13 +11,44 @@ final class Typography implements ArrayableInterface
 {
     use CommonTrait;
 
+    /**
+     * @var string
+     */
     public const FONT_FAMILY       = 'fontFamily';
+
+    /**
+     * @var string
+     */
     public const FONT_SIZE         = 'fontSize';
+
+    /**
+     * @var string
+     */
     public const FONT_STYLE        = 'fontStyle';
+
+    /**
+     * @var string
+     */
     public const FONT_WEIGHT       = 'fontWeight';
+
+    /**
+     * @var string
+     */
     public const LETTER_SPACING    = 'letterSpacing';
+
+    /**
+     * @var string
+     */
     public const LINE_HEIGHT       = 'lineHeight';
+
+    /**
+     * @var string
+     */
     public const TEXT_DECORATION   = 'textDecoration';
+
+    /**
+     * @var string
+     */
     public const TEXT_TRANSFORM    = 'textTransform';
 
     public function fontFamily(string $value): self

@@ -14,7 +14,7 @@ class MonochromaticColorsExperimental implements ColorsGenerator
     /**
      * @var array<array-key, int|float>
      */
-    private array $steps;
+    private array $steps = [];
 
     /**
      * @param array<array-key, int|float> $steps

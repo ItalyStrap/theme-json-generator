@@ -15,10 +15,15 @@ class Gradient implements ItemInterface
 {
     use CommonTrait;
 
+    /**
+     * @var string
+     */
     public const CATEGORY = 'gradient';
 
     private string $slug;
+
     private string $name;
+
     private GradientInterface $gradient;
 
     public function __construct(string $slug, string $name, GradientInterface $gradient)

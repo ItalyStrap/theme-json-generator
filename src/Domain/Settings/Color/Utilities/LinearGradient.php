@@ -12,6 +12,7 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color\Palette;
 class LinearGradient implements GradientInterface
 {
     private string $direction;
+
     private array $colors;
 
     public function __construct(string $direction, Palette ...$colors)
@@ -25,7 +26,7 @@ class LinearGradient implements GradientInterface
         return \sprintf(
             'linear-gradient(%s, %s)',
             $this->direction === '' ? 'to bottom' : $this->direction,
-            \implode(', ', \array_map(fn(Palette $color) => $color->var(), $this->colors))
+            \implode(', ', \array_map(static fn(Palette $color) => $color->var(), $this->colors))
         );
     }
 }

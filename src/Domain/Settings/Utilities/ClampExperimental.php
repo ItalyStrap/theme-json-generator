@@ -10,7 +10,9 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Settings\Utilities;
 class ClampExperimental
 {
     private string $value;
+
     private string $min;
+
     private string $max;
 
     public function __construct(

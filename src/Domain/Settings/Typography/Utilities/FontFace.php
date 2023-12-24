@@ -10,9 +10,13 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Settings\Typography\Utilities;
 class FontFace
 {
     private string $fontFamily;
+
     private string $fontWeight;
+
     private string $fontStyle;
+
     private string $fontStretch;
+
     private array $src;
 
     public function __construct(

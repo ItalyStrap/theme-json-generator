@@ -19,6 +19,7 @@ final class ColorInfo implements ColorInfoInterface
 
     /**
      * Luminance of #808080 or rgb(128,128,128) or hsl(0,0%,50%)
+     * @var float
      */
     public const MEDIUM_LUMINANCE = 0.21951971807487;
 
@@ -74,6 +75,7 @@ final class ColorInfo implements ColorInfoInterface
 
         return ( $colors[1] + 0.05 ) / ( $colors[0] + 0.05 );
     }
+
     /**
      * @return string|int
      */

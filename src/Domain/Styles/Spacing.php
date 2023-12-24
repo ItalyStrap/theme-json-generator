@@ -14,9 +14,24 @@ final class Spacing implements ArrayableInterface
 {
     use CommonTrait;
 
+    /**
+     * @var string
+     */
     public const TOP = 'top';
+
+    /**
+     * @var string
+     */
     public const RIGHT = 'right';
+
+    /**
+     * @var string
+     */
     public const BOTTOM = 'bottom';
+
+    /**
+     * @var string
+     */
     public const LEFT = 'left';
 
     public function top(string $value): self
@@ -143,7 +158,7 @@ final class Spacing implements ArrayableInterface
     private function assertPropertiesHasAllFourValuesAreEqual(array $properties): bool
     {
 
-        $propertiesFiltered = \array_map(fn($value) => \preg_replace('/\D/', '', $value), $properties);
+        $propertiesFiltered = \array_map(static fn($value) => \preg_replace('#\D#', '', $value), $properties);
 
         return \count(\array_unique($propertiesFiltered)) === 1 && \count($this->properties) === 4;
     }

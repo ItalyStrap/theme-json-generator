@@ -14,15 +14,19 @@ class Duotone implements ItemInterface
 {
     use CommonTrait;
 
+    /**
+     * @var string
+     */
     public const CATEGORY = 'duotone';
 
     private string $name;
+
     private string $slug;
 
     /**
      * @var array<array-key, string> $colors
      */
-    private array $colors;
+    private array $colors = [];
 
     public function __construct(string $slug, string $name, Palette ...$colors)
     {
@@ -51,6 +55,6 @@ class Duotone implements ItemInterface
      */
     private function assertValidColors(Palette ...$colors): array
     {
-        return \array_map(fn(Palette $color) => (string)$color->color()->toRgba(), $colors);
+        return \array_map(static fn(Palette $color) => (string)$color->color()->toRgba(), $colors);
     }
 }

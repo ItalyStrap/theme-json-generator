@@ -30,6 +30,9 @@ final class DumpCommand extends BaseCommand
     use RootFolderTrait;
     use FilesFinderTrait;
 
+    /**
+     * @var string
+     */
     public const NAME = 'dump';
 
 //    protected static $defaultName = 'dump';
@@ -75,8 +78,19 @@ final class DumpCommand extends BaseCommand
         return Command::SUCCESS;
     }
 
+    /**
+     * @var string
+     */
     public const COMPOSER_EXTRA_THEME_JSON_KEY = 'theme-json';
+
+    /**
+     * @var string
+     */
     public const CALLBACK = 'callable';
+
+    /**
+     * @var string
+     */
     public const PATH_FOR_THEME_SASS = 'path-for-theme-sass';
 
     private function process(BaseComposer $composer, IOInterface $io, string $rootFolder): void
@@ -105,8 +119,8 @@ final class DumpCommand extends BaseCommand
                     \rtrim($path_for_theme_sass, '/') . '/theme.scss'
                 ) )->write($data);
             }
-        } catch (\Exception $e) {
-            $io->write($e->getMessage());
+        } catch (\Exception $exception) {
+            $io->write($exception->getMessage());
         }
 
         /**
@@ -136,6 +150,7 @@ final class DumpCommand extends BaseCommand
     {
         return new class ($injector, $config) implements ContainerInterface {
             private \Auryn\Injector $injector;
+
             private ConfigInterface $config;
 
             public function __construct(\Auryn\Injector $injector, ConfigInterface $config)
@@ -147,7 +162,7 @@ final class DumpCommand extends BaseCommand
             public function get(string $id)
             {
                 if (!$this->has($id)) {
-                    throw new class ("Service with ID {$id} not found.") extends \Exception implements \Psr\Container\NotFoundExceptionInterface {
+                    throw new class (sprintf('Service with ID %s not found.', $id)) extends \Exception implements \Psr\Container\NotFoundExceptionInterface {
                     };
                 }
 

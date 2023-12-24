@@ -81,7 +81,7 @@ class ThemeJsonTest extends UnitTestCase
         $this->rootPackage->getType()->willReturn('wordpress-theme');
         $this->rootPackage->getExtra()->willReturn([
             'theme-json' => [
-                'callable' => fn (): array => ['key' => 'value'],
+                'callable' => static fn(): array => ['key' => 'value'],
                 'path-for-theme-sass'   => 'assets/',
             ],
         ]);
@@ -124,7 +124,7 @@ class ThemeJsonTest extends UnitTestCase
         $this->rootPackage->getType()->willReturn('wordpress-theme');
         $this->rootPackage->getExtra()->willReturn([
             'theme-json' => [
-                'callable' => fn (): array => ['key' => 'value'],
+                'callable' => static fn(): array => ['key' => 'value'],
             ],
         ]);
 

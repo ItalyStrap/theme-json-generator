@@ -11,9 +11,24 @@ final class Border implements ArrayableInterface
 {
     use CommonTrait;
 
+    /**
+     * @var string
+     */
     public const COLOR = 'color';
+
+    /**
+     * @var string
+     */
     public const RADIUS = 'radius';
+
+    /**
+     * @var string
+     */
     public const STYLE = 'style';
+
+    /**
+     * @var string
+     */
     public const WIDTH = 'width';
 
     public function color(string $value): self

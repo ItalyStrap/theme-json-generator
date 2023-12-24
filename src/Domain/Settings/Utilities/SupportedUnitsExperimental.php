@@ -18,7 +18,7 @@ class SupportedUnitsExperimental implements UnitInterfaceExperimental
     {
         foreach ($units as $unit) {
             if (!in_array($unit, self::VALID_UNITS)) {
-                throw new \InvalidArgumentException("Unit '{$unit}' is not a valid CSS unit.");
+                throw new \InvalidArgumentException(sprintf('Unit \'%s\' is not a valid CSS unit.', $unit));
             }
         }
 

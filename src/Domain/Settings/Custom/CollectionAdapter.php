@@ -12,7 +12,7 @@ class CollectionAdapter
     /**
      * @var array<string, mixed>
      */
-    private array $collection;
+    private array $collection = [];
 
     /**
      * @param array<string, mixed> $collection

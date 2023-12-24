@@ -14,6 +14,7 @@ final class ColorModifier implements ColorModifierInterface
     private ColorInfoInterface $color;
 
     private ColorFactoryInterface $color_factory;
+
     private string $initialType;
 
     /**
@@ -190,9 +191,9 @@ final class ColorModifier implements ColorModifierInterface
      */
     private function mixRgb(ColorInfoInterface $color_1, ColorInfoInterface $color_2, float $weight = 0.5): array
     {
-        $f = fn(int $x): float => $weight * $x;
-        $g = fn(int $x): float => ( 1 - $weight ) * $x;
-        $h = fn(float $x, float $y): float => \round($x + $y);
+        $f = static fn(int $x): float => $weight * $x;
+        $g = static fn(int $x): float => ( 1 - $weight ) * $x;
+        $h = static fn(float $x, float $y): float => \round($x + $y);
 
         return \array_map(
             $h,

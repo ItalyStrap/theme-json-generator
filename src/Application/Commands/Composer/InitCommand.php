@@ -21,6 +21,9 @@ class InitCommand extends BaseCommand
     use FilesFinderTrait;
     use DataFromJsonTrait;
 
+    /**
+     * @var string
+     */
     public const ENTRY_POINT_TEMPLATE = <<<'TEMPLATE'
 <?php
 
@@ -78,7 +81,7 @@ TEMPLATE;
 
             try {
                 FileWriter::writeFile($themePhpPath, $content, 0666);
-            } catch (FileWriterException $e) {
+            } catch (FileWriterException $fileWriterException) {
                 $output->writeln(\sprintf(
                     'Entry file %s cannot be created because of an error',
                     $phpFileName

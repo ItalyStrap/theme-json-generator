@@ -15,10 +15,15 @@ class FontSize implements ItemInterface
 {
     use CommonTrait;
 
+    /**
+     * @var string
+     */
     public const CATEGORY = 'fontSize';
 
     private string $slug;
+
     private string $name;
+
     private string $size;
 
     private ?Fluid $fluid;
@@ -38,6 +43,6 @@ class FontSize implements ItemInterface
             'name' => $this->name,
             'size' => $this->size,
             'fluid' => $this->fluid,
-        ], fn($value) => null !== $value);
+        ], static fn($value) => null !== $value);
     }
 }

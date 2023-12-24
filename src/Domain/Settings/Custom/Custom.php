@@ -14,10 +14,15 @@ class Custom implements ItemInterface
 {
     use CommonTrait;
 
+    /**
+     * @var string
+     */
     public const CATEGORY = 'custom';
 
     private string $key;
+
     private string $value;
+
     private string $name;
 
     public function __construct(
