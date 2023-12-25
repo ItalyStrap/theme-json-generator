@@ -45,6 +45,7 @@ class ValidateCommand extends BaseCommand
         $jsonFiles = $this->findJsonFiles($rootFolder);
 
         foreach ($jsonFiles as $file) {
+			$output->writeln('========================');
             $this->validateJsonFile($file, $output, $schemaPath);
         }
 
@@ -56,26 +57,20 @@ class ValidateCommand extends BaseCommand
         OutputInterface $output,
         string $schemaPath
     ): void {
-        $output->writeln([
-            '========================',
-            \sprintf(
-                'Validating <info>%s</info>',
-                \basename($file)
-            ),
-        ]);
+        $output->writeln(\sprintf(
+			'Validating <info>%s</info>',
+			\basename($file)
+		));
 
         $validator = new Validator();
         $data = $this->objectFromPath($file);
         $validator->validate($data, (object)['$ref' => 'file://' . \realpath($schemaPath)]);
 
         if ($validator->isValid()) {
-            $output->writeln([
-                \sprintf(
-                    '<info>%s</info> is valid',
-                    \basename($file)
-                ),
-                '========================',
-            ]);
+            $output->writeln(\sprintf(
+				'<info>%s</info> is valid',
+				\basename($file)
+			));
 
             return;
         }

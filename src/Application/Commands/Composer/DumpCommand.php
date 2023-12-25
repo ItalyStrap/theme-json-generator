@@ -126,12 +126,12 @@ final class DumpCommand extends BaseCommand
         /**
          * Let's test the new workflow
          */
-        foreach ($this->findPhpFiles($rootFolder) as $file) {
-            $this->testNewWorkflow($file, $io);
-        }
+//        foreach ($this->findPhpFiles($rootFolder) as $file) {
+//            $this->testNewWorkflow($file);
+//        }
     }
 
-    private function testNewWorkflow(string $fileInput, IOInterface $io)
+    private function testNewWorkflow(string $fileInput)
     {
         $injector = new \Auryn\Injector();
         $collection = $injector->make(Collection::class);
@@ -143,7 +143,7 @@ final class DumpCommand extends BaseCommand
 
         $data = clone $this->config;
         $data->merge((array)$injector->execute(require $fileInput));
-        var_dump($data);
+//        var_dump($data);
     }
 
     private function createContainer($injector, $config): ContainerInterface

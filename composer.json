@@ -12,7 +12,7 @@
             "role": "Developer"
         }
     ],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "require": {
         "php" : ">=7.4",
         "composer/composer": "^2.1",
@@ -20,6 +20,7 @@
 
         "italystrap/config": "^2.4",
         "italystrap/empress": "^2.0",
+        "italystrap/finder": "dev-master",
 
         "mexitek/phpcolors": "^1.0",
         "spatie/color": "~1.5.0",
