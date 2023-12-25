@@ -46,7 +46,7 @@ class ValidateCommand extends BaseCommand
 
         foreach ($jsonFiles as $file) {
             $output->writeln('========================');
-            $this->validateJsonFile($file, $output, $schemaPath);
+            $this->validateJsonFile((string)$file, $output, $schemaPath);
         }
 
         return Command::SUCCESS;

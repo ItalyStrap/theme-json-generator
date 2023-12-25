@@ -126,9 +126,9 @@ final class DumpCommand extends BaseCommand
         /**
          * Let's test the new workflow
          */
-//        foreach ($this->findPhpFiles($rootFolder) as $file) {
-//            $this->testNewWorkflow($file);
-//        }
+        foreach ($this->findPhpFiles($rootFolder) as $file) {
+            $this->testNewWorkflow((string)$file);
+        }
     }
 
     private function testNewWorkflow(string $fileInput)
@@ -177,7 +177,7 @@ final class DumpCommand extends BaseCommand
             private function injectorHas(string $id): bool
             {
                 $details = $this->injector->inspect($id, 31);
-                return (bool) array_filter($details);
+                return (bool) \array_filter($details);
             }
         };
     }
