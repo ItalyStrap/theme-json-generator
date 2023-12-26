@@ -2,6 +2,9 @@ DOCKER_FOLDER = .docker
 DOCKER_DIR = cd $(DOCKER_FOLDER) &&
 HOST_OWNER = $(shell id -u):$(shell id -g)
 FILES_OWNERSHIP = sudo chown -R $(HOST_OWNER) .
+DB_USER = $(shell cat .docker/.env | grep DB_USER | cut -d '=' -f2)
+DB_PASSWORD = $(shell cat .docker/.env | grep DB_PASSWORD | cut -d '=' -f2)
+DB_NAME = $(shell cat .docker/.env | grep DB_NAME | cut -d '=' -f2)
 
 default: help
 
@@ -43,6 +46,12 @@ down:	### Stop the containers inside the ./docker folder
 	@echo "Stopping the containers"
 	@$(DOCKER_DIR) docker-compose down --remove-orphans --volumes
 	@echo "Containers stopped"
+
+.PHONY: db/create
+db/create: up	### Create the database for the tests
+	@echo "Creating the database for the tests"
+	@$(DOCKER_DIR) docker-compose exec mysql mysql -u $(DB_USER) -p$(DB_PASSWORD) -e "CREATE DATABASE IF NOT EXISTS $(DB_NAME);"
+	@echo "Database created"
 
 # Composer commands
 
