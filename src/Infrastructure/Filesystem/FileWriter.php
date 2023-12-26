@@ -6,7 +6,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem;
 
 use ItalyStrap\Config\ConfigInterface;
 
-interface FileBuilder
+interface FileWriter
 {
     /**
      * @throws \Exception

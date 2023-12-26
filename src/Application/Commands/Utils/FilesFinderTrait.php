@@ -37,7 +37,7 @@ trait FilesFinderTrait
     private function findPhpFiles(string $rootFolder): iterable
     {
         $rootPhpEntryPoint = $rootFolder . '/theme.json.dist.php';
-        if (\file_exists($rootPhpEntryPoint)) {
+        if (!\file_exists($rootPhpEntryPoint)) {
             return [];
         }
 

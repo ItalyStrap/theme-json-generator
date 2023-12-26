@@ -6,7 +6,7 @@ namespace ItalyStrap\Tests\Unit\Infrastructure\Filesystem;
 
 use ItalyStrap\Config\Config;
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FileBuilder;
+use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FileWriter;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\ScssFileWriter;
 
 class SassFileWriterTest extends UnitTestCase

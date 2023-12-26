@@ -35,8 +35,6 @@ final class DumpCommand extends BaseCommand
      */
     public const NAME = 'dump';
 
-//    protected static $defaultName = 'dump';
-//    protected static $defaultDescription = 'Generate theme.json file';
     private ConfigInterface $config;
 
     public function __construct(ConfigInterface $config)
@@ -143,7 +141,6 @@ final class DumpCommand extends BaseCommand
 
         $data = clone $this->config;
         $data->merge((array)$injector->execute(require $fileInput));
-//        var_dump($data);
     }
 
     private function createContainer($injector, $config): ContainerInterface

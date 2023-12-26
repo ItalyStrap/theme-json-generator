@@ -7,7 +7,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem;
 use Composer\Json\JsonFile;
 use ItalyStrap\Config\ConfigInterface;
 
-class JsonFileWriter implements FileBuilder
+class JsonFileWriter implements FileWriter
 {
     private string $path;
 
