@@ -30,7 +30,7 @@ class Custom implements ItemInterface
         string $value
     ) {
         $this->key = $key;
-        $this->name = \ucfirst(\str_replace('.', ' ', $this->slug()));
+        $this->name = \ucfirst(\str_replace('.', ' ', $this->key));
         $this->value = $value;
     }
 
@@ -44,7 +44,7 @@ class Custom implements ItemInterface
         return \sprintf(
             '--wp--%s--%s',
             $this->category(),
-            $this->camelToUnderscore(\str_replace('.', '--', $this->slug()))
+            $this->camelToUnderscore(\str_replace('.', '--', $this->key))
         );
     }
 
