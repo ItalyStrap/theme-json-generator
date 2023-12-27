@@ -48,6 +48,9 @@ class Custom implements ItemInterface
         );
     }
 
+    /**
+     * @return array{key: string, name: string, value: string}
+     */
     public function toArray(): array
     {
         return [

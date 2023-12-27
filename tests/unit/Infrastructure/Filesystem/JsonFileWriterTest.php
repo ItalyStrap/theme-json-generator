@@ -21,7 +21,7 @@ class JsonFileWriterTest extends UnitTestCase
     /**
      * @test
      */
-    public function itShouldReturnValidJson()
+    public function itShouldReturnValidJson(): void
     {
         $sut = $this->makeInstance();
         $expected = '{"key": "value"}';

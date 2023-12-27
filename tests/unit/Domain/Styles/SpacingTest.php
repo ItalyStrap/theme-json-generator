@@ -91,7 +91,7 @@ class SpacingTest extends UnitTestCase
     /**
      * @dataProvider valueProvider
      */
-    public function testItShouldReturnArrayWithSpacingPropsFor(array $value, array $expected)
+    public function testItShouldReturnArrayWithSpacingPropsFor(array $value, array $expected): void
     {
         $sut = $this->makeInstance();
         $sut->shorthand($value);
@@ -124,7 +124,7 @@ class SpacingTest extends UnitTestCase
     /**
      * @dataProvider methodsProvider
      */
-    public function testItShouldReturnAnArray(string $method, string $value)
+    public function testItShouldReturnAnArray(string $method, string $value): void
     {
 
         $sut = $this->makeInstance();
@@ -134,7 +134,7 @@ class SpacingTest extends UnitTestCase
         $this->assertIsArray($sut->toArray(), '');
     }
 
-    public function testItShouldReturnTheCorrectValue()
+    public function testItShouldReturnTheCorrectValue(): void
     {
 
         $sut = $this->makeInstance();
@@ -154,7 +154,7 @@ class SpacingTest extends UnitTestCase
         );
     }
 
-    public function testItShouldBeImmutable()
+    public function testItShouldBeImmutable(): void
     {
 
         $sut = $this->makeInstance();
@@ -165,7 +165,7 @@ class SpacingTest extends UnitTestCase
         $sut->top('22');
     }
 
-    public function testItShouldBeImmutableAlsoIfICloneIt()
+    public function testItShouldBeImmutableAlsoIfICloneIt(): void
     {
 
         $sut = $this->makeInstance();
@@ -180,7 +180,7 @@ class SpacingTest extends UnitTestCase
         $sut_cloned->left('20px');
     }
 
-    public function testItShouldBeStringable()
+    public function testItShouldBeStringable(): void
     {
 
         $sut = $this->makeInstance();
@@ -230,7 +230,7 @@ class SpacingTest extends UnitTestCase
     /**
      * @dataProvider sameValueProvider
      */
-    public function testItShouldBeStringableAndReturnOnly(array $value, string $expected)
+    public function testItShouldBeStringableAndReturnOnly(array $value, string $expected): void
     {
 
         $sut = $this->makeInstance();

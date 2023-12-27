@@ -26,7 +26,7 @@ class SassFileWriterTest extends UnitTestCase
     /**
      * @test
      */
-    public function itShouldCreateScssFile()
+    public function itShouldCreateScssFile(): void
     {
 
         $sut = $this->makeInstance();
@@ -79,7 +79,7 @@ class SassFileWriterTest extends UnitTestCase
      * @dataProvider customSettingsProvider
      * @test
      */
-    public function itShouldIterateCustomSettingsFor(array $settings, string $variable, string $css_prop)
+    public function itShouldIterateCustomSettingsFor(array $settings, string $variable, string $css_prop): void
     {
 
         $sut = $this->makeInstance();
@@ -164,12 +164,13 @@ class SassFileWriterTest extends UnitTestCase
     /**
      * @test
      * @dataProvider presetSettingsProvider
+     * @return never
      */
     public function itShouldIteratePresetSettingsFor(
         array $data,
         string $expected_slug,
         string $expected_css_variable
-    ) {
+    ): void {
         $this->markTestSkipped('This test is skipped because it need to be refactored');
         $sut = $this->makeInstance();
 
@@ -191,7 +192,7 @@ class SassFileWriterTest extends UnitTestCase
     /**
      * @test
      */
-    public function itShouldThrowError()
+    public function itShouldThrowError(): void
     {
         $sut = $this->makeInstance();
 

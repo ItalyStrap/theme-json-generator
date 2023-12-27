@@ -33,6 +33,9 @@ class Gradient implements ItemInterface
         $this->gradient = $gradient;
     }
 
+    /**
+     * @return array{slug: string, name: string, gradient: string}
+     */
     public function toArray(): array
     {
         return [

@@ -36,6 +36,9 @@ class FontSize implements ItemInterface
         $this->fluid = $fluid;
     }
 
+    /**
+     * @return array{slug: string, name: string, size: string, fluid?: \ItalyStrap\ThemeJsonGenerator\Domain\Settings\Typography\Utilities\Fluid}
+     */
     public function toArray(): array
     {
         return \array_filter([
@@ -43,6 +46,6 @@ class FontSize implements ItemInterface
             'name' => $this->name,
             'size' => $this->size,
             'fluid' => $this->fluid,
-        ], static fn($value) => null !== $value);
+        ], static fn($value): bool => null !== $value);
     }
 }

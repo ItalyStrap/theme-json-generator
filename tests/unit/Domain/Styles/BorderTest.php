@@ -16,7 +16,7 @@ class BorderTest extends UnitTestCase
         return new Border();
     }
 
-    public function testItShouldCreateCorrectArray()
+    public function testItShouldCreateCorrectArray(): void
     {
         $sut = $this->makeInstance();
         $result = $sut

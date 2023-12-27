@@ -129,7 +129,7 @@ final class DumpCommand extends BaseCommand
         }
     }
 
-    private function testNewWorkflow(string $fileInput)
+    private function testNewWorkflow(string $fileInput): void
     {
         $injector = new \Auryn\Injector();
         $collection = $injector->make(Collection::class);
@@ -143,7 +143,7 @@ final class DumpCommand extends BaseCommand
         $data->merge((array)$injector->execute(require $fileInput));
     }
 
-    private function createContainer($injector, $config): ContainerInterface
+    private function createContainer(\Auryn\Injector $injector, \ItalyStrap\Config\ConfigInterface $config): ContainerInterface
     {
         return new class ($injector, $config) implements ContainerInterface {
             private \Auryn\Injector $injector;

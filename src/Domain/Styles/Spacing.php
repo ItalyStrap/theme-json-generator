@@ -158,7 +158,7 @@ final class Spacing implements ArrayableInterface
     private function assertPropertiesHasAllFourValuesAreEqual(array $properties): bool
     {
 
-        $propertiesFiltered = \array_map(static fn($value) => \preg_replace('#\D#', '', $value), $properties);
+        $propertiesFiltered = \array_map(static fn($value): ?string => \preg_replace('#\D#', '', $value), $properties);
 
         return \count(\array_unique($propertiesFiltered)) === 1 && \count($this->properties) === 4;
     }

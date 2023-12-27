@@ -44,6 +44,7 @@ class Collection implements CollectionInterface
 
     /**
      * @param mixed $default
+     * @return ItemInterface|mixed|null
      */
     public function get(string $key, $default = null)
     {
@@ -105,7 +106,7 @@ class Collection implements CollectionInterface
     {
         return \array_values(
             \array_map(
-                function (ItemInterface $item) {
+                function (ItemInterface $item): array {
                     $newItems = [];
                     foreach ($item->toArray() as $key => $value) {
                         if (\is_string($value)) {
@@ -170,6 +171,8 @@ class Collection implements CollectionInterface
          *       so in this case the second $this->get() is added as default and will search in the custom collection
          *       for `custom.spacer.base` and if found will return the value from the custom collection.
          *       If any value in the Preset and Custom collection is found then the null default will be returned.
+         *
+         * @var ItemInterface|null $item
          */
         $item = $this->get($newKey, $this->get(Custom::CATEGORY . '.' . $newKey));
 

@@ -34,6 +34,9 @@ class Fluid
         $this->max = $max;
     }
 
+    /**
+     * @return array{min: string, max: string}
+     */
     public function toArray(): array
     {
         return [

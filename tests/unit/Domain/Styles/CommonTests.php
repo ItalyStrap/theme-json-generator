@@ -6,7 +6,7 @@ namespace ItalyStrap\Tests\Unit\Domain\Styles;
 
 trait CommonTests
 {
-    public function testItShouldCreateUserDefinedProperty()
+    public function testItShouldCreateUserDefinedProperty(): void
     {
         $sut = $this->makeInstance();
         $result = $sut->property('style', '#000000')->toArray();
@@ -14,7 +14,7 @@ trait CommonTests
         $this->assertStringMatchesFormat('#000000', $result['style'], '');
     }
 
-    public function testItShouldBeImmutable()
+    public function testItShouldBeImmutable(): void
     {
         $sut = $this->makeInstance();
         $sut->property('style', '#000000');
@@ -23,7 +23,7 @@ trait CommonTests
         $sut->property('style', '#000000');
     }
 
-    public function testItShouldBeImmutableAlsoIfICloneIt()
+    public function testItShouldBeImmutableAlsoIfICloneIt(): void
     {
         $sut = $this->makeInstance();
         $sut->property('style', '#000000');

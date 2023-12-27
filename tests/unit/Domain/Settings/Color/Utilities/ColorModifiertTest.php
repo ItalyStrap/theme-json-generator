@@ -15,7 +15,7 @@ class ColorModifiertTest extends UnitTestCase
         return new ColorModifier(new ColorInfo($color));
     }
 
-    public static function typesProvider(): iterable
+    public static function typesProvider(): \Iterator
     {
         yield 'Hex white' => [
             '#ffffff',
@@ -103,7 +103,7 @@ class ColorModifiertTest extends UnitTestCase
         $this->assertSame($color, (string)$sut->hueRotate(), '');
     }
 
-    public static function greysProvider(): iterable
+    public static function greysProvider(): \Iterator
     {
         yield 'Hex grey' => [
             '#7f7f7f',
@@ -144,21 +144,21 @@ class ColorModifiertTest extends UnitTestCase
         $this->assertSame($color, (string)$sut->complementary(), '');
     }
 
-    public function testItShouldReturnDarkenColor()
+    public function testItShouldReturnDarkenColor(): void
     {
         $sut = $this->makeInstance('#ffffff');
 
         $this->assertSame('#cccccc', (string)$sut->darken(20)->toHex(), '');
     }
 
-    public function testItShouldReturnLightenColor()
+    public function testItShouldReturnLightenColor(): void
     {
         $sut = $this->makeInstance('#000000');
 
         $this->assertStringMatchesFormat('#333333', (string)$sut->lighten(20)->toHex(), '');
     }
 
-    public function testItShouldTintAndShade()
+    public function testItShouldTintAndShade(): void
     {
         $sut = $this->makeInstance('#7f7f7f');
 
@@ -166,14 +166,14 @@ class ColorModifiertTest extends UnitTestCase
         $this->assertStringMatchesFormat('#333333', (string)$sut->shade(0.6), '');
     }
 
-    public function testItShouldTone()
+    public function testItShouldTone(): void
     {
         $sut = $this->makeInstance('#ff0000');
 
         $this->assertStringMatchesFormat('#c04040', (string)$sut->tone(0.5), '');
     }
 
-    public function testItShouldReturnComplementaryColor()
+    public function testItShouldReturnComplementaryColor(): void
     {
         $sut = $this->makeInstance('#ff0000');
 
@@ -260,14 +260,14 @@ class ColorModifiertTest extends UnitTestCase
      * @dataProvider weightProvider
      * @test
      */
-    public function itShouldReturnMixedColorByWeight(float $weight, string $expected, string $mixedWith)
+    public function itShouldReturnMixedColorByWeight(float $weight, string $expected, string $mixedWith): void
     {
   //      $this->markTestSkipped('This test is skipped because it is not implemented yet');
   //      $sut = $this->makeInstance('#7f7f7f');
   //      $this->assertSame($expected, $sut->mix($mixedWith, $weight)->toHex(), '');
     }
 
-    public function testItShouldNotThrowException()
+    public function testItShouldNotThrowException(): void
     {
         $sut = $this->makeInstance('#3986E0');
         $color = (string)$sut->darken(20);

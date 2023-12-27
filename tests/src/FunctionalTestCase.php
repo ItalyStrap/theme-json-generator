@@ -8,7 +8,7 @@ use FunctionalTester;
 
 class FunctionalTestCase
 {
-    public function _before(FunctionalTester $I)
+    public function _before(FunctionalTester $I): void
     {
     }
 }

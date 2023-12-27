@@ -9,7 +9,7 @@ use ItalyStrap\Tests\FunctionalTestCase;
 
 class DumpCest extends FunctionalTestCase
 {
-    public function testTryToTest(FunctionalTester $I)
+    public function testTryToTest(FunctionalTester $I): void
     {
     }
 }

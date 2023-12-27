@@ -183,7 +183,7 @@ final class ThemeJson extends BaseCommand
         }
     }
 
-    private function createContainer($injector, $config): ContainerInterface
+    private function createContainer(\Auryn\Injector $injector, \ItalyStrap\Config\ConfigInterface $config): ContainerInterface
     {
         return new class ($injector, $config) implements ContainerInterface {
             private \Auryn\Injector $injector;

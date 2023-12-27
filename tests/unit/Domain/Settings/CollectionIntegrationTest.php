@@ -21,7 +21,7 @@ class CollectionIntegrationTest extends UnitTestCase
         return new Collection();
     }
 
-    public function testItShouldReplaceStringPlaceholder()
+    public function testItShouldReplaceStringPlaceholder(): void
     {
         $sut = $this->makeInstance();
         $sut->add(new FontSize('base', 'Base font size 16px', 'clamp(1.125rem, 2vw, 1.5rem)'))

@@ -41,6 +41,9 @@ class Duotone implements ItemInterface
         $this->colors = $this->assertValidColors(...$colors);
     }
 
+    /**
+     * @return array{slug: string, name: string, colors: string[]}
+     */
     public function toArray(): array
     {
         return [
@@ -55,6 +58,6 @@ class Duotone implements ItemInterface
      */
     private function assertValidColors(Palette ...$colors): array
     {
-        return \array_map(static fn(Palette $color) => (string)$color->color()->toRgba(), $colors);
+        return \array_map(static fn(Palette $color): string => (string)$color->color()->toRgba(), $colors);
     }
 }

@@ -33,6 +33,9 @@ class Palette implements ItemInterface
         $this->color = $color;
     }
 
+    /**
+     * @return array{slug: string, name: string, color: string}
+     */
     public function toArray(): array
     {
         return [

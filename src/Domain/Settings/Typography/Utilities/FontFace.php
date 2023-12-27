@@ -33,6 +33,9 @@ class FontFace
         $this->src = $src;
     }
 
+    /**
+     * @return array{fontFamily: string, fontWeight: string, fontStyle: string, fontStretch: string, src: mixed[]}
+     */
     public function toArray(): array
     {
         return [

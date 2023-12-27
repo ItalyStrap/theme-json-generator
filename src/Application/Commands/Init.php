@@ -10,7 +10,7 @@ class Init
     {
     }
 
-    public function process()
+    public function process(): void
     {
         // First check if the theme.json file exists in the root of the project
 //      if (!\file_exists( $this->path . '/theme.json')) {

@@ -32,6 +32,9 @@ class FontFamily implements ItemInterface
         $this->fontFamily = $fontFamily;
     }
 
+    /**
+     * @return array{slug: string, name: string, fontFamily: string}
+     */
     public function toArray(): array
     {
         return [

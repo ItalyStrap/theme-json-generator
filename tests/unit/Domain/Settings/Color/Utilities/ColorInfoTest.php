@@ -92,7 +92,7 @@ class ColorInfoTest extends UnitTestCase
     /**
      * @dataProvider colorFormatProvider
      */
-    public function testItShouldConvertEdgeCase($hex, $rgb, $hsla)
+    public function testItShouldConvertEdgeCase(string $hex, string $rgb, string $hsla): void
     {
         $sut = $this->makeInstance($hex);
 
@@ -110,7 +110,7 @@ class ColorInfoTest extends UnitTestCase
 //      $this->assertStringMatchesFormat( $rgb, (string) $sut->toHsla()->toRgb(), '' );
     }
 
-    public function colorProvider()
+    public function colorProvider(): \Generator
     {
         yield 'Dark hex'    => [
             '#000000', // Color
@@ -188,7 +188,7 @@ class ColorInfoTest extends UnitTestCase
     /**
      * @dataProvider colorProviderForArray
      */
-    public function testItShouldReturnArray(string $color, $expected)
+    public function testItShouldReturnArray(string $color, array $expected): void
     {
         $sut = $this->makeInstance($color);
 
@@ -221,7 +221,7 @@ class ColorInfoTest extends UnitTestCase
     /**
      * @dataProvider darkerColorProvider
      */
-    public function testItShouldBeDark(string $color)
+    public function testItShouldBeDark(string $color): void
     {
         $sut = $this->makeInstance($color);
 
@@ -261,14 +261,14 @@ class ColorInfoTest extends UnitTestCase
         $this->assertSame(1.0, $sut->alpha(), '');
     }
 
-    public function testItShouldReturnLuminanceValue()
+    public function testItShouldReturnLuminanceValue(): void
     {
         $sut = $this->makeInstance('#ff0000');
 
         $this->assertSame(0.2126, $sut->luminance(), '');
     }
 
-    public function testItShouldReturnRelativeLuminanceValue()
+    public function testItShouldReturnRelativeLuminanceValue(): void
     {
         $sut = $this->makeInstance('#000000');
         $color = $this->makeInstance('#ffffff');

@@ -18,7 +18,7 @@ class ComposerJsonFileAdapterTest extends UnitTestCase
     /**
      * @test
      */
-    public function itShouldBeInstantiatable()
+    public function itShouldBeInstantiatable(): void
     {
         $sut = $this->makeInstance();
     }
@@ -27,7 +27,7 @@ class ComposerJsonFileAdapterTest extends UnitTestCase
      * @test
      * @throws \Exception
      */
-    public function itShouldWrite()
+    public function itShouldWrite(): void
     {
         $sut = $this->makeInstance();
         $sut->write($this->inputData());

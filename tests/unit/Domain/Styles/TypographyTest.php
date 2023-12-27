@@ -16,7 +16,7 @@ class TypographyTest extends UnitTestCase
         return new Typography();
     }
 
-    public function testItShouldCreateCorrectArray()
+    public function testItShouldCreateCorrectArray(): void
     {
         $sut = $this->makeInstance();
         $result = $sut

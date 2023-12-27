@@ -18,7 +18,7 @@ class ColorTest extends UnitTestCase
         return $sut;
     }
 
-    public function testItShouldCreateCorrectArray()
+    public function testItShouldCreateCorrectArray(): void
     {
         $sut = $this->makeInstance();
         $result = $sut

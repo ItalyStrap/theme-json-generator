@@ -148,7 +148,7 @@ class PaletteTest extends UnitTestCase
      * @dataProvider propertiesProvider
      * @test
      */
-    public function itShouldReturnCssPropertyFor(string $expected, string $prop, string $value)
+    public function itShouldReturnCssPropertyFor(string $expected, string $prop, string $value): void
     {
         $this->slug = $prop;
         $this->name = $prop;
