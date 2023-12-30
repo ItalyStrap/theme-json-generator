@@ -15,19 +15,15 @@ class ComposerJsonFileAdapterTest extends UnitTestCase
         return new ComposerJsonFileAdapter($this->makeJsonFile());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldBeInstantiatable(): void
+    public function testItShouldBeInstantiatable(): void
     {
         $sut = $this->makeInstance();
     }
 
     /**
-     * @test
      * @throws \Exception
      */
-    public function itShouldWrite(): void
+    public function testItShouldWrite(): void
     {
         $sut = $this->makeInstance();
         $sut->write($this->inputData());

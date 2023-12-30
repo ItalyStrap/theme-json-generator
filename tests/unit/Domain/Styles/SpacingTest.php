@@ -16,7 +16,7 @@ class SpacingTest extends UnitTestCase
         return new Spacing();
     }
 
-    public function valueProvider(): \Generator
+    public static function valueProvider(): \Generator
     {
 
         yield '1 value' => [
@@ -98,7 +98,7 @@ class SpacingTest extends UnitTestCase
         $this->assertEquals($expected, $sut->toArray(), '');
     }
 
-    public function methodsProvider(): \Generator
+    public static function methodsProvider(): \Generator
     {
         yield 'Top' => [
             'top',
@@ -198,7 +198,7 @@ class SpacingTest extends UnitTestCase
         $this->assertStringMatchesFormat('25px 50px 20px 0', (string) $sut, '');
     }
 
-    public function sameValueProvider(): \Generator
+    public static function sameValueProvider(): \Generator
     {
 
         yield 'Value of 0'  => [

@@ -14,7 +14,7 @@ class ColorInfoTest extends UnitTestCase
         return new ColorInfo($color);
     }
 
-    public function colorFormatProvider(): \Generator
+    public static function colorFormatProvider(): \Generator
     {
         yield [
             '#ffc107', // HEX
@@ -110,7 +110,7 @@ class ColorInfoTest extends UnitTestCase
 //      $this->assertStringMatchesFormat( $rgb, (string) $sut->toHsla()->toRgb(), '' );
     }
 
-    public function colorProvider(): \Generator
+    public static function colorProvider(): \Generator
     {
         yield 'Dark hex'    => [
             '#000000', // Color
@@ -146,7 +146,7 @@ class ColorInfoTest extends UnitTestCase
         $this->assertSame($b, $sut->blue(), 'It should be blue');
     }
 
-    public function colorProviderForArray(): \Generator
+    public static function colorProviderForArray(): \Generator
     {
         yield 'Dark hex'    => [
             '#000000', // Color
@@ -199,7 +199,7 @@ class ColorInfoTest extends UnitTestCase
         ], 'It should be an array');
     }
 
-    public function darkerColorProvider(): \Generator
+    public static function darkerColorProvider(): \Generator
     {
         yield 'Black' => [
             '#000000'

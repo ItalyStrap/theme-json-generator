@@ -18,10 +18,7 @@ class JsonFileWriterTest extends UnitTestCase
         return new JsonFileWriter($this->theme_json_path);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnValidJson(): void
+    public function testItShouldReturnValidJson(): void
     {
         $sut = $this->makeInstance();
         $expected = '{"key": "value"}';

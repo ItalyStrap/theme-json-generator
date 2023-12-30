@@ -23,10 +23,7 @@ class SassFileWriterTest extends UnitTestCase
         return new ScssFileWriter($this->theme_sass_path);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateScssFile(): void
+    public function testItShouldCreateScssFile(): void
     {
 
         $sut = $this->makeInstance();
@@ -53,7 +50,7 @@ class SassFileWriterTest extends UnitTestCase
         \unlink($this->theme_sass_path);
     }
 
-    public function customSettingsProvider(): \Generator
+    public static function customSettingsProvider(): \Generator
     {
 
         yield 'Custom' => [
@@ -77,9 +74,8 @@ class SassFileWriterTest extends UnitTestCase
 
     /**
      * @dataProvider customSettingsProvider
-     * @test
      */
-    public function itShouldIterateCustomSettingsFor(array $settings, string $variable, string $css_prop): void
+    public function testItShouldIterateCustomSettingsFor(array $settings, string $variable, string $css_prop): void
     {
 
         $sut = $this->makeInstance();
@@ -102,7 +98,7 @@ class SassFileWriterTest extends UnitTestCase
         \unlink($this->theme_sass_path);
     }
 
-    public function presetSettingsProvider(): \Generator
+    public static function presetSettingsProvider(): \Generator
     {
         yield 'Color palette' => [
             [
@@ -162,11 +158,10 @@ class SassFileWriterTest extends UnitTestCase
     }
 
     /**
-     * @test
      * @dataProvider presetSettingsProvider
      * @return never
      */
-    public function itShouldIteratePresetSettingsFor(
+    public function testItShouldIteratePresetSettingsFor(
         array $data,
         string $expected_slug,
         string $expected_css_variable
@@ -189,10 +184,7 @@ class SassFileWriterTest extends UnitTestCase
         \unlink($this->theme_sass_path);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldThrowError(): void
+    public function testItShouldThrowError(): void
     {
         $sut = $this->makeInstance();
 

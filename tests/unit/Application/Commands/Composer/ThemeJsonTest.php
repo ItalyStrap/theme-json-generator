@@ -39,10 +39,9 @@ class ThemeJsonTest extends UnitTestCase
     }
 
     /**
-     * @test
      * @return never
      */
-    public function itShouldNotCreateThemeJsonFileFromRootPackage(): void
+    public function testItShouldNotCreateThemeJsonFileFromRootPackage(): void
     {
         $this->markTestSkipped('This test needs to be fixed');
         $theme_json_file_path = codecept_output_dir(random_int(0, mt_getrandmax()) . '/vendor');
@@ -67,10 +66,9 @@ class ThemeJsonTest extends UnitTestCase
     }
 
     /**
-     * @test
      * @return never
      */
-    public function itShouldCreateThemeJsonFileFromRootPackage(): void
+    public function testItShouldCreateThemeJsonFileFromRootPackage(): void
     {
         $this->markTestSkipped('This test needs to be fixed');
         $rand = (string) random_int(0, mt_getrandmax());
@@ -109,10 +107,9 @@ class ThemeJsonTest extends UnitTestCase
     }
 
     /**
-     * @test
      * @return never
      */
-    public function itShouldCreateThemeJsonFileFromRequiredPackage(): void
+    public function testItShouldCreateThemeJsonFileFromRequiredPackage(): void
     {
         $this->markTestSkipped('This test needs to be fixed');
         $theme_json_file_path = codecept_output_dir(random_int(0, mt_getrandmax()) .  '/vendor');

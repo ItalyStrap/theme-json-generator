@@ -180,7 +180,7 @@ class ColorModifiertTest extends UnitTestCase
         $this->assertSame('#00ffff', (string)$sut->complementary(), '');
     }
 
-    public function weightProvider(): \Generator
+    public static function weightProvider(): \Generator
     {
 
         yield '1 white' => [
@@ -258,9 +258,8 @@ class ColorModifiertTest extends UnitTestCase
 
     /**
      * @dataProvider weightProvider
-     * @test
      */
-    public function itShouldReturnMixedColorByWeight(float $weight, string $expected, string $mixedWith): void
+    public function testItShouldReturnMixedColorByWeight(float $weight, string $expected, string $mixedWith): void
     {
   //      $this->markTestSkipped('This test is skipped because it is not implemented yet');
   //      $sut = $this->makeInstance('#7f7f7f');
