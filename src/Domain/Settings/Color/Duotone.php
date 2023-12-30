@@ -30,10 +30,14 @@ class Duotone implements ItemInterface
 
     public function __construct(string $slug, string $name, Palette ...$colors)
     {
-        $this->isValidSlug($slug);
+        $this->assertValidSlug($slug);
 
-        if (empty($name) || empty($slug) || count($colors) < 2) {
-            throw new \LogicException('Duotone must have a name, slug, and at least two colors.');
+        if ($name === '') {
+            throw new \InvalidArgumentException('Duotone must have a name.');
+        }
+
+        if (count($colors) < 2) {
+            throw new \InvalidArgumentException('Duotone must have at least two colors.');
         }
 
         $this->slug = $slug;

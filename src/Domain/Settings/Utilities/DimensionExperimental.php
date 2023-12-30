@@ -21,7 +21,7 @@ final class DimensionExperimental
          $unit = $matches[2][0] ?? '';
 
         if (!\in_array($unit, ['px', 'rem', 'em', '%'], true)) {
-            throw new \InvalidArgumentException(sprintf('Unit \'%s\' is not supported.', $unit));
+            throw new \InvalidArgumentException(sprintf("Unit '%s' is not supported.", $unit));
         }
 
         $this->value = $value;

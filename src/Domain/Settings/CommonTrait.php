@@ -43,7 +43,7 @@ trait CommonTrait
         return \sprintf(
             'var(%s%s)',
             $this->prop(),
-            empty($fallback) ? '' : ',' . $fallback
+            $fallback === '' ? '' : ',' . $fallback
         );
     }
 
@@ -52,10 +52,30 @@ trait CommonTrait
         return $this->var();
     }
 
-    private function isValidSlug(string $slug): void
+    private function assertValidSlug(string $slug): void
     {
-        if (\preg_match('#\s#', $slug) || \preg_match('#[A-Z]#', $slug)) {
-            throw new \Exception('Slug must be lowercase and without spaces');
+        if (
+            \preg_match('#\s#', $slug)
+//          || \preg_match('#[A-Z]#', $slug)
+            || $slug === ''
+        ) {
+            throw new \InvalidArgumentException(\sprintf(
+                'Slug must be lowercase, without spaces and not empty, got %s',
+                $slug
+            ));
+        }
+    }
+
+    private function assertSlugIsWellFormed(string $slug): void
+    {
+        if (
+            \preg_match('#\s#', $slug)
+            || $slug === ''
+        ) {
+            throw new \Exception(\sprintf(
+                'Slug with spaces is not allowed, got %s',
+                $slug
+            ));
         }
     }
 
@@ -72,15 +92,5 @@ trait CommonTrait
             $us,
             $string
         ));
-    }
-
-    private function assertSlugIsWellFormed(string $slug): void
-    {
-        if (\preg_match('#\s#', $slug)) {
-            throw new \Exception(\sprintf(
-                'Slug with spaces is not allowed, got %s',
-                $slug
-            ));
-        }
     }
 }

@@ -111,9 +111,15 @@ final class ThemeJson extends BaseCommand
             $constraint = $link->getConstraint();
             $package = $repo->findPackage($link->getTarget(), $constraint);
             $packagePath = $vendorPath . '/' . $link->getTarget();
-            if ($package && $package->getType() === self::PACKAGE_TYPE) {
-                $this->writeFile($package, $packagePath, $io);
+            if (!$package instanceof \Composer\Package\PackageInterface) {
+                continue;
             }
+
+            if ($package->getType() !== self::PACKAGE_TYPE) {
+                continue;
+            }
+
+            $this->writeFile($package, $packagePath, $io);
         }
     }
 
@@ -208,7 +214,15 @@ final class ThemeJson extends BaseCommand
 
             public function has(string $id): bool
             {
-                return $this->config->has($id) || \class_exists($id) || $this->injectorHas($id);
+                if ($this->config->has($id)) {
+                    return true;
+                }
+
+                if (\class_exists($id)) {
+                    return true;
+                }
+
+                return $this->injectorHas($id);
             }
 
             private function injectorHas(string $id): bool

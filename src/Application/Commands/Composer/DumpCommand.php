@@ -186,7 +186,15 @@ final class DumpCommand extends BaseCommand
 
             public function has(string $id): bool
             {
-                return $this->config->has($id) || \class_exists($id) || $this->injectorHas($id);
+                if ($this->config->has($id)) {
+                    return true;
+                }
+
+                if (\class_exists($id)) {
+                    return true;
+                }
+
+                return $this->injectorHas($id);
             }
 
             private function injectorHas(string $id): bool
