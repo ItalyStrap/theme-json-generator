@@ -105,17 +105,18 @@ final class DumpCommand extends BaseCommand
         }
 
         try {
-            $result = (array)$callback();
+            $injector = $this->configureContainer();
+            $result = (array)$injector->execute($callback);
             $data = clone $this->config;
             $data->merge($result);
-            ( new JsonFileWriter($rootFolder . '/theme.json') )
+            (new JsonFileWriter($rootFolder . '/theme.json'))
                 ->write($data);
 
             $path_for_theme_sass = $rootFolder . '/' . $this->config->get(self::PATH_FOR_THEME_SASS);
             if (\is_writable($path_for_theme_sass)) {
-                ( new ScssFileWriter(
+                (new ScssFileWriter(
                     \rtrim($path_for_theme_sass, '/') . '/theme.scss'
-                ) )->write($data);
+                ))->write($data);
             }
         } catch (\Exception $exception) {
             $io->write($exception->getMessage());
@@ -125,22 +126,39 @@ final class DumpCommand extends BaseCommand
          * Let's test the new workflow
          */
         foreach ($this->findPhpFiles($rootFolder) as $file) {
-            $this->testNewWorkflow((string)$file);
+            $this->executeCallable((string)$file);
         }
     }
 
-    private function testNewWorkflow(string $fileInput): void
+    private function executeCallable(string $fileInput): void
+    {
+        $injector = $this->configureContainer();
+        $injector->execute(require $fileInput);
+    }
+
+    /**
+     * @return \Auryn\Injector
+     * @throws \Auryn\ConfigException
+     * @throws \Auryn\InjectionException
+     */
+    private function configureContainer(): \Auryn\Injector
     {
         $injector = new \Auryn\Injector();
-        $collection = $injector->make(Collection::class);
-        $container = $this->createContainer($injector, clone $this->config);
-        $injector->share($container);
         $injector->share($injector);
-        $injector->alias(ContainerInterface::class, \get_class($container));
-        $injector->alias(CollectionInterface::class, Collection::class);
 
-        $data = clone $this->config;
-        $data->merge((array)$injector->execute(require $fileInput));
+        $injector->alias(CollectionInterface::class, Collection::class);
+        $injector->share(CollectionInterface::class);
+        /**
+         * @todo Find out why I need to declare `collection` param in the hardcoded way
+         *       I needed this for all Styles classes that need to be injected with the shared collection
+         */
+        $injector->defineParam('collection', $injector->make(CollectionInterface::class));
+
+        $container = $this->createContainer($injector, clone $this->config);
+        $injector->alias(ContainerInterface::class, \get_class($container));
+        $injector->share($container);
+
+        return $injector;
     }
 
     private function createContainer(\Auryn\Injector $injector, \ItalyStrap\Config\ConfigInterface $config): ContainerInterface

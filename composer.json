@@ -2,7 +2,7 @@
     "name": "italystrap/theme-json-generator",
     "description": "WordPress theme.json generator from a PHP array",
     "keywords": ["WordPress", "WordPress theme.json", "theme.json"],
-    "type": "composer-plugin",
+    "type": "library",
     "license": "MIT",
     "authors": [
         {
@@ -45,7 +45,7 @@
 
         "squizlabs/php_codesniffer": "*",
         "phpcompatibility/php-compatibility": "*",
-        "dealerdirect/phpcodesniffer-composer-installer": "^0.7",
+        "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
 
         "vimeo/psalm": "^5.6",
 
@@ -55,7 +55,7 @@
         "infection/infection": "^0.26.6",
         "infection/codeception-adapter": "^0.4.1",
 
-        "rector/rector": "^0.15.17",
+        "rector/rector": "^0.18",
 
         "italystrap/debug": "dev-master",
         "wp-cli/wp-cli": "^2.7",
@@ -74,7 +74,8 @@
     "autoload-dev": {
         "psr-4": {
             "ItalyStrap\\Tests\\": "tests/src/",
-            "ItalyStrap\\Tests\\Unit\\": "tests/unit/"
+            "ItalyStrap\\Tests\\Unit\\": "tests/unit/",
+            "ItalyStrap\\Tests\\Functional\\": "tests/functional/"
         }
     },
     "suggest": {

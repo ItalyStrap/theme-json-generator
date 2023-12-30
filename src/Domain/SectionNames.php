@@ -27,6 +27,11 @@ final class SectionNames
     /**
      * @var string
      */
+    public const DESCRIPTION = 'description';
+
+    /**
+     * @var string
+     */
     public const SETTINGS = 'settings';
 
     /**
