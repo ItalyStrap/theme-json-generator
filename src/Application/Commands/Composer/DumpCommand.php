@@ -177,7 +177,7 @@ final class DumpCommand extends BaseCommand
             public function get(string $id)
             {
                 if (!$this->has($id)) {
-                    throw new class (sprintf('Service with ID %s not found.', $id)) extends \Exception implements \Psr\Container\NotFoundExceptionInterface {
+                    throw new class (\sprintf('Service with ID %s not found.', $id)) extends \Exception implements \Psr\Container\NotFoundExceptionInterface {
                     };
                 }
 
