@@ -48,7 +48,7 @@ class ScssFileWriter implements FileWriter
      */
     private function generateScssContent(ConfigInterface $data): string
     {
-        if ($data === []) {
+        if ($data->count() === 0) {
             return '// No data are provided!';
         }
 

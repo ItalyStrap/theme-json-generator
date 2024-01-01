@@ -10,7 +10,7 @@ use function implode;
 /**
  * @psalm-api
  */
-final class Spacing implements ArrayableInterface
+final class Spacing implements ArrayableInterface, \JsonSerializable
 {
     use CommonTrait;
 

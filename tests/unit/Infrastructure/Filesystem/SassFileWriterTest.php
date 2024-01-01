@@ -6,7 +6,6 @@ namespace ItalyStrap\Tests\Unit\Infrastructure\Filesystem;
 
 use ItalyStrap\Config\Config;
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FileWriter;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\ScssFileWriter;
 
 class SassFileWriterTest extends UnitTestCase
@@ -14,12 +13,11 @@ class SassFileWriterTest extends UnitTestCase
     /**
      * @var string
      */
-    private $theme_sass_path;
+    private string $theme_sass_path;
 
     protected function makeInstance(): ScssFileWriter
     {
-//      $this->theme_sass_path = \codecept_output_dir(\rand() . '/theme.scss');
-        $this->theme_sass_path = \codecept_output_dir('/theme.scss');
+        $this->theme_sass_path = \codecept_output_dir('theme.scss');
         return new ScssFileWriter($this->theme_sass_path);
     }
 
@@ -50,55 +48,7 @@ class SassFileWriterTest extends UnitTestCase
         \unlink($this->theme_sass_path);
     }
 
-    public static function customSettingsProvider(): \Generator
-    {
-
-        yield 'Custom' => [
-            [
-                'alignmentCenter'   => 'center',
-            ],
-            '$wp--custom--alignment-center',
-            '--wp--custom--alignment-center;',
-        ];
-
-        yield 'Custom with child' => [
-            [
-                'alignment' => [
-                    'center'    => 'center',
-                ],
-            ],
-            '$wp--custom--alignment--center',
-            '--wp--custom--alignment--center;',
-        ];
-    }
-
-    /**
-     * @dataProvider customSettingsProvider
-     */
-    public function testItShouldIterateCustomSettingsFor(array $settings, string $variable, string $css_prop): void
-    {
-
-        $sut = $this->makeInstance();
-        $sut->write(new Config([
-            'settings' => [
-                'custom'    => $settings,
-            ]
-        ]));
-
-        $this->assertStringEqualsFile(
-            $this->theme_sass_path,
-            \sprintf(
-                '%s: %s' . PHP_EOL,
-                $variable,
-                $css_prop
-            ),
-            ''
-        );
-
-        \unlink($this->theme_sass_path);
-    }
-
-    public static function presetSettingsProvider(): \Generator
+    public static function presetSettingsAndCustomProvider(): \Generator
     {
         yield 'Color palette' => [
             [
@@ -155,21 +105,44 @@ class SassFileWriterTest extends UnitTestCase
             '$wp--preset--font-family--system-font',
             '--wp--preset--font-family--system-font',
         ];
+
+        yield 'Custom' => [
+            [
+                'custom' => [
+                    'alignmentCenter'   => 'center',
+                ],
+            ],
+            '$wp--custom--alignment-center',
+            '--wp--custom--alignment-center',
+        ];
+
+        yield 'Custom with child' => [
+            [
+                'custom' => [
+                    'alignment' => [
+                        'center'    => 'center',
+                    ],
+                ],
+            ],
+            '$wp--custom--alignment--center',
+            '--wp--custom--alignment--center',
+        ];
     }
 
     /**
-     * @dataProvider presetSettingsProvider
+     * @dataProvider presetSettingsAndCustomProvider
      * @return never
+     * @throws \Exception
      */
-    public function testItShouldIteratePresetSettingsFor(
+    public function testItShouldIteratePresetAndCustomSettingsFor(
         array $data,
         string $expected_slug,
         string $expected_css_variable
     ): void {
-        $this->markTestSkipped('This test is skipped because it need to be refactored');
         $sut = $this->makeInstance();
 
-        $sut->write(new Config($data));
+        $sut->write(new Config(['settings' => $data]));
+        $this->assertFileExists($this->theme_sass_path, '');
 
         $this->assertStringEqualsFile(
             $this->theme_sass_path,

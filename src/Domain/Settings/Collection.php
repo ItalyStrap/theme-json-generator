@@ -15,10 +15,16 @@ class Collection implements CollectionInterface
     use AccessValueInArrayWithNotationTrait;
 
     private array $collection = [];
+    private string $field = '';
 
     public function add(ItemInterface $item): self
     {
+        /**
+         * The slug method can return a value like this "navbar.min.height"
+         * So the key needs to be built before all the insert value in the correct position
+         */
         $key = $item->category() . '.' . $item->slug();
+
         $this->assertIsUnique($key, $item);
 
         $this->insertValue(
@@ -90,16 +96,33 @@ class Collection implements CollectionInterface
         return $this->extractPlaceholders((string)$value);
     }
 
+    public function field(string $field): void
+    {
+        $this->field = $field;
+    }
+
+    public function toArray(): array
+    {
+        if ($this->field === '') {
+            return $this->collection;
+        }
+
+        $fetched = (array)$this->get($this->field, []);
+
+        if ($this->field === 'custom') {
+            return $this->processCustomCollection($fetched);
+        }
+
+        return $this->processPresetCollection($fetched);
+    }
+
     /**
      * @todo Filter empty values from collection
      */
     public function toArrayByCategory(string $category): array
     {
-        if ($category === 'custom') {
-            return $this->processCustomCollection((array)$this->get($category, []));
-        }
-
-        return $this->processPresetCollection((array)$this->get($category, []));
+        $this->field($category);
+        return $this->toArray();
     }
 
     private function processPresetCollection(array $collection): array

@@ -242,4 +242,20 @@ class SpacingTest extends UnitTestCase
 
         $this->assertStringMatchesFormat($expected, (string) $sut, '');
     }
+
+    public function testItShouldCreateCorrectJson(): void
+    {
+        $sut = $this->makeInstance();
+        $result = $sut
+            ->top('25px')
+            ->right('25px')
+            ->bottom('50px')
+            ->left('5rem');
+
+        $this->assertJsonStringEqualsJsonString(
+            '{"top":"25px","right":"25px","bottom":"50px","left":"5rem"}',
+            \json_encode($result),
+            ''
+        );
+    }
 }

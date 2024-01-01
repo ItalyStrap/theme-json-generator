@@ -13,9 +13,7 @@ class ColorTest extends UnitTestCase
 
     protected function makeInstance(): Color
     {
-        $sut = new Color();
-        $this->assertInstanceOf(Color::class, $sut, '');
-        return $sut;
+        return new Color();
     }
 
     public function testItShouldCreateCorrectArray(): void
@@ -35,5 +33,20 @@ class ColorTest extends UnitTestCase
         $this->assertStringMatchesFormat('#000000', $result['text'], '');
         $this->assertStringMatchesFormat('transparent', $result['background'], '');
         $this->assertStringMatchesFormat('value', $result['gradient'], '');
+    }
+
+    public function testItShouldCreateCorrectJson(): void
+    {
+        $sut = $this->makeInstance();
+        $result = $sut
+            ->text('#000000')
+            ->background('transparent')
+            ->gradient('value');
+
+        $this->assertJsonStringEqualsJsonString(
+            '{"text":"#000000","background":"transparent","gradient":"value"}',
+            \json_encode($result),
+            ''
+        );
     }
 }

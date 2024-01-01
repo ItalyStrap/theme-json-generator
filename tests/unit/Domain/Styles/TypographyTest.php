@@ -49,4 +49,24 @@ class TypographyTest extends UnitTestCase
         $this->assertStringMatchesFormat('1rem', $result['letterSpacing'], '');
         $this->assertStringMatchesFormat('serif', $result['fontFamily'], '');
     }
+
+    public function testItShouldCreateCorrectJson(): void
+    {
+        $sut = $this->makeInstance();
+        $result = $sut
+            ->textDecoration('none')
+            ->lineHeight('1')
+            ->fontSize('25px')
+            ->fontWeight('800')
+            ->textTransform('uppercase')
+            ->fontStyle('value')
+            ->letterSpacing('1rem')
+            ->fontFamily('serif');
+
+        $this->assertJsonStringEqualsJsonString(
+            '{"textDecoration":"none","lineHeight":"1","fontSize":"25px","fontWeight":"800","textTransform":"uppercase","fontStyle":"value","letterSpacing":"1rem","fontFamily":"serif"}',
+            \json_encode($result),
+            ''
+        );
+    }
 }

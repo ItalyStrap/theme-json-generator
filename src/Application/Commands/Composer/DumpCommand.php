@@ -11,9 +11,11 @@ use Composer\Package\PackageInterface;
 use ItalyStrap\Config\ConfigInterface;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\FilesFinderTrait;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\RootFolderTrait;
+use ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint;
 use ItalyStrap\ThemeJsonGenerator\Domain\SectionNames;
 use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Collection;
 use ItalyStrap\ThemeJsonGenerator\Domain\Settings\CollectionInterface;
+use ItalyStrap\ThemeJsonGenerator\Domain\Styles\ArrayableInterface;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\JsonFileWriter;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\ScssFileWriter;
 use Psr\Container\ContainerInterface;
@@ -58,6 +60,16 @@ final class DumpCommand extends BaseCommand
                 self::NAME
             )
         );
+
+        $this->addOption(
+            'validate',
+            null,
+            InputOption::VALUE_NONE,
+            \sprintf(
+                'If set, %s will validate the generated theme.json file.',
+                self::NAME
+            )
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -68,9 +80,11 @@ final class DumpCommand extends BaseCommand
 
         // Get the value of --dry-run
         $dry_run = $input->getOption('dry-run');
+        // Get the value of --validate
+        $validate = $input->getOption('validate');
 
         $output->writeln('<info>Generating theme.json file</info>');
-        $this->process($composer, $io, $rootFolder);
+        $this->process($composer, $rootFolder, $output);
         $output->writeln('<info>Generated theme.json file</info>');
 
         return Command::SUCCESS;
@@ -91,49 +105,56 @@ final class DumpCommand extends BaseCommand
      */
     public const PATH_FOR_THEME_SASS = 'path-for-theme-sass';
 
-    private function process(BaseComposer $composer, IOInterface $io, string $rootFolder): void
+    private function process(BaseComposer $composer, string $rootFolder, OutputInterface $output): void
     {
         $package = $composer->getPackage();
         $this->config->merge($package->getExtra()[self::COMPOSER_EXTRA_THEME_JSON_KEY] ?? []);
 
+        /**
+         * @var callable $callback
+         */
         $callback = $this->config->get(self::CALLBACK);
-        if (!is_callable($callback)) {
-            throw new \RuntimeException(\sprintf(
-                'Maybe the %s is not a valid callable',
-                $callback
-            ));
-        }
 
-        try {
-            $injector = $this->configureContainer();
-            $result = (array)$injector->execute($callback);
-            $data = clone $this->config;
-            $data->merge($result);
-            (new JsonFileWriter($rootFolder . '/theme.json'))
-                ->write($data);
-
-            $path_for_theme_sass = $rootFolder . '/' . $this->config->get(self::PATH_FOR_THEME_SASS);
-            if (\is_writable($path_for_theme_sass)) {
-                (new ScssFileWriter(
-                    \rtrim($path_for_theme_sass, '/') . '/theme.scss'
-                ))->write($data);
-            }
-        } catch (\Exception $exception) {
-            $io->write($exception->getMessage());
-        }
+        $this->processBlueprint($callback, $rootFolder, 'theme', $output);
 
         /**
          * Let's test the new workflow
+         * @todo add key for json file name to be created
+         * @example $name => $file
+         *         'theme' => 'theme.dist.json'
          */
         foreach ($this->findPhpFiles($rootFolder) as $file) {
-            $this->executeCallable((string)$file);
+            $first = \explode('.', \basename($file))[0];
+            $this->executeCallable(require $file, $rootFolder, $first, $output);
         }
     }
 
-    private function executeCallable(string $fileInput): void
+    private function processBlueprint(callable $callback, string $rootFolder, string $fileName, OutputInterface $output): void
+    {
+        try {
+            $injector = $this->configureContainer();
+            $injector->execute($callback);
+            $blueprint = $injector->make(Blueprint::class);
+
+            (new JsonFileWriter($rootFolder . DIRECTORY_SEPARATOR . $fileName . '.json'))
+                ->write($blueprint);
+
+            $path_for_theme_sass = $rootFolder . DIRECTORY_SEPARATOR . $this->config->get(self::PATH_FOR_THEME_SASS);
+            if (\is_writable($path_for_theme_sass)) {
+                (new ScssFileWriter(
+                    \rtrim($path_for_theme_sass, '/') . DIRECTORY_SEPARATOR . $fileName . '.scss'
+                ))->write($blueprint);
+            }
+        } catch (\Exception $exception) {
+            $output->writeln($exception->getMessage());
+        }
+    }
+
+    private function executeCallable(callable $entryPoint, string $rootFolder, string $fileName, OutputInterface $output): void
     {
         $injector = $this->configureContainer();
-        $injector->execute(require $fileInput);
+        $injector->execute($entryPoint);
+        $blueprint = $injector->make(Blueprint::class);
     }
 
     /**
@@ -148,15 +169,18 @@ final class DumpCommand extends BaseCommand
 
         $injector->alias(CollectionInterface::class, Collection::class);
         $injector->share(CollectionInterface::class);
+
         /**
-         * @todo Find out why I need to declare `collection` param in the hardcoded way
-         *       I needed this for all Styles classes that need to be injected with the shared collection
+         * Injector resolve to null if a param is nullable, so we need to be explicit and declare the param
+         * I need this for all the classes under the Styles namespace
          */
         $injector->defineParam('collection', $injector->make(CollectionInterface::class));
 
         $container = $this->createContainer($injector, clone $this->config);
         $injector->alias(ContainerInterface::class, \get_class($container));
         $injector->share($container);
+
+        $injector->share(Blueprint::class);
 
         return $injector;
     }

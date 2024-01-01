@@ -7,7 +7,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Styles;
 /**
  * @psalm-api
  */
-final class Border implements ArrayableInterface
+final class Border implements ArrayableInterface, \JsonSerializable
 {
     use CommonTrait;
 

@@ -7,7 +7,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Styles;
 /**
  * @psalm-api
  */
-final class Color implements ArrayableInterface
+final class Color implements ArrayableInterface, \JsonSerializable
 {
     use CommonTrait;
 

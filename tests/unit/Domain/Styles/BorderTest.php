@@ -37,4 +37,20 @@ class BorderTest extends UnitTestCase
         $this->assertStringMatchesFormat('1px', $result['width'], '');
         $this->assertStringMatchesFormat('none', $result['radius'], '');
     }
+
+    public function testItShouldCreateCorrectJson(): void
+    {
+        $sut = $this->makeInstance();
+        $result = $sut
+            ->color('#000000')
+            ->style('solid')
+            ->width('1px')
+            ->radius('none');
+
+        $this->assertJsonStringEqualsJsonString(
+            '{"color":"#000000","style":"solid","width":"1px","radius":"none"}',
+            \json_encode($result),
+            ''
+        );
+    }
 }

@@ -7,7 +7,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Styles;
 /**
  * @psalm-api
  */
-final class Typography implements ArrayableInterface
+final class Typography implements ArrayableInterface, \JsonSerializable
 {
     use CommonTrait;
 

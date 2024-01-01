@@ -6,6 +6,12 @@ namespace ItalyStrap\Tests\Unit\Domain\Styles;
 
 trait CommonTests
 {
+    public function testItShouldBeAnInstanceOfJsonSerializable(): void
+    {
+        $sut = $this->makeInstance();
+        $this->assertInstanceOf(\JsonSerializable::class, $sut);
+    }
+
     public function testItShouldCreateUserDefinedProperty(): void
     {
         $sut = $this->makeInstance();
