@@ -12,7 +12,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class ThemeJson extends UnitTestCase
 {
-    protected function makeInstance(): SUT
+    private function makeInstance(): SUT
     {
         return new SUT($this->makeConfig());
     }
