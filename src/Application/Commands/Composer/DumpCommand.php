@@ -70,6 +70,12 @@ final class DumpCommand extends BaseCommand
                 self::NAME
             )
         );
+
+        /**
+         * @todo other options:
+         *       --no-pretty-print
+         *       --indent=2 (default is 4)
+         */
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

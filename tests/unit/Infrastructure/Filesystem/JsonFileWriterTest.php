@@ -30,5 +30,8 @@ class JsonFileWriterTest extends UnitTestCase
         $sut->write($data);
 
         $this->assertJsonStringEqualsJsonFile($this->theme_json_path, $expected, '');
+
+        \unlink($this->theme_json_path);
+        \rmdir(\dirname($this->theme_json_path));
     }
 }

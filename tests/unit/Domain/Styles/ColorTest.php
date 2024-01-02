@@ -23,16 +23,19 @@ class ColorTest extends UnitTestCase
             ->text('#000000')
             ->background('transparent')
             ->gradient('value')
+            ->link('#000000')
             ->toArray();
 
         $this->assertIsArray($result, '');
         $this->assertArrayHasKey('text', $result, '');
         $this->assertArrayHasKey('background', $result, '');
         $this->assertArrayHasKey('gradient', $result, '');
+        $this->assertArrayHasKey('link', $result, '');
 
         $this->assertStringMatchesFormat('#000000', $result['text'], '');
         $this->assertStringMatchesFormat('transparent', $result['background'], '');
         $this->assertStringMatchesFormat('value', $result['gradient'], '');
+        $this->assertStringMatchesFormat('#000000', $result['link'], '');
     }
 
     public function testItShouldCreateCorrectJson(): void

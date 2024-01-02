@@ -28,6 +28,10 @@ class ScssFileWriter implements FileWriter
 
     public function write(ConfigInterface $data): void
     {
+        if (\count($data) === 0) {
+            throw new \RuntimeException('No data to write');
+        }
+
         if (\file_exists($this->path) && \is_file($this->path)) {
             \unlink($this->path);
         }

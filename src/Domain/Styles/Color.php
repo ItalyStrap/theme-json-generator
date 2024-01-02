@@ -26,6 +26,11 @@ final class Color implements ArrayableInterface, \JsonSerializable
      */
     public const TEXT = 'text';
 
+    /**
+     * @var string
+     */
+    public const LINK = 'link';
+
     public function background(string $value): self
     {
         $this->setProperty(self::BACKGROUND, $value);
@@ -41,6 +46,12 @@ final class Color implements ArrayableInterface, \JsonSerializable
     public function text(string $value): self
     {
         $this->setProperty(self::TEXT, $value);
+        return $this;
+    }
+
+    public function link(string $value): self
+    {
+        $this->setProperty(self::LINK, $value);
         return $this;
     }
 }

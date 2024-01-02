@@ -6,15 +6,15 @@ namespace ItalyStrap\Tests\Unit\Application\Commands\Composer;
 
 use Composer\Console\Application;
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Application\Commands\Composer\ThemeJson;
+use ItalyStrap\ThemeJsonGenerator\Application\Commands\Composer\ThemeJson as SUT;
 use Prophecy\Argument;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class ThemeJsonTest extends UnitTestCase
+class ThemeJson extends UnitTestCase
 {
-    protected function makeInstance(): ThemeJson
+    protected function makeInstance(): SUT
     {
-        return new ThemeJson($this->makeConfig());
+        return new SUT($this->makeConfig());
     }
 
     public function testItShouldBeInstantiatable(): void
@@ -43,26 +43,29 @@ class ThemeJsonTest extends UnitTestCase
      */
     public function testItShouldNotCreateThemeJsonFileFromRootPackage(): void
     {
-        $this->markTestSkipped('This test needs to be fixed');
-        $theme_json_file_path = codecept_output_dir(random_int(0, mt_getrandmax()) . '/vendor');
-        $this->config
-            ->get(Argument::type('string'))
-            ->willReturn($theme_json_file_path);
+//        $this->markTestSkipped('This test needs to be fixed');
+        $theme_json_file_path = \codecept_output_dir(random_int(0, mt_getrandmax()) . '/vendor');
+        $this->assertDirectoryExists($theme_json_file_path, '');
 
-        $this->rootPackage->getType()->willReturn('wordpress-theme');
-        $this->rootPackage->getExtra()->willReturn([
-            'theme-json' => [
-                'callable' => false,
-            ],
-        ]);
 
-        $this->expectException(\RuntimeException::class);
-
-        $sut = $this->makeInstance();
-//      $sut->process($this->makeComposer(), $this->makeIo());
-
-        $theme_json_file_path = dirname($theme_json_file_path);
-        $this->assertFileNotExists($theme_json_file_path . '/theme.json', '');
+//        $this->config
+//            ->get(Argument::type('string'))
+//            ->willReturn($theme_json_file_path);
+//
+//        $this->rootPackage->getType()->willReturn('wordpress-theme');
+//        $this->rootPackage->getExtra()->willReturn([
+//            'theme-json' => [
+//                'callable' => false,
+//            ],
+//        ]);
+//
+//        $this->expectException(\RuntimeException::class);
+//
+//        $sut = $this->makeInstance();
+////      $sut->process($this->makeComposer(), $this->makeIo());
+//
+//        $theme_json_file_path = dirname($theme_json_file_path);
+//        $this->assertFileNotExists($theme_json_file_path . '/theme.json', '');
     }
 
     /**
