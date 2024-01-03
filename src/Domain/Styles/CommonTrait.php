@@ -12,13 +12,16 @@ trait CommonTrait
     /**
      * @var array<string, string>
      */
-    private array $properties = [];
+    private array $properties;
 
     private ?CollectionInterface $collection;
 
-    public function __construct(?CollectionInterface $collection = null)
-    {
+    public function __construct(
+        ?CollectionInterface $collection = null,
+        array $properties = []
+    ) {
         $this->collection = $collection ?? new NullCollection();
+        $this->properties = $properties;
     }
 
     /**
@@ -35,35 +38,14 @@ trait CommonTrait
      */
     public function property(string $property, string $value): self
     {
-        $this->setProperty($property, $value);
-        return $this;
+        return $this->setProperty($property, $value);
     }
 
     private function setProperty(string $key, string $value): self
     {
-        $this->assertIsImmutable($key);
         $this->properties[$key] = $this->collection->value($value, $value);
-        return $this;
-    }
-
-    private function assertIsImmutable(string $key): void
-    {
-        if (\array_key_exists($key, $this->properties)) {
-            $bt = \debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-
-            $bt[1] ??= [];
-
-            if (empty($bt[1])) {
-                $bt[1] = ['file' => '', 'line' => ''];
-            }
-
-            throw new \RuntimeException(\sprintf(
-                'The key "%s" is already provided | File:  %s | Line: %s',
-                $key,
-                $bt[1]['file'] ?? '',
-                $bt[1]['line'] ?? ''
-            ));
-        }
+        $class = __CLASS__;
+        return new $class($this->collection, $this->properties);
     }
 
     final public function __clone()

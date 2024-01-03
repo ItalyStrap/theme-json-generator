@@ -31,27 +31,23 @@ final class Border implements ArrayableInterface, \JsonSerializable
      */
     public const WIDTH = 'width';
 
-    public function color(string $value): self
+    public function color(string $value): Border
     {
-        $this->setProperty(self::COLOR, $value);
-        return $this;
+        return $this->setProperty(self::COLOR, $value);
     }
 
-    public function radius(string $value): self
+    public function radius(string $value): Border
     {
-        $this->setProperty(self::RADIUS, $value);
-        return $this;
+        return $this->setProperty(self::RADIUS, $value);
     }
 
-    public function style(string $value): self
+    public function style(string $value): Border
     {
-        $this->setProperty(self::STYLE, $value);
-        return $this;
+        return $this->setProperty(self::STYLE, $value);
     }
 
-    public function width(string $value): self
+    public function width(string $value): Border
     {
-        $this->setProperty(self::WIDTH, $value);
-        return $this;
+        return $this->setProperty(self::WIDTH, $value);
     }
 }

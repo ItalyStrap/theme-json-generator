@@ -31,27 +31,23 @@ final class Color implements ArrayableInterface, \JsonSerializable
      */
     public const LINK = 'link';
 
-    public function background(string $value): self
+    public function background(string $value): Color
     {
-        $this->setProperty(self::BACKGROUND, $value);
-        return $this;
+        return $this->setProperty(self::BACKGROUND, $value);
     }
 
-    public function gradient(string $value): self
+    public function gradient(string $value): Color
     {
-        $this->setProperty(self::GRADIENT, $value);
-        return $this;
+        return $this->setProperty(self::GRADIENT, $value);
     }
 
-    public function text(string $value): self
+    public function text(string $value): Color
     {
-        $this->setProperty(self::TEXT, $value);
-        return $this;
+        return $this->setProperty(self::TEXT, $value);
     }
 
-    public function link(string $value): self
+    public function link(string $value): Color
     {
-        $this->setProperty(self::LINK, $value);
-        return $this;
+        return $this->setProperty(self::LINK, $value);
     }
 }

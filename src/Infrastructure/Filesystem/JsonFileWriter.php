@@ -25,12 +25,11 @@ class JsonFileWriter implements FileWriter
      */
     public function write(ConfigInterface $data): void
     {
-        $json_file = new ComposerJsonFileAdapter(new JsonFile($this->path));
-
         if (\count($data) === 0) {
             throw new \RuntimeException('No data to write');
         }
 
+        $json_file = new ComposerJsonFileAdapter(new JsonFile($this->path));
         $json_file->write($data->toArray());
     }
 }

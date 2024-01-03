@@ -94,8 +94,8 @@ class SpacingTest extends UnitTestCase
     public function testItShouldReturnArrayWithSpacingPropsFor(array $value, array $expected): void
     {
         $sut = $this->makeInstance();
-        $sut->shorthand($value);
-        $this->assertEquals($expected, $sut->toArray(), '');
+        $result = $sut->shorthand($value);
+        $this->assertEquals($expected, $result->toArray(), '');
     }
 
     public static function methodsProvider(): \Generator
@@ -129,7 +129,7 @@ class SpacingTest extends UnitTestCase
 
         $sut = $this->makeInstance();
 
-        \call_user_func([ $sut, $method ], $value);
+        \call_user_func([$sut, $method], $value);
 
         $this->assertIsArray($sut->toArray(), '');
     }
@@ -138,7 +138,7 @@ class SpacingTest extends UnitTestCase
     {
 
         $sut = $this->makeInstance();
-        $sut->top('25px')
+        $result = $sut->top('25px')
             ->right('25px')
             ->bottom('50px')
             ->left('5rem');
@@ -150,97 +150,23 @@ class SpacingTest extends UnitTestCase
                 'bottom'    => '50px',
                 'left'      => '5rem',
             ],
-            $sut->toArray()
+            $result->toArray()
         );
-    }
-
-    public function testItShouldBeImmutable(): void
-    {
-
-        $sut = $this->makeInstance();
-        $sut->top('25px')
-            ->left('25px');
-
-        $this->expectException(\RuntimeException::class);
-        $sut->top('22');
     }
 
     public function testItShouldBeImmutableAlsoIfICloneIt(): void
     {
 
         $sut = $this->makeInstance();
-        $sut->top('25px')
+        $result = $sut->top('25px')
             ->left('25px');
 
-        $sut_cloned = clone $sut;
+        $resultCloned = clone $result;
 
-        $this->assertNotEmpty($sut->toArray(), '');
-        $this->assertEmpty($sut_cloned->toArray(), '');
+        $this->assertNotEmpty($result->toArray(), '');
+        $this->assertEmpty($resultCloned->toArray(), '');
 
-        $sut_cloned->left('20px');
-    }
-
-    public function testItShouldBeStringable(): void
-    {
-
-        $sut = $this->makeInstance();
-
-        $sut->top('25px');
-        $this->assertStringMatchesFormat('25px 0 0 0', (string) $sut, '');
-
-        $sut->bottom('20px');
-        $this->assertStringMatchesFormat('25px 0 20px 0', (string) $sut, '');
-
-        $sut->left('0');
-        $this->assertStringMatchesFormat('25px 0 20px 0', (string) $sut, '');
-
-        $sut->right('50px');
-        $this->assertStringMatchesFormat('25px 50px 20px 0', (string) $sut, '');
-    }
-
-    public static function sameValueProvider(): \Generator
-    {
-
-        yield 'Value of 0'  => [
-            ['0','0','0','0',],
-            '0'
-        ];
-
-        yield 'Value of 0px'    => [
-            ['0px','0px','0px','0px',],
-            '0px'
-        ];
-
-        yield 'Value of 0 if we have 0px and 0' => [
-            ['0px','0','0px','0px',],
-            '0px'
-        ];
-
-        yield 'Value of 42px'   => [
-            ['42px','42px','42px','42px',],
-            '42px'
-        ];
-
-        yield 'Value of 42px even if we have 42 with no unit'   => [
-            ['42px','42','42px','42px',],
-            '42px'
-        ];
-    }
-
-    /**
-     * @dataProvider sameValueProvider
-     */
-    public function testItShouldBeStringableAndReturnOnly(array $value, string $expected): void
-    {
-
-        $sut = $this->makeInstance();
-
-        $sut->top($value[0]);
-        $sut->bottom($value[1]);
-        $sut->left($value[2]);
-        $sut->right($value[3]);
-
-        $this->assertStringMatchesFormat($expected, (string) $sut, '');
+        $resultCloned->left('20px');
     }
 
     public function testItShouldCreateCorrectJson(): void

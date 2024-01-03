@@ -75,6 +75,8 @@ final class DumpCommand extends BaseCommand
          * @todo other options:
          *       --no-pretty-print
          *       --indent=2 (default is 4)
+         *       --config (provide a custom config file)
+         *       --delete -D (delete the generated theme.json file)
          */
     }
 
@@ -130,16 +132,20 @@ final class DumpCommand extends BaseCommand
          *         'theme' => 'theme.dist.json'
          */
         foreach ($this->findPhpFiles($rootFolder) as $file) {
-            $first = \explode('.', \basename($file))[0];
-            $this->executeCallable(require $file, $rootFolder, $first, $output);
+            $folderToCreateFile = $rootFolder;
+            $fileName = \explode('.', \basename($file))[0];
+            if (\strpos($file, '/styles') !== false) {
+                $folderToCreateFile .= '/styles';
+            }
+            $this->executeCallable(require $file, $folderToCreateFile, $fileName, $output);
         }
     }
 
-    private function processBlueprint(callable $callback, string $rootFolder, string $fileName, OutputInterface $output): void
+    private function processBlueprint(callable $entryPoint, string $rootFolder, string $fileName, OutputInterface $output): void
     {
         try {
             $injector = $this->configureContainer();
-            $injector->execute($callback);
+            $injector->execute($entryPoint);
             $blueprint = $injector->make(Blueprint::class);
 
             (new JsonFileWriter($rootFolder . DIRECTORY_SEPARATOR . $fileName . '.json'))

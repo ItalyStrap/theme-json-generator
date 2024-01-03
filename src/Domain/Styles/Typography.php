@@ -53,49 +53,41 @@ final class Typography implements ArrayableInterface, \JsonSerializable
 
     public function fontFamily(string $value): self
     {
-        $this->setProperty(self::FONT_FAMILY, $value);
-        return $this;
+        return $this->setProperty(self::FONT_FAMILY, $value);
     }
 
     public function fontSize(string $value): self
     {
-        $this->setProperty(self::FONT_SIZE, $value);
-        return $this;
+        return $this->setProperty(self::FONT_SIZE, $value);
     }
 
     public function fontStyle(string $value): self
     {
-        $this->setProperty(self::FONT_STYLE, $value);
-        return $this;
+        return $this->setProperty(self::FONT_STYLE, $value);
     }
 
     public function fontWeight(string $value): self
     {
-        $this->setProperty(self::FONT_WEIGHT, $value);
-        return $this;
+        return $this->setProperty(self::FONT_WEIGHT, $value);
     }
 
     public function letterSpacing(string $value): self
     {
-        $this->setProperty(self::LETTER_SPACING, $value);
-        return $this;
+        return $this->setProperty(self::LETTER_SPACING, $value);
     }
 
     public function lineHeight(string $value): self
     {
-        $this->setProperty(self::LINE_HEIGHT, $value);
-        return $this;
+        return $this->setProperty(self::LINE_HEIGHT, $value);
     }
 
     public function textDecoration(string $value): self
     {
-        $this->setProperty(self::TEXT_DECORATION, $value);
-        return $this;
+        return $this->setProperty(self::TEXT_DECORATION, $value);
     }
 
     public function textTransform(string $value): self
     {
-        $this->setProperty(self::TEXT_TRANSFORM, $value);
-        return $this;
+        return $this->setProperty(self::TEXT_TRANSFORM, $value);
     }
 }

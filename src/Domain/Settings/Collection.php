@@ -10,7 +10,7 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Custom\Custom;
 /**
  * @psalm-api
  */
-class Collection implements CollectionInterface
+class Collection implements CollectionInterface, \JsonSerializable
 {
     use AccessValueInArrayWithNotationTrait;
 
@@ -96,9 +96,19 @@ class Collection implements CollectionInterface
         return $this->extractPlaceholders((string)$value);
     }
 
-    public function field(string $field): void
+    public function field(string $field)
     {
+        $keys = \array_keys($this->collection);
+        if (!\in_array($field, $keys, true)) {
+            throw new \InvalidArgumentException(\sprintf(
+                'Field %s does not exists in the collection, got: %s',
+                $field,
+                \implode(', ', $keys)
+            ));
+        }
+
         $this->field = $field;
+        return $this;
     }
 
     public function toArray(): array
@@ -122,6 +132,15 @@ class Collection implements CollectionInterface
     public function toArrayByCategory(string $category): array
     {
         $this->field($category);
+        return $this->toArray();
+    }
+
+    /**
+     * @return mixed
+     */
+    #[\ReturnTypeWillChange]
+    public function jsonSerialize()
+    {
         return $this->toArray();
     }
 

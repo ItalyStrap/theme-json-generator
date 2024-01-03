@@ -20,6 +20,11 @@ class Palette implements ItemInterface
      */
     public const CATEGORY = 'color';
 
+    /**
+     * @var string
+     */
+    public const KEY = 'settings.color.palette';
+
     private string $slug;
 
     private string $name;

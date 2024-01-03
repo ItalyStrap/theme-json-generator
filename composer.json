@@ -15,6 +15,7 @@
     "minimum-stability": "dev",
     "require": {
         "php" : ">=7.4",
+        "ext-json": "*",
         "composer/composer": "^2.1",
         "composer-plugin-api": "^2.0",
 
@@ -56,6 +57,7 @@
         "infection/codeception-adapter": "^0.4.1",
 
         "rector/rector": "^0.18",
+        "symplify/easy-coding-standard": "^12.0",
 
         "italystrap/debug": "dev-master",
         "wp-cli/wp-cli": "^2.7",
@@ -132,6 +134,12 @@
         ],
         "rector:fix": [
             "@php ./vendor/bin/rector process"
+        ],
+        "ecs": [
+            "@php ./vendor/bin/ecs"
+        ],
+        "ecs:fix": [
+            "@php ./vendor/bin/ecs --fix"
         ],
         "theme/json": [
             "@php ./bin/theme-json"
