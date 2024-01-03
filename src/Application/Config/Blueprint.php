@@ -8,7 +8,7 @@ use ItalyStrap\ThemeJsonGenerator\Domain\SectionNames;
 
 final class Blueprint extends \ItalyStrap\Config\Config implements \JsonSerializable
 {
-    public function addBlockStyle(string $blockName, array $config): bool
+    public function setBlockStyle(string $blockName, array $config): bool
     {
         return $this->set(SectionNames::STYLES . '.blocks.' . $blockName, $config);
     }

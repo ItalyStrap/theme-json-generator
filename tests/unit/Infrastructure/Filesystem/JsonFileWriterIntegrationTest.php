@@ -87,7 +87,7 @@ class JsonFileWriterIntegrationTest extends UnitTestCase
       }
   }';
 
-        $this->blueprint->addBlockStyle('core/site-title', [
+        $this->blueprint->setBlockStyle('core/site-title', [
             'color' => $this->colorIntegration
                 ->text(self::COLOR_HEADING_TEXT),
             'typography' => $this->typographyIntegration
@@ -95,7 +95,7 @@ class JsonFileWriterIntegrationTest extends UnitTestCase
                 ->fontWeight('600'),
         ]);
 
-        $this->blueprint->addBlockStyle('core/post-title', [ // .wp-block-post-title
+        $this->blueprint->setBlockStyle('core/post-title', [ // .wp-block-post-title
             'color' => $this->colorIntegration
                 ->text(self::COLOR_HEADING_TEXT),
             'typography' => $this->typographyIntegration
@@ -109,7 +109,7 @@ class JsonFileWriterIntegrationTest extends UnitTestCase
             ],
         ]);
 
-        $this->blueprint->addBlockStyle('core/query-title', [
+        $this->blueprint->setBlockStyle('core/query-title', [
             'color' => $this->colorIntegration
                 ->text(self::COLOR_GRAY_400),
             'typography' => $this->typographyIntegration
