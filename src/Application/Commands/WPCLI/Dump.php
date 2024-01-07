@@ -19,12 +19,12 @@ use function sprintf;
 /**
  * @psalm-api
  */
-final class ThemeJson
+final class Dump
 {
     /**
      * @var string
      */
-    public const NAME = 'theme-json';
+    public const NAME = 'theme-json dump';
 
     /**
      * @param array<string, mixed> $args
@@ -32,6 +32,8 @@ final class ThemeJson
      */
     public function __invoke(array $args, array $assoc_args): void
     {
+
+        throw new Exception('This command is not implemented yet');
 
         /**
          * --parent

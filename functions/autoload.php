@@ -4,6 +4,6 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator;
 
-use ItalyStrap\ThemeJsonGenerator\Infrastructure\Commands\WPCLI\Register;
+use ItalyStrap\ThemeJsonGenerator\Infrastructure\Cli\WPCLI\Bootstrap;
 
-(new Register())();
+(new Bootstrap())();

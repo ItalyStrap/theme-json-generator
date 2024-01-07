@@ -16,7 +16,6 @@ final class Blueprint extends \ItalyStrap\Config\Config implements \JsonSerializ
     /**
      * @return mixed
      */
-    #[\ReturnTypeWillChange]
     public function jsonSerialize(): array
     {
         return $this->getArrayCopy();

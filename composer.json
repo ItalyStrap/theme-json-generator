@@ -83,9 +83,6 @@
     "suggest": {
         "spatie/color": "Allows to convert CSS color"
     },
-    "extra": {
-        "class": "\\ItalyStrap\\ThemeJsonGenerator\\Infrastructure\\Commands\\Composer\\Register"
-    },
     "bin": [
         "bin/theme-json"
     ],

@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace ItalyStrap\Tests\Unit\Application\Commands\WPCLI;
 
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Application\Commands\WPCLI\ThemeJson;
+use ItalyStrap\ThemeJsonGenerator\Application\Commands\WPCLI\Dump;
 use Prophecy\Argument;
 
 class ThemeJsonTest extends UnitTestCase
 {
-    protected function makeInstance(): ThemeJson
+    protected function makeInstance(): Dump
     {
-        return new ThemeJson();
+        return new Dump();
     }
 
     public function testItShouldBeInstantiatable(): void

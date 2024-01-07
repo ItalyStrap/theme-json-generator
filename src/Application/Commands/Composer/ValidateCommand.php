@@ -6,8 +6,9 @@ namespace ItalyStrap\ThemeJsonGenerator\Application\Commands\Composer;
 
 use Composer\Command\BaseCommand;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\DataFromJsonTrait;
-use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\FilesFinderTrait;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\RootFolderTrait;
+use ItalyStrap\ThemeJsonGenerator\Domain\Output\Validate;
+use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FilesFinder;
 use JsonSchema\Validator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -16,8 +17,19 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ValidateCommand extends BaseCommand
 {
     use RootFolderTrait;
-    use FilesFinderTrait;
     use DataFromJsonTrait;
+
+    private Validate $validate;
+    private FilesFinder $filesFinder;
+
+    public function __construct(
+        Validate $validate,
+        FilesFinder $filesFinder
+    ) {
+        $this->validate = $validate;
+        $this->filesFinder = $filesFinder;
+        parent::__construct();
+    }
 
     protected function configure()
     {
@@ -42,9 +54,7 @@ class ValidateCommand extends BaseCommand
             return Command::FAILURE;
         }
 
-        $jsonFiles = $this->findJsonFiles($rootFolder);
-
-        foreach ($jsonFiles as $file) {
+        foreach ($this->filesFinder->find($rootFolder, 'json') as $file) {
             $output->writeln('========================');
             $this->validateJsonFile((string)$file, $output, $schemaPath);
         }

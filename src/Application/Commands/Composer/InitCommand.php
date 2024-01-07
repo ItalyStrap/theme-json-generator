@@ -7,8 +7,9 @@ namespace ItalyStrap\ThemeJsonGenerator\Application\Commands\Composer;
 use Brick\VarExporter\VarExporter;
 use Composer\Command\BaseCommand;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\DataFromJsonTrait;
-use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\FilesFinderTrait;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\RootFolderTrait;
+use ItalyStrap\ThemeJsonGenerator\Domain\Output\Init;
+use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FilesFinder;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -18,7 +19,6 @@ use Webimpress\SafeWriter\FileWriter;
 class InitCommand extends BaseCommand
 {
     use RootFolderTrait;
-    use FilesFinderTrait;
     use DataFromJsonTrait;
 
     /**
@@ -39,8 +39,15 @@ return static function (ContainerInterface $container) {
 
 TEMPLATE;
 
-    public function __construct()
-    {
+    private FilesFinder $filesFinder;
+    private Init $init;
+
+    public function __construct(
+        Init $init,
+        FilesFinder $filesFinder
+    ) {
+        $this->init = $init;
+        $this->filesFinder = $filesFinder;
         parent::__construct();
     }
 
@@ -54,8 +61,9 @@ TEMPLATE;
     {
         $rootFolder = $this->rootFolder();
 
-        foreach ($this->findJsonFiles($rootFolder) as $file) {
-            $this->generateEntryPointDataFile($file . '.dist.php', $output, $file);
+        foreach ($this->filesFinder->find($rootFolder, 'json') as $file) {
+            $output->writeln('========================');
+            $this->generateEntryPointDataFile($file . '.dist.php', $output, (string)$file);
         }
 
         return Command::SUCCESS;
