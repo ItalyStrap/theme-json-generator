@@ -6,12 +6,12 @@ namespace ItalyStrap\Tests\Unit\Infrastructure\Filesystem;
 
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint;
-use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Collection;
-use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color\Palette;
-use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color\Utilities\ColorInfo;
-use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Color\Utilities\ColorModifier;
-use ItalyStrap\ThemeJsonGenerator\Domain\Styles\Color;
-use ItalyStrap\ThemeJsonGenerator\Domain\Styles\Typography;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Collection;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Palette;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorInfo;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorModifier;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Color;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Typography;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\JsonFileWriter;
 
 class JsonFileWriterIntegrationTest extends UnitTestCase

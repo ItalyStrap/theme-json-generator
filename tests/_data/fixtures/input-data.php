@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\Tests;
 
-use ItalyStrap\ThemeJsonGenerator\Domain\SectionNames;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\SectionNames;
 
 return [
     SectionNames::VERSION => 1,

@@ -6,12 +6,11 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Output;
 
 use ItalyStrap\Config\ConfigInterface;
 use ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint;
-use ItalyStrap\ThemeJsonGenerator\Domain\Settings\Collection;
-use ItalyStrap\ThemeJsonGenerator\Domain\Settings\CollectionInterface;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Collection;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\CollectionInterface;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\JsonFileWriter;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\ScssFileWriter;
 use Psr\Container\ContainerInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
 class Dump
 {

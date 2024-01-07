@@ -29,7 +29,6 @@ class InitCommand extends BaseCommand
 
 declare(strict_types=1);
 
-use ItalyStrap\ThemeJsonGenerator\Domain\SectionNames;
 use Psr\Container\ContainerInterface;
 
 return static function (ContainerInterface $container) {
