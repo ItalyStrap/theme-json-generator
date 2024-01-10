@@ -61,7 +61,6 @@ TEMPLATE;
     private function generateEntryPointDataFile(
         \SplFileInfo $file
     ): void {
-
         $entryPointFileName = $file->getFilename() . self::ENTRY_POINT_EXTENSION;
         $entryPointRealPath = $file->getPath() . DIRECTORY_SEPARATOR . $entryPointFileName;
         if (!\file_exists($entryPointRealPath)) {

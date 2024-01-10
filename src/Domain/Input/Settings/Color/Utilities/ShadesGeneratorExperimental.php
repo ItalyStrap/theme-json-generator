@@ -118,7 +118,6 @@ class ShadesGeneratorExperimental
      */
     public function toArray(): array
     {
-
         $colors = [];
         for ($i = $this->min; $i < $this->max; $i += $this->increment_by) {
             $colors[$i] = new Palette(

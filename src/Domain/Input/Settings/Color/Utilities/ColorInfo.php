@@ -65,7 +65,6 @@ final class ColorInfo implements ColorInfoInterface
      */
     public function relativeLuminance(ColorInfoInterface $color): float
     {
-
         $colors = [
             $this->luminance(),
             $color->luminance(),
@@ -73,7 +72,7 @@ final class ColorInfo implements ColorInfoInterface
 
         \sort($colors);
 
-        return ( $colors[1] + 0.05 ) / ( $colors[0] + 0.05 );
+        return ($colors[1] + 0.05) / ($colors[0] + 0.05);
     }
 
     /**
@@ -82,7 +81,7 @@ final class ColorInfo implements ColorInfoInterface
     public function red()
     {
         $red = $this->spatieColor->red();
-        if (! \is_string($red) && ! \is_int($red)) {
+        if (!\is_string($red) && !\is_int($red)) {
             throw new \Exception('The color is not string or int');
         }
 
@@ -95,7 +94,7 @@ final class ColorInfo implements ColorInfoInterface
     public function green()
     {
         $green = $this->spatieColor->green();
-        if (! \is_string($green) && ! \is_int($green)) {
+        if (!\is_string($green) && !\is_int($green)) {
             throw new \Exception('The color is not string or int');
         }
 
@@ -108,7 +107,7 @@ final class ColorInfo implements ColorInfoInterface
     public function blue()
     {
         $blue = $this->spatieColor->blue();
-        if (! \is_string($blue) && ! \is_int($blue)) {
+        if (!\is_string($blue) && !\is_int($blue)) {
             throw new \Exception('The color is not string or int');
         }
 

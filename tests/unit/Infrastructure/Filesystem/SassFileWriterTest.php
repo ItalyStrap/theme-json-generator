@@ -23,16 +23,15 @@ class SassFileWriterTest extends UnitTestCase
 
     public function testItShouldCreateScssFile(): void
     {
-
         $sut = $this->makeInstance();
         $data = new Config(
             [
-                'settings'  => [
-                    'custom'    => [
+                'settings' => [
+                    'custom' => [
                         'alignment--center' => 'center',
                     ],
                     'color' => [
-                        'palette'   => [
+                        'palette' => [
                         ],
                     ],
                 ]
@@ -109,7 +108,7 @@ class SassFileWriterTest extends UnitTestCase
         yield 'Custom' => [
             [
                 'custom' => [
-                    'alignmentCenter'   => 'center',
+                    'alignmentCenter' => 'center',
                 ],
             ],
             '$wp--custom--alignment-center',
@@ -120,7 +119,7 @@ class SassFileWriterTest extends UnitTestCase
             [
                 'custom' => [
                     'alignment' => [
-                        'center'    => 'center',
+                        'center' => 'center',
                     ],
                 ],
             ],

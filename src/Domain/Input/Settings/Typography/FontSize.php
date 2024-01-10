@@ -46,6 +46,6 @@ class FontSize implements ItemInterface
             'name' => $this->name,
             'size' => $this->size,
             'fluid' => $this->fluid,
-        ], static fn($value): bool => null !== $value);
+        ], static fn ($value): bool => null !== $value);
     }
 }

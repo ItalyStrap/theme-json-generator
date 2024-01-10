@@ -27,7 +27,6 @@ class MonochromaticColorsExperimental implements ColorsGenerator
 
     public function generate(): array
     {
-
         \arsort($this->steps);
         $colors = [];
         foreach ($this->steps as $weight) {

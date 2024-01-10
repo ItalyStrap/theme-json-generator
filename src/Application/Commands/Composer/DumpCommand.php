@@ -109,10 +109,7 @@ final class DumpCommand extends BaseCommand
             $output->writeln($exception->getMessage());
         }
 
-        $command = new class (
-            $rootFolder,
-            $input->getOption('dry-run')
-        ) {
+        $command = new class($rootFolder, $input->getOption('dry-run')) {
             private string $rootFolder = '';
             private bool $dry_run;
 

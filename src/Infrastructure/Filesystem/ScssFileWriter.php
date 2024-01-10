@@ -38,7 +38,7 @@ class ScssFileWriter implements FileWriter
 
         $_file = new \SplFileObject($this->path, 'a');
 
-        if (! $_file->isWritable()) {
+        if (!$_file->isWritable()) {
             throw new \RuntimeException('The file is not writable');
         }
 
@@ -59,10 +59,10 @@ class ScssFileWriter implements FileWriter
         $content = '';
 
         $schema = [
-            'settings.color.palette'            => '--wp--preset--color',
-            'settings.color.gradients'          => '--wp--preset--gradient',
-            'settings.typography.fontFamilies'  => '--wp--preset--font-family',
-            'settings.typography.fontSizes'     => '--wp--preset--font-size',
+            'settings.color.palette' => '--wp--preset--color',
+            'settings.color.gradients' => '--wp--preset--gradient',
+            'settings.typography.fontFamilies' => '--wp--preset--font-family',
+            'settings.typography.fontSizes' => '--wp--preset--font-size',
         ];
 
         foreach ($schema as $slug => $prefix) {
@@ -88,13 +88,13 @@ class ScssFileWriter implements FileWriter
         return $content;
     }
 
-//  private function generateScssMap( string $slug, string $prefix ): string {
+    //  private function generateScssMap( string $slug, string $prefix ): string {
 //      return \sprintf(
 //          '"%1$s": %2$s--%1$s,' . PHP_EOL,
 //          $this->camelToUnderscore( $slug ),
 //          $prefix
 //      );
-//  }
+    //  }
 
     /**
      * @param string $slug
@@ -126,7 +126,7 @@ class ScssFileWriter implements FileWriter
          * @var string|array<string, string> $value
          */
         foreach ($tree as $property => $value) {
-            if (! \is_string($property)) {
+            if (!\is_string($property)) {
                 throw new \RuntimeException(
                     \sprintf(
                         'Property key is not a string, actual value is: %s',
@@ -143,7 +143,7 @@ class ScssFileWriter implements FileWriter
 
             if (\is_array($value)) {
                 $new_prefix = $new_key . $token;
-                $result     = \array_merge(
+                $result = \array_merge(
                     $result,
                     $this->flattenTree($value, $new_prefix, $token)
                 );

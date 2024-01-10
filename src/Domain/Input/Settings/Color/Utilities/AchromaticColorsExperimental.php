@@ -12,7 +12,7 @@ class AchromaticColorsExperimental implements ColorsGenerator
     public function generate(): array
     {
         return \array_map(
-            static fn(string $color): ColorInfoInterface => new ColorInfo($color),
+            static fn (string $color): ColorInfoInterface => new ColorInfo($color),
             ['#000000', '#ffffff']
         );
     }

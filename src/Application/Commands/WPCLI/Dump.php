@@ -32,7 +32,6 @@ final class Dump
      */
     public function __invoke(array $args, array $assoc_args): void
     {
-
         throw new Exception('This command is not implemented yet');
 
         /**
@@ -41,7 +40,7 @@ final class Dump
          * @var array<string, mixed> $assoc_args_default
          */
         $assoc_args_default = [
-            'parent'    => false,
+            'parent' => false,
         ];
 
         $assoc_args = array_replace_recursive($assoc_args_default, $assoc_args);

@@ -58,17 +58,17 @@ class CollectionIntegrationTest extends UnitTestCase
         );
 
         $sut->addMultiple((new CollectionAdapter([
-            'contentSize'   => 'clamp(16rem, 60vw, 60rem)',
-            'wideSize'      => 'clamp(16rem, 85vw, 70rem)',
-            'baseFontSize'  => "{{fontSize.base}}",
-            'spacer'        => [
-                'base'  => '1rem',
-                'v'     => 'calc( {{spacer.base}} * 4 )',
-                'h'     => 'calc( {{spacer.base}} * 4 )',
-                's'     => 'calc( {{spacer.base}} / 1.5 )',
-                'm'     => 'calc( {{spacer.base}} * 2 )',
-                'l'     => 'calc( {{spacer.base}} * 3 )',
-                'xl'    => 'calc( {{spacer.base}} * 4 )',
+            'contentSize' => 'clamp(16rem, 60vw, 60rem)',
+            'wideSize' => 'clamp(16rem, 85vw, 70rem)',
+            'baseFontSize' => "{{fontSize.base}}",
+            'spacer' => [
+                'base' => '1rem',
+                'v' => 'calc( {{spacer.base}} * 4 )',
+                'h' => 'calc( {{spacer.base}} * 4 )',
+                's' => 'calc( {{spacer.base}} / 1.5 )',
+                'm' => 'calc( {{spacer.base}} * 2 )',
+                'l' => 'calc( {{spacer.base}} * 3 )',
+                'xl' => 'calc( {{spacer.base}} * 4 )',
             ],
             'grandParentField' => [
                 'parentField' => [
@@ -80,17 +80,17 @@ class CollectionIntegrationTest extends UnitTestCase
         $customCollection = $sut->toArrayByCategory('custom');
         $this->assertSame(
             [
-                'contentSize'   => 'clamp(16rem, 60vw, 60rem)',
-                'wideSize'      => 'clamp(16rem, 85vw, 70rem)',
-                'baseFontSize'  => 'var(--wp--preset--font-size--base)',
-                'spacer'        => [
-                    'base'  => '1rem',
-                    'v'     => 'calc( var(--wp--custom--spacer--base) * 4 )',
-                    'h'     => 'calc( var(--wp--custom--spacer--base) * 4 )',
-                    's'     => 'calc( var(--wp--custom--spacer--base) / 1.5 )',
-                    'm'     => 'calc( var(--wp--custom--spacer--base) * 2 )',
-                    'l'     => 'calc( var(--wp--custom--spacer--base) * 3 )',
-                    'xl'    => 'calc( var(--wp--custom--spacer--base) * 4 )',
+                'contentSize' => 'clamp(16rem, 60vw, 60rem)',
+                'wideSize' => 'clamp(16rem, 85vw, 70rem)',
+                'baseFontSize' => 'var(--wp--preset--font-size--base)',
+                'spacer' => [
+                    'base' => '1rem',
+                    'v' => 'calc( var(--wp--custom--spacer--base) * 4 )',
+                    'h' => 'calc( var(--wp--custom--spacer--base) * 4 )',
+                    's' => 'calc( var(--wp--custom--spacer--base) / 1.5 )',
+                    'm' => 'calc( var(--wp--custom--spacer--base) * 2 )',
+                    'l' => 'calc( var(--wp--custom--spacer--base) * 3 )',
+                    'xl' => 'calc( var(--wp--custom--spacer--base) * 4 )',
                 ],
                 'grandParentField' => [
                     'parentField' => [

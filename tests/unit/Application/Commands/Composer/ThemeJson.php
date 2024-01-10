@@ -62,7 +62,7 @@ class ThemeJson extends UnitTestCase
 //        $this->expectException(\RuntimeException::class);
 //
 //        $sut = $this->makeInstance();
-////      $sut->process($this->makeComposer(), $this->makeIo());
+        ////      $sut->process($this->makeComposer(), $this->makeIo());
 //
 //        $theme_json_file_path = dirname($theme_json_file_path);
 //        $this->assertFileNotExists($theme_json_file_path . '/theme.json', '');
@@ -84,8 +84,8 @@ class ThemeJson extends UnitTestCase
         $this->rootPackage->getType()->willReturn('wordpress-theme');
         $this->rootPackage->getExtra()->willReturn([
             'theme-json' => [
-                'callable' => static fn(): array => ['key' => 'value'],
-                'path-for-theme-sass'   => 'assets/',
+                'callable' => static fn (): array => ['key' => 'value'],
+                'path-for-theme-sass' => 'assets/',
             ],
         ]);
 
@@ -115,7 +115,7 @@ class ThemeJson extends UnitTestCase
     public function testItShouldCreateThemeJsonFileFromRequiredPackage(): void
     {
         $this->markTestSkipped('This test needs to be fixed');
-        $theme_json_file_path = codecept_output_dir(random_int(0, mt_getrandmax()) .  '/vendor');
+        $theme_json_file_path = codecept_output_dir(random_int(0, mt_getrandmax()) . '/vendor');
 
         $this->composerConfig
             ->get(Argument::type('string'))
@@ -127,7 +127,7 @@ class ThemeJson extends UnitTestCase
         $this->rootPackage->getType()->willReturn('wordpress-theme');
         $this->rootPackage->getExtra()->willReturn([
             'theme-json' => [
-                'callable' => static fn(): array => ['key' => 'value'],
+                'callable' => static fn (): array => ['key' => 'value'],
             ],
         ]);
 

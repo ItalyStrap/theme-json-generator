@@ -54,7 +54,7 @@ final class ColorModifier implements ColorModifierInterface
 
     public function darken(int $amount = 0): ColorInfoInterface
     {
-        return $this->createNewColorWithChangedLightnessOrOpacity(- $amount);
+        return $this->createNewColorWithChangedLightnessOrOpacity(-$amount);
     }
 
     public function lighten(int $amount = 0): ColorInfoInterface
@@ -191,9 +191,9 @@ final class ColorModifier implements ColorModifierInterface
      */
     private function mixRgb(ColorInfoInterface $color_1, ColorInfoInterface $color_2, float $weight = 0.5): array
     {
-        $f = static fn(int $x): float => $weight * $x;
-        $g = static fn(int $x): float => ( 1 - $weight ) * $x;
-        $h = static fn(float $x, float $y): float => \round($x + $y);
+        $f = static fn (int $x): float => $weight * $x;
+        $g = static fn (int $x): float => (1 - $weight) * $x;
+        $h = static fn (float $x, float $y): float => \round($x + $y);
 
         return \array_map(
             $h,
@@ -206,7 +206,7 @@ final class ColorModifier implements ColorModifierInterface
     {
         return $value > 100
             ? 100
-            : ( $value < 0 ? 0 : (int) $value );
+            : ($value < 0 ? 0 : (int) $value);
     }
 
     /**

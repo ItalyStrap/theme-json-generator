@@ -25,7 +25,7 @@ final class Bootstrap
         $injector->alias(ConfigInterface::class, Config::class);
 
         $injector->alias(FinderInterface::class, Finder::class);
-        $injector->delegate(Finder::class, fn(): FinderInterface => (new FinderFactory())->make());
+        $injector->delegate(Finder::class, fn (): FinderInterface => (new FinderFactory())->make());
 
         $injector->alias(
             EventDispatcherInterface::class,

@@ -130,8 +130,9 @@ class UnitTestCase extends Unit
         return $this->palette->reveal();
     }
 
-	// phpcs:ignore -- Method from Codeception
-	protected function _before() {
+    // phpcs:ignore -- Method from Codeception
+    protected function _before()
+    {
         $this->item = $this->prophesize(ItemInterface::class);
         $this->colorInfo = $this->prophesize(ColorInfoInterface::class);
         $this->gradient = $this->prophesize(GradientInterface::class);

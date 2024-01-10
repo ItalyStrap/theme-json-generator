@@ -26,7 +26,7 @@ class LinearGradient implements GradientInterface
         return \sprintf(
             'linear-gradient(%s, %s)',
             $this->direction === '' ? 'to bottom' : $this->direction,
-            \implode(', ', \array_map(static fn(Palette $color): string => $color->var(), $this->colors))
+            \implode(', ', \array_map(static fn (Palette $color): string => $color->var(), $this->colors))
         );
     }
 }

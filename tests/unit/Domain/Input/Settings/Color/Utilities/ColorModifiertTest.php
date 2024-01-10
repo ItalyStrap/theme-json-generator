@@ -182,7 +182,6 @@ class ColorModifiertTest extends UnitTestCase
 
     public static function weightProvider(): \Generator
     {
-
         yield '1 white' => [
             1, // weight
             '#ffffff', // Expected

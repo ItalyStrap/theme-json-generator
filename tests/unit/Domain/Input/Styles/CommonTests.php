@@ -57,11 +57,11 @@ trait CommonTests
                 'blocks' => [
                     'core/site-title' => [
                         'color' => $object1 = $sut->property('property', 'core/site-title'),
-                        'typography'    => $object2 = $sut->property('property', 'core/site-title'),
+                        'typography' => $object2 = $sut->property('property', 'core/site-title'),
                     ],
                     'core/post-title' => [
                         'color' => $object3 = $sut->property('property', 'core/post-title'),
-                        'typography'    => $object4 = $sut->property('property', 'core/post-title'),
+                        'typography' => $object4 = $sut->property('property', 'core/post-title'),
                     ],
                 ],
             ],

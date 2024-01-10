@@ -97,7 +97,7 @@ TEMPLATE;
             }
         );
 
-        $command = new class ($rootFolder) {
+        $command = new class($rootFolder) {
             private string $rootFolder = '';
 
             public function __construct(string $rootFolder)

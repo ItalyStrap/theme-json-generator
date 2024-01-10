@@ -18,72 +18,71 @@ class SpacingTest extends UnitTestCase
 
     public static function valueProvider(): \Generator
     {
-
         yield '1 value' => [
             ['0px'],
             [
-                'top'       => '0px',
-                'right'     => '0px',
-                'bottom'    => '0px',
-                'left'      => '0px',
+                'top' => '0px',
+                'right' => '0px',
+                'bottom' => '0px',
+                'left' => '0px',
             ]
         ];
 
         yield '1 value with int 0 without unit' => [
             [0],
             [
-                'top'       => '0',
-                'right'     => '0',
-                'bottom'    => '0',
-                'left'      => '0',
+                'top' => '0',
+                'right' => '0',
+                'bottom' => '0',
+                'left' => '0',
             ]
         ];
 
         yield '1 value with string "0" without unit' => [
             ['0'],
             [
-                'top'       => '0',
-                'right'     => '0',
-                'bottom'    => '0',
-                'left'      => '0',
+                'top' => '0',
+                'right' => '0',
+                'bottom' => '0',
+                'left' => '0',
             ]
         ];
 
-        yield '2 values'    => [
+        yield '2 values' => [
             ['0px', 'auto'],
             [
-                'top'       => '0px',
-                'right'     => 'auto',
-                'bottom'    => '0px',
-                'left'      => 'auto',
+                'top' => '0px',
+                'right' => 'auto',
+                'bottom' => '0px',
+                'left' => 'auto',
             ]
         ];
 
-        yield '3 values'    => [
+        yield '3 values' => [
             ['0px', 'auto', '10px'],
             [
-                'top'       => '0px',
-                'right'     => 'auto',
-                'bottom'    => '10px',
-                'left'      => 'auto',
+                'top' => '0px',
+                'right' => 'auto',
+                'bottom' => '10px',
+                'left' => 'auto',
             ]
         ];
 
-        yield '4 values'    => [
+        yield '4 values' => [
             ['1px', '2px', '3px', '4px'],
             [
-                'top'       => '1px',
-                'right'     => '2px',
-                'bottom'    => '3px',
-                'left'      => '4px',
+                'top' => '1px',
+                'right' => '2px',
+                'bottom' => '3px',
+                'left' => '4px',
             ]
         ];
 
-        yield '4 values with some empty'    => [
+        yield '4 values with some empty' => [
             ['1px', '', '3px', ''],
             [
-                'top'       => '1px',
-                'bottom'    => '3px',
+                'top' => '1px',
+                'bottom' => '3px',
             ]
         ];
     }
@@ -126,7 +125,6 @@ class SpacingTest extends UnitTestCase
      */
     public function testItShouldReturnAnArray(string $method, string $value): void
     {
-
         $sut = $this->makeInstance();
 
         \call_user_func([$sut, $method], $value);
@@ -136,7 +134,6 @@ class SpacingTest extends UnitTestCase
 
     public function testItShouldReturnTheCorrectValue(): void
     {
-
         $sut = $this->makeInstance();
         $result = $sut->top('25px')
             ->right('25px')
@@ -145,10 +142,10 @@ class SpacingTest extends UnitTestCase
 
         $this->assertEquals(
             [
-                'top'       => '25px',
-                'right'     => '25px',
-                'bottom'    => '50px',
-                'left'      => '5rem',
+                'top' => '25px',
+                'right' => '25px',
+                'bottom' => '50px',
+                'left' => '5rem',
             ],
             $result->toArray()
         );
@@ -156,7 +153,6 @@ class SpacingTest extends UnitTestCase
 
     public function testItShouldBeImmutableAlsoIfICloneIt(): void
     {
-
         $sut = $this->makeInstance();
         $result = $sut->top('25px')
             ->left('25px');

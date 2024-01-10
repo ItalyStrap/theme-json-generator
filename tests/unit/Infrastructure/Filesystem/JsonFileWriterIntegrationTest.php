@@ -16,10 +16,10 @@ use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\JsonFileWriter;
 
 class JsonFileWriterIntegrationTest extends UnitTestCase
 {
-    const COLOR_HEADING_TEXT = Palette::CATEGORY . '.headingColor';
-    const FONT_SIZE_H1 = 'font-size-h1';
-    const COLOR_GRAY_400 = 'color-gray-400';
-    const FONT_SIZE_H5 = 'font-size-h5';
+    public const COLOR_HEADING_TEXT = Palette::CATEGORY . '.headingColor';
+    public const FONT_SIZE_H1 = 'font-size-h1';
+    public const COLOR_GRAY_400 = 'color-gray-400';
+    public const FONT_SIZE_H5 = 'font-size-h5';
 
     private string $theme_json_path;
     private Blueprint $blueprint;

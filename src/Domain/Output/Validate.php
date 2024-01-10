@@ -43,7 +43,6 @@ class Validate
         \SplFileInfo $file,
         string $schemaPath
     ): void {
-
         $data = $this->objectFromPath((string)$file);
         $this->validator->validate($data, (object)['$ref' => 'file://' . \realpath($schemaPath)]);
 

@@ -25,7 +25,7 @@ class JsonFileWriterTest extends UnitTestCase
         $expected = '{"key": "value"}';
 
         $data = new Blueprint([
-            'key'   => 'value',
+            'key' => 'value',
         ]);
 
         $sut->write($data);

@@ -62,6 +62,6 @@ class Duotone implements ItemInterface
      */
     private function assertValidColors(Palette ...$colors): array
     {
-        return \array_map(static fn(Palette $color): string => (string)$color->color()->toRgba(), $colors);
+        return \array_map(static fn (Palette $color): string => (string)$color->color()->toRgba(), $colors);
     }
 }

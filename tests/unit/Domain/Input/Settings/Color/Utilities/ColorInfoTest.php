@@ -112,7 +112,7 @@ class ColorInfoTest extends UnitTestCase
 
     public static function colorProvider(): \Generator
     {
-        yield 'Dark hex'    => [
+        yield 'Dark hex' => [
             '#000000', // Color
             '00', // Red
             '00', // Green
@@ -148,7 +148,7 @@ class ColorInfoTest extends UnitTestCase
 
     public static function colorProviderForArray(): \Generator
     {
-        yield 'Dark hex'    => [
+        yield 'Dark hex' => [
             '#000000', // Color
             [
                 '00', // Red
