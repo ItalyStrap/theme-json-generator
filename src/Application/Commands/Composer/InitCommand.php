@@ -8,8 +8,12 @@ use Brick\VarExporter\VarExporter;
 use Composer\Command\BaseCommand;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\DataFromJsonTrait;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\RootFolderTrait;
+use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\EntryPointCanNotBeCreated;
+use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\EntryPointCreated;
+use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\EntryPointDoesNotExist;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Init;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FilesFinder;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -40,11 +44,14 @@ TEMPLATE;
 
     private FilesFinder $filesFinder;
     private Init $init;
+    private EventDispatcherInterface $dispatcher;
 
     public function __construct(
+        EventDispatcherInterface $dispatcher,
         Init $init,
         FilesFinder $filesFinder
     ) {
+        $this->dispatcher = $dispatcher;
         $this->init = $init;
         $this->filesFinder = $filesFinder;
         parent::__construct();
@@ -60,68 +67,52 @@ TEMPLATE;
     {
         $rootFolder = $this->rootFolder();
 
-        foreach ($this->filesFinder->find($rootFolder, 'json') as $file) {
-            $output->writeln('========================');
-            $this->generateEntryPointDataFile($file . '.dist.php', $output, (string)$file);
-        }
+        $this->dispatcher->addListener(
+            EntryPointDoesNotExist::class,
+            static function (EntryPointDoesNotExist $event) use ($output): void {
+                $output->writeln(\sprintf(
+                    'Entry file does not exist, creating %s file',
+                    $event->getFile()
+                ));
+            }
+        );
 
-        return Command::SUCCESS;
-    }
+        $this->dispatcher->addListener(
+            EntryPointCreated::class,
+            static function (EntryPointCreated $event) use ($output): void {
+                $output->writeln(\sprintf(
+                    'Entry file %s created',
+                    $event->getFile()
+                ));
+            }
+        );
 
-    private function generateEntryPointDataFile(
-        string $themePhpPath,
-        OutputInterface $output,
-        string $themeJsonPath
-    ): void {
-        if (!\file_exists($themePhpPath)) {
-            $phpFileName = \basename($themePhpPath);
-            $output->writeln(\sprintf(
-                'Entry file does not exist, creating %s file',
-                $phpFileName
-            ));
-            $dataExported = $this->exportFromThemeJsonIfExists($themeJsonPath);
-
-            $content = \sprintf(
-                self::ENTRY_POINT_TEMPLATE,
-                \trim($dataExported)
-            );
-
-            try {
-                FileWriter::writeFile($themePhpPath, $content, 0666);
-            } catch (FileWriterException $fileWriterException) {
+        $this->dispatcher->addListener(
+            EntryPointCanNotBeCreated::class,
+            static function (EntryPointCanNotBeCreated $event) use ($output): void {
                 $output->writeln(\sprintf(
                     'Entry file %s cannot be created because of an error',
-                    $phpFileName
+                    $event->getFile()
                 ));
-                return;
+            }
+        );
+
+        $command = new class ($rootFolder) {
+            private string $rootFolder = '';
+
+            public function __construct(string $rootFolder)
+            {
+                $this->rootFolder = $rootFolder;
             }
 
-            $output->writeln(\sprintf(
-                'Entry file %s created',
-                $phpFileName
-            ));
-        }
-    }
+            public function getRootFolder(): string
+            {
+                return $this->rootFolder;
+            }
+        };
 
-    private function exportFromThemeJsonIfExists(string $themeJsonPath)
-    {
-        if (!\file_exists($themeJsonPath)) {
-            return 'return [];';
-        }
+        $this->init->handle($command);
 
-        $data = $this->associativeFromPath($themeJsonPath);
-
-        $dataExported = VarExporter::export($data, VarExporter::ADD_RETURN | VarExporter::TRAILING_COMMA_IN_ARRAY, 1);
-        return \str_replace(
-            [
-                "'\$schema'",
-                "'version'",
-            ],
-            [
-                'SectionNames::SCHEMA',
-                'SectionNames::VERSION',
-            ],
-            $dataExported
-        );
+        return Command::SUCCESS;
     }
 }

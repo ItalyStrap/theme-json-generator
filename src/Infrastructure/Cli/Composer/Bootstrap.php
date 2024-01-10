@@ -14,6 +14,7 @@ use ItalyStrap\Finder\FinderInterface;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Composer\DumpCommand;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Composer\InitCommand;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Composer\ValidateCommand;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
 final class Bootstrap
 {
@@ -25,6 +26,12 @@ final class Bootstrap
 
         $injector->alias(FinderInterface::class, Finder::class);
         $injector->delegate(Finder::class, fn(): FinderInterface => (new FinderFactory())->make());
+
+        $injector->alias(
+            EventDispatcherInterface::class,
+            \Symfony\Component\EventDispatcher\EventDispatcher::class
+        );
+        $injector->share(EventDispatcherInterface::class);
 
         $application = new Application();
         $application->add($injector->make(InitCommand::class));

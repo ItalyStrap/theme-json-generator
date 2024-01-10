@@ -17,7 +17,7 @@ trait DataFromJsonTrait
     }
 
     /**
-     * @return array<mixed>|object
+     * @return array|object
      */
     private function fromPath(string $path, ?bool $associative)
     {

@@ -8,18 +8,70 @@ use ItalyStrap\Config\ConfigInterface;
 use ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Collection;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\CollectionInterface;
+use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FilesFinder;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\JsonFileWriter;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\ScssFileWriter;
 use Psr\Container\ContainerInterface;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
 class Dump
 {
     private ConfigInterface $config;
+    private FilesFinder $filesFinder;
+    private EventDispatcherInterface $dispatcher;
 
     public function __construct(
-        ConfigInterface $config
+        EventDispatcherInterface $dispatcher,
+        ConfigInterface $config,
+        FilesFinder $filesFinder
     ) {
         $this->config = $config;
+        $this->filesFinder = $filesFinder;
+        $this->dispatcher = $dispatcher;
+    }
+
+    public function handle(object $command): void
+    {
+        /**
+         * Let's test the new workflow
+         * @todo add key for json file name to be created
+         * @example $name => $file
+         *         'theme' => 'theme.dist.json'
+         */
+        foreach ($this->filesFinder->find($command->getRootFolder(), 'php') as $fileName => $file) {
+            // $this->dispatcher->dispatch(new GeneratingFile($file->getFilename()));
+//          $folderToCreateFile = $command->getRootFolder();
+//          if (\strpos((string)$file, '/styles') !== false) {
+//              $folderToCreateFile .= '/styles';
+//          }
+//          $this->executeCallable(require $file, $folderToCreateFile, $fileName);
+            $this->executeCallable(require $file, $file->getPath(), $fileName, $command, $file);
+        }
+    }
+
+    private function executeCallable(
+        callable $entryPoint,
+        string $rootFolder,
+        string $fileName,
+        object $command,
+        \SplFileInfo $file
+    ): void {
+        $injector = $this->configureContainer();
+        $injector->execute($entryPoint);
+        $blueprint = $injector->make(Blueprint::class);
+
+//      var_dump($fileName);
+//      var_dump($file);
+//      var_dump($file->getPath() . DIRECTORY_SEPARATOR . $fileName);
+
+//      (new JsonFileWriter($file->getPath() . DIRECTORY_SEPARATOR . $fileName . '.test.json'))
+//          ->write($blueprint);
+
+        if ($command->isDryRun()) {
+            // Add event the command is in dry run mode
+            // $this->dispatcher->dispatch(new DryRunMode(''));
+            return;
+        }
     }
 
     /**
@@ -45,16 +97,6 @@ class Dump
                 \rtrim($path_for_theme_sass, '/') . DIRECTORY_SEPARATOR . $fileName . '.scss'
             ))->write($blueprint);
         }
-    }
-
-    public function executeCallable(
-        callable $entryPoint,
-        string $rootFolder,
-        string $fileName
-    ): void {
-        $injector = $this->configureContainer();
-        $injector->execute($entryPoint);
-        $blueprint = $injector->make(Blueprint::class);
     }
 
     /**

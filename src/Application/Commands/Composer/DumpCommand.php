@@ -13,6 +13,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\Process;
 
 /**
  * @psalm-api
@@ -68,11 +69,11 @@ final class DumpCommand extends BaseCommand
         );
 
         $this->addOption(
-            'validate',
+            ValidateCommand::NAME,
             null,
             InputOption::VALUE_NONE,
             \sprintf(
-                'If set, %s will validate the generated theme.json file.',
+                'If set, %s will validate all the generated json files.',
                 self::NAME
             )
         );
@@ -82,20 +83,14 @@ final class DumpCommand extends BaseCommand
          *       --no-pretty-print
          *       --indent=2 (default is 4)
          *       --config (provide a custom config file)
-         *       --delete -D (delete the generated theme.json file)
+         *       --delete -D (delete the json file before generate it) before deleting the file, check if the related php file exists
          */
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $io = $this->getIO();
         $composer = $this->requireComposer();
         $rootFolder = $this->rootFolder();
-
-        // Get the value of --dry-run
-        $dry_run = $input->getOption('dry-run');
-        // Get the value of --validate
-        $validate = $input->getOption('validate');
 
         $output->writeln('<info>Generating theme.json file</info>');
 
@@ -109,25 +104,47 @@ final class DumpCommand extends BaseCommand
 
         try {
             $this->dump->processBlueprint($callback, $rootFolder, 'theme');
+            $output->writeln('<info>Generated theme.json file</info>');
         } catch (\Exception $exception) {
             $output->writeln($exception->getMessage());
         }
 
-        /**
-         * Let's test the new workflow
-         * @todo add key for json file name to be created
-         * @example $name => $file
-         *         'theme' => 'theme.dist.json'
-         */
-        foreach ($this->filesFinder->find($rootFolder, 'php') as $fileName => $file) {
-            $folderToCreateFile = $rootFolder;
-            if (\strpos((string)$file, '/styles') !== false) {
-                $folderToCreateFile .= '/styles';
-            }
-            $this->dump->executeCallable(require $file, $folderToCreateFile, $fileName);
-        }
+        $command = new class (
+            $rootFolder,
+            $input->getOption('dry-run')
+        ) {
+            private string $rootFolder = '';
+            private bool $dry_run;
 
-        $output->writeln('<info>Generated theme.json file</info>');
+            public function __construct(
+                string $rootFolder,
+                bool $dry_run
+            ) {
+                $this->rootFolder = $rootFolder;
+                $this->dry_run = $dry_run;
+            }
+
+            public function getRootFolder(): string
+            {
+                return $this->rootFolder;
+            }
+
+            public function isDryRun(): bool
+            {
+                return $this->dry_run;
+            }
+        };
+
+        $this->dump->handle($command);
+
+        if ($input->getOption(ValidateCommand::NAME)) {
+            $process = new Process(['php', 'vendor/bin/theme-json', ValidateCommand::NAME]);
+            $process->run();
+
+            $output->write($process->getOutput());
+
+            return $process->getExitCode();
+        }
 
         return Command::SUCCESS;
     }
