@@ -3,4 +3,4 @@
 
 declare(strict_types=1);
 
-require 'theme.json.php';
+require 'theme-json.php';
