@@ -1,17 +1,25 @@
 # ItalyStrap Theme Json Generator
 
-[![Build Status](https://github.com/ItalyStrap/theme-json-generator/actions/workflows/test.yml/badge.svg)](https://github.com/ItalyStrap/theme-json-generator/actions)
+[![Tests Status](https://github.com/ItalyStrap/theme-json-generator/actions/workflows/test.yml/badge.svg)](https://github.com/ItalyStrap/theme-json-generator/actions)
+[![Latest Stable Version](https://img.shields.io/packagist/v/italystrap/theme-json-generator.svg)](https://packagist.org/packages/italystrap/theme-json-generator)
+[![Total Downloads](https://img.shields.io/packagist/dt/italystrap/theme-json-generator.svg)](https://packagist.org/packages/italystrap/theme-json-generator)
+[![Latest Unstable Version](https://img.shields.io/packagist/vpre/italystrap/theme-json-generator.svg)](https://packagist.org/packages/italystrap/theme-json-generator)
+[![License](https://img.shields.io/packagist/l/italystrap/theme-json-generator.svg)](https://packagist.org/packages/italystrap/theme-json-generator)
+![PHP from Packagist](https://img.shields.io/packagist/php-v/italystrap/theme-json-generator)
 
 WordPress Theme Json Generator the OOP way
 
 This is a WIP project and still experimental.
+Until this package reach the version 1.x.x, we still on 0.x.x version (if you don't know what this means, please read the [SemVer](http://semver.org/) specification).
 
-The idea is to generate a file `theme.json` from PHP because json sucks 😁 (just kidding)
+In short because of 0.x.x version the API can change at any time.
 
-With PHP, you have the ability to split the file in multiple files, add comments, generate the content as you wish, 
+The idea is to generate a file `theme.json` (and all others `*.json` files inside the `styles` folder) from PHP because json sucks 😁 (just kidding)
+
+With PHP, you have the ability to split the file in multiple files, add comments, generate the content and many more other stuff as you wish, 
 PHP is not limited like json.
 
-I'm experimenting this library as composer and WP_CLI plugin for generating the file.
+I'm experimenting this library as CLI and WP_CLI (the latter is on hold right now) command for generating and validating JSON files for a BLock Theme.
 
 ## Table Of Contents
 
@@ -32,21 +40,54 @@ This package adheres to the [SemVer](http://semver.org/) specification and will 
 
 ## Basic Usage
 
+This package must be used only for development purpose, using it in production is not recommended because of performance reasons.
+The files need to be already generated when you are in production.
+All JSON files act as a cache, do not even think to generate them on the fly.
+So, do not use this package in production.
+
+This package add CLI commands to initialize, generate and validate JSONs files.
+
 ### How it works
 
-#### Composer Plugin
+Basically, this CLI executes the following steps:
 
-Basically, this plugin executes the following steps:
+* Init the entrypoint used to generate the JSON file.
+* Generate the JSON file using the entrypoint generated.
+* Validate the JSON files generated.
 
-* This package adds a Composer plugin and a WP_CLI command.
-* After that you can use the command `wp theme-json generate` or `composer theme-json generate` to generate the file.
+#### CLI
 
-* This plugin searches for a custom callback you provide trough `composer.json` inside `extra` field.
+```shell
+./vendor/bin/theme-json init
+```
+
+This command will initialize all antrypoints used to generate the JSON file.
+First this command will check if a `theme.json` file exists in the root of the theme, if not it will create it.
+Then it will create the entrypoint for the `theme.json` file and all the others inside the `styles` folder, the entrypoint will be a PHP file called the same as the name of the JSON  file plus the `.php` extension, so for example the `theme.json` will have the entrypoint `theme.json.php` and so on.
+This way all entrypoint will be closer to the JSON file they generate.
+
+
+```shell
+./vendor/bin/theme-json dump
+```
+
+This command will generate the JSON file using the entrypoint generated.
+
+```shell
+./vendor/bin/theme-json validate
+```
+
+This command will validate the JSON files generated.
+
+* * `.vendor/bin/theme-json init` to initialize the entrypoint used to generate the JSON file.
+* * `.vendor/bin/theme-json dump` to generate the JSON file using the entrypoint generated.
+* * `.vendor/bin/theme-json validate` to validate the JSON files generated.
+
+The entrypoints generated are PHP files that will return a callable.
+
 * The callback needs to return an array with your [theme config](https://developer.wordpress.org/themes/global-settings-and-styles/) and the callback accepts a string argument where you get the 
   path of the theme.
 * At the end it generates the **theme.json** in the root folder of the theme you are developing.
-
-#### WP_CLI command
 
 #### Under the hood
 
@@ -422,6 +463,8 @@ return [
 `CollectionInterface::value( string $slug )` will return the value of the CSS property.
 
 The `styles` section coming soon, I'm working on it.
+
+[🆙](#table-of-contents)
 
 ## Changelog
 
