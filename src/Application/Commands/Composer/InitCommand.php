@@ -25,6 +25,8 @@ class InitCommand extends BaseCommand
     use RootFolderTrait;
     use DataFromJsonTrait;
 
+    public const NAME = 'init';
+
     /**
      * @var string
      */
@@ -59,7 +61,7 @@ TEMPLATE;
 
     protected function configure(): void
     {
-        $this->setName('init');
+        $this->setName(self::NAME);
         $this->setDescription('Initialize theme.json file');
     }
 
@@ -97,7 +99,7 @@ TEMPLATE;
             }
         );
 
-        $command = new class($rootFolder) {
+        $command = new class ($rootFolder) {
             private string $rootFolder = '';
 
             public function __construct(string $rootFolder)

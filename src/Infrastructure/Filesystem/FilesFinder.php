@@ -19,10 +19,6 @@ class FilesFinder
     }
 
     /**
-     * @todo some alternative to file name:
-     * - theme.json.php
-     * - theme.json.dist.php
-     *
      * @return iterable<\SplFileInfo>
      */
     public function find(
@@ -42,13 +38,13 @@ class FilesFinder
             return;
         }
 
-        $found = $this->finder
+        $files = $this->finder
             ->in([
                 $stylesFolder,
             ])
-            ->allFiles(['*', 'dist'], $extension, '.');
+            ->allFiles(['*'], $extension, '.');
 
-        foreach ($found as $file) {
+        foreach ($files as $file) {
             yield $this->extractFileName($file) => $file;
         }
     }

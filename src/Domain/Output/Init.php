@@ -10,6 +10,12 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\EntryPointCanNotBeCreated
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\EntryPointCreated;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\EntryPointDoesNotExist;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FilesFinder;
+use PhpParser\Error;
+use PhpParser\Node;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\ClassConst;
+use PhpParser\NodeFinder;
+use PhpParser\ParserFactory;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Webimpress\SafeWriter\Exception\ExceptionInterface as FileWriterException;
 use Webimpress\SafeWriter\FileWriter;
@@ -38,7 +44,7 @@ return static function (ContainerInterface $container, CollectionInterface $coll
 
 TEMPLATE;
 
-    public const ENTRY_POINT_EXTENSION = '.dist.php';
+    public const ENTRY_POINT_EXTENSION = '.php';
 
     private FilesFinder $filesFinder;
     private EventDispatcherInterface $dispatcher;
@@ -83,7 +89,7 @@ TEMPLATE;
         }
     }
 
-    private function exportFromThemeJsonIfExists(\SplFileInfo $file)
+    private function exportFromThemeJsonIfExists(\SplFileInfo $file): string
     {
         $data = $this->associativeFromPath((string)$file);
 
@@ -93,16 +99,37 @@ TEMPLATE;
             1
         );
 
-        return \str_replace(
-            [
-                "'\$schema'",
-                "'version'",
-            ],
-            [
-                'SectionNames::SCHEMA',
-                'SectionNames::VERSION',
-            ],
-            $dataExported
-        );
+        $code = \file_get_contents(__DIR__ . '/../../../src/Domain/Input/SectionNames.php');
+        $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
+        try {
+            $ast = $parser->parse($code);
+        } catch (Error $error) {
+            echo "Parse error: {$error->getMessage()}\n";
+            return '';
+        }
+
+        $nodeFinder = new NodeFinder();
+        $constants = $nodeFinder->findInstanceOf($ast, ClassConst::class);
+
+        $search = [];
+        $replace = [];
+
+        foreach ($constants as $constant) {
+            foreach ($constant->consts as $const) {
+                $name = $const->name->toString();
+                $value = null;
+
+                if ($const->value instanceof String_) {
+                    $value = $const->value->value;
+                }
+
+                if ($value !== null) {
+                    $search[] = "'$value'";
+                    $replace[] = "SectionNames::$name";
+                }
+            }
+        }
+
+        return \str_replace($search, $replace, $dataExported);
     }
 }

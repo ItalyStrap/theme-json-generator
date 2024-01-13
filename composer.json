@@ -28,6 +28,7 @@
         "phenx/php-font-lib": "^0.5.4",
 
         "justinrainbow/json-schema": "^5.2",
+        "scssphp/scssphp": "^1.12.1",
         "brick/varexporter": "^0.3.8",
         "webimpress/safe-writer": "^2.2"
     },

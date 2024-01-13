@@ -6,9 +6,13 @@ namespace ItalyStrap\ThemeJsonGenerator\Application\Commands\Composer;
 
 use Composer\Command\BaseCommand;
 use ItalyStrap\Config\ConfigInterface;
+use ItalyStrap\ThemeJsonGenerator\Application\Commands\DumpMessage;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\RootFolderTrait;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Dump;
+use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\GeneratedFile;
+use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\GeneratingFile;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FilesFinder;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -37,15 +41,23 @@ final class DumpCommand extends BaseCommand
      */
     public const CALLBACK = 'callable';
 
-    private ConfigInterface $config;
+    /**
+     * @var string
+     */
+    public const PATH_FOR_THEME_SASS = 'path-for-theme-sass';
+
     private Dump $dump;
+    private ConfigInterface $config;
     private FilesFinder $filesFinder;
+    private EventDispatcherInterface $dispatcher;
 
     public function __construct(
+        EventDispatcherInterface $dispatcher,
         Dump $dump,
         ConfigInterface $config,
         FilesFinder $filesFinder
     ) {
+        $this->dispatcher = $dispatcher;
         $this->dump = $dump;
         $this->config = $config;
         $this->filesFinder = $filesFinder;
@@ -102,37 +114,41 @@ final class DumpCommand extends BaseCommand
          */
         $callback = $this->config->get(self::CALLBACK);
 
+        $this->dispatcher->addListener(
+            GeneratingFile::class,
+            static function (GeneratingFile $event) use ($output): void {
+                $output->writeln(\sprintf(
+                    '<info>Generating %s file</info>',
+                    $event->getFileName()
+                ));
+            }
+        );
+
+        $this->dispatcher->addListener(
+            GeneratedFile ::class,
+            static function (GeneratedFile $event) use ($output): void {
+                $output->writeln(\sprintf(
+                    '<info>Generated %s file</info>',
+                    $event->getFileName()
+                ));
+                $output->writeln('========================');
+            }
+        );
+
+        $message = new DumpMessage(
+            $rootFolder,
+            $this->config->get(self::PATH_FOR_THEME_SASS, ''),
+            $input->getOption('dry-run')
+        );
+
         try {
-            $this->dump->processBlueprint($callback, $rootFolder, 'theme');
+            $this->dump->processBlueprint($message, 'theme', $callback);
             $output->writeln('<info>Generated theme.json file</info>');
         } catch (\Exception $exception) {
             $output->writeln($exception->getMessage());
         }
 
-        $command = new class($rootFolder, $input->getOption('dry-run')) {
-            private string $rootFolder = '';
-            private bool $dry_run;
-
-            public function __construct(
-                string $rootFolder,
-                bool $dry_run
-            ) {
-                $this->rootFolder = $rootFolder;
-                $this->dry_run = $dry_run;
-            }
-
-            public function getRootFolder(): string
-            {
-                return $this->rootFolder;
-            }
-
-            public function isDryRun(): bool
-            {
-                return $this->dry_run;
-            }
-        };
-
-        $this->dump->handle($command);
+        $this->dump->handle($message);
 
         if ($input->getOption(ValidateCommand::NAME)) {
             $process = new Process(['php', 'vendor/bin/theme-json', ValidateCommand::NAME]);

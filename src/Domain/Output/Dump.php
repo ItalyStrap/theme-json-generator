@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Output;
 
 use ItalyStrap\Config\ConfigInterface;
+use ItalyStrap\ThemeJsonGenerator\Application\Commands\Composer\DumpCommand;
 use ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Collection;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\CollectionInterface;
+use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\DryRunMode;
+use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\GeneratedFile;
+use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\GeneratingFile;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FilesFinder;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\JsonFileWriter;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\ScssFileWriter;
@@ -34,69 +38,57 @@ class Dump
     {
         /**
          * Let's test the new workflow
-         * @todo add key for json file name to be created
          * @example $name => $file
-         *         'theme' => 'theme.dist.json'
+         *         'theme' => 'theme.json'
          */
         foreach ($this->filesFinder->find($command->getRootFolder(), 'php') as $fileName => $file) {
-            // $this->dispatcher->dispatch(new GeneratingFile($file->getFilename()));
-//          $folderToCreateFile = $command->getRootFolder();
-//          if (\strpos((string)$file, '/styles') !== false) {
-//              $folderToCreateFile .= '/styles';
-//          }
-//          $this->executeCallable(require $file, $folderToCreateFile, $fileName);
-            $this->executeCallable(require $file, $file->getPath(), $fileName, $command, $file);
+            $injector = $this->configureContainer();
+            $injector->execute(require $file);
+            $blueprint = $injector->make(Blueprint::class);
+
+            if ($command->isDryRun()) {
+                $this->dispatcher->dispatch(new DryRunMode());
+                continue;
+            }
+
+            $this->generateJsonFile($command, $fileName, $file, $blueprint);
+            $this->generateScssFile($command, $fileName, $blueprint);
         }
     }
 
-    private function executeCallable(
-        callable $entryPoint,
-        string $rootFolder,
-        string $fileName,
-        object $command,
-        \SplFileInfo $file
-    ): void {
-        $injector = $this->configureContainer();
-        $injector->execute($entryPoint);
-        $blueprint = $injector->make(Blueprint::class);
+    private function generateJsonFile(object $command, string $fileName, \SplFileInfo $file, Blueprint $blueprint): void
+    {
+        $this->dispatcher->dispatch(new GeneratingFile($fileName . '.json'));
 
-//      var_dump($fileName);
-//      var_dump($file);
-//      var_dump($file->getPath() . DIRECTORY_SEPARATOR . $fileName);
-
-//      (new JsonFileWriter($file->getPath() . DIRECTORY_SEPARATOR . $fileName . '.test.json'))
-//          ->write($blueprint);
-
-        if ($command->isDryRun()) {
-            // Add event the command is in dry run mode
-            // $this->dispatcher->dispatch(new DryRunMode(''));
-            return;
-        }
-    }
-
-    /**
-     * @var string
-     */
-    public const PATH_FOR_THEME_SASS = 'path-for-theme-sass';
-
-    public function processBlueprint(
-        callable $entryPoint,
-        string $rootFolder,
-        string $fileName
-    ): void {
-        $injector = $this->configureContainer();
-        $injector->execute($entryPoint);
-        $blueprint = $injector->make(Blueprint::class);
-
-        (new JsonFileWriter($rootFolder . DIRECTORY_SEPARATOR . $fileName . '.json'))
+        (new JsonFileWriter($file->getPath() . DIRECTORY_SEPARATOR . $fileName . '.test.json'))
             ->write($blueprint);
 
-        $path_for_theme_sass = $rootFolder . DIRECTORY_SEPARATOR . $this->config->get(self::PATH_FOR_THEME_SASS);
-        if (\is_writable($path_for_theme_sass)) {
-            (new ScssFileWriter(
-                \rtrim($path_for_theme_sass, '/') . DIRECTORY_SEPARATOR . $fileName . '.scss'
-            ))->write($blueprint);
+        $this->dispatcher->dispatch(new GeneratedFile($fileName . '.json'));
+    }
+
+    private function generateScssFile(object $command, string $fileName, Blueprint $blueprint): void
+    {
+        $this->dispatcher->dispatch(new GeneratingFile($fileName . '.scss'));
+
+        $path_for_theme_sass = $command->getRootFolder() . DIRECTORY_SEPARATOR . $command->getSassFolder();
+        if ($command->getSassFolder() !== '' && \is_writable($path_for_theme_sass)) {
+            (new ScssFileWriter($path_for_theme_sass . DIRECTORY_SEPARATOR . $fileName . '.scss'))
+                ->write($blueprint);
+            $this->dispatcher->dispatch(new GeneratedFile($fileName . '.scss'));
         }
+    }
+
+    public function processBlueprint(
+        object $command,
+        string $fileName,
+        callable $entryPoint
+    ): void {
+        $injector = $this->configureContainer();
+        $injector->execute($entryPoint);
+        $blueprint = $injector->make(Blueprint::class);
+
+        (new JsonFileWriter($command->getRootFolder() . DIRECTORY_SEPARATOR . $fileName . '.json'))
+            ->write($blueprint);
     }
 
     /**
@@ -129,7 +121,7 @@ class Dump
 
     private function createContainer(\Auryn\Injector $injector, \ItalyStrap\Config\ConfigInterface $config): ContainerInterface
     {
-        return new class($injector, $config) implements ContainerInterface {
+        return new class ($injector, $config) implements ContainerInterface {
             private \Auryn\Injector $injector;
 
             private ConfigInterface $config;
@@ -143,7 +135,7 @@ class Dump
             public function get(string $id)
             {
                 if (!$this->has($id)) {
-                    throw new class(\sprintf('Service with ID %s not found.', $id)) extends \Exception implements \Psr\Container\NotFoundExceptionInterface {
+                    throw new class (\sprintf('Service with ID %s not found.', $id)) extends \Exception implements \Psr\Container\NotFoundExceptionInterface {
                     };
                 }
 
