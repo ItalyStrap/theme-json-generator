@@ -83,7 +83,7 @@ final class Dump
         try {
             $result = (array)$callback();
             $data = new Config($result);
-            ( new JsonFileWriter($path) )->write($data);
+            (new JsonFileWriter($path))->write($data);
             WP_CLI::success(sprintf(
                 '%s was generated!',
                 $path

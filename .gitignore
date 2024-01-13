@@ -5,9 +5,6 @@
 # Codeception
 codeception.yml
 
-# Rector
-rector.php
-
 # Common File
 *.local
 *.lock
