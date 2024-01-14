@@ -33,7 +33,8 @@ class SchemaJsonMiddleware
             throw new \RuntimeException("Impossible to download the schema");
         }
 
-        if (!\file_put_contents($schemaPath, $schemaContent)) {
+        $bytesWritten = (int)\file_put_contents($schemaPath, $schemaContent);
+        if ($bytesWritten === 0) {
             throw new \RuntimeException("Impossible to write the schema");
         }
     }

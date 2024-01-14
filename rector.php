@@ -25,6 +25,7 @@ return static function (RectorConfig $rectorConfig): void {
 //        SetList::DEAD_CODE,
         SetList::EARLY_RETURN,
         SetList::TYPE_DECLARATION,
+        SetList::STRICT_BOOLEANS,
         LevelSetList::UP_TO_PHP_74
     ]);
 };
