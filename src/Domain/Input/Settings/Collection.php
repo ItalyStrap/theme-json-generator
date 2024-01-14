@@ -97,7 +97,7 @@ class Collection implements CollectionInterface, \JsonSerializable
         return $this->extractPlaceholders((string)$value);
     }
 
-    public function field(string $field)
+    public function field(string $field): self
     {
         $keys = \array_keys($this->collection);
         if (!\in_array($field, $keys, true)) {

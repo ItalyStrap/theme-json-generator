@@ -58,7 +58,7 @@ class ValidateCommand extends BaseCommand
 
         $this->dispatcher->addListener(
             ValidatingFile::class,
-            static function (ValidatingFile $event) use ($output) {
+            static function (ValidatingFile $event) use ($output): void {
                 $output->writeln('========================');
                 $output->writeln(\sprintf(
                     'Validating <info>%s</info>',
@@ -69,7 +69,7 @@ class ValidateCommand extends BaseCommand
 
         $this->dispatcher->addListener(
             ValidFile::class,
-            static function (ValidFile $event) use ($output) {
+            static function (ValidFile $event) use ($output): void {
                 $output->writeln(\sprintf(
                     '<info>%s</info> is valid',
                     $event->getFile()->getFilename()
@@ -79,7 +79,7 @@ class ValidateCommand extends BaseCommand
 
         $this->dispatcher->addListener(
             ValidatedFails::class,
-            static function (ValidatedFails $event) use ($output) {
+            static function (ValidatedFails $event) use ($output): void {
                 $output->writeln('<error># ' . $event->getFile()->getFilename() . ' file errors</error>');
                 foreach ($event->getErrors() as $error) {
                     $output->writeln(\sprintf(

@@ -28,9 +28,9 @@ class JsonFileWriterIntegrationTest extends UnitTestCase
 
     private Blueprint $blueprint;
 
-    private $colorIntegration;
+    private ?\ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Color $colorIntegration = null;
 
-    private $typographyIntegration;
+    private ?\ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Typography $typographyIntegration = null;
 
     protected function makeInstance(): JsonFileWriter
     {
