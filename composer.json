@@ -123,6 +123,7 @@
         "qa": [
             "@cs",
             "@psalm",
+            "@rector",
             "@unit",
             "@integration",
             "@infection"
