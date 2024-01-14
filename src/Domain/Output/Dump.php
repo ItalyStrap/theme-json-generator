@@ -6,6 +6,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Output;
 
 use ItalyStrap\Config\ConfigInterface;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Composer\DumpCommand;
+use ItalyStrap\ThemeJsonGenerator\Application\Commands\DumpMessage;
 use ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Collection;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\CollectionInterface;
@@ -18,6 +19,9 @@ use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\ScssFileWriter;
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
+/**
+ * @psalm-api
+ */
 class Dump
 {
     private ConfigInterface $config;
@@ -36,30 +40,36 @@ class Dump
         $this->dispatcher = $dispatcher;
     }
 
-    public function handle(object $command): void
+    public function handle(DumpMessage $message): void
     {
         /**
          * Let's test the new workflow
          * @example $name => $file
          *         'theme' => 'theme.json'
          */
-        foreach ($this->filesFinder->find($command->getRootFolder(), 'php') as $fileName => $file) {
+        foreach ($this->filesFinder->find($message->getRootFolder(), 'php') as $fileName => $file) {
             $injector = $this->configureContainer();
+            /** @psalm-suppress UnresolvableInclude */
             $injector->execute(require $file);
+            /** @var Blueprint $blueprint */
             $blueprint = $injector->make(Blueprint::class);
 
-            if ($command->isDryRun()) {
+            if ($message->isDryRun()) {
                 $this->dispatcher->dispatch(new DryRunMode());
                 continue;
             }
 
-            $this->generateJsonFile($command, $fileName, $file, $blueprint);
-            $this->generateScssFile($command, $fileName, $blueprint);
+            $this->generateJsonFile($message, $fileName, $file, $blueprint);
+            $this->generateScssFile($message, $fileName, $blueprint);
         }
     }
 
-    private function generateJsonFile(object $command, string $fileName, \SplFileInfo $file, Blueprint $blueprint): void
-    {
+    private function generateJsonFile(
+        DumpMessage $command,
+        string $fileName,
+        \SplFileInfo $file,
+        Blueprint $blueprint
+    ): void {
         $this->dispatcher->dispatch(new GeneratingFile($fileName . '.json'));
 
         (new JsonFileWriter($file->getPath() . DIRECTORY_SEPARATOR . $fileName . '.test.json'))
@@ -68,7 +78,7 @@ class Dump
         $this->dispatcher->dispatch(new GeneratedFile($fileName . '.json'));
     }
 
-    private function generateScssFile(object $command, string $fileName, Blueprint $blueprint): void
+    private function generateScssFile(DumpMessage $command, string $fileName, Blueprint $blueprint): void
     {
         $this->dispatcher->dispatch(new GeneratingFile($fileName . '.scss'));
 
@@ -81,16 +91,17 @@ class Dump
     }
 
     public function processBlueprint(
-        object $command,
+        DumpMessage $message,
         string $fileName,
         callable $entryPoint
     ): void {
         $injector = $this->configureContainer();
         $injector->execute($entryPoint);
 
+        /** @var Blueprint $blueprint */
         $blueprint = $injector->make(Blueprint::class);
 
-        (new JsonFileWriter($command->getRootFolder() . DIRECTORY_SEPARATOR . $fileName . '.json'))
+        (new JsonFileWriter($message->getRootFolder() . DIRECTORY_SEPARATOR . $fileName . '.json'))
             ->write($blueprint);
     }
 

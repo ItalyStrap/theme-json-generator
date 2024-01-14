@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Output;
 
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\DataFromJsonTrait;
+use ItalyStrap\ThemeJsonGenerator\Application\Commands\ValidateMessage;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\ValidatedFails;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\ValidatingFile;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\ValidFile;
@@ -13,6 +14,9 @@ use JsonSchema\Validator;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use ScssPhp\ScssPhp\Compiler;
 
+/**
+ * @psalm-api
+ */
 class Validate
 {
     use DataFromJsonTrait;
@@ -37,7 +41,7 @@ class Validate
         $this->compiler = $compiler;
     }
 
-    public function handle(object $command): void
+    public function handle(ValidateMessage $command): void
     {
         foreach ($this->filesFinder->find($command->getRootFolder(), 'json') as $file) {
             $this->dispatcher->dispatch(new ValidatingFile($file));
@@ -54,7 +58,7 @@ class Validate
         $this->validator->validate($data, (object)['$ref' => 'file://' . \realpath($schemaPath)]);
 
         if (!$this->validator->isValid()) {
-            $this->dispatcher->dispatch(new ValidatedFails($file, $this->validator->getErrors()));
+            $this->dispatcher->dispatch(new ValidatedFails($file, (array)$this->validator->getErrors()));
             return;
         }
 

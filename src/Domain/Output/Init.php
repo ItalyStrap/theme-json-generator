@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Output;
 
 use Brick\VarExporter\VarExporter;
+use ItalyStrap\ThemeJsonGenerator\Application\Commands\InitMessage;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\DataFromJsonTrait;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\EntryPointCanNotBeCreated;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\EntryPointCreated;
@@ -20,6 +21,9 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use Webimpress\SafeWriter\Exception\ExceptionInterface as FileWriterException;
 use Webimpress\SafeWriter\FileWriter;
 
+/**
+ * @psalm-api
+ */
 class Init
 {
     use DataFromJsonTrait;
@@ -58,7 +62,7 @@ TEMPLATE;
         $this->dispatcher = $dispatcher;
     }
 
-    public function handle(object $command): void
+    public function handle(InitMessage $command): void
     {
         foreach ($this->filesFinder->find($command->getRootFolder(), 'json') as $file) {
             $this->generateEntryPointDataFile($file);

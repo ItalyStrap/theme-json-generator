@@ -19,7 +19,7 @@ class FilesFinder
     }
 
     /**
-     * @return iterable<\SplFileInfo>
+     * @return iterable<string, \SplFileInfo>
      */
     public function find(
         string $rootFolder,

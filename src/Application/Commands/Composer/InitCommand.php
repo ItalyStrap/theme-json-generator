@@ -6,6 +6,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Application\Commands\Composer;
 
 use Brick\VarExporter\VarExporter;
 use Composer\Command\BaseCommand;
+use ItalyStrap\ThemeJsonGenerator\Application\Commands\InitMessage;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\DataFromJsonTrait;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\RootFolderTrait;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\EntryPointCanNotBeCreated;
@@ -101,21 +102,9 @@ TEMPLATE;
             }
         );
 
-        $command = new class ($rootFolder) {
-            private string $rootFolder = '';
+        $message = new InitMessage($rootFolder);
 
-            public function __construct(string $rootFolder)
-            {
-                $this->rootFolder = $rootFolder;
-            }
-
-            public function getRootFolder(): string
-            {
-                return $this->rootFolder;
-            }
-        };
-
-        $this->init->handle($command);
+        $this->init->handle($message);
 
         return Command::SUCCESS;
     }

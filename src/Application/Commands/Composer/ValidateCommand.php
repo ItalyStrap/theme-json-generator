@@ -8,6 +8,7 @@ use Composer\Command\BaseCommand;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Middleware\SchemaJsonMiddleware;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\DataFromJsonTrait;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\RootFolderTrait;
+use ItalyStrap\ThemeJsonGenerator\Application\Commands\ValidateMessage;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\ValidatedFails;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\ValidatingFile;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\ValidFile;
@@ -91,33 +92,11 @@ class ValidateCommand extends BaseCommand
             }
         );
 
-        $command = new class ($rootFolder, $schemaPath) {
-            private string $rootFolder;
-
-            private string $schemaPath;
-
-            public function __construct(
-                string $rootFolder,
-                string $schemaPath
-            ) {
-                $this->schemaPath = $schemaPath;
-                $this->rootFolder = $rootFolder;
-            }
-
-            public function getSchemaPath(): string
-            {
-                return $this->schemaPath;
-            }
-
-            public function getRootFolder(): string
-            {
-                return $this->rootFolder;
-            }
-        };
+        $message = new ValidateMessage($rootFolder, $schemaPath);
 
         try {
             $schemaMiddleware = new SchemaJsonMiddleware();
-            $schemaMiddleware->process($command, $this->validate);
+            $schemaMiddleware->process($message, $this->validate);
         } catch (\Exception $exception) {
             $output->writeln('<error>Error: ' . $exception->getMessage() . '</error>');
             return Command::FAILURE;

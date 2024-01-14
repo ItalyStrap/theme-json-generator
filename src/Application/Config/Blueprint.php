@@ -7,6 +7,9 @@ namespace ItalyStrap\ThemeJsonGenerator\Application\Config;
 use ItalyStrap\Config\Config;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\SectionNames;
 
+/**
+ * @psalm-api
+ */
 final class Blueprint extends Config implements \JsonSerializable
 {
     public function setBlockStyle(string $blockName, array $config): bool
