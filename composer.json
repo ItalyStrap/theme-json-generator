@@ -32,7 +32,7 @@
         "brick/varexporter": "^0.3.8",
         "webimpress/safe-writer": "^2.2",
 
-        "symfony/polyfill-php80": "1.22"
+        "symfony/polyfill-php80": "^1.22"
     },
     "require-dev": {
         "lucatume/wp-browser": "^3.1",
@@ -160,7 +160,6 @@
         "qa": "Run all QA tools",
         "rector": "Run Rector",
         "rector:fix": "Run Rector and fix errors",
-        "json": "Generate theme.json file",
         "theme/json": "Generate theme.json file"
     },
     "support"    : {
