@@ -37,7 +37,7 @@ class FontSize implements ItemInterface
     }
 
     /**
-     * @return array{slug: string, name: string, size: string, fluid?: Fluid}
+     * @return array<string, mixed>
      */
     public function toArray(): array
     {

@@ -129,7 +129,7 @@ TEMPLATE;
                 }
 
                 if ($value !== null) {
-                    $search[] = sprintf("'%s'", $value);
+                    $search[] = \sprintf("'%s'", $value);
                     $replace[] = 'SectionNames::' . $name;
                 }
             }

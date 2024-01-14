@@ -8,16 +8,16 @@ trait DataFromJsonTrait
 {
     private function associativeFromPath(string $path): array
     {
-        return $this->fromPath($path, true);
+        return (array)$this->fromPath($path, true);
     }
 
     private function objectFromPath(string $path): object
     {
-        return $this->fromPath($path, false);
+        return (object)$this->fromPath($path, false);
     }
 
     /**
-     * @return array|object
+     * @return array<array-key, mixed>|object
      */
     private function fromPath(string $path, ?bool $associative)
     {
@@ -31,6 +31,13 @@ trait DataFromJsonTrait
 
         try {
             $data = \json_decode($json, $associative, 512, JSON_THROW_ON_ERROR);
+
+            if (!\is_array($data) && !\is_object($data)) {
+                throw new \RuntimeException(\sprintf(
+                    'Unable to decode json from file "%s"',
+                    $path
+                ));
+            }
         } catch (\JsonException $jsonException) {
             throw new \RuntimeException(\sprintf(
                 'Unable to decode json from file "%s"',
