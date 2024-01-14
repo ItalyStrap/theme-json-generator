@@ -139,7 +139,6 @@ class Collection implements CollectionInterface, \JsonSerializable
     /**
      * @return mixed
      */
-    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return $this->toArray();

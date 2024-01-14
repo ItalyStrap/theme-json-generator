@@ -91,7 +91,7 @@ class ValidateCommand extends BaseCommand
             }
         );
 
-        $command = new class($rootFolder, $schemaPath) {
+        $command = new class ($rootFolder, $schemaPath) {
             private string $rootFolder;
 
             private string $schemaPath;

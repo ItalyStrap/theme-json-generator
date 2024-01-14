@@ -122,9 +122,11 @@ class Dump
         return $injector;
     }
 
-    private function createContainer(\Auryn\Injector $injector, \ItalyStrap\Config\ConfigInterface $config): ContainerInterface
-    {
-        return new class($injector, $config) implements ContainerInterface {
+    private function createContainer(
+        \Auryn\Injector $injector,
+        \ItalyStrap\Config\ConfigInterface $config
+    ): ContainerInterface {
+        return new class ($injector, $config) implements ContainerInterface {
             private \Auryn\Injector $injector;
 
             private ConfigInterface $config;
@@ -138,7 +140,9 @@ class Dump
             public function get(string $id)
             {
                 if (!$this->has($id)) {
-                    throw new class(\sprintf('Service with ID %s not found.', $id)) extends \Exception implements \Psr\Container\NotFoundExceptionInterface {
+                    throw new class (
+                        \sprintf('Service with ID %s not found.', $id)
+                    ) extends \Exception implements \Psr\Container\NotFoundExceptionInterface {
                     };
                 }
 

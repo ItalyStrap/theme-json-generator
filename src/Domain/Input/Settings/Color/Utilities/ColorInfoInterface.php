@@ -7,6 +7,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities;
 /**
  * @psalm-api
  */
+// phpcs:ignore PHPCompatibility.Interfaces.NewInterfaces.stringableFound
 interface ColorInfoInterface extends \Stringable
 {
     public function isDark(): bool;

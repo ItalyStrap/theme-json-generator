@@ -70,7 +70,9 @@ trait CommonTests
         $data = new Blueprint($data);
 
         $this->assertStringMatchesFormat(
+            // phpcs:disable
             '{"styles":{"blocks":{"core/site-title":{"color":{"property":"core/site-title"},"typography":{"property":"core/site-title"}},"core/post-title":{"color":{"property":"core/post-title"},"typography":{"property":"core/post-title"}}}}}',
+            // phpcs:enable
             \json_encode($data, \JSON_UNESCAPED_SLASHES),
             ''
         );

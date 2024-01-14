@@ -5,6 +5,9 @@
 # Codeception
 codeception.yml
 
+# PHPCS
+.phpcs-cache
+
 # Common File
 *.local
 *.lock

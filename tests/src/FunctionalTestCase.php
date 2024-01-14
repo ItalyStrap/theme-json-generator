@@ -8,6 +8,7 @@ use FunctionalTester;
 
 class FunctionalTestCase
 {
+    // phpcs:ignore -- Method from Codeception
     public function _before(FunctionalTester $I): void
     {
     }

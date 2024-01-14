@@ -64,7 +64,9 @@ class TypographyTest extends UnitTestCase
             ->fontFamily('serif');
 
         $this->assertJsonStringEqualsJsonString(
+            // phpcs:disable
             '{"textDecoration":"none","lineHeight":"1","fontSize":"25px","fontWeight":"800","textTransform":"uppercase","fontStyle":"value","letterSpacing":"1rem","fontFamily":"serif"}',
+            // phpcs:enable
             \json_encode($result),
             ''
         );

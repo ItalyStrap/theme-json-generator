@@ -30,7 +30,8 @@ trait CommonTrait
      * $this->property('fontSize', '20px') === ['fontSize' => '20px']
      *
      * Explanation:
-     * If the $value `fontFamily.base` is found in the collection (because $value is treated as a key of the collection),
+     * If the $value `fontFamily.base` is found in the collection
+     * (because $value is treated as a key of the collection),
      * then the CSS variable found in the collection will be returned.
      *
      * If the $value `20px` is not found in the collection (because $value is treated as a key of the collection),

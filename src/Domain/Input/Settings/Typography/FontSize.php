@@ -37,7 +37,7 @@ class FontSize implements ItemInterface
     }
 
     /**
-     * @return array{slug: string, name: string, size: string, fluid?: \ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\Utilities\Fluid}
+     * @return array{slug: string, name: string, size: string, fluid?: Fluid}
      */
     public function toArray(): array
     {

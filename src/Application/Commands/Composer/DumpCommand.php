@@ -98,7 +98,8 @@ final class DumpCommand extends BaseCommand
          *       --no-pretty-print
          *       --indent=2 (default is 4)
          *       --config (provide a custom config file)
-         *       --delete -D (delete the json file before generate it) before deleting the file, check if the related php file exists
+         *       --delete -D (delete the json file before generate it) before deleting the file
+         *                   check if the related php file exists
          */
     }
 
