@@ -28,23 +28,6 @@ class InitCommand extends BaseCommand
 
     public const NAME = 'init';
 
-    /**
-     * @var string
-     */
-    public const ENTRY_POINT_TEMPLATE = <<<'TEMPLATE'
-<?php
-
-declare(strict_types=1);
-
-use Psr\Container\ContainerInterface;
-
-return static function (ContainerInterface $container) {
-
-	%s
-};
-
-TEMPLATE;
-
     private FilesFinder $filesFinder;
 
     private Init $init;

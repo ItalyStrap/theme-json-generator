@@ -22,5 +22,8 @@ interface ItemInterface extends \Stringable
 
     public function __toString(): string;
 
+    /**
+     * @return array<string, string|array|object>
+     */
     public function toArray(): array;
 }
