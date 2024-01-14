@@ -15,6 +15,7 @@ class Collection implements CollectionInterface, \JsonSerializable
     use AccessValueInArrayWithNotationTrait;
 
     private array $collection = [];
+
     private string $field = '';
 
     public function add(ItemInterface $item): self

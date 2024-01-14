@@ -44,7 +44,7 @@ trait CommonTrait
     private function setProperty(string $key, string $value): self
     {
         $this->properties[$key] = $this->collection->value($value, $value);
-        $class = __CLASS__;
+        $class = self::class;
         return new $class($this->collection, $this->properties);
     }
 

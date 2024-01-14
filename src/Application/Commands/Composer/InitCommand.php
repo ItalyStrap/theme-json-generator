@@ -45,7 +45,9 @@ return static function (ContainerInterface $container) {
 TEMPLATE;
 
     private FilesFinder $filesFinder;
+
     private Init $init;
+
     private EventDispatcherInterface $dispatcher;
 
     public function __construct(

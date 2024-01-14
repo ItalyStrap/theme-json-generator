@@ -21,7 +21,9 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 class Dump
 {
     private ConfigInterface $config;
+
     private FilesFinder $filesFinder;
+
     private EventDispatcherInterface $dispatcher;
 
     public function __construct(
@@ -85,6 +87,7 @@ class Dump
     ): void {
         $injector = $this->configureContainer();
         $injector->execute($entryPoint);
+
         $blueprint = $injector->make(Blueprint::class);
 
         (new JsonFileWriter($command->getRootFolder() . DIRECTORY_SEPARATOR . $fileName . '.json'))

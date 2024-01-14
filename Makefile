@@ -14,7 +14,7 @@ default: help
 help: ## Display this help screen
 	@grep -hP '^\w.*?:.*##.*$$' $(MAKEFILE_LIST) | sort -u | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-.PHONY: files/mod
+.PHONY: files/permission
 files/permission:	### Set the executable files in Docker folder permissions to 777
 	@echo "Checking files permissions"
 	@find $(DOCKER_FOLDER) -maxdepth 1 -type f -exec grep -lE '^#!' {} \; | xargs chmod 777

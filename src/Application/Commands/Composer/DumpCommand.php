@@ -47,8 +47,11 @@ final class DumpCommand extends BaseCommand
     public const PATH_FOR_THEME_SASS = 'path-for-theme-sass';
 
     private Dump $dump;
+
     private ConfigInterface $config;
+
     private FilesFinder $filesFinder;
+
     private EventDispatcherInterface $dispatcher;
 
     public function __construct(

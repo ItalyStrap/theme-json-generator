@@ -7,5 +7,6 @@ namespace ItalyStrap\ThemeJsonGenerator\Application\Commands;
 final class FilesExtension
 {
     public const PHP = '.php';
+
     public const JSON = '.json';
 }

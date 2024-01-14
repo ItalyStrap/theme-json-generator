@@ -47,6 +47,7 @@ TEMPLATE;
     public const ENTRY_POINT_EXTENSION = '.php';
 
     private FilesFinder $filesFinder;
+
     private EventDispatcherInterface $dispatcher;
 
     public function __construct(
@@ -104,7 +105,7 @@ TEMPLATE;
         try {
             $ast = $parser->parse($code);
         } catch (Error $error) {
-            echo "Parse error: {$error->getMessage()}\n";
+            echo sprintf('Parse error: %s%s', $error->getMessage(), PHP_EOL);
             return '';
         }
 
@@ -124,8 +125,8 @@ TEMPLATE;
                 }
 
                 if ($value !== null) {
-                    $search[] = "'$value'";
-                    $replace[] = "SectionNames::$name";
+                    $search[] = sprintf("'%s'", $value);
+                    $replace[] = 'SectionNames::' . $name;
                 }
             }
         }

@@ -7,7 +7,9 @@ namespace ItalyStrap\ThemeJsonGenerator\Application\Commands;
 class DumpMessage
 {
     private string $rootFolder = '';
+
     private bool $dry_run;
+
     private string $sassFolder;
 
     public function __construct(

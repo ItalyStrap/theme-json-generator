@@ -18,8 +18,11 @@ class Validate
     use DataFromJsonTrait;
 
     private Validator $validator;
+
     private FilesFinder $filesFinder;
+
     private EventDispatcherInterface $dispatcher;
+
     private Compiler $compiler;
 
     public function __construct(

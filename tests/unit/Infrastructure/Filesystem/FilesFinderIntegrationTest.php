@@ -37,7 +37,7 @@ class FilesFinderIntegrationTest extends UnitTestCase
         ) {
             $this->assertInstanceOf(\SplFileInfo::class, $file);
             $this->assertSame(FilesFinder::ROOT_FILE_NAME, $fileName);
-            $count++;
+            ++$count;
         }
 
         $this->assertSame(1, $count);
@@ -57,7 +57,7 @@ class FilesFinderIntegrationTest extends UnitTestCase
             ) as $fileName => $file
         ) {
             $this->assertInstanceOf(\SplFileInfo::class, $file);
-            $count++;
+            ++$count;
         }
     }
 }

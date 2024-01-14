@@ -26,7 +26,9 @@ class ValidateCommand extends BaseCommand
     public const NAME = 'validate';
 
     private Validate $validate;
+
     private FilesFinder $filesFinder;
+
     private EventDispatcherInterface $dispatcher;
 
     public function __construct(
@@ -91,6 +93,7 @@ class ValidateCommand extends BaseCommand
 
         $command = new class($rootFolder, $schemaPath) {
             private string $rootFolder;
+
             private string $schemaPath;
 
             public function __construct(

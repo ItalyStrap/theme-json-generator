@@ -7,6 +7,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Output\Events;
 class ValidatedFails
 {
     private \SplFileInfo $file;
+
     private array $errors;
 
     public function __construct(\SplFileInfo $file, array $errors)
