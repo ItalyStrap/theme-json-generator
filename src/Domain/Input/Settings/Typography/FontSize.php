@@ -36,9 +36,6 @@ class FontSize implements ItemInterface
         $this->fluid = $fluid;
     }
 
-    /**
-     * @return array<string, mixed>
-     */
     public function toArray(): array
     {
         return \array_filter([

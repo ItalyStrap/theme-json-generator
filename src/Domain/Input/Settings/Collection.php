@@ -14,6 +14,9 @@ class Collection implements CollectionInterface, \JsonSerializable
 {
     use AccessValueInArrayWithNotationTrait;
 
+    /**
+     * @var ItemInterface[]
+     */
     private array $collection = [];
 
     private string $field = '';
@@ -28,6 +31,7 @@ class Collection implements CollectionInterface, \JsonSerializable
 
         $this->assertIsUnique($key, $item);
 
+        /** @psalm-suppress MixedPropertyTypeCoercion */
         $this->insertValue(
             $this->collection,
             \explode('.', $key),
@@ -51,7 +55,7 @@ class Collection implements CollectionInterface, \JsonSerializable
 
     /**
      * @param mixed $default
-     * @return ItemInterface|mixed|null
+     * @return array<string, mixed>|ItemInterface|mixed|null
      */
     public function get(string $key, $default = null)
     {
@@ -114,13 +118,16 @@ class Collection implements CollectionInterface, \JsonSerializable
 
     public function toArray(): array
     {
-        if ($this->field === '') {
+        $field = $this->field;
+        $this->field = '';
+
+        if ($field === '') {
             return $this->collection;
         }
 
-        $fetched = (array)$this->get($this->field, []);
+        $fetched = (array)$this->get($field, []);
 
-        if ($this->field === 'custom') {
+        if ($field === 'custom') {
             return $this->processCustomCollection($fetched);
         }
 
@@ -133,14 +140,6 @@ class Collection implements CollectionInterface, \JsonSerializable
     public function toArrayByCategory(string $category): array
     {
         $this->field($category);
-        return $this->toArray();
-    }
-
-    /**
-     * @return mixed
-     */
-    public function jsonSerialize()
-    {
         return $this->toArray();
     }
 
@@ -165,9 +164,15 @@ class Collection implements CollectionInterface, \JsonSerializable
         );
     }
 
+    /**
+     * @param array<array-key, mixed> $collection
+     * @param array-key|string $prefix
+     * @return array<array-key, mixed>
+     */
     private function processCustomCollection(array $collection, string $prefix = ''): array
     {
         $processed = [];
+        /** @var array<array-key, mixed>|ItemInterface $value */
         foreach ($collection as $key => $value) {
             $fullKey = $prefix === '' ? $key : $prefix . '.' . $key;
             if (\is_array($value)) {
@@ -237,5 +242,13 @@ class Collection implements CollectionInterface, \JsonSerializable
                 )
             );
         }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function jsonSerialize()
+    {
+        return $this->toArray();
     }
 }

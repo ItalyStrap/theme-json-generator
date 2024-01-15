@@ -16,6 +16,9 @@ trait CommonTrait
 
     private ?CollectionInterface $collection;
 
+    /**
+     * @param array<string, string> $properties
+     */
     public function __construct(
         ?CollectionInterface $collection = null,
         array $properties = []
@@ -44,6 +47,7 @@ trait CommonTrait
 
     private function setProperty(string $key, string $value): self
     {
+        /** @psalm-suppress PossiblyNullReference */
         $this->properties[$key] = $this->collection->value($value, $value);
         $class = self::class;
         return new $class($this->collection, $this->properties);
@@ -59,7 +63,7 @@ trait CommonTrait
      */
     public function toArray(): array
     {
-        $result = \array_filter($this->properties, static fn ($value): bool => $value !== '' && $value !== null);
+        $result = \array_filter($this->properties, static fn ($value): bool => $value !== '');
         $this->properties = [];
         return $result;
     }
