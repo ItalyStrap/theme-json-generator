@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Output;
 
 use ItalyStrap\Config\ConfigInterface;
-use ItalyStrap\ThemeJsonGenerator\Application\Commands\Composer\DumpCommand;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\DumpMessage;
 use ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Collection;
@@ -53,6 +52,13 @@ class Dump
             $injector->execute(require $file);
             /** @var Blueprint $blueprint */
             $blueprint = $injector->make(Blueprint::class);
+
+            /**
+             * @todo Add subscription configuration.
+             * @var EventDispatcherInterface $dispatcher
+             */
+            $dispatcher = $injector->make(EventDispatcherInterface::class);
+            $dispatcher->dispatch($blueprint);
 
             if ($message->isDryRun()) {
                 $this->dispatcher->dispatch(new DryRunMode());
@@ -115,18 +121,21 @@ class Dump
         $injector = new \Auryn\Injector();
         $injector->share($injector);
 
+        $container = $this->createContainer($injector, clone $this->config);
+        $injector->alias(ContainerInterface::class, \get_class($container));
+        $injector->share($container);
+
         $injector->alias(CollectionInterface::class, Collection::class);
         $injector->share(CollectionInterface::class);
+
+        $injector->alias(EventDispatcherInterface::class, \get_class($this->dispatcher));
+        $injector->share(EventDispatcherInterface::class);
 
         /**
          * Injector resolve to null if a param is nullable, so we need to be explicit and declare the param
          * I need this for all the classes under the Styles namespace
          */
         $injector->defineParam('collection', $injector->make(CollectionInterface::class));
-
-        $container = $this->createContainer($injector, clone $this->config);
-        $injector->alias(ContainerInterface::class, \get_class($container));
-        $injector->share($container);
 
         $injector->share(Blueprint::class);
 

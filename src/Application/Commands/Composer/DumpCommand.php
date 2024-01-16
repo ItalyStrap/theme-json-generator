@@ -12,7 +12,6 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Output\Dump;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\GeneratedFile;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\GeneratingFile;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FilesFinder;
-use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -52,15 +51,15 @@ final class DumpCommand extends BaseCommand
 
     private FilesFinder $filesFinder;
 
-    private EventDispatcherInterface $dispatcher;
+    private \Symfony\Component\EventDispatcher\EventDispatcher $subscriber;
 
     public function __construct(
-        EventDispatcherInterface $dispatcher,
+        \Symfony\Component\EventDispatcher\EventDispatcher $subscriber,
         Dump $dump,
         ConfigInterface $config,
         FilesFinder $filesFinder
     ) {
-        $this->dispatcher = $dispatcher;
+        $this->subscriber = $subscriber;
         $this->dump = $dump;
         $this->config = $config;
         $this->filesFinder = $filesFinder;
@@ -118,7 +117,7 @@ final class DumpCommand extends BaseCommand
          */
         $callback = $this->config->get(self::CALLBACK);
 
-        $this->dispatcher->addListener(
+        $this->subscriber->addListener(
             GeneratingFile::class,
             static function (GeneratingFile $event) use ($output): void {
                 $output->writeln(\sprintf(
@@ -128,7 +127,7 @@ final class DumpCommand extends BaseCommand
             }
         );
 
-        $this->dispatcher->addListener(
+        $this->subscriber->addListener(
             GeneratedFile ::class,
             static function (GeneratedFile $event) use ($output): void {
                 $output->writeln(\sprintf(

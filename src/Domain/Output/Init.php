@@ -20,6 +20,7 @@ use PhpParser\ParserFactory;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Webimpress\SafeWriter\Exception\ExceptionInterface as FileWriterException;
 use Webimpress\SafeWriter\FileWriter;
+use Webmozart\Assert\Assert;
 
 /**
  * @psalm-api
@@ -86,7 +87,10 @@ TEMPLATE;
             try {
                 FileWriter::writeFile($entryPointRealPath, $content, 0666);
             } catch (FileWriterException $fileWriterException) {
-                $this->dispatcher->dispatch(new EntryPointCanNotBeCreated($entryPointRealPath));
+                $this->dispatcher->dispatch(new EntryPointCanNotBeCreated(
+                    $entryPointRealPath,
+                    $fileWriterException
+                ));
                 return;
             }
 
@@ -104,35 +108,40 @@ TEMPLATE;
             1
         );
 
-        $code = \file_get_contents(__DIR__ . '/../../../src/Domain/Input/SectionNames.php');
-        $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
-        try {
-            $ast = $parser->parse($code);
-        } catch (Error $error) {
-            echo sprintf('Parse error: %s%s', $error->getMessage(), PHP_EOL);
-            return '';
-        }
-
-        $nodeFinder = new NodeFinder();
-        $constants = $nodeFinder->findInstanceOf($ast, ClassConst::class);
-
         $search = [];
         $replace = [];
 
-        foreach ($constants as $constant) {
-            foreach ($constant->consts as $const) {
-                $name = $const->name->toString();
-                $value = null;
+        $code = (string)\file_get_contents(__DIR__ . '/../../../src/Domain/Input/SectionNames.php');
+        $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
 
-                if ($const->value instanceof String_) {
-                    $value = $const->value->value;
-                }
+        try {
+            $ast = (array)$parser->parse($code);
 
-                if ($value !== null) {
-                    $search[] = \sprintf("'%s'", $value);
-                    $replace[] = 'SectionNames::' . $name;
+            $nodeFinder = new NodeFinder();
+            $constants = $nodeFinder->findInstanceOf($ast, ClassConst::class);
+
+            /**
+             * @var ClassConst $constant
+             */
+            foreach ($constants as $constant) {
+                Assert::propertyExists($constant, 'consts');
+                foreach ($constant->consts as $const) {
+                    $name = $const->name->toString();
+                    $value = null;
+
+                    if ($const->value instanceof String_) {
+                        $value = $const->value->value;
+                    }
+
+                    if ($value !== null) {
+                        $search[] = \sprintf("'%s'", $value);
+                        $replace[] = 'SectionNames::' . $name;
+                    }
                 }
             }
+        } catch (Error $error) {
+            echo sprintf('Parse error: %s%s', $error->getMessage(), PHP_EOL);
+            return '';
         }
 
         return \str_replace($search, $replace, $dataExported);

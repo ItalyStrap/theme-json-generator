@@ -14,7 +14,6 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\ValidatingFile;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\ValidFile;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Validate;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FilesFinder;
-use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -30,14 +29,14 @@ class ValidateCommand extends BaseCommand
 
     private FilesFinder $filesFinder;
 
-    private EventDispatcherInterface $dispatcher;
+    private \Symfony\Component\EventDispatcher\EventDispatcher $subscriber;
 
     public function __construct(
-        EventDispatcherInterface $dispatcher,
+        \Symfony\Component\EventDispatcher\EventDispatcher $subscriber,
         Validate $validate,
         FilesFinder $filesFinder
     ) {
-        $this->dispatcher = $dispatcher;
+        $this->subscriber = $subscriber;
         $this->validate = $validate;
         $this->filesFinder = $filesFinder;
         parent::__construct();
@@ -57,7 +56,7 @@ class ValidateCommand extends BaseCommand
         $rootFolder = $this->rootFolder();
         $schemaPath = $rootFolder . '/theme.schema.json';
 
-        $this->dispatcher->addListener(
+        $this->subscriber->addListener(
             ValidatingFile::class,
             static function (ValidatingFile $event) use ($output): void {
                 $output->writeln('========================');
@@ -68,7 +67,7 @@ class ValidateCommand extends BaseCommand
             }
         );
 
-        $this->dispatcher->addListener(
+        $this->subscriber->addListener(
             ValidFile::class,
             static function (ValidFile $event) use ($output): void {
                 $output->writeln(\sprintf(
@@ -78,7 +77,7 @@ class ValidateCommand extends BaseCommand
             }
         );
 
-        $this->dispatcher->addListener(
+        $this->subscriber->addListener(
             ValidatedFails::class,
             static function (ValidatedFails $event) use ($output): void {
                 $output->writeln('<error># ' . $event->getFile()->getFilename() . ' file errors</error>');

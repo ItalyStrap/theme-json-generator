@@ -32,6 +32,7 @@ final class Bootstrap
             \Symfony\Component\EventDispatcher\EventDispatcher::class
         );
         $injector->share(EventDispatcherInterface::class);
+        $injector->share(\Symfony\Component\EventDispatcher\EventDispatcher::class);
 
         $application = new Application();
         $application->add($injector->make(InitCommand::class));

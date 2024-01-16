@@ -10,14 +10,21 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Output\Events;
 class EntryPointCanNotBeCreated
 {
     private string $file;
+    private \Throwable $exception;
 
-    public function __construct(string $file)
+    public function __construct(string $file, \Throwable $exception)
     {
         $this->file = $file;
+        $this->exception = $exception;
     }
 
     public function getFile(): string
     {
         return $this->file;
+    }
+
+    public function getException(): \Throwable
+    {
+        return $this->exception;
     }
 }

@@ -47,6 +47,10 @@ class Validate
             $this->dispatcher->dispatch(new ValidatingFile($file));
             $this->validateJsonFile($file, $command->getSchemaPath());
             $this->validator->reset();
+            /**
+             * @todo Implementing scss validation
+             */
+            $this->compiler->compileString('');
         }
     }
 

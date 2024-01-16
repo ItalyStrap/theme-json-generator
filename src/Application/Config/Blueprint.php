@@ -12,6 +12,11 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\SectionNames;
  */
 final class Blueprint extends Config implements \JsonSerializable
 {
+    public function setBlockSettings(string $blockName, array $config): bool
+    {
+        return $this->set(SectionNames::SETTINGS . '.blocks.' . $blockName, $config);
+    }
+
     public function setBlockStyle(string $blockName, array $config): bool
     {
         return $this->set(SectionNames::STYLES . '.blocks.' . $blockName, $config);
