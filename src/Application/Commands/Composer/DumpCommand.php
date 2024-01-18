@@ -11,7 +11,6 @@ use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\RootFolderTrait;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Dump;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\GeneratedFile;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\GeneratingFile;
-use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FilesFinder;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -49,20 +48,16 @@ final class DumpCommand extends BaseCommand
 
     private ConfigInterface $config;
 
-    private FilesFinder $filesFinder;
-
     private \Symfony\Component\EventDispatcher\EventDispatcher $subscriber;
 
     public function __construct(
         \Symfony\Component\EventDispatcher\EventDispatcher $subscriber,
         Dump $dump,
-        ConfigInterface $config,
-        FilesFinder $filesFinder
+        ConfigInterface $config
     ) {
         $this->subscriber = $subscriber;
         $this->dump = $dump;
         $this->config = $config;
-        $this->filesFinder = $filesFinder;
         parent::__construct();
     }
 
@@ -110,6 +105,7 @@ final class DumpCommand extends BaseCommand
         $output->writeln('<info>Generating theme.json file</info>');
 
         $package = $composer->getPackage();
+        /** @psalm-suppress MixedArgument */
         $this->config->merge($package->getExtra()[self::COMPOSER_EXTRA_THEME_JSON_KEY] ?? []);
 
         /**
@@ -140,8 +136,8 @@ final class DumpCommand extends BaseCommand
 
         $message = new DumpMessage(
             $rootFolder,
-            $this->config->get(self::PATH_FOR_THEME_SASS, ''),
-            $input->getOption('dry-run')
+            (string)$this->config->get(self::PATH_FOR_THEME_SASS, ''),
+            (bool)$input->getOption('dry-run')
         );
 
         try {
@@ -159,7 +155,7 @@ final class DumpCommand extends BaseCommand
 
             $output->write($process->getOutput());
 
-            return $process->getExitCode();
+            return (int)$process->getExitCode();
         }
 
         return Command::SUCCESS;

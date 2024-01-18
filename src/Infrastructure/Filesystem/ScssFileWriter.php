@@ -14,16 +14,12 @@ class ScssFileWriter implements FileWriter
 
     private string $path;
 
-    private ConfigInterface $config;
-
     /**
      * @param string $path
-     * @param ConfigInterface|null $config
      */
-    public function __construct(string $path, ConfigInterface $config = null)
+    public function __construct(string $path)
     {
         $this->path = $path;
-        $this->config = $config ?? new Config();
     }
 
     public function write(ConfigInterface $data): void
@@ -47,7 +43,7 @@ class ScssFileWriter implements FileWriter
     }
 
     /**
-     * @param array<string|int, mixed> $data
+     * @param ConfigInterface $data
      * @return string
      */
     private function generateScssContent(ConfigInterface $data): string

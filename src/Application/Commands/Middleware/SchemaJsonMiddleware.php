@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Application\Commands\Middleware;
 
+use ItalyStrap\ThemeJsonGenerator\Application\Commands\ValidateMessage;
+use ItalyStrap\ThemeJsonGenerator\Domain\Output\Validate;
+
 class SchemaJsonMiddleware
 {
-    public function process(object $command, object $handler): void
+    public function process(ValidateMessage $command, Validate $handler): void
     {
         $schemaPath = $command->getSchemaPath();
         if (!\file_exists($schemaPath) || $this->isFileSchemaOlderThanOneWeek($schemaPath)) {

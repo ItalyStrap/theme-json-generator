@@ -9,6 +9,10 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\SectionNames;
 
 /**
  * @psalm-api
+ * @template TKey as array-key
+ * @template TValue
+ * @template-extends Config<TKey,TValue>
+ * @psalm-suppress DeprecatedInterface
  */
 final class Blueprint extends Config implements \JsonSerializable
 {

@@ -6,6 +6,9 @@ namespace ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem;
 
 use ItalyStrap\Finder\FinderInterface;
 
+/**
+ * @psalm-api
+ */
 class FilesFinder
 {
     public const ROOT_FILE_NAME = 'theme';
@@ -38,6 +41,9 @@ class FilesFinder
             return;
         }
 
+        /**
+         * @var \SplFileInfo[] $files
+         */
         $files = $this->finder
             ->in([
                 $stylesFolder,
@@ -51,6 +57,6 @@ class FilesFinder
 
     private function extractFileName(\SplFileInfo $file): string
     {
-        return (string)\explode('.', $file->getBasename())[0];
+        return \explode('.', $file->getBasename())[0];
     }
 }

@@ -126,9 +126,7 @@
             "@cs",
             "@psalm",
             "@rector",
-            "@unit",
-            "@integration",
-            "@infection"
+            "@unit"
         ],
         "rector": [
             "@php ./vendor/bin/rector process --dry-run"
@@ -141,9 +139,6 @@
         ],
         "ecs:fix": [
             "@php ./vendor/bin/ecs --fix"
-        ],
-        "theme/json": [
-            "@php ./bin/theme-json"
         ]
     },
     "scripts-descriptions": {
@@ -159,8 +154,7 @@
         "clean": "Clean Codeception cache",
         "qa": "Run all QA tools",
         "rector": "Run Rector",
-        "rector:fix": "Run Rector and fix errors",
-        "theme/json": "Generate theme.json file"
+        "rector:fix": "Run Rector and fix errors"
     },
     "support"    : {
         "issues": "https://github.com/ItalyStrap/theme-json-generator/issues",

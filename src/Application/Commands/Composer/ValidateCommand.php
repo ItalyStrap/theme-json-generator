@@ -13,11 +13,13 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\ValidatedFails;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\ValidatingFile;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\ValidFile;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Validate;
-use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FilesFinder;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * @psalm-api
+ */
 class ValidateCommand extends BaseCommand
 {
     use RootFolderTrait;
@@ -27,29 +29,33 @@ class ValidateCommand extends BaseCommand
 
     private Validate $validate;
 
-    private FilesFinder $filesFinder;
-
     private \Symfony\Component\EventDispatcher\EventDispatcher $subscriber;
 
     public function __construct(
         \Symfony\Component\EventDispatcher\EventDispatcher $subscriber,
-        Validate $validate,
-        FilesFinder $filesFinder
+        Validate $validate
     ) {
         $this->subscriber = $subscriber;
         $this->validate = $validate;
-        $this->filesFinder = $filesFinder;
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName(self::NAME);
         $this->setDescription('Validate theme.json file');
+
+        // $this->addOption(
+        //     'force',
+        //     'f',
+        //     InputOption::VALUE_NONE,
+        //     'Force to regenerate the theme.schema.json file'
+        // );
     }
 
     /**
      * @todo add a rule to exclude the theme.schema.json file to .gitignore
+     * @todo add a rule `--force` to regenerate the theme.schema.json file
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -81,11 +87,14 @@ class ValidateCommand extends BaseCommand
             ValidatedFails::class,
             static function (ValidatedFails $event) use ($output): void {
                 $output->writeln('<error># ' . $event->getFile()->getFilename() . ' file errors</error>');
+                /**
+                 * @var array<string, string> $error
+                 */
                 foreach ($event->getErrors() as $error) {
                     $output->writeln(\sprintf(
                         '- <error>[%s]</error> is not valid. %s',
-                        $error['property'],
-                        $error['message']
+                        $error['property'] ?? '',
+                        $error['message'] ?? ''
                     ));
                 }
             }

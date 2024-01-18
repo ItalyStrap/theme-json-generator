@@ -12,11 +12,13 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\EntryPointCanNotBeCreated
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\EntryPointCreated;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\EntryPointDoesNotExist;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Init;
-use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FilesFinder;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * @psalm-api
+ */
 class InitCommand extends BaseCommand
 {
     use RootFolderTrait;
@@ -24,20 +26,16 @@ class InitCommand extends BaseCommand
 
     public const NAME = 'init';
 
-    private FilesFinder $filesFinder;
-
     private Init $init;
 
     private \Symfony\Component\EventDispatcher\EventDispatcher $subscriber;
 
     public function __construct(
         \Symfony\Component\EventDispatcher\EventDispatcher $subscriber,
-        Init $init,
-        FilesFinder $filesFinder
+        Init $init
     ) {
         $this->subscriber = $subscriber;
         $this->init = $init;
-        $this->filesFinder = $filesFinder;
         parent::__construct();
     }
 

@@ -16,6 +16,9 @@ use ItalyStrap\ThemeJsonGenerator\Application\Commands\Composer\InitCommand;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Composer\ValidateCommand;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
+/**
+ * @psalm-api
+ */
 final class Bootstrap
 {
     public function run(): int
@@ -35,8 +38,11 @@ final class Bootstrap
         $injector->share(\Symfony\Component\EventDispatcher\EventDispatcher::class);
 
         $application = new Application();
+        /** @psalm-suppress MixedArgument */
         $application->add($injector->make(InitCommand::class));
+        /** @psalm-suppress MixedArgument */
         $application->add($injector->make(DumpCommand::class));
+        /** @psalm-suppress MixedArgument */
         $application->add($injector->make(ValidateCommand::class));
         return $application->run();
     }
