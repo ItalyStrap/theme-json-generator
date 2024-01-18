@@ -18,8 +18,12 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Palette;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorInfoInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\GradientInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\ItemInterface;
+use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FilesFinder;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
+use Psr\EventDispatcher\EventDispatcherInterface;
+use JsonSchema\Validator;
+use ScssPhp\ScssPhp\Compiler;
 use UnitTester;
 
 class UnitTestCase extends Unit
@@ -130,6 +134,34 @@ class UnitTestCase extends Unit
         return $this->palette->reveal();
     }
 
+    protected ObjectProphecy $dispatcher;
+
+    protected function makeDispatcher(): EventDispatcherInterface
+    {
+        return $this->dispatcher->reveal();
+    }
+
+    protected ObjectProphecy $filesFinder;
+
+    protected function makeFilesFinder(): FilesFinder
+    {
+        return $this->filesFinder->reveal();
+    }
+
+    protected ObjectProphecy $validator;
+
+    protected function makeValidator(): Validator
+    {
+        return $this->validator->reveal();
+    }
+
+    protected ObjectProphecy $compiler;
+
+    protected function makeCompiler(): Compiler
+    {
+        return $this->compiler->reveal();
+    }
+
     // phpcs:ignore -- Method from Codeception
     protected function _before()
     {
@@ -137,7 +169,6 @@ class UnitTestCase extends Unit
         $this->colorInfo = $this->prophesize(ColorInfoInterface::class);
         $this->gradient = $this->prophesize(GradientInterface::class);
         $this->palette = $this->prophesize(Palette::class);
-
 
         $this->config = $this->prophesize(ConfigInterface::class);
         $this->jsonFile = $this->prophesize(JsonFile::class);
@@ -148,6 +179,10 @@ class UnitTestCase extends Unit
         $this->link = $this->prophesize(Link::class);
         $this->repositoryManager = $this->prophesize(RepositoryManager::class);
         $this->package = $this->prophesize(PackageInterface::class);
+        $this->dispatcher = $this->prophesize(EventDispatcherInterface::class);
+        $this->filesFinder = $this->prophesize(FilesFinder::class);
+        $this->validator = $this->prophesize(Validator::class);
+        $this->compiler = $this->prophesize(Compiler::class);
 
         $this->composer->getConfig()->willReturn($this->makeComposerConfig());
         $this->composer->getPackage()->willReturn($this->makeRootPackage());
