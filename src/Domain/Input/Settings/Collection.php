@@ -241,7 +241,7 @@ class Collection implements CollectionInterface, \JsonSerializable
 
     private function assertIsUnique(string $key, ItemInterface $item): void
     {
-        if ($this->get($key)) {
+        if ($this->get($key) !== null) {
             throw new \RuntimeException(
                 \sprintf(
                     '%s already registered in %s category: got %s',
