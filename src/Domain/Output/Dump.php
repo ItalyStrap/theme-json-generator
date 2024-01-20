@@ -50,12 +50,10 @@ class Dump
             $injector = $this->configureContainer();
             /** @psalm-suppress UnresolvableInclude */
             $injector->execute(require $file);
-            /** @var Blueprint $blueprint */
             $blueprint = $injector->make(Blueprint::class);
 
             /**
              * @todo Add subscription configuration.
-             * @var EventDispatcherInterface $dispatcher
              */
             $dispatcher = $injector->make(EventDispatcherInterface::class);
             $dispatcher->dispatch($blueprint);
@@ -104,21 +102,15 @@ class Dump
         $injector = $this->configureContainer();
         $injector->execute($entryPoint);
 
-        /** @var Blueprint $blueprint */
         $blueprint = $injector->make(Blueprint::class);
 
         (new JsonFileWriter($message->getRootFolder() . DIRECTORY_SEPARATOR . $fileName . '.json'))
             ->write($blueprint);
     }
 
-    /**
-     * @return \Auryn\Injector
-     * @throws \Auryn\ConfigException
-     * @throws \Auryn\InjectionException
-     */
-    private function configureContainer(): \Auryn\Injector
+    private function configureContainer(): \ItalyStrap\Empress\Injector
     {
-        $injector = new \Auryn\Injector();
+        $injector = new \ItalyStrap\Empress\Injector();
         $injector->share($injector);
 
         $container = $this->createContainer($injector, clone $this->config);
@@ -143,7 +135,7 @@ class Dump
     }
 
     private function createContainer(
-        \Auryn\Injector $injector,
+        \ItalyStrap\Empress\Injector $injector,
         \ItalyStrap\Config\ConfigInterface $config
     ): ContainerInterface {
         return new class ($injector, $config) implements ContainerInterface {
@@ -151,7 +143,7 @@ class Dump
 
             private ConfigInterface $config;
 
-            public function __construct(\Auryn\Injector $injector, ConfigInterface $config)
+            public function __construct(\ItalyStrap\Empress\Injector $injector, ConfigInterface $config)
             {
                 $this->injector = $injector;
                 $this->config = $config;
@@ -160,9 +152,10 @@ class Dump
             public function get(string $id)
             {
                 if (!$this->has($id)) {
-                    throw new class (
-                        \sprintf('Service with ID %s not found.', $id)
-                    ) extends \Exception implements \Psr\Container\NotFoundExceptionInterface {
+                    throw new class (\sprintf(
+                        'Service with ID %s not found.',
+                        $id
+                    )) extends \Exception implements \Psr\Container\NotFoundExceptionInterface {
                     };
                 }
 

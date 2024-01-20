@@ -33,4 +33,9 @@ class NullCollection implements CollectionInterface
     {
         return $this;
     }
+
+    public function parse(string $content): string
+    {
+        return $content;
+    }
 }

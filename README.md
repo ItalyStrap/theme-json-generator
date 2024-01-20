@@ -336,6 +336,12 @@ The `styles` section coming soon, I'm working on it.
 
 [🆙](#table-of-contents)
 
+### Custom CSS and per block CSS
+
+Link https://github.com/luizbills/css-generator.php
+
+[🆙](#table-of-contents)
+
 ## Changelog
 
 Refactored the files structure:

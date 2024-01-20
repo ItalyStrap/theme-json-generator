@@ -6,8 +6,8 @@
   },
   "logs": {
     "text": "php://stdout",
-    "badge": {
-      "branch": "master"
+    "stryker": {
+      "badge": "master"
     }
   },
   "timeout": 10,
@@ -15,5 +15,5 @@
     "@default": true
   },
   "testFramework": "codeception",
-  "testFrameworkOptions": "--skip=wpunit --skip=acceptance --skip=functional"
+  "testFrameworkOptions": "--skip=integration --skip=acceptance --skip=functional"
 }

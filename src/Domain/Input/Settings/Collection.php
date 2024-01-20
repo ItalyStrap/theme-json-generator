@@ -5,10 +5,14 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings;
 
 use ItalyStrap\Config\AccessValueInArrayWithNotationTrait;
+use ItalyStrap\Tests\Unit\Domain\Input\Settings\CollectionIntegrationTest;
+use ItalyStrap\Tests\Unit\Domain\Input\Settings\CollectionTest;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Custom\Custom;
 
 /**
  * @psalm-api
+ * @see CollectionTest
+ * @see CollectionIntegrationTest
  */
 class Collection implements CollectionInterface, \JsonSerializable
 {
@@ -96,9 +100,58 @@ class Collection implements CollectionInterface, \JsonSerializable
         }
 
         /**
-         * This prevents to return a string with the placeholder
+         * This prevents to return a string with the placeholder like this:
+         * {{color.base}}
+         * instead we want to return the value of the placeholder like this:
+         * var(--wp--preset--color--base)
          */
         return $this->extractPlaceholders((string)$value);
+    }
+
+    public function parse(string $content): string
+    {
+        return $this->extractPlaceholders($content);
+    }
+
+    /**
+     * Just a reminder:
+     * '/{{([\w.]+)}}|var:(preset|custom)\|([\w.]+)\|([\w.]+)/'
+     * The pattern above will match also the shortcut syntax used as a reference by WordPress to search values.
+     * For now let the WordPress doing the job, and we will see later if we need to change this.
+     */
+    private function extractPlaceholders(string $string): string
+    {
+        $pattern = '/{{([\w.]+)}}/';
+        $found = (int)\preg_match_all($pattern, $string, $matches, PREG_SET_ORDER);
+
+        if ($found === 0) {
+            return $string;
+        }
+
+        $replace = [];
+        $search = [];
+        foreach ($matches as $match) {
+            $search[] = \array_shift($match);
+
+            /**
+             * The second parameter is needed to search also in the custom collection
+             * Let say you define a custom value `spacer.base`, `spacer` is not any Presets category
+             * so in this case the second $this->get() is added as default and will search in the custom collection
+             * for `custom.spacer.base` and if found will return the value from the custom collection.
+             * If any value in the Preset and Custom collection is found then the null default will be returned.
+             *
+             * @var ItemInterface|null $item
+             */
+            $item = $this->get($match[0], $this->get(Custom::CATEGORY . '.' . $match[0]));
+
+            if ($item === null) {
+                throw new \RuntimeException(sprintf('{{%s}} does not exists', $match[0]));
+            }
+
+            $replace[] = $item->var();
+        }
+
+        return \str_replace($search, $replace, $string);
     }
 
     public function field(string $field): self
@@ -184,50 +237,6 @@ class Collection implements CollectionInterface, \JsonSerializable
         }
 
         return $processed;
-    }
-
-    private function extractPlaceholders(string $string): string
-    {
-        $pattern = '/{{([\w.]+)}}|var:(preset|custom)\|([\w.]+)\|([\w.]+)/';
-        preg_match_all($pattern, $string, $matches, PREG_SET_ORDER);
-
-        $found = [];
-        $shiftedItem = '';
-        foreach ($matches as $match) {
-            $shiftedItem = \array_shift($match);
-
-            if (\strpos($match[0], '.') !== false) {
-                $match = \explode('.', $match[0]);
-            }
-
-            $match = \array_filter($match);
-
-            $found = $match;
-        }
-
-        if (\count($found) < 1) {
-            return $string;
-        }
-
-        $newKey = \implode('.', $found);
-
-        /**
-         * @todo Add test for the second parameter of get()
-         *       The second parameter is needed to search also in the custom collection
-         *       Let say you define a custom value `spacer.base`, `spacer` is not any Presets category
-         *       so in this case the second $this->get() is added as default and will search in the custom collection
-         *       for `custom.spacer.base` and if found will return the value from the custom collection.
-         *       If any value in the Preset and Custom collection is found then the null default will be returned.
-         *
-         * @var ItemInterface|null $item
-         */
-        $item = $this->get($newKey, $this->get(Custom::CATEGORY . '.' . $newKey));
-
-        if ($item === null) {
-            throw new \RuntimeException(sprintf('{{%s}} does not exists', $newKey));
-        }
-
-        return \str_replace($shiftedItem, $item->var(), $string);
     }
 
     private function assertIsUnique(string $key, ItemInterface $item): void

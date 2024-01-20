@@ -19,10 +19,10 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorInf
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\GradientInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\ItemInterface;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FilesFinder;
+use JsonSchema\Validator;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\EventDispatcher\EventDispatcherInterface;
-use JsonSchema\Validator;
 use ScssPhp\ScssPhp\Compiler;
 use UnitTester;
 

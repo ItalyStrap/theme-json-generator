@@ -15,9 +15,86 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Typography;
 
 class CollectionIntegrationTest extends UnitTestCase
 {
-    protected function makeInstance(): Collection
+    private function makeInstance(): Collection
     {
         return new Collection();
+    }
+
+    private function buildInstance(): Collection
+    {
+        $sut = $this->makeInstance();
+        $sut->add(new FontSize('base', 'Base font size 16px', 'clamp(1.125rem, 2vw, 1.5rem)'))
+            ->add(new FontSize('h1', 'Used in H1 titles', 'calc( {{fontSize.base}} * 2.8125)'))
+            ->add(new FontSize('h2', 'Used in H2 titles', 'calc( {{fontSize.base}} * 2.1875)'));
+
+        $body_text = (new ColorInfo('#000000'))->toHsla();
+        $bodyClrPalette = new Palette('bodyColor', 'Color for text', $body_text);
+
+        $sut->add($bodyClrPalette);
+
+//        $sut->addMultiple(ShadesGeneratorExperimental::fromColorInfo($body_text, 'bodyColor')->toArray());
+        $sut->addMultiple(ShadesGeneratorExperimental::fromPalette($bodyClrPalette)->toArray());
+
+        $sut->addMultiple((new CollectionAdapter([
+            'contentSize' => 'clamp(16rem, 60vw, 60rem)',
+            'wideSize' => 'clamp(16rem, 85vw, 70rem)',
+            'baseFontSize' => "{{fontSize.base}}",
+        ]))->toArray());
+
+        return $sut;
+    }
+
+    public static function placeholdersProvider(): iterable
+    {
+        yield 'simple' => [
+            'string' => '{{fontSize.base}}',
+            'expected' => 'var(--wp--preset--font-size--base)',
+        ];
+
+        yield 'simple with calc' => [
+            'string' => 'calc( {{fontSize.base}} * 2 )',
+            'expected' => 'calc( var(--wp--preset--font-size--base) * 2 )',
+        ];
+
+        yield 'simple from custom' => [
+            'string' => '{{custom.contentSize}}',
+            'expected' => 'var(--wp--custom--content-size)',
+        ];
+
+        yield 'from css' => [
+            'string' => <<<'EOF'
+.has-text-color {
+    font-size: {{fontSize.base}};
+})
+.wp-block-paragraph.has-text-color {
+    font-size: {{fontSize.h1}};
+}
+EOF
+            ,
+            'expected' => <<<'EOF'
+.has-text-color {
+    font-size: var(--wp--preset--font-size--base);
+})
+.wp-block-paragraph.has-text-color {
+    font-size: var(--wp--preset--font-size--h-1);
+}
+EOF
+            ,
+        ];
+    }
+
+    /**
+     * @dataProvider placeholdersProvider
+     */
+    public function testChangeMultiplePlaceHolder(
+        string $string,
+        string $expected
+    ): void {
+        $sut = $this->buildInstance();
+
+        $value = $sut->parse($string);
+
+        $this->assertSame($expected, $value);
     }
 
     public function testItShouldReplaceStringPlaceholder(): void
@@ -217,6 +294,6 @@ class CollectionIntegrationTest extends UnitTestCase
 //          break;
         }
 
-        codecept_debug($fontFace);
+//        codecept_debug($fontFace);
     }
 }

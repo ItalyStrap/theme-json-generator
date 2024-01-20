@@ -16,6 +16,16 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\SectionNames;
  */
 final class Blueprint extends Config implements \JsonSerializable
 {
+    public function setGlobalCss(string $css): bool
+    {
+        return $this->set(SectionNames::STYLES . '.css', $css);
+    }
+
+    public function setElementStyle(string $elementName, array $config): bool
+    {
+        return $this->set(SectionNames::STYLES . '.elements.' . $elementName, $config);
+    }
+
     public function setBlockSettings(string $blockName, array $config): bool
     {
         return $this->set(SectionNames::SETTINGS . '.blocks.' . $blockName, $config);
@@ -26,14 +36,11 @@ final class Blueprint extends Config implements \JsonSerializable
         return $this->set(SectionNames::STYLES . '.blocks.' . $blockName, $config);
     }
 
-    public function setElementStyle(string $elementName, array $config): bool
+    public function setPerBLockCss(string $blockName, string $css): bool
     {
-        return $this->set(SectionNames::STYLES . '.elements.' . $elementName, $config);
+        return $this->set(SectionNames::STYLES . '.blocks.' . $blockName . '.css', $css);
     }
 
-    /**
-     * @return mixed
-     */
     public function jsonSerialize(): array
     {
         return $this->getArrayCopy();

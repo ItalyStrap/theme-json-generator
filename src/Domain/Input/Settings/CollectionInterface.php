@@ -21,4 +21,6 @@ interface CollectionInterface
      * @param mixed $default
      */
     public function value(string $key, $default = null): string;
+
+    public function parse(string $content): string;
 }

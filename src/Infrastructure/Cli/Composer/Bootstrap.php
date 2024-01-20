@@ -28,7 +28,7 @@ final class Bootstrap
         $injector->alias(ConfigInterface::class, Config::class);
 
         $injector->alias(FinderInterface::class, Finder::class);
-        $injector->delegate(Finder::class, static fn(): FinderInterface => (new FinderFactory())->make());
+        $injector->delegate(Finder::class, static fn (): FinderInterface => (new FinderFactory())->make());
 
         $injector->alias(
             EventDispatcherInterface::class,
@@ -38,11 +38,11 @@ final class Bootstrap
         $injector->share(\Symfony\Component\EventDispatcher\EventDispatcher::class);
 
         $application = new Application();
-        /** @psalm-suppress MixedArgument */
+        /** @psalm-suppress InvalidArgument */
         $application->add($injector->make(InitCommand::class));
-        /** @psalm-suppress MixedArgument */
+        /** @psalm-suppress InvalidArgument */
         $application->add($injector->make(DumpCommand::class));
-        /** @psalm-suppress MixedArgument */
+        /** @psalm-suppress InvalidArgument */
         $application->add($injector->make(ValidateCommand::class));
         return $application->run();
     }

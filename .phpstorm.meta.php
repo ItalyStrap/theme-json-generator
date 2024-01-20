@@ -1,16 +1,13 @@
 <?php
 
-namespace PHPSTORM_META {
+declare(strict_types=1);
 
-    $STATIC_METHOD_TYPES = [
-        \Auryn\Injector::make("") => [
-            "" == "@",
-        ],
-        \ItalyStrap\Empress\Injector::make("") => [
-            "" == "@",
-        ],
-        \Psr\Container\ContainerInterface::get("") => [
-            "" == "@",
-        ],
-    ];
-}
+namespace PHPSTORM_META;
+
+override(\Auryn\Injector::make(0), map([
+    '' => '@',
+]));
+override(\ItalyStrap\Empress\Injector::make(0), map([
+    '' => '@',
+]));
+override(\Psr\Container\ContainerInterface::get(0), type(0));
