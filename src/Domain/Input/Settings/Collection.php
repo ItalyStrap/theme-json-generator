@@ -45,9 +45,6 @@ class Collection implements CollectionInterface, \JsonSerializable
         return $this;
     }
 
-    /**
-     * @param ItemInterface[] $items
-     */
     public function addMultiple(array $items): self
     {
         foreach ($items as $item) {
@@ -57,60 +54,9 @@ class Collection implements CollectionInterface, \JsonSerializable
         return $this;
     }
 
-    /**
-     * @param mixed $default
-     * @return array<string, mixed>|ItemInterface|mixed|null
-     */
     public function get(string $key, $default = null)
     {
         return $this->findValue($this->collection, \explode('.', $key), $default);
-    }
-
-    /**
-     * This method is meant to be used only in the Styles Section or the Theme.json file
-     * that because inside the styles section you only need to get a css variable created in the
-     * Settings section.
-     *
-     * Now obviously if you need to pass other CSS accepted values you can also use them
-     * and because they are not keys of the collection they will be returned as is.
-     *
-     * In short:
-     *
-     * If you pass a key of the collection you will get the value of the item.
-     * Example:
-     * Collection::value('color.base') === 'var(--wp--preset--color--base)'
-     *
-     * If you pass a CSS value you will get the same value (because all CSS value are not keys of the collection)
-     * Example:
-     * Collection::value('nonExistentKey', 'inherit') === 'inherit'
-     *
-     * @param string $key
-     * @param mixed $default
-     * @return string
-     */
-    public function value(string $key, $default = null): string
-    {
-        /**
-         * @var ItemInterface|mixed $value
-         */
-        $value = $this->get($key, $default);
-
-        if ($value instanceof ItemInterface) {
-            $value = $value->var();
-        }
-
-        /**
-         * This prevents to return a string with the placeholder like this:
-         * {{color.base}}
-         * instead we want to return the value of the placeholder like this:
-         * var(--wp--preset--color--base)
-         */
-        return $this->extractPlaceholders((string)$value);
-    }
-
-    public function parse(string $content): string
-    {
-        return $this->extractPlaceholders($content);
     }
 
     /**
@@ -119,13 +65,13 @@ class Collection implements CollectionInterface, \JsonSerializable
      * The pattern above will match also the shortcut syntax used as a reference by WordPress to search values.
      * For now let the WordPress doing the job, and we will see later if we need to change this.
      */
-    private function extractPlaceholders(string $string): string
+    public function parse(string $content): string
     {
         $pattern = '/{{([\w.]+)}}/';
-        $found = (int)\preg_match_all($pattern, $string, $matches, PREG_SET_ORDER);
+        $found = (int)\preg_match_all($pattern, $content, $matches, PREG_SET_ORDER);
 
         if ($found === 0) {
-            return $string;
+            return $content;
         }
 
         $replace = [];
@@ -151,7 +97,7 @@ class Collection implements CollectionInterface, \JsonSerializable
             $replace[] = $item->var();
         }
 
-        return \str_replace($search, $replace, $string);
+        return \str_replace($search, $replace, $content);
     }
 
     public function field(string $field): self
@@ -198,23 +144,21 @@ class Collection implements CollectionInterface, \JsonSerializable
 
     private function processPresetCollection(array $collection): array
     {
-        return \array_values(
-            \array_map(
-                function (ItemInterface $item): array {
-                    $newItems = [];
-                    foreach ($item->toArray() as $key => $value) {
-                        if (\is_string($value)) {
-                            $value = $this->extractPlaceholders($value);
-                        }
-
-                        $newItems[$key] = $value;
+        return \array_values(\array_map(
+            function (ItemInterface $item): array {
+                $newItems = [];
+                foreach ($item->toArray() as $key => $value) {
+                    if (\is_string($value)) {
+                        $value = $this->parse($value);
                     }
 
-                    return $newItems;
-                },
-                $collection
-            )
-        );
+                    $newItems[$key] = $value;
+                }
+
+                return $newItems;
+            },
+            $collection
+        ));
     }
 
     /**
@@ -233,7 +177,7 @@ class Collection implements CollectionInterface, \JsonSerializable
                 continue;
             }
 
-            $processed[$key] = $this->extractPlaceholders((string)$value);
+            $processed[$key] = $this->parse((string)$value);
         }
 
         return $processed;

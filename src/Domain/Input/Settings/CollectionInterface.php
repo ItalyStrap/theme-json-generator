@@ -12,15 +12,15 @@ interface CollectionInterface
     public function add(ItemInterface $item): self;
 
     /**
-     * @param mixed $default
-     * @return mixed
+     * @param ItemInterface[] $items
      */
-    public function get(string $key, $default = null);
+    public function addMultiple(array $items): self;
 
     /**
      * @param mixed $default
+     * @return array<string, mixed>|ItemInterface|mixed|null
      */
-    public function value(string $key, $default = null): string;
+    public function get(string $key, $default = null);
 
     public function parse(string $content): string;
 }
