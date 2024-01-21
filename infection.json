@@ -2,6 +2,12 @@
   "source": {
     "directories": [
       "src"
+    ],
+    "excludes": [
+      "Application",
+      "Infrastructure",
+      "/\\Experimental\\.php/",
+      "{.*/Output/Events/.*}"
     ]
   },
   "logs": {
