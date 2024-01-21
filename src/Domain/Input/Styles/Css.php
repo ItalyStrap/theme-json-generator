@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles;
 
+use ItalyStrap\Tests\Unit\Domain\Input\Styles\CssTest;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\CollectionInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\NullCollection;
 
 /**
  * @psalm-api
+ * @see CssTest
  */
 class Css
 {

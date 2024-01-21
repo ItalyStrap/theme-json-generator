@@ -17,8 +17,6 @@ use ScssPhp\ScssPhp\Compiler;
  * @link https://www.google.it/search?q=php+inline+css+content&sca_esv=596560865&ei=mAicZaTCGp3Axc8Pq7yT8AQ&ved=0ahUKEwik7p-Rgs6DAxUdYPEDHSveBE4Q4dUDCBA&uact=5&oq=php+inline+css+content&gs_lp=Egxnd3Mtd2l6LXNlcnAiFnBocCBpbmxpbmUgY3NzIGNvbnRlbnQyBRAhGKABMgUQIRigATIIECEYFhgeGB0yCBAhGBYYHhgdMggQIRgWGB4YHUjvogFQmgdYwJcBcAF4AZABAJgBsQGgAZkSqgEEMC4xOLgBA8gBAPgBAcICChAAGEcY1gQYsAPCAgoQABiABBiKBRhDwgIFEAAYgATCAgYQABgWGB7CAgcQABiABBgTwgIIEAAYFhgeGBPiAwQYACBBiAYBkAYI&sclient=gws-wiz-serp#ip=1
  * @link https://github.com/topics/inline-css?l=php
  * @link https://github.com/sabberworm/PHP-CSS-Parser
- * @link https://fullsiteediting.com/lessons/how-to-use-custom-css-in-theme-json/
- * @link https://developer.wordpress.org/news/2023/04/21/per-block-css-with-theme-json/
  */
 class CssTest extends UnitTestCase
 {
