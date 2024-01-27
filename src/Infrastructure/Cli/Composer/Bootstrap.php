@@ -14,6 +14,9 @@ use ItalyStrap\Finder\FinderInterface;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Composer\DumpCommand;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Composer\InitCommand;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Composer\ValidateCommand;
+use ItalyStrap\ThemeJsonGenerator\Application\Commands\Middleware\DeleteSchemaJsonMiddleware;
+use ItalyStrap\ThemeJsonGenerator\Application\Commands\Middleware\SchemaJsonMiddleware;
+use ItalyStrap\ThemeJsonGenerator\Domain\Output\Validate;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -43,7 +46,20 @@ final class Bootstrap
         /** @psalm-suppress InvalidArgument */
         $application->add($injector->make(DumpCommand::class));
         /** @psalm-suppress InvalidArgument */
-        $application->add($injector->make(ValidateCommand::class));
+        $application->add($injector->make(ValidateCommand::class, [
+            '+bus' => function (string $named_param, Injector $injector): \ItalyStrap\Bus\Bus {
+                $bus = new \ItalyStrap\Bus\Bus(
+                    $injector->make(Validate::class)
+                );
+
+                $bus->addMiddleware(
+                    new DeleteSchemaJsonMiddleware(),
+                    new SchemaJsonMiddleware()
+                );
+
+                return $bus;
+            },
+        ]));
         return $application->run();
     }
 }

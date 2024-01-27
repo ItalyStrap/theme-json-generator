@@ -11,6 +11,7 @@
 >
     <projectFiles>
         <directory name="bin" />
+        <directory name="bus" />
         <directory name="functions" />
         <directory name="src" />
         <ignoreFiles>

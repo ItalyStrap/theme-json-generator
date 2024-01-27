@@ -5,16 +5,15 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator\Application\Commands\Composer;
 
 use Composer\Command\BaseCommand;
-use ItalyStrap\ThemeJsonGenerator\Application\Commands\Middleware\SchemaJsonMiddleware;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\DataFromJsonTrait;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\RootFolderTrait;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\ValidateMessage;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\ValidatedFails;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\ValidatingFile;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\ValidFile;
-use ItalyStrap\ThemeJsonGenerator\Domain\Output\Validate;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -27,16 +26,16 @@ class ValidateCommand extends BaseCommand
 
     public const NAME = 'validate';
 
-    private Validate $validate;
-
     private \Symfony\Component\EventDispatcher\EventDispatcher $subscriber;
+
+    private \ItalyStrap\Bus\Bus $bus;
 
     public function __construct(
         \Symfony\Component\EventDispatcher\EventDispatcher $subscriber,
-        Validate $validate
+        \ItalyStrap\Bus\Bus $bus
     ) {
         $this->subscriber = $subscriber;
-        $this->validate = $validate;
+        $this->bus = $bus;
         parent::__construct();
     }
 
@@ -45,17 +44,16 @@ class ValidateCommand extends BaseCommand
         $this->setName(self::NAME);
         $this->setDescription('Validate theme.json file');
 
-        // $this->addOption(
-        //     'force',
-        //     'f',
-        //     InputOption::VALUE_NONE,
-        //     'Force to regenerate the theme.schema.json file'
-        // );
+         $this->addOption(
+             'force',
+             'f',
+             InputOption::VALUE_NONE,
+             'Force to regenerate the theme.schema.json file'
+         );
     }
 
     /**
      * @todo add a rule to exclude the theme.schema.json file to .gitignore
-     * @todo add a rule `--force` to regenerate the theme.schema.json file
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -100,16 +98,13 @@ class ValidateCommand extends BaseCommand
             }
         );
 
-        $message = new ValidateMessage($rootFolder, $schemaPath);
+        $message = new ValidateMessage($rootFolder, $schemaPath, (bool)$input->getOption('force'));
 
         try {
-            $schemaMiddleware = new SchemaJsonMiddleware();
-            $schemaMiddleware->process($message, $this->validate);
+            return (int)$this->bus->handle($message);
         } catch (\Exception $exception) {
             $output->writeln('<error>Error: ' . $exception->getMessage() . '</error>');
             return Command::FAILURE;
         }
-
-        return Command::SUCCESS;
     }
 }

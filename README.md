@@ -40,10 +40,10 @@ This package adheres to the [SemVer](http://semver.org/) specification and will 
 
 ## Basic Usage
 
-This package must be used only for development purpose, using it in production is not recommended because of performance reasons.
+This package **must be used only for development** purpose, using it in production it is not recommended because of performance reasons.
 The files need to be already generated when you are in production.
 All JSON files act as a cache, do not even think to generate them on the fly.
-So, do not use this package in production.
+So, **do not use this package in production**.
 
 This package add CLI commands to initialize, generate and validate JSONs files.
 
@@ -61,17 +61,26 @@ Basically, this CLI executes the following steps:
 ./vendor/bin/theme-json init
 ```
 
-This command will initialize all antrypoints used to generate the JSON file.
-First this command will check if a `theme.json` file exists in the root of the theme, if not it will create it.
-Then it will create the entrypoint for the `theme.json` file and all the others inside the `styles` folder, the entrypoint will be a PHP file called the same as the name of the JSON  file plus the `.php` extension, so for example the `theme.json` will have the entrypoint `theme.json.php` and so on.
+This command will initialize all entrypoint used to generate the JSON file.
+First this command will check if a `theme.json` file exists in the root of the theme (for classic theme for example), if not it will create it.
+Then it will create the entrypoint file for the `theme.json` file.
+When generating the entrypoint if a JSON file exists will also be used to populate the entrypoint file with the content of the JSON file in array format, so you do not need to fill the entrypoint file manually.
+If the JSON file is empty the entrypoint file will be empty too.
+From now on every time you run the `dump` command the content of the JSON file will be updated with the content of the entrypoint file.
+
+If the theme is a Block Based Theme it will search also inside the `styles` folder (if exists) for all JSON files,
+then it will create the entrypoint file for all JSON files found inside the `styles` folder.
+
+The entrypoint is a PHP file called the same as the name of the JSON file plus the `.php` as extension, so for example the `theme.json` will have the entrypoint `theme.json.php` and so on.
 This way all entrypoint will be closer to the JSON file they generate.
+Entrypoint files for `styles` folder will be inside the `styles` folder itself.
 All the entrypoint generated are PHP files that will return a callable, this callable will be used to add your custom configuration for structuring the JSON file.
 
 ```shell
 ./vendor/bin/theme-json dump
 ```
 
-This command will generate the JSON file using the entrypoint generated with the init command.
+This command will generate the JSON file using the entrypoint generated with the `init` command.
 
 You can use `--validate` option to validate the JSON files generated after the dump.
 The `--validate` option is the same as the command below.
@@ -81,51 +90,14 @@ The `--validate` option is the same as the command below.
 ```
 
 This command will validate the JSON files generated.
-The validation is done using the [justinrainbow/json-schema](https://github.com/justinrainbow/json-schema) package.
-The command will check first if you have `theme.schema.json` file in the root of the theme, if not it will create it, only remember to add the `theme.schema.json` file to your `.gitignore` file.
-The file is regenerated if the file schmea you have is older than a week or if you use the `--force` option.
+The validation is done using the [justinrainbow/json-schema](https://github.com/justinrainbow/json-schema) package against the [WordPress Theme Json schema](https://schemas.wp.org/trunk/theme.json).
+The command will check first if you have a file called `theme.schema.json` in the root of the theme folder or if the file is older than a week, if not it will create it (as a cache), only remember to add the `theme.schema.json` file to your `.gitignore` file to avoid to commit it.
+If you use the `--force` option it will always create the `theme.schema.json` file from scratch.
 Then it will validate all the Global Styles JSON files generated using the local schema file, the `theme.json` file in the root and all the others inside the `styles` folder.
 
-#### Under the hood
+#### Let's start
 
-* The callback needs to return an array with your [theme config](https://developer.wordpress.org/themes/global-settings-and-styles/) and the callback accepts a string argument where you get the
-  path of the theme.
-* At the end it generates the **theme.json** in the root folder of the theme you are developing.
-
-  [WordPress Theme Json schema](https://developer.wordpress.org/block-editor/how-to-guides/themes/theme-json/)
-This package simply convert a PHP array you provide into a JSON file, so if you want or need to make things simpler
-just provide the PHP array with all the structure you need.
-
-So if you just follow the schema your theme.json will need to be compliant with the WordPress Theme Json schema you're ready to go, create your simple array and the package will do the rest.
-
-This is a basic example of the array you need to provide:
-
-```php
-$arrayExample = [
-    'version'   => 1,
-    'settings'  => 	[
-        'layout' => [
-            'contentSize' => '620px',
-            'wideSize' => '1000px',
-        ],
-        [...] // All the rest of config, this is just an example
-    ]
-];
-```
-
-And this package will generate the following json:
-
-```json
-{
-  "version": 1,
-  "settings": {
-    "layout": {
-      "contentSize": "620px",
-      "wideSize": "1000px"
-    }
-  }
-}
-```
+This is a basic example of the schema of a Global Style JSON file:
 
 ```json
 {
@@ -137,36 +109,27 @@ And this package will generate the following json:
 }
 ```
 
-[🆙](#table-of-contents)
+You can find more info about the schema [here](https://developer.wordpress.org/block-editor/how-to-guides/themes/global-settings-and-styles/).
 
-### Example project
+The basic idea of this application is to just convert a PHP array into a JSON file, let's take a look at an example:
 
 ```php
-namespace YourVendor\YourProject;
-
-final class YourCustomClass {
-
-    /**
-     * @argument string $path The path of the theme
-     */
-    public static function yourCallback( string $path ): array {
-        // You can check against the $path argument in case you have parent and child theme.
-    
-        return [
-            'version'   => 1,
-            'settings'  => 	[
-                'layout' => [
-                    'contentSize' => '620px',
-                    'wideSize' => '1000px',
-                ],
-                [...] // All the rest of config
-            ]
-        ];
-    }
-}
+$arrayExample = [
+    'version'   => 1,
+    'settings'  => 	[
+        'layout' => [
+            'contentSize' => '620px',
+            'wideSize' => '1000px',
+        ],
+        [...] // All the rest of config, this is just an example
+    ],
+    'styles'    => [...],
+    'customTemplates'   => [...],
+    'templateParts' => [...],
+];
 ```
 
-And this package will generate the following json:
+And the generated JSON file will be:
 
 ```json
 {
@@ -176,43 +139,161 @@ And this package will generate the following json:
       "contentSize": "620px",
       "wideSize": "1000px"
     }
-  }
+  },
+  "styles": {},
+  "customTemplates": {},
+  "templateParts": {}
 }
 ```
 
-[🆙](#table-of-contents)
+You need to following the WordPress Theme Json schema to have a valid JSON file, anyway calling the `validate` command will check if the JSON file is valid or not.
+If in the future the schema will add more fields you can just add them to the array and the CLI will generate the JSON file with the new fields even if I do not update this documentation.
 
-### WP_CLI command
+But, right now I have not shown you the real power of this package, so let's start from the beginning.
 
-The WP_CLI commands are on hold in this version, I'm thinking if having also a WP_CLI command is a good idea or not.
+#### Entrypoint
 
-So the following documentation for WP_CLI is not valid for this version, I keep it here for future reference.
+An entrypoint serve as a bridge where you can add your custom configuration for structuring the JSON file and this CLI can know how to generate the JSON file based on your configuration.
 
-For using as WP_CLI command you have to create a file `wp-cli.local.yml` or `wp-cli.yml` in the root of your theme 
-or better in the root of the WordPress installation.
+A basic example of the entrypoint file:
 
-Inside that file add this line for adding your custom callback:
+```php
 
-```yaml
-THEME_JSON_CALLABLE: '\YourVendor\YourProject\your_callback'
+declare(strict_types=1);
+
+namespace YourVendor\YourProject;
+
+use ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint;
+
+return static function (Blueprint $blueprint /**, Other Services You Need */): void {
+    // Do your configuration using the $blueprint object
+    // You do not need to return anything, it's just a void function
+}
 ```
 
-And in the command line just use the command:
+Under the hood this package use [Empress](https://github.com/ItalyStrap/empress) so every service you add to the signature of the callable will be resolved by the container.
 
-```shell
-wp theme-json dump
+But, please, be minimal, follow the KISS principle, do not add too much services to the signature of the callable, if you need to add too much services, maybe you need to refactor your code.
+
+Another example could be to also add a Container to the signature of the callable but be aware that using the container to call every thing can lead you to the dark side of the Service Locator pattern, so use it wisely.
+
+```php
+
+declare(strict_types=1);
+
+namespace YourVendor\YourProject;
+
+use ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint;
+use Psr\Container\ContainerInterface;
+
+return static function (Blueprint $blueprint, ContainerInterface $container /**, Other Services You Need */): void {
+    // Do your configuration using the $blueprint object
+    // You do not need to return anything, it's just a void function
+}
 ```
 
-This command is still experimental, could be changed in the future.
+The `$container` allow you to access to all services you need to add your custom configuration.
+
+Now it's time to start with a real (basic) example.
+
+```php
+
+declare(strict_types=1);
+
+namespace YourVendor\YourProject;
+
+use ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\SectionNames;
+use Psr\Container\ContainerInterface;
+
+return static function (Blueprint $blueprint): void {
+    $blueprint->merge([
+        SectionNames::SCHEMA => 'https://schemas.wp.org/trunk/theme.json',
+        SectionNames::VERSION => self::VERSION,
+        SectionNames::TITLE => 'Experimental Theme',
+        SectionNames::DESCRIPTION => 'Experimental Theme',
+        SectionNames::SETTINGS => [
+            'layout' => [
+                'contentSize' => '620px',
+                'wideSize' => '1000px',
+            ],
+            'color' => [
+                'custom' => true,
+                'link' => true,
+                'palette' => [
+                    [
+                        'slug' => 'base',
+                        'name' => 'Brand base color',
+                        'color' => 'hsla(212,73%,55%,1)',
+                    ],
+                    // ... All the rest of palette colors
+                ],
+                'gradients' => [
+                    [
+                        'slug' => 'light-to-dark',
+                        'name' => 'Black to white',
+                        'gradient' => 'linear-gradient(160deg, var(--wp--preset--color--light), var(--wp--preset--color--dark))',
+                    ],
+                    // ... All the rest of gradients
+                ],
+                'duotone' => [
+                    [
+                        'slug' => 'black-to-white',
+                        'name' => 'Black to White',
+                        'colors' => [
+                            'rgba(0,0,0,1.00)',
+                            'rgba(255,255,255,1.00)',
+                        ],
+                    ],
+                    // ... All the rest of duotone
+                ],
+            ],
+            'typography' => [
+                'customFontSize' => true,
+                'fontSizes' => [
+                    [
+                        'slug' => 'base',
+                        'name' => 'Base font size 16px',
+                        'size' => 'clamp(1rem, 2vw, 1.5rem)',
+                    ],
+                    // ... All the rest of font sizes
+                ],
+                'fontFamilies' => [
+                    [
+                        'slug' => 'base',
+                        'name' => 'Default font family',
+                        'fontFamily' => 'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+                    ],
+                    // ... All the rest of font families
+                ],
+            ],
+            'custom' => [...],
+            [...] // All the rest of config
+        ],
+        SectionNames::STYLES => [
+            'color' => [...],
+            'typography' => [...],
+            'spacing' => [...],
+            'elements' => [...],
+            'blocks' => [...],
+            [...] // All the rest of config
+        ],
+    ]);
+}
+```
+
+This example show you only the surface of the iceberg, if you do not need to add complex configuration you can just use it as is and skip the rest of the documentation.
+
+After you add your configuration just run the command `./vendor/bin/theme-json dump` and the JSON file will be generated.
 
 [🆙](#table-of-contents)
 
 ## Advanced Usage
 
-> This part is optional, if you want to provide your own data just skip this part.
-> I use a naming convention for defining CSS properties, you can use your own if you don't like mine.
+From now on the fun begins.
 
-Now we know how to generate all Global Styles JSON files so, what next?
+
+> I use a naming convention for defining CSS properties, you can use your own if you don't like mine.
 
 If you want to do more with PHP you can use some helper classes I added to this package to better manage the 
 settings.
@@ -245,9 +326,6 @@ also the category of the preset with the name separated by a dot like color `col
 needs a `text` value from a color collection, also we need to add the collection of colors to the collection of 
 gradients with color snippet:
 
-```php
-$gradient->withCollection( $palette );
-```
 
 This way allows us to avoid syntax errors when writing CSS properties manually.
 In case there is no value with the slug we use, the object will throw a `\RuntimeException::class`, useful for 
@@ -339,6 +417,31 @@ The `styles` section coming soon, I'm working on it.
 ### Custom CSS and per block CSS
 
 Link https://github.com/luizbills/css-generator.php
+
+[🆙](#table-of-contents)
+
+### WP_CLI command (on hold)
+
+The WP_CLI commands are on hold in this version, I'm thinking if having also a WP_CLI command is a good idea or not.
+
+So the following documentation for WP_CLI is not valid for this version, I keep it here for future reference.
+
+For using as WP_CLI command you have to create a file `wp-cli.local.yml` or `wp-cli.yml` in the root of your theme
+or better in the root of the WordPress installation.
+
+Inside that file add this line for adding your custom callback:
+
+```yaml
+THEME_JSON_CALLABLE: '\YourVendor\YourProject\your_callback'
+```
+
+And in the command line just use the command:
+
+```shell
+wp theme-json dump
+```
+
+This command is still experimental, could be changed in the future.
 
 [🆙](#table-of-contents)
 

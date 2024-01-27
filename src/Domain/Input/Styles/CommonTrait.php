@@ -15,13 +15,13 @@ trait CommonTrait
      */
     private array $properties;
 
-    private ?CollectionInterface $collection;
+    private CollectionInterface $collection;
 
     /**
      * @param array<string, string> $properties
      */
     public function __construct(
-        ?CollectionInterface $collection = null,
+        CollectionInterface $collection = null,
         array $properties = []
     ) {
         $this->collection = $collection ?? new NullCollection();
@@ -68,7 +68,6 @@ trait CommonTrait
     {
         /**
          * @var ItemInterface|mixed $value
-         * @psalm-suppress PossiblyNullReference
          */
         $value = $this->collection->get($value, $value);
 

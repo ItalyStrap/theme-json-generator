@@ -12,6 +12,7 @@ use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 
 return function (ECSConfig $ecsConfig): void {
     $ecsConfig->paths([
+        __DIR__ . '/bus',
         __DIR__ . '/src',
         __DIR__ . '/tests',
         __DIR__ . '/functions',
@@ -30,18 +31,23 @@ return function (ECSConfig $ecsConfig): void {
 
     // this way you add a single rule
     $ecsConfig->rules([
-//        NoUnusedImportsFixer::class,
+        NoUnusedImportsFixer::class,
         DeclareStrictTypesFixer::class
     ]);
 
     // this way you can add sets - group of rules
     $ecsConfig->sets([
         // run and fix, one by one
-//         SetList::SPACES,
-        // SetList::ARRAY,
-        // SetList::DOCBLOCK,
-        // SetList::NAMESPACES,
-        // SetList::COMMENTS,
-         SetList::PSR_12,
+        SetList::COMMON,
+        SetList::PHPUNIT,
+        SetList::CLEAN_CODE,
+        SetList::ARRAY,
+        SetList::COMMENTS,
+        SetList::CONTROL_STRUCTURES,
+        SetList::DOCBLOCK,
+        SetList::NAMESPACES,
+        SetList::SPACES,
+        SetList::SYMPLIFY,
+        SetList::PSR_12,
     ]);
 };

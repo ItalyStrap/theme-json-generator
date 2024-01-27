@@ -69,6 +69,7 @@
     },
     "autoload": {
         "psr-4": {
+            "ItalyStrap\\Bus\\": "bus/",
             "ItalyStrap\\ThemeJsonGenerator\\": "src/"
         },
         "files": [

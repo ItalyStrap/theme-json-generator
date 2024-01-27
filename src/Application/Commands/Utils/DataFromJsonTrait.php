@@ -19,7 +19,7 @@ trait DataFromJsonTrait
     /**
      * @return array<array-key, mixed>|object
      */
-    private function fromPath(string $path, ?bool $associative)
+    private function fromPath(string $path, ?bool $isAssociative)
     {
         $json = \file_get_contents($path);
         if ($json === false) {
@@ -30,7 +30,7 @@ trait DataFromJsonTrait
         }
 
         try {
-            $data = \json_decode($json, $associative, 512, JSON_THROW_ON_ERROR);
+            $data = \json_decode($json, $isAssociative, 512, JSON_THROW_ON_ERROR);
 
             if (!\is_array($data) && !\is_object($data)) {
                 throw new \RuntimeException(\sprintf(

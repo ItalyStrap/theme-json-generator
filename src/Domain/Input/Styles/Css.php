@@ -14,17 +14,16 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\NullCollection;
  */
 class Css
 {
-    private ?CollectionInterface $collection;
+    private CollectionInterface $collection;
 
     public function __construct(
-        ?CollectionInterface $collection = null
+        CollectionInterface $collection = null
     ) {
         $this->collection = $collection ?? new NullCollection();
     }
 
     public function parseString(string $css): string
     {
-        /** @psalm-suppress PossiblyNullReference */
         $css = $this->collection->parse($css);
         $rules = \explode("}", \trim($css));
         $rules = \array_filter($rules);
@@ -76,10 +75,6 @@ class Css
         return $processedRule;
     }
 
-    /**
-     * @todo check if this is correct
-     * $isRoot = \in_array(\trim($subValue), [':root', 'root'], true);
-     */
     private function getProcessedSubValues(array $subValues): array
     {
         $processedSubValues = [];

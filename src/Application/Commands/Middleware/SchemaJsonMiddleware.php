@@ -7,16 +7,17 @@ namespace ItalyStrap\ThemeJsonGenerator\Application\Commands\Middleware;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\ValidateMessage;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Validate;
 
-class SchemaJsonMiddleware
+class SchemaJsonMiddleware implements \ItalyStrap\Bus\MiddlewareInterface
 {
-    public function process(ValidateMessage $command, Validate $handler): void
+    public function process(object $message, \ItalyStrap\Bus\HandlerInterface $handler): int
     {
-        $schemaPath = $command->getSchemaPath();
+        /** @var ValidateMessage $message */
+        $schemaPath = $message->getSchemaPath();
         if (!\file_exists($schemaPath) || $this->isFileSchemaOlderThanOneWeek($schemaPath)) {
             $this->createFileSchema($schemaPath);
         }
 
-        $handler->handle($command);
+        return (int)$handler->handle($message);
     }
 
     private function isFileSchemaOlderThanOneWeek(string $schemaPath): bool

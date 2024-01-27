@@ -17,7 +17,7 @@ use ScssPhp\ScssPhp\Compiler;
 /**
  * @psalm-api
  */
-class Validate
+class Validate implements \ItalyStrap\Bus\HandlerInterface
 {
     use DataFromJsonTrait;
 
@@ -41,17 +41,20 @@ class Validate
         $this->compiler = $compiler;
     }
 
-    public function handle(ValidateMessage $command): void
+    public function handle(object $message): int
     {
-        foreach ($this->filesFinder->find($command->getRootFolder(), 'json') as $file) {
+        /** @var ValidateMessage $message */
+        foreach ($this->filesFinder->find($message->getRootFolder(), 'json') as $file) {
             $this->dispatcher->dispatch(new ValidatingFile($file));
-            $this->validateJsonFile($file, $command->getSchemaPath());
+            $this->validateJsonFile($file, $message->getSchemaPath());
             $this->validator->reset();
             /**
              * @todo Implementing scss validation
              */
             $this->compiler->compileString('');
         }
+
+        return 0;
     }
 
     private function validateJsonFile(
