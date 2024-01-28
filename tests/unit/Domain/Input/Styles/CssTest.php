@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace ItalyStrap\Tests\Unit\Domain\Input\Styles;
 
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Css;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\CssExperimental;
 use ScssPhp\ScssPhp\Compiler;
 
 /**
@@ -20,9 +20,9 @@ use ScssPhp\ScssPhp\Compiler;
  */
 class CssTest extends UnitTestCase
 {
-    private function makeInstance(): Css
+    private function makeInstance(): CssExperimental
     {
-        return new Css();
+        return new CssExperimental();
     }
 
     public static function styleProvider(): iterable

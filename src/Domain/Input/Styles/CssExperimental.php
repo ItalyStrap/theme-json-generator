@@ -12,7 +12,7 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\NullCollection;
  * @psalm-api
  * @see CssTest
  */
-class Css
+class CssExperimental
 {
     private CollectionInterface $collection;
 

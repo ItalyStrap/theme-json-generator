@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace ItalyStrap\Tests\Integration\Domain\Input\Styles;
 
 use ItalyStrap\Tests\IntegrationTestCase;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Css;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\CssExperimental;
 
 class CssTest extends IntegrationTestCase
 {
     use ProcessBlocksCustomCssTrait;
 
-    private function makeInstance(): Css
+    private function makeInstance(): CssExperimental
     {
-        return new Css();
+        return new CssExperimental();
     }
 
     public static function styleProvider(): iterable
