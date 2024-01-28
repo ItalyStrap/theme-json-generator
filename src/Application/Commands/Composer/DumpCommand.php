@@ -109,7 +109,8 @@ final class DumpCommand extends BaseCommand
         $this->config->merge($package->getExtra()[self::COMPOSER_EXTRA_THEME_JSON_KEY] ?? []);
 
         /**
-         * @var callable $callback
+         * @todo The callback is temporary until the new files generation are in place.
+         * @psalm-suppress MixedAssignment
          */
         $callback = $this->config->get(self::CALLBACK);
 
@@ -141,7 +142,9 @@ final class DumpCommand extends BaseCommand
         );
 
         try {
-            $this->dump->processBlueprint($message, 'theme', $callback);
+            if (\is_callable($callback)) {
+                $this->dump->processBlueprint($message, 'theme', $callback);
+            }
             $output->writeln('<info>Generated theme.json file</info>');
         } catch (\Exception $exception) {
             $output->writeln($exception->getMessage());

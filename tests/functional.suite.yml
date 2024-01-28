@@ -1,4 +1,6 @@
 actor: FunctionalTester
 modules:
     enabled:
+        - Asserts
+        - Cli
         - \Helper\Functional
