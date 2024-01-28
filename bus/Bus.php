@@ -13,6 +13,7 @@ namespace ItalyStrap\Bus;
  * @link https://laravel.com/docs/5.0/bus
  * @link https://github.com/remotelyliving/php-command-bus/blob/master/src/CommandBus.php
  * @link https://github.com/php-fig/event-dispatcher-util/blob/master/src/ParameterDeriverTrait.php
+ * @link https://steemit.com/php/@crell/psr-14-example-delayed-events-queues-and-asynchronicity
  *
  * @psalm-api
  */

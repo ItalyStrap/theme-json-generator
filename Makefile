@@ -127,7 +127,7 @@ acceptance: up	### Run the acceptance tests
 tests: unit	### Run unit and integration tests
 
 .PHONY: qa
-qa: cs psalm unit ### Run all the tests
+qa: cs psalm unit integration ### Run all the tests
 
 # Infection commands
 
