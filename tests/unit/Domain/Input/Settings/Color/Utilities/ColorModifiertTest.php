@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace ItalyStrap\Tests\Unit\Domain\Input\Settings\Color\Utilities;
 
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorInfo;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\Color;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorModifier;
 
 class ColorModifiertTest extends UnitTestCase
 {
     protected function makeInstance(string $color): ColorModifier
     {
-        return new ColorModifier(new ColorInfo($color));
+        return new ColorModifier(new Color($color));
     }
 
     public static function typesProvider(): \Iterator

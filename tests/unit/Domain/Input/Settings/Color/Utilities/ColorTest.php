@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace ItalyStrap\Tests\Unit\Domain\Input\Settings\Color\Utilities;
 
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorInfo;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\Color;
 
-class ColorInfoTest extends UnitTestCase
+class ColorTest extends UnitTestCase
 {
-    protected function makeInstance(string $color): ColorInfo
+    protected function makeInstance(string $color): Color
     {
-        return new ColorInfo($color);
+        return new Color($color);
     }
 
     public static function colorFormatProvider(): \Generator

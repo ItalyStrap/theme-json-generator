@@ -11,7 +11,7 @@ use Exception;
  */
 final class ColorModifier implements ColorModifierInterface
 {
-    private ColorInfoInterface $color;
+    private ColorInterface $color;
 
     private ColorFactoryInterface $color_factory;
 
@@ -20,59 +20,59 @@ final class ColorModifier implements ColorModifierInterface
     /**
      * @throws Exception
      */
-    public function __construct(ColorInfoInterface $color, ColorFactoryInterface $factory = null)
+    public function __construct(ColorInterface $color, ColorFactoryInterface $factory = null)
     {
         $this->color = $color;
         $this->color_factory = $factory ?? new ColorFactory();
         $this->initialType = $this->color->type();
     }
 
-    public function color(): ColorInfoInterface
+    public function color(): ColorInterface
     {
         return $this->color;
     }
 
-    public function tint(float $weight = 0): ColorInfoInterface
+    public function tint(float $weight = 0): ColorInterface
     {
         return $this->mixWith('rgb(255,255,255)', $weight);
     }
 
-    public function shade(float $weight = 0): ColorInfoInterface
+    public function shade(float $weight = 0): ColorInterface
     {
         return $this->mixWith('rgb(0,0,0)', $weight);
     }
 
-    public function tone(float $weight = 0): ColorInfoInterface
+    public function tone(float $weight = 0): ColorInterface
     {
         return $this->mixWith('rgb(128,128,128)', $weight);
     }
 
-    public function opacity(float $alpha = 1): ColorInfoInterface
+    public function opacity(float $alpha = 1): ColorInterface
     {
         return $this->createNewColorWithChangedLightnessOrOpacity(0, $alpha);
     }
 
-    public function darken(int $amount = 0): ColorInfoInterface
+    public function darken(int $amount = 0): ColorInterface
     {
         return $this->createNewColorWithChangedLightnessOrOpacity(-$amount);
     }
 
-    public function lighten(int $amount = 0): ColorInfoInterface
+    public function lighten(int $amount = 0): ColorInterface
     {
         return $this->createNewColorWithChangedLightnessOrOpacity($amount);
     }
 
-    public function saturate(int $amount = 0): ColorInfoInterface
+    public function saturate(int $amount = 0): ColorInterface
     {
         return $this->createNewColorWithChangedSaturation($amount);
     }
 
-    public function contrast(int $amount = 0): ColorInfoInterface
+    public function contrast(int $amount = 0): ColorInterface
     {
         return $this->createNewColorWithChangedContrast($amount);
     }
 
-    public function complementary(): ColorInfoInterface
+    public function complementary(): ColorInterface
     {
         if ($this->color->hue() === 0 && $this->color->saturation() === 0) {
             return $this->color;
@@ -81,7 +81,7 @@ final class ColorModifier implements ColorModifierInterface
         return $this->hueRotate($this->color->hue() + 180);
     }
 
-    public function invert(): ColorInfoInterface
+    public function invert(): ColorInterface
     {
         return $this->createNewColorFrom(
             (string) $this->color->hue(),
@@ -91,7 +91,7 @@ final class ColorModifier implements ColorModifierInterface
         );
     }
 
-    public function hueRotate(int $amount = 0): ColorInfoInterface
+    public function hueRotate(int $amount = 0): ColorInterface
     {
         $sumHue = $this->color->hue() + $amount;
 
@@ -107,7 +107,7 @@ final class ColorModifier implements ColorModifierInterface
         );
     }
 
-    private function createNewColorWithChangedLightnessOrOpacity(int $amount, float $alpha = 1): ColorInfoInterface
+    private function createNewColorWithChangedLightnessOrOpacity(int $amount, float $alpha = 1): ColorInterface
     {
         return $this->createNewColorFrom(
             (string) $this->color->hue(),
@@ -117,7 +117,7 @@ final class ColorModifier implements ColorModifierInterface
         );
     }
 
-    private function createNewColorWithChangedSaturation(int $amount): ColorInfoInterface
+    private function createNewColorWithChangedSaturation(int $amount): ColorInterface
     {
         return $this->createNewColorFrom(
             (string) $this->color->hue(),
@@ -127,7 +127,7 @@ final class ColorModifier implements ColorModifierInterface
         );
     }
 
-    private function createNewColorWithChangedContrast(int $amount): ColorInfoInterface
+    private function createNewColorWithChangedContrast(int $amount): ColorInterface
     {
         return $this->createNewColorFrom(
             (string) $this->color->hue(),
@@ -146,7 +146,7 @@ final class ColorModifier implements ColorModifierInterface
         string $saturation,
         string $lightness,
         string $alpha
-    ): ColorInfoInterface {
+    ): ColorInterface {
         $newColor = $this->color_factory->fromColorString(\sprintf(
             'hsla(%s, %s%%, %s%%, %s)',
             $hue,
@@ -164,7 +164,7 @@ final class ColorModifier implements ColorModifierInterface
      * @psalm-suppress MixedInferredReturnType
      * @psalm-suppress MixedReturnStatement
      */
-    private function mixWith(string $color_string, float $weight = 0): ColorInfoInterface
+    private function mixWith(string $color_string, float $weight = 0): ColorInterface
     {
         /**
          * I need to cast to RGB or RGBA because the mixRgb method
@@ -189,7 +189,7 @@ final class ColorModifier implements ColorModifierInterface
     /**
      * @return array<array-key, int|float>
      */
-    private function mixRgb(ColorInfoInterface $color_1, ColorInfoInterface $color_2, float $weight = 0.5): array
+    private function mixRgb(ColorInterface $color_1, ColorInterface $color_2, float $weight = 0.5): array
     {
         $f = static fn (int $x): float => $weight * $x;
         $g = static fn (int $x): float => (1 - $weight) * $x;
@@ -210,11 +210,11 @@ final class ColorModifier implements ColorModifierInterface
     }
 
     /**
-     * @param ColorInfoInterface $newColor
+     * @param ColorInterface $newColor
      * @return mixed
      * @throws Exception
      */
-    private function callMethodOnColorObject(ColorInfoInterface $newColor): ColorInfoInterface
+    private function callMethodOnColorObject(ColorInterface $newColor): ColorInterface
     {
         if (\method_exists($newColor, 'to' . $this->initialType)) {
             $methodName = 'to' . $this->initialType;

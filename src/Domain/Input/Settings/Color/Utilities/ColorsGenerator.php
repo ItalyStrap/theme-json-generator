@@ -10,7 +10,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities;
 interface ColorsGenerator
 {
     /**
-     * @return array<array-key, ColorInfoInterface>
+     * @return array<array-key, ColorInterface>
      */
     public function generate(): array;
 }

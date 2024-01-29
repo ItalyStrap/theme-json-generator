@@ -11,7 +11,7 @@ use Spatie\Color\Hsla;
 /**
  * @psalm-api
  */
-final class ColorInfo implements ColorInfoInterface
+final class Color implements ColorInterface
 {
     private SpatieColor $spatieColor;
 
@@ -63,7 +63,7 @@ final class ColorInfo implements ColorInfoInterface
      *
      * @throws \Exception
      */
-    public function relativeLuminance(ColorInfoInterface $color): float
+    public function relativeLuminance(ColorInterface $color): float
     {
         $colors = [
             $this->luminance(),

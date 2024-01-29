@@ -12,10 +12,10 @@ interface ColorFactoryInterface
     /**
      * @throws \Exception
      */
-    public function fromColorInfo(ColorInfoInterface $colorValue): ColorInfoInterface;
+    public function fromColorInfo(ColorInterface $colorValue): ColorInterface;
 
     /**
      * @throws \Exception
      */
-    public function fromColorString(string $color): ColorInfoInterface;
+    public function fromColorString(string $color): ColorInterface;
 }

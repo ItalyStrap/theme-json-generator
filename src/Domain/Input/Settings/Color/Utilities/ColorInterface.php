@@ -8,7 +8,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities;
  * @psalm-api
  */
 // phpcs:ignore PHPCompatibility.Interfaces.NewInterfaces.stringableFound
-interface ColorInfoInterface extends \Stringable
+interface ColorInterface extends \Stringable
 {
     public function isDark(): bool;
 
@@ -23,15 +23,15 @@ interface ColorInfoInterface extends \Stringable
      */
     public function luminance(): float;
 
-    public function toHex(): ColorInfoInterface;
+    public function toHex(): ColorInterface;
 
-    public function toHsl(): ColorInfoInterface;
+    public function toHsl(): ColorInterface;
 
-    public function toHsla(float $alpha = 1): ColorInfoInterface;
+    public function toHsla(float $alpha = 1): ColorInterface;
 
-    public function toRgb(): ColorInfoInterface;
+    public function toRgb(): ColorInterface;
 
-    public function toRgba(float $alpha = 1): ColorInfoInterface;
+    public function toRgba(float $alpha = 1): ColorInterface;
 
     /**
      * @return string|int

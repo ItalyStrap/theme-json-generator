@@ -23,7 +23,7 @@ class ShadesGeneratorExperimental
      */
     public const INCREMENT_BY = 100;
 
-    private ColorInfoInterface $color;
+    private ColorInterface $color;
 
     private string $slug;
 
@@ -49,7 +49,7 @@ class ShadesGeneratorExperimental
     }
 
     public static function fromColorInfo(
-        ColorInfoInterface $color,
+        ColorInterface $color,
         string $slug,
         int $min = self::MIN,
         int $max = self::MAX,
@@ -65,7 +65,7 @@ class ShadesGeneratorExperimental
     }
 
     public function __construct(
-        ColorInfoInterface $color,
+        ColorInterface $color,
         string $slug,
         int $min = self::MIN,
         int $max = self::MAX,

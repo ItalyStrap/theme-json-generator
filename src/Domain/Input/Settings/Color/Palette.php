@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color;
 
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorInfoInterface;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\CommonTrait;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\ItemInterface;
 
@@ -29,9 +29,9 @@ class Palette implements ItemInterface
 
     private string $name;
 
-    private ColorInfoInterface $color;
+    private ColorInterface $color;
 
-    public function __construct(string $slug, string $name, ColorInfoInterface $color)
+    public function __construct(string $slug, string $name, ColorInterface $color)
     {
         $this->slug = $slug;
         $this->name = $name;
@@ -50,7 +50,7 @@ class Palette implements ItemInterface
         ];
     }
 
-    public function color(): ColorInfoInterface
+    public function color(): ColorInterface
     {
         return $this->color;
     }

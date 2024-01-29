@@ -6,15 +6,15 @@ namespace ItalyStrap\Tests\Unit\Domain\Input\Settings\Color\Utilities;
 
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\AnalogousColorsExperimental;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorInfo;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorInfoInterface;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\Color;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorModifier;
 
 class AnalogousColorsTest extends UnitTestCase
 {
     protected function makeInstance(string $color): AnalogousColorsExperimental
     {
-        return new AnalogousColorsExperimental(new ColorModifier(new ColorInfo($color)));
+        return new AnalogousColorsExperimental(new ColorModifier(new Color($color)));
     }
 
     public function testItShouldReturnArrayWithColorInfoInterface(): void
@@ -22,7 +22,7 @@ class AnalogousColorsTest extends UnitTestCase
         $sut = $this->makeInstance('#ffffff');
 
         $this->assertContainsOnlyInstancesOf(
-            ColorInfoInterface::class,
+            ColorInterface::class,
             $sut->generate()
         );
     }

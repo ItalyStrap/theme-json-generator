@@ -6,7 +6,7 @@ namespace ItalyStrap\Tests\Unit\Domain\Input\Settings\Color\Utilities;
 
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\AchromaticColorsExperimental;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorInfoInterface;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorInterface;
 
 class AchromaticColorsTest extends UnitTestCase
 {
@@ -20,7 +20,7 @@ class AchromaticColorsTest extends UnitTestCase
         $sut = $this->makeInstance();
 
         $this->assertContainsOnlyInstancesOf(
-            ColorInfoInterface::class,
+            ColorInterface::class,
             $sut->generate()
         );
     }

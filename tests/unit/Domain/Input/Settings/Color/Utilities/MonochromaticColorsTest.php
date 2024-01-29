@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace ItalyStrap\Tests\Unit\Domain\Input\Settings\Color\Utilities;
 
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorInfo;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorInfoInterface;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\Color;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorModifier;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\MonochromaticColorsExperimental;
 
 class MonochromaticColorsTest extends UnitTestCase
 {
-    protected function makeInstance(ColorInfoInterface $color, array $steps): MonochromaticColorsExperimental
+    protected function makeInstance(ColorInterface $color, array $steps): MonochromaticColorsExperimental
     {
         return new MonochromaticColorsExperimental(new ColorModifier($color), $steps);
     }
@@ -20,12 +20,12 @@ class MonochromaticColorsTest extends UnitTestCase
     public function testItShouldReturnArrayWithColorInfoInterface(): void
     {
         $sut = $this->makeInstance(
-            new ColorInfo('#ffffff'),
+            new Color('#ffffff'),
             []
         );
 
         $this->assertContainsOnlyInstancesOf(
-            ColorInfoInterface::class,
+            ColorInterface::class,
             $sut->generate()
         );
     }
@@ -33,7 +33,7 @@ class MonochromaticColorsTest extends UnitTestCase
     public function testItShouldReturnArrayWithOneColor(): void
     {
         $sut = $this->makeInstance(
-            new ColorInfo('#ffffff'),
+            new Color('#ffffff'),
             []
         );
 
@@ -44,7 +44,7 @@ class MonochromaticColorsTest extends UnitTestCase
     public function testItShouldReturnArrayWithTwoColors(): void
     {
         $sut = $this->makeInstance(
-            new ColorInfo('rgb(128, 128, 128)'),
+            new Color('rgb(128, 128, 128)'),
             [20, 40]
         );
 
@@ -59,7 +59,7 @@ class MonochromaticColorsTest extends UnitTestCase
     public function testItShouldReturnArrayWithTwoColorss(): void
     {
         $sut = $this->makeInstance(
-            new ColorInfo('rgb(128, 128, 128)'),
+            new Color('rgb(128, 128, 128)'),
             [0.2, 0.4]
         );
 

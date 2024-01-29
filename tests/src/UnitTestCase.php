@@ -15,7 +15,7 @@ use Composer\Package\RootPackageInterface;
 use Composer\Repository\RepositoryManager;
 use ItalyStrap\Config\ConfigInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Palette;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorInfoInterface;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\GradientInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\ItemInterface;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FilesFinder;
@@ -115,7 +115,7 @@ class UnitTestCase extends Unit
 
     protected ObjectProphecy $colorInfo;
 
-    protected function makeColorInfo(): ColorInfoInterface
+    protected function makeColorInfo(): ColorInterface
     {
         return $this->colorInfo->reveal();
     }
@@ -166,7 +166,7 @@ class UnitTestCase extends Unit
     protected function _before()
     {
         $this->item = $this->prophesize(ItemInterface::class);
-        $this->colorInfo = $this->prophesize(ColorInfoInterface::class);
+        $this->colorInfo = $this->prophesize(ColorInterface::class);
         $this->gradient = $this->prophesize(GradientInterface::class);
         $this->palette = $this->prophesize(Palette::class);
 

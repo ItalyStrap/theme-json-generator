@@ -8,9 +8,9 @@ use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Collection;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Palette;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorInfo;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\Color;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorModifier;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Color;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Color as StylesColor;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Typography;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\JsonFileWriter;
 
@@ -38,13 +38,13 @@ class JsonFileWriterIntegrationTest extends UnitTestCase
         $this->blueprint = new Blueprint();
         $collection = new Collection();
 
-        $bodyText = (new ColorInfo('#000000'))->toHsla();
+        $bodyText = (new Color('#000000'))->toHsla();
         $headingText = (new ColorModifier($bodyText))->lighten(20);
         $headingClrPalette = new Palette('headingColor', 'Color for headings', $headingText);
 
         $collection->add($headingClrPalette);
 
-        $this->colorIntegration = new Color($collection);
+        $this->colorIntegration = new StylesColor($collection);
         $this->typographyIntegration = new Typography($collection);
         return new JsonFileWriter($this->theme_json_path);
     }

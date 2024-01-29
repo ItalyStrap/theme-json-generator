@@ -12,16 +12,16 @@ final class ColorFactory implements ColorFactoryInterface
     /**
      * @throws \Exception
      */
-    public function fromColorInfo(ColorInfoInterface $colorValue): ColorInfoInterface
+    public function fromColorInfo(ColorInterface $colorValue): ColorInterface
     {
-        return new ColorInfo((string) $colorValue);
+        return new Color((string) $colorValue);
     }
 
     /**
      * @throws \Exception
      */
-    public function fromColorString(string $color): ColorInfoInterface
+    public function fromColorString(string $color): ColorInterface
     {
-        return new ColorInfo($color);
+        return new Color($color);
     }
 }

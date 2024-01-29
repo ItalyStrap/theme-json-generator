@@ -7,7 +7,7 @@ namespace ItalyStrap\Tests\Unit\Domain\Input\Settings;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Collection;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Palette;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorInfo;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\Color;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ShadesGeneratorExperimental;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Custom\CollectionAdapter;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\FontSize;
@@ -27,7 +27,7 @@ class CollectionIntegrationTest extends UnitTestCase
             ->add(new FontSize('h1', 'Used in H1 titles', 'calc( {{fontSize.base}} * 2.8125)'))
             ->add(new FontSize('h2', 'Used in H2 titles', 'calc( {{fontSize.base}} * 2.1875)'));
 
-        $body_text = (new ColorInfo('#000000'))->toHsla();
+        $body_text = (new Color('#000000'))->toHsla();
         $bodyClrPalette = new Palette('bodyColor', 'Color for text', $body_text);
 
         $sut->add($bodyClrPalette);
@@ -196,7 +196,7 @@ EOF
     {
         $sut = $this->makeInstance();
 
-        $body_text = (new ColorInfo('#000000'))->toHsla();
+        $body_text = (new Color('#000000'))->toHsla();
         $bodyClrPalette = new Palette('bodyColor', 'Color for text', $body_text);
 
         $sut->add($bodyClrPalette);

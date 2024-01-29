@@ -9,25 +9,25 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities;
  */
 interface ColorModifierInterface
 {
-    public function tint(float $weight = 0): ColorInfoInterface;
+    public function tint(float $weight = 0): ColorInterface;
 
-    public function shade(float $weight = 0): ColorInfoInterface;
+    public function shade(float $weight = 0): ColorInterface;
 
-    public function tone(float $weight = 0): ColorInfoInterface;
+    public function tone(float $weight = 0): ColorInterface;
 
-    public function opacity(float $alpha = 1): ColorInfoInterface;
+    public function opacity(float $alpha = 1): ColorInterface;
 
-    public function darken(int $amount = 0): ColorInfoInterface;
+    public function darken(int $amount = 0): ColorInterface;
 
-    public function lighten(int $amount = 0): ColorInfoInterface;
+    public function lighten(int $amount = 0): ColorInterface;
 
-    public function saturate(int $amount = 0): ColorInfoInterface;
+    public function saturate(int $amount = 0): ColorInterface;
 
-    public function contrast(int $amount = 0): ColorInfoInterface;
+    public function contrast(int $amount = 0): ColorInterface;
 
-    public function hueRotate(int $amount = 0): ColorInfoInterface;
+    public function hueRotate(int $amount = 0): ColorInterface;
 
-    public function complementary(): ColorInfoInterface;
+    public function complementary(): ColorInterface;
 
-    public function color(): ColorInfoInterface;
+    public function color(): ColorInterface;
 }
