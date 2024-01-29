@@ -1,18 +1,14 @@
 {
   "$schema":"./vendor/phpbench/phpbench/phpbench.schema.json",
   "runner.bootstrap": "vendor/autoload.php",
-  "php_disable_ini": true,
-  "php_config": {
-    "extension": []
-  },
-  "path": "tests/benchmarks",
-  "reports": {
+  "runner.path": "tests/benchmarks",
+  "report.generators": {
     "performance": {
       "extends": "aggregate",
-      "title": "Finder",
-      "description": "Benchmark how long it takes to run finder",
+      "title": "App",
+      "description": "Benchmark how long it takes to run the application",
       "cols": [ "subject", "mode" ]
     }
   },
-  "time_unit": "milliseconds"
+  "runner.time_unit": "milliseconds"
 }

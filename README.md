@@ -298,6 +298,8 @@ From now on the fun begins.
 If you want to do more with PHP you can use some helper classes I added to this package to better manage the 
 settings.
 
+> All classes with `Experimental` suffix may change the name and the logic in the future.
+
 The first classes you can use are the
 
 * `\ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Collection::class`

@@ -113,7 +113,7 @@
             "@php ./vendor/bin/infection --threads=max"
         ],
         "bench": [
-            "@php ./vendor/bin/phpbench run tests/Benchmark --report=performance"
+            "@php ./vendor/bin/phpbench run"
         ],
         "metrics": [
             "@php ./vendor/bin/phpmetrics --report-html='./tests/_output/report' ./src"

@@ -16,6 +16,7 @@
     <config name="testVersion" value="7.4-"/>
 
     <file>./bin/</file>
+    <file>./bus/</file>
     <file>./functions/</file>
     <file>./src/</file>
     <file>./tests/</file>
