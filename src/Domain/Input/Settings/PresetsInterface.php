@@ -7,18 +7,18 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings;
 /**
  * @psalm-api
  */
-interface CollectionInterface
+interface PresetsInterface
 {
-    public function add(ItemInterface $item): self;
+    public function add(PresetInterface $item): self;
 
     /**
-     * @param ItemInterface[] $items
+     * @param PresetInterface[] $items
      */
     public function addMultiple(array $items): self;
 
     /**
      * @param mixed $default
-     * @return array<string, mixed>|ItemInterface|mixed|null
+     * @return array<string, mixed>|PresetInterface|mixed|null
      */
     public function get(string $key, $default = null);
 

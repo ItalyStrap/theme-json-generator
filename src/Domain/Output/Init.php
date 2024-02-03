@@ -39,10 +39,10 @@ declare(strict_types=1);
 
 use ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\SectionNames;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\CollectionInterface;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetsInterface;
 use Psr\Container\ContainerInterface;
 
-return static function (ContainerInterface $container, CollectionInterface $collection, Blueprint $blueprint) {
+return static function (ContainerInterface $container, PresetsInterface $collection, Blueprint $blueprint) {
 
 	$blueprint->merge(%s);
 };

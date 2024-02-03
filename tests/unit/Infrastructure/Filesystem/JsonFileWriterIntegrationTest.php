@@ -6,7 +6,7 @@ namespace ItalyStrap\Tests\Unit\Infrastructure\Filesystem;
 
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Collection;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Palette;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\Color;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorModifier;
@@ -36,7 +36,7 @@ class JsonFileWriterIntegrationTest extends UnitTestCase
     {
         $this->theme_json_path = \codecept_output_dir(random_int(0, mt_getrandmax()) . '/theme.json');
         $this->blueprint = new Blueprint();
-        $collection = new Collection();
+        $collection = new Presets();
 
         $bodyText = (new Color('#000000'))->toHsla();
         $headingText = (new ColorModifier($bodyText))->lighten(20);

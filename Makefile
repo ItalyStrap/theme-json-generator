@@ -124,7 +124,7 @@ acceptance: up	### Run the acceptance tests
 	@$(DOCKER_DIR) ./codecept run acceptance
 
 .PHONY: tests
-tests: unit	### Run unit and integration tests
+tests: unit	integration functional ### Run unit and integration tests
 
 .PHONY: qa
 qa: cs psalm unit integration functional ### Run all the tests

@@ -10,7 +10,7 @@ class IntegrationTestCase extends WPTestCase
 {
     protected \IntegrationTester $tester;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         // Before...
         parent::setUp();
@@ -18,7 +18,7 @@ class IntegrationTestCase extends WPTestCase
         // Your set up methods here.
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         // Your tear down methods here.
 

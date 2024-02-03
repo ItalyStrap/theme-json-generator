@@ -8,14 +8,14 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings;
  * @infection-ignore-all
  * @psalm-api
  */
-class NullCollection implements CollectionInterface
+class NullPresets implements PresetsInterface
 {
-    public function add(ItemInterface $item): CollectionInterface
+    public function add(PresetInterface $item): PresetsInterface
     {
         return $this;
     }
 
-    public function addMultiple(array $items): CollectionInterface
+    public function addMultiple(array $items): PresetsInterface
     {
         return $this;
     }

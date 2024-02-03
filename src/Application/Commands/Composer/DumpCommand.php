@@ -145,6 +145,7 @@ final class DumpCommand extends BaseCommand
             if (\is_callable($callback)) {
                 $this->dump->processBlueprint($message, 'theme', $callback);
             }
+
             $output->writeln('<info>Generated theme.json file</info>');
         } catch (\Exception $exception) {
             $output->writeln($exception->getMessage());

@@ -7,8 +7,8 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Output;
 use ItalyStrap\Config\ConfigInterface;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\DumpMessage;
 use ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Collection;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\CollectionInterface;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Presets;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetsInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\DryRunMode;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\GeneratedFile;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\GeneratingFile;
@@ -50,7 +50,9 @@ class Dump
             $injector = $this->configureContainer();
             /** @psalm-suppress UnresolvableInclude */
             $injector->execute(require $file);
+            $collection = $injector->make(PresetsInterface::class);
             $blueprint = $injector->make(Blueprint::class);
+            $blueprint->setCollection($collection);
 
             /**
              * @todo Add subscription configuration.
@@ -74,12 +76,12 @@ class Dump
         \SplFileInfo $file,
         Blueprint $blueprint
     ): void {
-        $this->dispatcher->dispatch(new GeneratingFile($fileName . '.json'));
+        $this->dispatcher->dispatch(new GeneratingFile($fileName . '.test.json'));
 
         (new JsonFileWriter($file->getPath() . DIRECTORY_SEPARATOR . $fileName . '.test.json'))
             ->write($blueprint);
 
-        $this->dispatcher->dispatch(new GeneratedFile($fileName . '.json'));
+        $this->dispatcher->dispatch(new GeneratedFile($fileName . '.test.json'));
     }
 
     private function generateScssFile(DumpMessage $command, string $fileName, Blueprint $blueprint): void
@@ -102,7 +104,9 @@ class Dump
         $injector = $this->configureContainer();
         $injector->execute($entryPoint);
 
+        $collection = $injector->make(PresetsInterface::class);
         $blueprint = $injector->make(Blueprint::class);
+        $blueprint->setCollection($collection);
 
         (new JsonFileWriter($message->getRootFolder() . DIRECTORY_SEPARATOR . $fileName . '.json'))
             ->write($blueprint);
@@ -117,8 +121,8 @@ class Dump
         $injector->alias(ContainerInterface::class, \get_class($container));
         $injector->share($container);
 
-        $injector->alias(CollectionInterface::class, Collection::class);
-        $injector->share(CollectionInterface::class);
+        $injector->alias(PresetsInterface::class, Presets::class);
+        $injector->share(PresetsInterface::class);
 
         $injector->alias(EventDispatcherInterface::class, \get_class($this->dispatcher));
         $injector->share(EventDispatcherInterface::class);
@@ -127,7 +131,7 @@ class Dump
          * Injector resolve to null if a param is nullable, so we need to be explicit and declare the param
          * I need this for all the classes under the Styles namespace
          */
-        $injector->defineParam('collection', $injector->make(CollectionInterface::class));
+        $injector->defineParam('collection', $injector->make(PresetsInterface::class));
 
         $injector->share(Blueprint::class);
 

@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color;
 
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\CommonTrait;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\ItemInterface;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetTrait;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetInterface;
 
 /**
  * @psalm-api
  */
-class Duotone implements ItemInterface
+class Duotone implements PresetInterface
 {
-    use CommonTrait;
+    use PresetTrait;
 
     /**
      * @var string
@@ -30,8 +30,6 @@ class Duotone implements ItemInterface
 
     public function __construct(string $slug, string $name, Palette ...$colors)
     {
-        $this->assertValidSlug($slug);
-
         if ($name === '') {
             throw new \InvalidArgumentException('Duotone must have a name.');
         }

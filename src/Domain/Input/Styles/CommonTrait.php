@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles;
 
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\CollectionInterface;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\ItemInterface;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\NullCollection;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetsInterface;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetInterface;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\NullPresets;
 
 trait CommonTrait
 {
@@ -15,16 +15,16 @@ trait CommonTrait
      */
     private array $properties;
 
-    private CollectionInterface $collection;
+    private PresetsInterface $collection;
 
     /**
      * @param array<string, string> $properties
      */
     public function __construct(
-        CollectionInterface $collection = null,
+        PresetsInterface $collection = null,
         array $properties = []
     ) {
-        $this->collection = $collection ?? new NullCollection();
+        $this->collection = $collection ?? new NullPresets();
         $this->properties = $properties;
     }
 
@@ -67,11 +67,11 @@ trait CommonTrait
     private function setProperty(string $key, string $value): self
     {
         /**
-         * @var ItemInterface|mixed $value
+         * @var PresetInterface|mixed $value
          */
         $value = $this->collection->get($value, $value);
 
-        if ($value instanceof ItemInterface) {
+        if ($value instanceof PresetInterface) {
             $value = $value->var();
         }
 

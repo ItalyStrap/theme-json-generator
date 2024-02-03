@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography;
 
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\CommonTrait;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\ItemInterface;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetTrait;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetInterface;
 
 /**
  * @psalm-api
  */
-class FontFamily implements ItemInterface
+class FontFamily implements PresetInterface
 {
-    use CommonTrait;
+    use PresetTrait;
 
     /**
      * @var string

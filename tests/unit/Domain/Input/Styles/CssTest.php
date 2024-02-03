@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\Tests\Unit\Domain\Input\Styles;
 
+use ItalyStrap\Tests\CssStyleStringProviderTrait;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\CssExperimental;
 use ScssPhp\ScssPhp\Compiler;
@@ -13,6 +14,7 @@ use ScssPhp\ScssPhp\Compiler;
  * @link https://fullsiteediting.com/lessons/how-to-use-custom-css-in-theme-json/
  * @link https://developer.wordpress.org/news/2023/04/21/per-block-css-with-theme-json/
  * @link https://github.com/WordPress/wordpress-develop/blob/trunk/tests/phpunit/tests/theme/wpThemeJson.php
+ * @link https://developer.wordpress.org/themes/global-settings-and-styles/
  *
  * @link https://www.google.it/search?q=php+inline+css+content&sca_esv=596560865&ei=mAicZaTCGp3Axc8Pq7yT8AQ&ved=0ahUKEwik7p-Rgs6DAxUdYPEDHSveBE4Q4dUDCBA&uact=5&oq=php+inline+css+content&gs_lp=Egxnd3Mtd2l6LXNlcnAiFnBocCBpbmxpbmUgY3NzIGNvbnRlbnQyBRAhGKABMgUQIRigATIIECEYFhgeGB0yCBAhGBYYHhgdMggQIRgWGB4YHUjvogFQmgdYwJcBcAF4AZABAJgBsQGgAZkSqgEEMC4xOLgBA8gBAPgBAcICChAAGEcY1gQYsAPCAgoQABiABBiKBRhDwgIFEAAYgATCAgYQABgWGB7CAgcQABiABBgTwgIIEAAYFhgeGBPiAwQYACBBiAYBkAYI&sclient=gws-wiz-serp#ip=1
  * @link https://github.com/topics/inline-css?l=php
@@ -20,6 +22,10 @@ use ScssPhp\ScssPhp\Compiler;
  */
 class CssTest extends UnitTestCase
 {
+    use CssStyleStringProviderTrait {
+        styleProvider as styleProviderTrait;
+    }
+
     private function makeInstance(): CssExperimental
     {
         return new CssExperimental();
@@ -27,324 +33,31 @@ class CssTest extends UnitTestCase
 
     public static function styleProvider(): iterable
     {
-        yield 'root element' => [
-            'actual' => 'height: 100%;',
-            'expected' => 'height: 100%;',
-        ];
-
-        yield 'root element with multiple rules' => [
-            'actual' => 'height: 100%;width: 100%;color: red;',
-            'expected' => 'height: 100%;width: 100%;color: red;',
-        ];
-
-        yield 'root element with multiple rules and pseudo class' => [
-            'actual' => 'height: 100%;width: 100%;color: red;:hover {color: red;}',
-            'expected' => 'height: 100%;width: 100%;color: red;' . PHP_EOL . '&:hover {color: red;}',
-        ];
-
-        yield 'root element with multiple rules and pseudo class and pseudo element' => [
-            'actual' => 'height: 100%;width: 100%;color: red;:hover {color: red;}::placeholder {color: red;}',
-            'expected' =>
-                'height: 100%;width: 100%;color: red;'
-                . PHP_EOL . '&:hover {color: red;}'
-                . PHP_EOL . '&::placeholder {color: red;}',
-        ];
-
-        yield 'pseudo single class' => [
-            'actual' => ':hover {color: red;}',
-            'expected' => '&:hover {color: red;}',
-        ];
-
-        yield 'pseudo single class with multiple rules' => [
-            'actual' => ':hover {color: red;height: 100%;}',
-            'expected' => '&:hover {color: red;height: 100%;}',
-        ];
-
-        yield 'pseudo single class with multiple rules and pseudo element' => [
-            'actual' => ':hover {color: red;height: 100%;}::placeholder {color: red;}',
-            'expected' => '&:hover {color: red;height: 100%;}' . PHP_EOL . '&::placeholder {color: red;}',
-        ];
-
-        yield 'simple pseudo element ::placeholder ' => [
-            'actual' => '::placeholder {color: red;}',
-            'expected' => '&::placeholder {color: red;}',
-        ];
-
-        yield 'simple pseudo element with multiple rules ::placeholder ' => [
-            'actual' => '::placeholder {color: red;height: 100%;}',
-            'expected' => '&::placeholder {color: red;height: 100%;}',
-        ];
-
-        yield 'root element with pseudo element' => [
-            'actual' => 'height: 100%;::placeholder {color: red;}',
-            'expected' => 'height: 100%;' . PHP_EOL . '&::placeholder {color: red;}',
-        ];
-
-        yield 'mixed css example' => [
-            'actual' => <<<'MIXED_CSS'
-height: 100%;
-.foo {
-    color: red;
-}
-MIXED_CSS,
-            'expected' => <<<'MIXED_CSS'
-height: 100%;
-& .foo {
-    color: red;
-}
-MIXED_CSS,
-        ];
-
-        yield 'mixed css example with multiple rules' => [
-            'actual' => <<<'MIXED_CSS'
-height: 100%;
-width: 100%;
-.foo {
-    color: red;
-    height: 100%;
-}
-MIXED_CSS,
-            'expected' => <<<'MIXED_CSS'
-height: 100%;
-width: 100%;
-& .foo {
-    color: red;
-    height: 100%;
-}
-MIXED_CSS,
-        ];
-
-        yield 'simple css example' => [
-            'actual' => <<<'CSS'
-.foo {
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-}
-CSS,
-            'expected' => <<<'CSS'
-& .foo {
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-}
-CSS,
-        ];
-
-        yield 'simple css example with multiple rules' => [
-            'actual' => <<<'CSS'
-.foo {
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    color: red;
-}
-.foo .bar {
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    color: red;
-}
-CSS,
-            'expected' => <<<'CSS'
-& .foo {
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    color: red;
-}
-& .foo .bar {
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    color: red;
-}
-CSS,
-        ];
-
-        yield 'simple css example with multiple rules and pseudo class' => [
-            'actual' => <<<'CSS'
-.foo {
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    color: red;
-}
-.foo .bar {
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    color: red;
-}
-table {
-    border-collapse: collapse;
-    border-spacing: 0;
-}
-:hover {
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    color: red;
-}
-CSS,
-            'expected' => <<<'CSS'
-& .foo {
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    color: red;
-}
-& .foo .bar {
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    color: red;
-}
-& table {
-    border-collapse: collapse;
-    border-spacing: 0;
-}
-&:hover {
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    color: red;
-}
-CSS,
-        ];
-
-        yield 'simple css example with multiple rules and pseudo class and pseudo element' => [
-            'actual' => <<<'CSS'
-.foo {
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    color: red;
-}
-.foo .bar {
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    color: red;
-}
-table {
-    border-collapse: collapse;
-    border-spacing: 0;
-}
-:hover {
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    color: red;
-}
-::placeholder {
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    color: red;
-}
-CSS,
-            'expected' => <<<'CSS'
-& .foo {
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    color: red;
-}
-& .foo .bar {
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    color: red;
-}
-& table {
-    border-collapse: collapse;
-    border-spacing: 0;
-}
-&:hover {
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    color: red;
-}
-&::placeholder {
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    color: red;
-}
-CSS,
-        ];
-
-        yield 'root custom properties' => [
-            'actual' => <<<'CUSTOM_CSS'
---foo: 100%;
-CUSTOM_CSS,
-            'expected' => <<<'CUSTOM_CSS'
---foo: 100%;
-CUSTOM_CSS,
-        ];
-
-        yield 'root custom properties with multiple rules' => [
-            'actual' => <<<'CUSTOM_CSS'
---foo: 100%;
---bar: 100%;
-CUSTOM_CSS,
-            'expected' => <<<'CUSTOM_CSS'
---foo: 100%;
---bar: 100%;
-CUSTOM_CSS,
-        ];
+        foreach (self::styleProviderTrait() as $key => $value) {
+            yield $key => $value;
+        }
 
         yield 'root custom properties mixed with css' => [
+            // phpcs:disable
+            'selector' => '.test-selector',
+            'actual' => '.test-selector #firstParagraph{background-color: var(--first-color);color: var(--second-color);}.test-selector{--foo: 100%;--bar: 100%;}.test-selector .foo {--bar: 50%;color: red;width: var(--foo);height: var(--bar);}',
+            'expected' => '--foo: 100%;--bar: 100%;& #firstParagraph{background-color: var(--first-color);color: var(--second-color);}& .foo {--bar: 50%;color: red;width: var(--foo);height: var(--bar);}',
+            // phpcs:enable
+        ];
+
+        yield 'css on multiple line' => [
+            'selector' => '.test-selector',
             'actual' => <<<'CUSTOM_CSS'
-#firstParagraph {
-    background-color: var(--first-color);
-    color: var(--second-color);
+.test-selector .bar{
+    color: red;
 }
---foo: 100%;
---bar: 100%;
-.foo {
+.test-selector {
+    --foo: 100%;
+    height: 100%;
+    width: 100%;
+    color: red;
+}
+.test-selector .foo{
     --bar: 50%;
     color: red;
     width: var(--foo);
@@ -352,13 +65,14 @@ CUSTOM_CSS,
 }
 CUSTOM_CSS,
             'expected' => <<<'CUSTOM_CSS'
-& #firstParagraph {
-    background-color: var(--first-color);
-    color: var(--second-color);
-}
 --foo: 100%;
---bar: 100%;
-& .foo {
+height: 100%;
+width: 100%;
+color: red;
+& .bar{
+    color: red;
+}
+& .foo{
     --bar: 50%;
     color: red;
     width: var(--foo);
@@ -371,16 +85,16 @@ CUSTOM_CSS,
     /**
      * @dataProvider styleProvider
      */
-    public function testItShouldParse(string $css, string $expected): void
+    public function testItShouldParse(string $selector, string $actual, string $expected): void
     {
-        $actual = $this->makeInstance()->parseString($css);
-        $this->assertSame($expected, $actual);
+        $parseString = $this->makeInstance()->parseString($actual, $selector);
+        $this->assertSame($expected, $parseString, 'The parsed string is not the same as expected');
     }
 
     /**
      * @dataProvider styleProvider
      */
-    public function testItShouldCompileExpanded(string $css, string $expected): void
+    public function testItShouldCompileExpanded(string $selector, string $css, string $expected): void
     {
         $this->expandedCompiler($css, 'expanded');
     }
@@ -388,7 +102,7 @@ CUSTOM_CSS,
     /**
      * @dataProvider styleProvider
      */
-    public function testItShouldCompileCompressed(string $css, string $expected): void
+    public function testItShouldCompileCompressed(string $selector, string $css, string $expected): void
     {
         $this->expandedCompiler($css, 'compressed');
     }
@@ -400,7 +114,7 @@ CUSTOM_CSS,
 
         $result = $compiler->compileString($css);
 
-        $actual = $this->makeInstance()->parseString($result->getCss());
+        $actual = $this->makeInstance()->parseString($result->getCss(), '.test-selector');
         $this->assertTrue(true, 'Let this test pass, is a check for the compiler');
     }
 }

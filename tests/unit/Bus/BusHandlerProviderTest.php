@@ -72,7 +72,7 @@ class BusHandlerProviderTest extends UnitTestCase
             /**
              * @param class-string $messageName
              */
-            public function addHandler(HandlerInterface $handler, string $messageName)
+            public function addHandler(HandlerInterface $handler, string $messageName): void
             {
                 $this->handlers[$messageName] = $handler;
             }
@@ -108,6 +108,7 @@ class BusHandlerProviderTest extends UnitTestCase
         foreach ($this->handlers as $messageName => $handler) {
             $handlerProvider->addHandler($handler, $messageName);
         }
+
         return new Bus($handlerProvider);
     }
 

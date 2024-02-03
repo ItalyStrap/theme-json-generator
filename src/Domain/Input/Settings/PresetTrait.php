@@ -7,7 +7,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings;
 /**
  * @psalm-api
  */
-trait CommonTrait
+trait PresetTrait
 {
     public function category(): string
     {
@@ -31,11 +31,11 @@ trait CommonTrait
 
     public function prop(): string
     {
-        return \sprintf(
+        return $this->camelToSnake(\sprintf(
             '--wp--preset--%s--%s',
-            $this->camelToUnderscore($this->category()),
-            $this->camelToUnderscore($this->slug())
-        );
+            $this->category(),
+            $this->slug()
+        ));
     }
 
     public function var(string $fallback = ''): string
@@ -52,27 +52,13 @@ trait CommonTrait
         return $this->var();
     }
 
-    private function assertValidSlug(string $slug): void
-    {
-        if (
-            \preg_match('#\s#', $slug)
-//          || \preg_match('#[A-Z]#', $slug)
-            || $slug === ''
-        ) {
-            throw new \InvalidArgumentException(\sprintf(
-                'Slug must be lowercase, without spaces and not empty, got %s',
-                $slug
-            ));
-        }
-    }
-
     private function assertSlugIsWellFormed(string $slug): void
     {
         if (
             \preg_match('#\s#', $slug)
             || $slug === ''
         ) {
-            throw new \Exception(\sprintf(
+            throw new \InvalidArgumentException(\sprintf(
                 'Slug with spaces is not allowed, got %s',
                 $slug
             ));
@@ -85,7 +71,7 @@ trait CommonTrait
      * @param string $us
      * @return string
      */
-    private function camelToUnderscore(string $string, string $us = '-'): string
+    private function camelToSnake(string $string, string $us = '-'): string
     {
         return strtolower((string)preg_replace(
             '#(?<=\d)(?=[A-Za-z])|(?<=[A-Za-z])(?=\d)|(?<=[a-z])(?=[A-Z])#',

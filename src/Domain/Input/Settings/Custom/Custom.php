@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Custom;
 
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\CommonTrait;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\ItemInterface;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetTrait;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetInterface;
 
 /**
  * @psalm-api
  */
-class Custom implements ItemInterface
+class Custom implements PresetInterface
 {
-    use CommonTrait;
+    use PresetTrait;
 
     /**
      * @var string
@@ -44,7 +44,7 @@ class Custom implements ItemInterface
         return \sprintf(
             '--wp--%s--%s',
             $this->category(),
-            $this->camelToUnderscore(\str_replace('.', '--', $this->key))
+            $this->camelToSnake(\str_replace('.', '--', $this->key))
         );
     }
 

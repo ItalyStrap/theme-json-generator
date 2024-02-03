@@ -47,16 +47,14 @@ final class Bootstrap
         $application->add($injector->make(DumpCommand::class));
         /** @psalm-suppress InvalidArgument */
         $application->add($injector->make(ValidateCommand::class, [
-            '+bus' => function (string $named_param, Injector $injector): \ItalyStrap\Bus\Bus {
+            '+bus' => static function (string $named_param, Injector $injector): \ItalyStrap\Bus\Bus {
                 $bus = new \ItalyStrap\Bus\Bus(
                     $injector->make(Validate::class)
                 );
-
                 $bus->addMiddleware(
                     new DeleteSchemaJsonMiddleware(),
                     new SchemaJsonMiddleware()
                 );
-
                 return $bus;
             },
         ]));

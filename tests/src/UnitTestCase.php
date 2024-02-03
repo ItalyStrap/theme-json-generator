@@ -17,7 +17,7 @@ use ItalyStrap\Config\ConfigInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Palette;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\GradientInterface;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\ItemInterface;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetInterface;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FilesFinder;
 use JsonSchema\Validator;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -45,7 +45,7 @@ class UnitTestCase extends Unit
 
     protected ObjectProphecy $item;
 
-    protected function makeItem(): ItemInterface
+    protected function makeItem(): PresetInterface
     {
         return $this->item->reveal();
     }
@@ -165,7 +165,7 @@ class UnitTestCase extends Unit
     // phpcs:ignore -- Method from Codeception
     protected function _before()
     {
-        $this->item = $this->prophesize(ItemInterface::class);
+        $this->item = $this->prophesize(PresetInterface::class);
         $this->colorInfo = $this->prophesize(ColorInterface::class);
         $this->gradient = $this->prophesize(GradientInterface::class);
         $this->palette = $this->prophesize(Palette::class);

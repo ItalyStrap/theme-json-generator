@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace ItalyStrap\Tests\Unit\Domain\Input\Settings;
 
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Collection;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Palette;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\ItemInterface;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetInterface;
 
-class CollectionTest extends UnitTestCase
+class PresetsTest extends UnitTestCase
 {
-    private function makeInstance(): Collection
+    private function makeInstance(): Presets
     {
-        return new Collection();
+        return new Presets();
     }
 
     public function testItShouldGet(): void
@@ -21,7 +21,7 @@ class CollectionTest extends UnitTestCase
         $sut = $this->makeInstance();
         $sut->addMultiple([$this->prepareFakeItem('1')]);
 
-        $this->assertInstanceOf(ItemInterface::class, $sut->get('category1.slug1'));
+        $this->assertInstanceOf(PresetInterface::class, $sut->get('category1.slug1'));
         $this->assertSame('var1', (string)$sut->get('category1.slug1'));
         $this->assertNull($sut->get('category1.slug2'));
         $this->assertSame('default', $sut->get('category1.slug2', 'default'));
@@ -78,9 +78,9 @@ class CollectionTest extends UnitTestCase
         );
     }
 
-    private function prepareFakeItem(string $val = ''): ItemInterface
+    private function prepareFakeItem(string $val = ''): PresetInterface
     {
-        return new class ($val) implements ItemInterface {
+        return new class ($val) implements PresetInterface {
             private string $val;
 
             public function __construct(string $val = '')

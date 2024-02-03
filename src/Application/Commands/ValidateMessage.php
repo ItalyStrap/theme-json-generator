@@ -12,6 +12,7 @@ class ValidateMessage
     private string $rootFolder;
 
     private string $schemaPath;
+
     private bool $forceRecreate;
 
     public function __construct(

@@ -24,7 +24,7 @@ class DecorateBusTest extends UnitTestCase
                 }
             },
             new class implements \ItalyStrap\Bus\HandlerInterface {
-                public function handle(object $message)
+                public function handle(object $message): int
                 {
                     return 1;
                 }

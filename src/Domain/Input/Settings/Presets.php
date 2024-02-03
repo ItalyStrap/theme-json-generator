@@ -5,27 +5,27 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings;
 
 use ItalyStrap\Config\AccessValueInArrayWithNotationTrait;
-use ItalyStrap\Tests\Unit\Domain\Input\Settings\CollectionIntegrationTest;
-use ItalyStrap\Tests\Unit\Domain\Input\Settings\CollectionTest;
+use ItalyStrap\Tests\Unit\Domain\Input\Settings\PresetsIntegrationTest;
+use ItalyStrap\Tests\Unit\Domain\Input\Settings\PresetsTest;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Custom\Custom;
 
 /**
  * @psalm-api
- * @see CollectionTest
- * @see CollectionIntegrationTest
+ * @see PresetsTest
+ * @see PresetsIntegrationTest
  */
-class Collection implements CollectionInterface, \JsonSerializable
+class Presets implements PresetsInterface, \JsonSerializable
 {
     use AccessValueInArrayWithNotationTrait;
 
     /**
-     * @var ItemInterface[]
+     * @var PresetInterface[]
      */
     private array $collection = [];
 
     private string $field = '';
 
-    public function add(ItemInterface $item): self
+    public function add(PresetInterface $item): self
     {
         /**
          * The slug method can return a value like this "navbar.min.height"
@@ -86,7 +86,7 @@ class Collection implements CollectionInterface, \JsonSerializable
              * for `custom.spacer.base` and if found will return the value from the custom collection.
              * If any value in the Preset and Custom collection is found then the null default will be returned.
              *
-             * @var ItemInterface|null $item
+             * @var PresetInterface|null $item
              */
             $item = $this->get($match[0], $this->get(Custom::CATEGORY . '.' . $match[0]));
 
@@ -102,12 +102,11 @@ class Collection implements CollectionInterface, \JsonSerializable
 
     public function field(string $field): self
     {
-        $keys = \array_keys($this->collection);
-        if (!\in_array($field, $keys, true)) {
-            throw new \InvalidArgumentException(\sprintf(
+        if (!\array_key_exists($field, $this->collection)) {
+            throw new \RuntimeException(\sprintf(
                 'Field %s does not exists in the collection, got: %s',
                 $field,
-                \implode(', ', $keys)
+                \implode(', ', \array_keys($this->collection)) ?: 'empty collection'
             ));
         }
 
@@ -145,7 +144,7 @@ class Collection implements CollectionInterface, \JsonSerializable
     private function processPresetCollection(array $collection): array
     {
         return \array_values(\array_map(
-            function (ItemInterface $item): array {
+            function (PresetInterface $item): array {
                 $newItems = [];
                 foreach ($item->toArray() as $key => $value) {
                     if (\is_string($value)) {
@@ -169,7 +168,7 @@ class Collection implements CollectionInterface, \JsonSerializable
     private function processCustomCollection(array $collection, string $prefix = ''): array
     {
         $processed = [];
-        /** @var array<array-key, mixed>|ItemInterface $value */
+        /** @var array<array-key, mixed>|PresetInterface $value */
         foreach ($collection as $key => $value) {
             $fullKey = $prefix === '' ? $key : $prefix . '.' . $key;
             if (\is_array($value)) {
@@ -183,7 +182,7 @@ class Collection implements CollectionInterface, \JsonSerializable
         return $processed;
     }
 
-    private function assertIsUnique(string $key, ItemInterface $item): void
+    private function assertIsUnique(string $key, PresetInterface $item): void
     {
         if ($this->get($key) !== null) {
             throw new \RuntimeException(
@@ -197,10 +196,7 @@ class Collection implements CollectionInterface, \JsonSerializable
         }
     }
 
-    /**
-     * @return mixed
-     */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return $this->toArray();
     }

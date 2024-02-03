@@ -8,7 +8,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings;
  * @psalm-api
  */
 // phpcs:ignore PHPCompatibility.Interfaces.NewInterfaces.stringableFound
-interface ItemInterface extends \Stringable
+interface PresetInterface extends \Stringable
 {
     public function category(): string;
 

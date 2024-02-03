@@ -20,7 +20,7 @@ trait ProcessBlocksCustomCssTrait
      * @since 6.2.0
      * @see \WP_Theme_JSON::process_blocks_custom_css()
      */
-    private function process_blocks_custom_css($css, $selector ) {
+    private function process_blocks_custom_css($css, $selector) {
         $processed_css = '';
 
         // Split CSS nested rules.

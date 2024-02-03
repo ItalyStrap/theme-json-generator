@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace ItalyStrap\Tests\Unit\Domain\Input\Settings;
 
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Collection;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Palette;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\Color;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ShadesGeneratorExperimental;
@@ -13,14 +13,14 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Custom\CollectionAdapter
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\FontSize;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Typography;
 
-class CollectionIntegrationTest extends UnitTestCase
+class PresetsIntegrationTest extends UnitTestCase
 {
-    private function makeInstance(): Collection
+    private function makeInstance(): Presets
     {
-        return new Collection();
+        return new Presets();
     }
 
-    private function buildInstance(): Collection
+    private function buildInstance(): Presets
     {
         $sut = $this->makeInstance();
         $sut->add(new FontSize('base', 'Base font size 16px', 'clamp(1.125rem, 2vw, 1.5rem)'))
