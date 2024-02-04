@@ -317,7 +317,7 @@ settings.
 
 ### Settings
 
-Before doing any kind of style or calling value from a collection you need to define the settings first, the settings are divided in some sections:
+Before doing any kind of style or calling value from a presets you need to define the settings first, the settings are divided in some sections:
 
 * `color`
 * `typography`
@@ -329,24 +329,24 @@ Before doing any kind of style or calling value from a collection you need to de
 
 The `color` and `typography` sections are divided in `palette`, `gradients`, `duotone`, `fontSizes` and `fontFamilies`.
 
-To handle data inside those sections I created some value objects, but first let's talk about the `Collection` object.
+To handle data inside those sections I created some value objects, but first let's talk about the `Presets` object.
 
-#### Collection
+#### Presets
 
-The `Collection` object is used to collect all the value objects used to build the settings, it is used to store all the value objects and then add them to the `Blueprint` object.
+The `Presets` object is used to collect all the value objects used to build the settings, it is used to store all the value objects and then add them to the `Blueprint` object.
 
 ```php
 use \ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Presets;
 
-$collection = new Presets();
+$presets = new Presets();
 ```
 
-The collection has a few methods you can use:
+The presets has a few methods you can use:
 
 ```php
-interface CollectionInterface
+interface PresetsInterface
 {
-    public function add(ItemInterface $item): self;
+    public function add(PresetInterface $item): self;
 
     public function addMultiple(array $items): self;
 
@@ -356,12 +356,12 @@ interface CollectionInterface
 }
 ```
 
-The `add()` method is used to add a single value object to the collection, the value object must implement the `ItemInterface` interface,
-The `addMultiple()` method is used to add an array of value objects to the collection.
-The `get()` method is used to get a value object that implements the `ItemInterface` interface but because you can also add a mixed default value the return type is mixed as well.
-The `parse()` method is used to parse a string and if the string contains a `{{}}` syntax it will search for the corresponding value in the collection and replace it with the value of the property fond from the collection, so if you pass a string like `{{color.base}}` the `color.base` key will be used to get the value from the collection, if no value is found it will throw a `\RuntimeException::class`, but if you pass a string without the `{{}}` syntax it will return the string as is.
+The `add()` method is used to add a single value object to the presets, the value object must implement the `PresetInterface` interface,
+The `addMultiple()` method is used to add an array of value objects to the presets.
+The `get()` method is used to get a value object that implements the `PresetInterface` interface but because you can also add a mixed default value the return type is mixed as well.
+The `parse()` method is used to parse a string and if the string contains a `{{}}` syntax it will search for the corresponding value in the presets and replace it with the value of the property fond from the presets, so if you pass a string like `{{color.base}}` the `color.base` key will be used to get the value from the presets, if no value is found it will throw a `\RuntimeException::class`, but if you pass a string without the `{{}}` syntax it will return the string as is.
 
-Because you use the entrypoint you do not need to instantiate a new collection object, instead you can use the `$collection` object passed by the callable, or use the `$container` to get the collection object.
+Because you use the entrypoint you do not need to instantiate a new presets object, instead you can use the `$presets` object passed by the callable, or use the `$container` to get the presets object.
 
 ```php
 declare(strict_types=1);
@@ -372,17 +372,17 @@ use ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\SectionNames;
 use Psr\Container\ContainerInterface;
 
-return static function (Blueprint $blueprint, CollectionInterface $collection): void {
+return static function (Blueprint $blueprint, PresetsInterface $presets): void {
 
 }
 ```
 
-#### ItemInterface
+#### PresetInterface
 
-The `ItemInterface` interface used by all Presets value objects.
+The `PresetInterface` interface used by all Presets value objects.
 
 ```php
-interface ItemInterface extends \Stringable
+interface PresetInterface extends \Stringable
 {
     public function category(): string;
 
@@ -498,18 +498,18 @@ The `Palette` class accept three arguments:
 * `string $name` The name of the color
 * `Color $color` The color instance
 
-After you created all colors you need in the project and all the `Palette` instances you can add them to the collection `\ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\CollectionInterface::class`.
+After you created all colors you need in the project and all the `Palette` instances you can add them to the presets `\ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetsInterface::class`.
 
-A collection is another object used to collect those value object (till now I've only talked about Palette value objects, but there are other objects used to handle the data, we'll see more later).
+A presets is another object used to collect those value object (till now I've only talked about Palette value objects, but there are other objects used to handle the data, we'll see more later).
 
 ```php
 
 use \ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Presets;
 
-$collection = new Presets();
+$presets = new Presets();
 
-$collection->add($baseClrPalette);
-// $collection->add($otherColorPalette);
+$presets->add($baseClrPalette);
+// $presets->add($otherColorPalette);
 // and so on
 ```
 
@@ -557,7 +557,7 @@ The linear gradient above will be converted to:
 "linear-gradient(160deg, var(--wp--preset--color--light), var(--wp--preset--color--dark))"
 ```
 
-We can also handle the power of the `CollectionInterface::class` like this snippet:
+We can also handle the power of the `PresetsInterface::class` like this snippet:
 
 ```php
 $lightToDark = new \ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Gradient(
@@ -565,23 +565,23 @@ $lightToDark = new \ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Gr
     'Black to white',
     new LinearGradient(
         '160deg',
-        $this->collection->get(JsonData::COLOR_LIGHT),
-        $this->collection->get(JsonData::COLOR_DARK)
+        $this->presets->get(JsonData::COLOR_LIGHT),
+        $this->presets->get(JsonData::COLOR_DARK)
     )
 )
 ```
 
-The `Collection::get()` will return the `ItemInterface` object stored in the collection with the slug passed as argument needed for the `LinearGradient` class.
+The `Presets::get()` will return the `PresetInterface` object stored in the presets with the slug passed as argument needed for the `LinearGradient` class.
 
 This way allows us to avoid syntax errors when writing CSS properties manually because most of the code is an object.
 
 In case there is no value with the slug we use, the object will throw a `\RuntimeException::class`, useful for 
 future refactoring of the theme style.
 
-Now add the gradient to the collection:
+Now add the gradient to the presets:
 
 ```php
-$collection->add($lightToDark);
+$presets->add($lightToDark);
 ```
 
 #### settings.color.duotone
@@ -592,8 +592,8 @@ The `duotone` section is similar to the `gradients` section.
 $blackToWhite = new \ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Duotone(
     "black-to-white",
     "Black to White",
-    $this->collection->get(JsonData::COLOR_BODY_COLOR),
-    $this->collection->get(JsonData::COLOR_BODY_BG)
+    $this->presets->get(JsonData::COLOR_BODY_COLOR),
+    $this->presets->get(JsonData::COLOR_BODY_BG)
 )
 ```
 
@@ -605,10 +605,10 @@ The `Duotone` class accept four arguments:
 
 The `Palette[]` argument passed to `Duotone` will be resolved to a regular CSS property like `var(--wp--preset--color--body-color)` and `var(--wp--preset--color--body-bg)` in this case, but you are free to add any other `Palette` object you need, only the first two colors will be used to build the duotone.
 
-Now add the duotone to the collection:
+Now add the duotone to the presets:
 
 ```php
-$collection->add($blackToWhite);
+$presets->add($blackToWhite);
 ```
 
 #### settings.typography.fontSizes
@@ -631,10 +631,10 @@ Right now the `FontSize` class accept three arguments:
 
 There is not yet an object to handle the font size, so we need to pass a string with the value of the font size, in the future release I'll add an object to handle the font size.
 
-Add it to the collection:
+Add it to the presets:
 
 ```php
-$collection->add($fontSizeBase);
+$presets->add($fontSizeBase);
 ```
 
 #### settings.typography.fontFamilies
@@ -655,19 +655,19 @@ Right now the `FontFamily` class accept three arguments:
 * `string $name` The name of the font family
 * `string $fontFamily` The font family
 
-And add it to the collection:
+And add it to the presets:
 
 ```php
-$collection->add($fontFamilyBase);
+$presets->add($fontFamilyBase);
 ```
 
 #### settings.custom
 
-Now it's time to see how to handle the `custom` section, this section is used to define custom properties, it uses `\ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Custom\Custom::class` class, and we also need to use `\ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Custom\CollectionAdapter::class` class to be able to add our custom definition to the collection.
+Now it's time to see how to handle the `custom` section, this section is used to define custom properties, it uses `\ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Custom\Custom::class` class, and we also need to use `\ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Custom\PresetsAdapter::class` class to be able to add our custom definition to the presets.
 
 ```php
 
-$collectionAdapter = new CollectionAdapter([
+$presetsAdapter = new PresetsAdapter([
     'contentSize'   => 'clamp(16rem, 60vw, 60rem)',
     'wideSize'      => 'clamp(16rem, 85vw, 70rem)',
     'baseFontSize'  => "1rem",
@@ -679,24 +679,24 @@ $collectionAdapter = new CollectionAdapter([
         'l' => '1.7'
     ],
     'body'      => [
-        'bg'    => $this->collection->get(JsonData::COLOR_BASE),
-        'text'  => $this->collection->get(JsonData::COLOR_BODY_BG),
+        'bg'    => $this->presets->get(JsonData::COLOR_BASE),
+        'text'  => $this->presets->get(JsonData::COLOR_BODY_BG),
     ],
     'link'      => [
-        'bg'    => $this->collection->get(JsonData::COLOR_BASE),
-        'text'  => $this->collection->get(JsonData::COLOR_BODY_BG),
+        'bg'    => $this->presets->get(JsonData::COLOR_BASE),
+        'text'  => $this->presets->get(JsonData::COLOR_BODY_BG),
         'decoration'    => 'underline',
         'hover' => [
-            'text'          => $this->collection->get(JsonData::COLOR_BODY_COLOR),
+            'text'          => $this->presets->get(JsonData::COLOR_BODY_COLOR),
             'decoration'    => 'underline',
         ],
     ],
 ]);
 ```
 
-The `CollectionAdapter` class accept an array of custom properties, and it will adapt the array to be used in the collection.
+The `PresetsAdapter` class accept an array of custom properties, and it will adapt the array to be used in the presets.
 
-If you need to use a value from the collection you can use the `{{}}` syntax, this will be replaced with the value of the property from the collection.
+If you need to use a value from the presets you can use the `{{}}` syntax, this will be replaced with the value of the property from the presets.
 For example in the snippet above the `{{lineHeight.base}}` property will be replaced with the value of the `lineHeight.base` property.
 
 The resulted CSS variables will be:
@@ -715,17 +715,17 @@ CamelCase properties will be converted to kebab-case.
 Categories will be converted to double dash `--`.
 Also nested properties will be converted to double dash `--`.
 
-And then add it to the collection:
+And then add it to the presets:
 
 ```php
-$this->collection->addMultiple(
-    $collectionAdapter->toArray()
+$this->presets->addMultiple(
+    $presetsAdapter->toArray()
 );
 ```
 
-After you populated the collection no further step is needed, the collection will be added to the `Blueprint` object automagically and the CLI will do the rest.
+After you populated the presets no further step is needed, the presets will be added to the `Blueprint` object automagically and the CLI will do the rest.
 
-Here a list of some other helper method you can use from the `Collection` object:
+Here a list of some other helper method you can use from the `Presets` object:
 
 ```php
 @todo
@@ -774,8 +774,8 @@ Even if you could also do this:
 [
     SectionNames::STYLES => [
         'color' => [
-            'text' => $this->collection->get(JsonData::COLOR_BODY_COLOR)->var(), // You must need to use the var() method to get the CSS variable, without it, you will get a not valid json file
-            'background' => $this->collection->get(JsonData::COLOR_BODY_BG)->var(),
+            'text' => $this->presets->get(JsonData::COLOR_BODY_COLOR)->var(), // You must need to use the var() method to get the CSS variable, without it, you will get a not valid json file
+            'background' => $this->presets->get(JsonData::COLOR_BODY_BG)->var(),
         ],
 ]
 ```
@@ -785,19 +785,19 @@ So, now let's see how to build the same structure using the builder object:
 ```php
 [
     SectionNames::STYLES => [
-        'color' => (new \ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Color($collection))
+        'color' => (new \ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Color($presets))
             ->text(Palette::CATEGORY . '.bodyColor')
             ->background(Palette::CATEGORY . '.bodyBg'),
 ]
 ```
 
-What I've done above was to create a new instance of the `Color` builder object (the same apply to all other builder object) and pass the collection to the constructor, then I chained the `text()` and `background()` methods to build the structure of the CSS rules.
+What I've done above was to create a new instance of the `Color` builder object (the same apply to all other builder object) and pass the presets to the constructor, then I chained the `text()` and `background()` methods to build the structure of the CSS rules.
 Chain methods are only helpers, so you can use the IDE autocompletion to see what methods are available.
 All methods return a new instance of the builder object, this way you can be sure that the object is immutable, and you can chain methods without worrying about the state of the object.
-If you do not pass `$collection` to the constructor you can still use a builder object but because there are no references to the settings presets and custom the key you pass to the methods will be returned by the method itself as is, this also apply if passing a `$collection` but the key passed to the method is not found in the collection, sometimes you need to pass a regular string and the string need to be returned as is.
+If you do not pass `$presets` to the constructor you can still use a builder object but because there are no references to the settings presets and custom the key you pass to the methods will be returned by the method itself as is, this also apply if passing a `$presets` but the key passed to the method is not found in the presets, sometimes you need to pass a regular string and the string need to be returned as is.
 I cannot validate if the value is a valid CSS value.
 
-To get the value from the `$collection` the key you pass is a string with the category and the slug of the value you need to get, for example `Palette::CATEGORY . '.bodyColor'` is valid and is the same as `color.bodyColor`, the `Palette::CATEGORY` is a shortcut that you can use to build the key, the key is composed by a category and a slug separated by a dot `.`, under the hood the value will be accessed using the dot notation.
+To get the value from the `$presets` the key you pass is a string with the category and the slug of the value you need to get, for example `Palette::CATEGORY . '.bodyColor'` is valid and is the same as `color.bodyColor`, the `Palette::CATEGORY` is a shortcut that you can use to build the key, the key is composed by a category and a slug separated by a dot `.`, under the hood the value will be accessed using the dot notation.
 All the others object under the Settings folder have a `CATEGORY` constant that you can use to build the key.
 I encourage you to use the constant instead of the string, this way you can avoid typos, and also you can be sure that the key is the same even if I will change something in the future.
 
@@ -806,7 +806,7 @@ All builder object have a `property(string $property, string $value)` method in 
 ```php
 [
     SectionNames::STYLES => [
-        'color' => (new \ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Color($collection))
+        'color' => (new \ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Color($presets))
             ->text(Palette::CATEGORY . '.bodyColor')
             ->background(Palette::CATEGORY . '.bodyBg')
             ->property('customProperty', 'customValue'),
@@ -886,7 +886,7 @@ The code above will be rendered like this in the JSON file:
 The method `parseString()` can:
 
 * Convert the target selector to `&` symbol if provided
-* If you pass a `$collection` to the constructor it will also convert references `{{}}` to the value of the property from the collection
+* If you pass a `$presets` to the constructor it will also convert references `{{}}` to the value of the property from the presets
 
 So, those are valid CSS syntax you can use for the theme.json:
 
@@ -942,10 +942,10 @@ This command is still experimental, could be changed in the future.
 Refactored the files structure:
 You have to change the Composer Plugin call -> You should call "ItalyStrap\\ThemeJsonGenerator\\Composer\\Plugin::run" See above in the docs
 Changed Preset::class and Custom::class, use:
-\ItalyStrap\ThemeJsonGenerator\Settings\PresetCollection::class
-\ItalyStrap\ThemeJsonGenerator\Settings\CustomCollection::class
+\ItalyStrap\ThemeJsonGenerator\Settings\PresetPresets::class
+\ItalyStrap\ThemeJsonGenerator\Settings\CustomPresets::class
 
-The directory Collection is here only for back compat.
+The directory Presets is here only for back compat.
 
 ## Contributing
 
@@ -962,3 +962,4 @@ This code is licensed under the [MIT](LICENSE).
 ## Resources
 
 * [Theme.json Documentation](https://developer.wordpress.org/themes/global-settings-and-styles/)
+* [Full Site Editing](https://fullsiteediting.com/)
