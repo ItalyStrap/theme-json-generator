@@ -7,28 +7,30 @@
 [![License](https://img.shields.io/packagist/l/italystrap/theme-json-generator.svg)](https://packagist.org/packages/italystrap/theme-json-generator)
 ![PHP from Packagist](https://img.shields.io/packagist/php-v/italystrap/theme-json-generator)
 
-WordPress Theme Json Generator the OOP way
+WordPress Theme Json Generator: The OOP Way
 
-This is a WIP project and still experimental.
-Until this package reach the version 1.x.x, we still on 0.x.x version (if you don't know what this means, please read the [SemVer](http://semver.org/) specification).
+**Work in Progress:** This project is experimental and currently in development. As we navigate through the 0.x.x versions, please note that API changes may occur. For understanding versioning, refer to the [SemVer](http://semver.org/) specification.
 
-In short because of 0.x.x version the API can change at any time.
+**Project Vision:** The aim is to revolutionize the way `theme.json` files (and other `*.json` files within the `styles` folder) are generated because json sucks 😁 (just kidding). PHP offers the flexibility to divide configurations into multiple files, include comments, and generate dynamic content, overcoming the limitations of JSON.
 
-The idea is to generate a file `theme.json` (and all others `*.json` files inside the `styles` folder) from PHP because json sucks 😁 (just kidding)
+**Who is This For?**
+- Ideal for those seeking a more maintainable and predictable method to generate JSON files for WordPress themes.
+- Perfect if you prefer writing your configurations once and reusing them efficiently.
 
-With PHP, you have the ability to split the file in multiple files, add comments, generate the content and many more other stuff as you wish, 
-PHP is not limited like json.
+**Not Suited For:**
+- Users content with direct JSON file manipulation without the need for PHP generation.
+- Those who believe this approach complicates the JSON generation process.
+- Individuals comfortable managing extensive JSON configurations manually.
 
-I'm experimenting this library as CLI and WP_CLI (the latter is on hold right now) command for generating and validating JSON files for a BLock Theme.
+**Explore With Us:** Join us in exploring this CLI and WP_CLI tool for generating and validating JSON files for Block Themes, and see how it can streamline your development process.
 
-Who is this not for?
-* If you are happy with the JSON file, and you do not want to use PHP to generate it, this package is not for you.
-* If you think that this  tool overcomplicates the process of generating the JSON file, this package is not for you.
-* If you like to manage tens or thousands of lines of JSON code, make typo and so on, this package is not for you.
+**Important Considerations for Developers:**
 
-So, who is this for?
-* If you like to use a more predictable and maintainable way to generate the JSON file, this package is for you.
-* If you like to write once and use it multiple times, this package is for you.
+This package is designed with the development phase in mind and **should only be used for development purposes**. For performance reasons, it is not recommended to use this tool in production environments. JSON files should be generated in advance during the development process and considered as a form of cache in your project. Generating these files on the fly in a production environment is strongly discouraged. Therefore, **this package should not be used in production**.
+
+**Extending Functionality with CLI Commands:**
+
+To enhance your development workflow, this package includes CLI commands that simplify the initialization, generation, and validation of JSON files. These tools are crafted to streamline the creation and management of your theme’s configuration, ensuring a smooth and efficient development process.
 
 ## Table Of Contents
 
@@ -51,60 +53,153 @@ This package adheres to the [SemVer](http://semver.org/) specification and will 
 
 ## Basic Usage
 
-This package **must be used only for development** purpose, using it in production it is not recommended because of performance reasons.
-The files need to be already generated when you are in production.
-All JSON files act as a cache, do not even think to generate them on the fly.
-So, **do not use this package in production**.
+Following the introduction to the tool's capabilities and its intended development use, let's dive into how to leverage its functionalities effectively.
 
-This package add CLI commands to initialize, generate and validate JSONs files.
+### Understanding the Workflow
 
-### How it works
+The CLI tool simplifies the process of working with JSON configurations for your WordPress themes through a streamlined workflow, consisting of the following key steps:
 
-Basically, this CLI executes the following steps:
+1. Initialization: Start by initializing the entry point. This setup phase prepares the environment for generating your theme.json file, ensuring that all necessary prerequisites are met.
+2. Generation: Utilizing the initialized entry point, the tool then proceeds to generate the JSON file. This step takes your PHP configurations and translates them into a structured theme.json file, ready for use in your theme development.
+3. Validation: After generation, the tool performs a validation check on the generated JSON files. This ensures that the files are correctly formatted and meet the expected standards, ready for integration into your WordPress theme.
 
-* Init the entrypoint used to generate the JSON file.
-* Generate the JSON file using the entrypoint generated.
-* Validate the JSON files generated.
+#### Initializing the Environment: The init Command
 
-#### CLI
+To kickstart the development process and prepare your theme for JSON configuration, the `init` command lays the foundational structure required for generating your `theme.json` and related JSON files efficiently.
+
+How to Use
+
+Execute the command below in your terminal:
 
 ```shell
 ./vendor/bin/theme-json init
 ```
 
-This command will initialize all entrypoint used to generate the JSON file.
-First this command will check if a `theme.json` file exists in the root of the theme (for classic theme for example), if not it will create it.
-Then it will create the entrypoint file for the `theme.json` file.
-When generating the entrypoint if a JSON file exists will also be used to populate the entrypoint file with the content of the JSON file in array format, so you do not need to fill the entrypoint file manually.
-If the JSON file is empty the entrypoint file will be empty too.
-From now on every time you run the `dump` command the content of the JSON file will be updated with the content of the entrypoint file.
+What Happens Next?
 
-If the theme is a Block Based Theme it will search also inside the `styles` folder (if exists) for all JSON files,
-then it will create the entrypoint file for all JSON files found inside the `styles` folder.
+Upon execution, this command performs a series of actions to ensure your theme is ready for further development:
 
-The entrypoint is a PHP file called the same as the name of the JSON file plus the `.php` as extension, so for example the `theme.json` will have the entrypoint `theme.json.php` and so on.
-This way all entrypoint will be closer to the JSON file they generate.
-Entrypoint files for `styles` folder will be inside the `styles` folder itself.
-All the entrypoint generated are PHP files that will return a callable, this callable will be used to add your custom configuration for structuring the JSON file.
+1. **Checks for theme.json or others json files:** Initially, it looks for an existing theme.json file at the root of your theme (and inside `styles` folder if exists). If found, it proceeds with the existing structure; if not, a new `*.json` file is created to get you started.
+2. **Entrypoint Creation:** For each JSON file (including theme.json and any JSON files within the styles folder of block-based themes), the command creates a corresponding PHP entrypoint file. This file serves as a bridge, allowing you to manage your JSON configurations dynamically with PHP, to doing so this file must return a callable used to add your custom configuration for structuring the JSON file.
+3. **Content Transfer:** If an existing JSON file contains data, its contents are automatically transferred to the newly created entrypoint file in array format. This feature simplifies the initial setup by negating the need for manual data entry into the entrypoint files.
+4. **Synchronization with dump Command:** From this point forward, executing the `dump` command will update the content of the JSON files to reflect the configurations specified in the PHP entrypoint files.
+
+Naming and Organization
+
+* Each entrypoint PHP file is named after its corresponding JSON file but with an added `.php` extension (e.g., `theme.json.php` for `theme.json`).
+* Entrypoint files related to the styles folder are placed within the same folder, maintaining a close association with their respective JSON files.
+
+Key Takeaway
+
+The `init` command is designed to streamline the setup process, making it easier for you to manage and generate your theme’s JSON configurations with the power and flexibility of PHP.
+
+##### FAQs/Troubleshooting
+
+**Q: What should I do if I encounter permission issues when running the init command on Linux?**
+
+**A:** Permission issues usually occur when you don't have the necessary rights to write to the directory where you're trying to generate or modify files. Here are a few tips to resolve this:
+
+**Run with Sudo:** Temporarily elevating your permissions with `sudo` can help bypass the issue. However, use this with caution as it grants elevated privileges to the operation. You can run the command like so:
+
+```shell
+sudo ./vendor/bin/theme-json init
+```
+
+Remember, it's generally best to avoid using `sudo` for scripts unless absolutely necessary, due to the security implications.
+
+**Change Directory Permissions:** Adjusting the permissions of the directory where you're working might be necessary. You can change the directory permissions with the `chmod` command. For example, to grant write access to the current user, you could use:
+
+```shell
+chmod u+w /path/to/your/theme-directory
+```
+
+Be sure to replace `/path/to/your/theme-directory` with the actual path to your theme directory.
+
+**Check File Ownership:** If the files or directories were created by another user or through a process with different permissions, you might face access issues. You can change the ownership with the `chown` command, like this:
+
+```shell
+sudo chown $USER:$USER /path/to/your/theme-directory -R
+```
+
+This command changes the ownership of the theme directory and all its contents to the current user. Replace `/path/to/your/theme-directory` with the actual path to your directory.
+
+**Note:** Always exercise caution when changing permissions and ownership of files and directories on your system, especially when using `sudo`. These actions can affect the security and functionality of your system.
+
+#### Generating and Updating JSON Files: The dump Command
+
+Once you've set up your environment with the `init` command, the `dump` command is your next step in the workflow. It's designed to take the configurations from your PHP entrypoint files and generate the corresponding JSON files for your theme.
+
+How to Use
+
+To execute the dump command, run the following in your terminal:
 
 ```shell
 ./vendor/bin/theme-json dump
 ```
 
-This command will generate the JSON file using the entrypoint generated with the `init` command.
+Key Features
 
-You can use `--validate` option to validate the JSON files generated after the dump.
-The `--validate` option is the same as the command below.
+* **JSON File Generation:** Utilizes the PHP entrypoint files prepared by the `init` command to generate or update your `theme.json` and any other related JSON files in your theme directory. This ensures that your theme configurations are accurately reflected in the JSON files used by WordPress.
+
+* **Validation Option:** With the `--validate` option, you can ensure the integrity and format of your JSON files immediately after generation. This step is crucial for preventing errors in your theme due to malformed JSON.
+
+```shell
+./vendor/bin/theme-json dump --validate
+```
+
+Using the `--validate` option runs a validation check similar to the standalone validation command, making it a convenient way to generate and validate in one step.
+
+When to Use
+
+The `dump` command is especially useful in several scenarios, including:
+
+* **After Initial Setup:** Run it immediately after using the `init` command to generate your initial JSON files.
+* **After Making Changes:** Whenever you update your PHP entrypoint files with new configurations, use the `dump` command to reflect those changes in your JSON files.
+* **Before Testing or Deployment:** It's a good practice to run this command as part of your pre-testing or pre-deployment checklist to ensure all your theme configurations are up-to-date and validated.
+
+Tips for Effective Use
+
+* Regularly use the `dump` command throughout your theme development process to keep your JSON files synchronized with your PHP configurations.
+* Incorporate the `--validate` option into your workflow to catch and resolve potential issues early in the development process.
+
+(for watching the changes and automatically generate the JSON files you can use any of the available task runners like Gulp, Grunt, Webpack, etc.)
+
+#### Validating JSON Files: The validate Command
+
+To maintain the highest standards of quality and compatibility for your WordPress theme, the `validate` command plays a crucial role. It scrutinizes your JSON files to ensure they adhere to the WordPress Theme JSON schema, leveraging the robust validation capabilities of the [justinrainbow/json-schema](https://github.com/justinrainbow/json-schema) package.
+
+How to Use
+
+Execute the command below to validate your theme's JSON files:
 
 ```shell
 ./vendor/bin/theme-json validate
 ```
 
-This command will validate the JSON files generated.
-The validation is done using the [justinrainbow/json-schema](https://github.com/justinrainbow/json-schema) package against the [WordPress Theme Json schema](https://schemas.wp.org/trunk/theme.json).
-The command will check first if you have a file called `theme.schema.json` in the root of the theme folder or if the file is older than a week, if not it will create it (as a cache), only remember to add the `theme.schema.json` file to your `.gitignore` file to avoid to commit it.
-If you use the `--force` option it will always create the `theme.schema.json` file from scratch.
-Then it will validate all the Global Styles JSON files generated using the local schema file, the `theme.json` file in the root and all the others inside the `styles` folder.
+Key Features
+
+* **Comprehensive Validation:** This command checks the integrity and structure of your JSON files against the [WordPress Theme Json schema](https://schemas.wp.org/trunk/theme.json), ensuring they meet the required standards for WordPress themes.
+* **Schema Caching:** On its first run, the command looks for a `theme.schema.json` file in your theme's root directory. If it doesn't find one, or if the existing file is older than a week, it automatically generates a new one to use as a cache. This process enhances performance by avoiding repetitive downloads of the schema. Remember to add `theme.schema.json` to your `.gitignore` to prevent accidental commits.
+* **Force Refresh Option:** Using the `--force` option with the command forces a fresh generation of the `theme.schema.json` file, ensuring you're validating against the most current schema available.
+
+```shell
+./vendor/bin/theme-json validate --force
+```
+
+* **Global Styles Validation:** It validates not only the primary `theme.json` file but also any JSON files within the `styles` folder, providing a thorough validation of all global styles configurations.
+
+When to Use
+
+* **Before Committing Changes:** Run this command as a final check before committing updates to your theme's repository to ensure all JSON files are valid.
+* **After Generating or Updating JSON Files:** Following the use of the `dump` command, validate your files to catch any potential issues early.
+* **Periodically:** To ensure ongoing compliance with the WordPress Theme JSON schema, especially after schema updates.
+
+Tips for Effective Use
+
+* Regular validation of your JSON files is essential for maintaining theme quality and compatibility. Incorporate the `validate` command into your regular development workflow to catch and correct issues promptly.
+* Utilize the `--force` option if you suspect schema updates or when you wish to ensure validation against the latest schema standards.
+
+
 
 #### Let's start
 
