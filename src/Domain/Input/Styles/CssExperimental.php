@@ -43,6 +43,7 @@ class CssExperimental
                 $rootRule[] = $value;
                 continue;
             }
+
             // phpcs:enable
 
             $explodedNew[$key] = $value;

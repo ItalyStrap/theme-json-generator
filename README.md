@@ -11,7 +11,9 @@ WordPress Theme Json Generator: The OOP Way
 
 **Work in Progress:** This project is experimental and currently in development. As we navigate through the 0.x.x versions, please note that API changes may occur. For understanding versioning, refer to the [SemVer](http://semver.org/) specification.
 
-**Project Vision:** The aim is to revolutionize the way `theme.json` files (and other `*.json` files within the `styles` folder) are generated because json sucks 😁 (just kidding). PHP offers the flexibility to divide configurations into multiple files, include comments, and generate dynamic content, overcoming the limitations of JSON.
+**Project Vision:** The aim is to revolutionize the way `theme.json` files (and other `*.json` files within the `styles` folder) are generated because json sucks 😁 (just kidding).
+
+PHP offers the flexibility to divide configurations into multiple files, include comments, and generate dynamic content, overcoming the limitations of JSON.
 
 **Who is This For?**
 - Ideal for those seeking a more maintainable and predictable method to generate JSON files for WordPress themes.
@@ -59,9 +61,9 @@ Following the introduction to the tool's capabilities and its intended developme
 
 The CLI tool simplifies the process of working with JSON configurations for your WordPress themes through a streamlined workflow, consisting of the following key steps:
 
-1. Initialization: Start by initializing the entry point. This setup phase prepares the environment for generating your theme.json file, ensuring that all necessary prerequisites are met.
-2. Generation: Utilizing the initialized entry point, the tool then proceeds to generate the JSON file. This step takes your PHP configurations and translates them into a structured theme.json file, ready for use in your theme development.
-3. Validation: After generation, the tool performs a validation check on the generated JSON files. This ensures that the files are correctly formatted and meet the expected standards, ready for integration into your WordPress theme.
+1. **Initialization:** Start by initializing the entry point. This setup phase prepares the environment for generating your `theme.json` file, ensuring that all necessary prerequisites are met.
+2. **Generation:** Utilizing the initialized entry point, the tool then can proceed to generate the JSON file. This step takes your PHP configurations and translates them into a structured `theme.json` file, ready for use in your theme development.
+3. **Validation:** After generation, the tool can perform a validation check on the generated JSON files. This ensures that the files are correctly formatted and meet the expected standards, ready for integration into your WordPress theme.
 
 #### Initializing the Environment: The init Command
 
@@ -79,8 +81,8 @@ What Happens Next?
 
 Upon execution, this command performs a series of actions to ensure your theme is ready for further development:
 
-1. **Checks for theme.json or others json files:** Initially, it looks for an existing theme.json file at the root of your theme (and inside `styles` folder if exists). If found, it proceeds with the existing structure; if not, a new `*.json` file is created to get you started.
-2. **Entrypoint Creation:** For each JSON file (including theme.json and any JSON files within the styles folder of block-based themes), the command creates a corresponding PHP entrypoint file. This file serves as a bridge, allowing you to manage your JSON configurations dynamically with PHP, to doing so this file must return a callable used to add your custom configuration for structuring the JSON file.
+1. **Checks for theme.json or others json files:** Initially, it looks for an existing `theme.json` file at the root of your theme (and inside `styles` folder if exists). If found, it proceeds with the existing structure; if not, a new `theme.json` file is created to get you started. By default, only the `theme.json` file is created, but you can create other JSON files inside the `styles` folder by adding the `--styles` option to the command (this is not yet implemented).
+2. **Entrypoint Creation:** For each JSON file (including `theme.json` and any JSON files within the styles folder of block-based themes), the command creates a corresponding PHP entrypoint file. This file serves as a bridge, allowing you to manage your JSON configurations dynamically with PHP, to doing so this file must return a callable used to add your custom configuration for structuring the JSON file.
 3. **Content Transfer:** If an existing JSON file contains data, its contents are automatically transferred to the newly created entrypoint file in array format. This feature simplifies the initial setup by negating the need for manual data entry into the entrypoint files.
 4. **Synchronization with dump Command:** From this point forward, executing the `dump` command will update the content of the JSON files to reflect the configurations specified in the PHP entrypoint files.
 
@@ -199,11 +201,9 @@ Tips for Effective Use
 * Regular validation of your JSON files is essential for maintaining theme quality and compatibility. Incorporate the `validate` command into your regular development workflow to catch and correct issues promptly.
 * Utilize the `--force` option if you suspect schema updates or when you wish to ensure validation against the latest schema standards.
 
+### Getting Started with Basic Configuration
 
-
-#### Let's start
-
-This is a basic example of the schema of a Global Style JSON file:
+Diving into the world of theme development with our tool begins with understanding the basic structure of a Global Style JSON file. Here's a simple example to illustrate the schema you'll be working with:
 
 ```json
 {
@@ -215,9 +215,11 @@ This is a basic example of the schema of a Global Style JSON file:
 }
 ```
 
-You can find more info about the schema [here](https://developer.wordpress.org/block-editor/how-to-guides/themes/global-settings-and-styles/).
+For a deeper dive into the schema details, you can explore the official WordPress documentation [here](https://developer.wordpress.org/block-editor/how-to-guides/themes/global-settings-and-styles/).
 
-The basic idea of this application is to just convert a PHP array into a JSON file, let's take a look at an example:
+The Core Concept
+
+At its heart, our application's primary goal is to transform a PHP array into a JSON file, bridging the dynamic capabilities of PHP with the structured format of JSON for theme development. Consider this PHP array example:
 
 ```php
 $arrayExample = [
@@ -227,7 +229,7 @@ $arrayExample = [
             'contentSize' => '620px',
             'wideSize' => '1000px',
         ],
-        [...] // All the rest of config, this is just an example
+        // Additional configuration goes here
     ],
     'styles'    => [...],
     'customTemplates'   => [...],
@@ -235,7 +237,7 @@ $arrayExample = [
 ];
 ```
 
-And the generated JSON file will be:
+Transformed, the generated JSON file looks like this:
 
 ```json
 {
@@ -252,58 +254,45 @@ And the generated JSON file will be:
 }
 ```
 
-You need to following the WordPress Theme Json schema to have a valid JSON file, anyway calling the `validate` command will check if the JSON file is valid or not.
-If in the future the schema will add more fields you can just add them to the array and the CLI will generate the JSON file with the new fields even if I do not update this documentation.
+Adhering to the WordPress Theme JSON schema is vital for creating valid JSON files. The `validate` command assists in ensuring your configurations meet the schema requirements. Future schema updates are seamlessly integrated, allowing your configurations to evolve without needing constant documentation checks.
 
-But, right now I have not shown you the real power of this package, so let's start from the beginning.
+The Entrypoint: Your Configuration Hub
 
-#### Entrypoint
-
-Now to store all the information and pass it to the application we need to use the `Blueprint` object, this object
-will be used to be converted to JSON file.
-
-An entrypoint serve as a bridge where you can add your custom configuration for structuring the JSON file and this CLI can know how to generate the JSON file based on your configuration.
-
-A basic example of the entrypoint file:
+Let's delve into a real, yet simple configuration example for the entrypoint file:
 
 ```php
-
 declare(strict_types=1);
 
 namespace YourVendor\YourProject;
 
 use ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint;
 
-return static function (Blueprint $blueprint /**, Other Services You Need */): void {
-    // Do your configuration using the $blueprint object
-    // You do not need to return anything, it's just a void function
-}
+return static function (Blueprint $blueprint): void {
+    // Your configuration code goes here
+};
 ```
 
-Under the hood this package use [Empress](https://github.com/ItalyStrap/empress) so every service you add to the signature of the callable will be resolved by the container.
+_This approach utilizes the [Empress](https://github.com/ItalyStrap/empress) package for dependency resolution, emphasizing simplicity and adherence to the KISS principle, we'll see more later._
 
-But, please, be minimal, follow the KISS principle, do not add too much services to the signature of the callable, if you need to add too much services, maybe you need to refactor your code.
-
-Another example could be to also add a Container to the signature of the callable but be aware that using the container to call every thing can lead you to the dark side of the Service Locator pattern, so use it wisely.
+The `BLueprint` extends the [Config](https://github.com/ItalyStrap/config) package adding some helper methods to simplify the process of adding the configuration.
 
 ```php
-
 declare(strict_types=1);
 
 namespace YourVendor\YourProject;
 
 use ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint;
-use Psr\Container\ContainerInterface;
 
-return static function (Blueprint $blueprint, ContainerInterface $container /**, Other Services You Need */): void {
-    // Do your configuration using the $blueprint object
-    // You do not need to return anything, it's just a void function
-}
+return static function (Blueprint $blueprint): void {
+    $blueprint->merge([
+        // Your merged configuration details go here
+    ]);
+};
 ```
 
-The `$container` allow you to access to all services you need to add your custom configuration.
+The first method you can use is the `merge()` method, this method is used to initial add the configuration to the blueprint.
 
-Now it's time to start with a real (basic) example.
+So, to get started quickly see the example below:
 
 ```php
 
@@ -318,7 +307,7 @@ use Psr\Container\ContainerInterface;
 return static function (Blueprint $blueprint): void {
     $blueprint->merge([
         SectionNames::SCHEMA => 'https://schemas.wp.org/trunk/theme.json',
-        SectionNames::VERSION => self::VERSION,
+        SectionNames::VERSION => 2,
         SectionNames::TITLE => 'Experimental Theme',
         SectionNames::DESCRIPTION => 'Experimental Theme',
         SectionNames::SETTINGS => [
@@ -391,26 +380,120 @@ return static function (Blueprint $blueprint): void {
 }
 ```
 
-### The entrypoint file
+In this example we provided soma basic configuration to the blueprint, the `SectionNames` class is used to avoid typos and to keep the code clean and maintainable.
 
-This example show you only the surface of the iceberg, if you do not need to add complex configuration you can just use it as is and skip the rest of the documentation.
+Later in this documentation we'll see more methods you can use from the `Blueprint` class to simplify the process of adding the configuration.
 
-After you add your configuration just run the command `./vendor/bin/theme-json dump` and the JSON file will be generated.
+Now to generate your JSON file simply use the command:
+
+```shell
+./vendor/bin/theme-json dump
+```
+
+This basic configuration guide aims to get you started quickly, keeping complexities at bay. As your project grows, you may explore advanced configurations to leverage the full power of our tool.
 
 [🆙](#table-of-contents)
 
 ## Advanced Usage
 
-From now on the fun begins.
+As you venture beyond the fundamentals, the real adventure begins. This section is where you'll unlock the full potential of the ItalyStrap Theme Json Generator, diving into advanced configurations and techniques that can truly elevate your theme development experience. Prepare to explore the depths of customization and efficiency that were once beyond reach. From sophisticated service injection with Empress and the PSR-11 Container, to mastering dynamic JSON generation, every piece of knowledge here is designed to not just enhance your capabilities but to also inject fun into the creative process. Let's embark on this journey together, where complexity meets creativity, and learning becomes an exhilarating part of crafting your themes.
 
-> I use a naming convention for defining CSS properties, you can use your own if you don't like mine.
+### Important note for the tool structure
 
-If you want to do more with PHP you can use some helper classes I added to this package to better manage the 
-settings.
+This tool is built using some DDD principles, all the classes meant to be used to the generation process of the `*.json` files are located in the `Domain` namespace.
+
+The `Domain` folder is divided in two principal folders, the `Input` and the `Output` folders.
+To create more separation you can find two folder inside the `Domain` folder, the `Input` and the `Output` folders.
+
+As the name suggests, the `Input` folder contains all the classes that are used for input the data to the tool. All those classes are meant to be used to configure the input data for the generation process.
+Practically you'll use those classes to apply the JSON schema.
+Only those classes are needed by you to configure the generation process.
+
+The `Input` folder is the container for the some of the sections of the `theme.json` file, like:
+
+* Settings
+* Styles
+
+In the future I'll add more sections like:
+
+* CustomTemplates
+* TemplateParts
+
+As the name suggests I tried to organize the classes in a way that is easy to understand and maintainable.
+
+The `Output` folder contains all classes used to output the data end the generation process.
+Those classes are used internally by the tool, and you don't need to use them directly.
+
+The Other folder are not needed for the configuration of a JSON file but are used internally by the CLI, the `Application` folder, and the `Infrastructure` folder.
+The `Application` folder contains all the classes used for running
+The `Infrastructure` folder contains all the classes used to interact with the external world, like the `CLI` classes, the `WP_CLI` classes, `Filesystem`, etc.
+
+
+
+### Advanced Service Injection with Empress and PSR-11 Container
+
+In the advanced configuration of your theme's JSON, [Empress](https://github.com/ItalyStrap/empress) (our powerful dependency injection tool, evolved from Auryn\Injector) serves as a powerful backbone for service resolution, providing the flexibility to inject services directly into your configuration's callable. To complement this, we also leverage the PSR-11 ContainerInterface, offering a standardized way to access services, enhancing the usability and familiarity for developers.
+
+Understanding Empress and PSR-11 Integration
+
+* **Empress Injector:** At its core, `Empress` utilizes the `Injector::make()` method to resolve services, configuring only those requiring specific setups. This approach minimizes overhead and simplifies service management.
+* **PSR-11 Container:** To provide a common interface for service retrieval, we integrate the PSR-11 `ContainerInterface`. This ensures that accessing services is straightforward, using `Container::get()` as a preferred method for most use cases. The `get()` method effectively wraps `Injector::make()`, ensuring consistency in service resolution.
+
+Best Practices for Service Injection
+
+* **Be Pragmatic:** Whether you choose to pass `ItalyStrap\Empress\Injector` or `ContainerInterface` into your callable, both approaches offer seamless access to previously registered services and those requiring no explicit configuration, thanks to the dynamic capabilities of `Empress`.
+* **Prefer PSR-11 for Daily Use:** For routine access to services, the PSR-11 **ContainerInterface** is recommended. Its common interface simplifies the retrieval process, making it ideal for regular use.
+* **Maintain Minimalism:** Despite the flexibility in accessing and configuring services, adhering to the principle of minimalism remains crucial. Inject only essential services into your callable, ensuring your code remains clean and maintainable.
+
+```php
+declare(strict_types=1);
+
+namespace YourVendor\YourProject;
+
+use ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint;
+use Psr\Container\ContainerInterface;
+
+return static function (Blueprint $blueprint, ContainerInterface $container): void {
+// Utilize the $blueprint and $container for your configuration
+};
+```
+
+The Synergy of Empress and PSR-11
+
+This integrated approach, combining the power of `Empress` for internal configurations and the `ContainerInterface` for a standardized external interface, optimizes the development workflow. Instances of `ItalyStrap\Empress\Injector` and `ContainerInterface` are shared, and it means that every time you call one of them you'll get the same instance of the object, ensuring efficient service access through both `make` and `get` methods. Yet, for ease of use and to adhere to best practices, the PSR-11 interface is preferred for accessing services.
+
+By balancing the advanced capabilities of `Empress` with the simplicity and standardization of PSR-11, developers can craft sophisticated theme configurations while keeping the process streamlined and accessible.
+
+So, the example above can be rewritten as:
+
+```php
+declare(strict_types=1);
+
+namespace YourVendor\YourProject;
+
+use ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint;
+use Psr\Container\ContainerInterface;
+
+return static function (Blueprint $blueprint, ContainerInterface $container): void {
+    /** @var SomeService $someService */
+    $someService = $container->get(SomeService::class);
+};
+```
+
+[🆙](#table-of-contents)
+
+
+
+
+
+### Settings
 
 > All classes with `Experimental` suffix may change the name and the logic in the future.
 
-### Settings
+If you want to do more with PHP you can use some helper classes I added to this package to better manage the
+settings.
+
+> I use a naming convention for defining CSS properties, you can use your own if you don't like mine.
 
 Before doing any kind of style or calling value from a presets you need to define the settings first, the settings are divided in some sections:
 

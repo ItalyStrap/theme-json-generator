@@ -43,6 +43,13 @@ class InitCommand extends BaseCommand
     {
         $this->setName(self::NAME);
         $this->setDescription('Initialize theme.json file');
+
+        $this->addOption(
+            'styles',
+            's',
+            \Symfony\Component\Console\Input\InputOption::VALUE_OPTIONAL,
+            'Init JSON file inside styles folder'
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -80,7 +87,11 @@ class InitCommand extends BaseCommand
             }
         );
 
-        $message = new InitMessage($rootFolder);
+        $message = new InitMessage($rootFolder, (string)$input->getOption('styles'));
+
+        if ($message->getStyleOption() !== '') {
+            throw new \RuntimeException('The option --styles is not yet implemented');
+        }
 
         $this->init->handle($message);
 

@@ -12,10 +12,12 @@ use ItalyStrap\Finder\Finder;
 use ItalyStrap\Finder\FinderFactory;
 use ItalyStrap\Finder\FinderInterface;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Composer\DumpCommand;
+use ItalyStrap\ThemeJsonGenerator\Application\Commands\Composer\InfoCommand;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Composer\InitCommand;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Composer\ValidateCommand;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Middleware\DeleteSchemaJsonMiddleware;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Middleware\SchemaJsonMiddleware;
+use ItalyStrap\ThemeJsonGenerator\Domain\Output\Info;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Validate;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
@@ -56,6 +58,13 @@ final class Bootstrap
                     new SchemaJsonMiddleware()
                 );
                 return $bus;
+            },
+        ]));
+        $application->add($injector->make(InfoCommand::class, [
+            '+bus' => static function (string $named_param, Injector $injector): \ItalyStrap\Bus\Bus {
+                return new \ItalyStrap\Bus\Bus(
+                    $injector->make(Info::class)
+                );
             },
         ]));
         return $application->run();

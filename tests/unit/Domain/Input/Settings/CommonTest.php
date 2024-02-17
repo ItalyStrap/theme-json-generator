@@ -11,7 +11,7 @@ class CommonTest extends UnitTestCase
 {
     use PresetTrait;
 
-    public static function invalidSlugProvider()
+    public static function invalidSlugProvider(): \Generator
     {
         yield 'empty' => [''];
         yield 'with space' => ['with space'];

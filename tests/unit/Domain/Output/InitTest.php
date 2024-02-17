@@ -26,6 +26,6 @@ class InitTest extends UnitTestCase
             ->willReturn([])
             ->shouldBeCalledOnce();
 
-        $this->makeInstance()->handle(new InitMessage(''));
+        $this->makeInstance()->handle(new InitMessage('', ''));
     }
 }
