@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\Tests\Unit\Domain\Output;
 
+use ItalyStrap\Config\Config;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\DumpMessage;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Dump;
@@ -15,7 +16,8 @@ class DumpTest extends UnitTestCase
     {
         return new Dump(
             $this->makeDispatcher(),
-            $this->makeConfig(),
+//            $this->makeConfig(),
+            new Config(),
             $this->makeFilesFinder(),
         );
     }
@@ -50,6 +52,10 @@ class DumpTest extends UnitTestCase
             ->willReturn([
                 $advancedExample->getFilename() => $advancedExample,
             ]);
+
+//        $this->config
+//            ->has(Argument::type('string'))
+//            ->willReturn(false);
 
         $this->makeInstance()->handle(new DumpMessage('', '', false));
     }

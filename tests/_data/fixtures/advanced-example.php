@@ -18,8 +18,9 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\FontFamily;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\FontSize;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Color as StylesColor;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Typography;
+use Psr\Container\ContainerInterface;
 
-return static function (Blueprint $blueprint, Presets $presets): void {
+return static function (Blueprint $blueprint, Presets $presets, ContainerInterface $container): void {
     $baseClr = (new Color('#3986E0'))->toHsla();
     $bodyText = (new Color('#000000'))->toHsla();
     $headingText = (new ColorModifier($bodyText))->lighten(20);
@@ -111,13 +112,13 @@ return static function (Blueprint $blueprint, Presets $presets): void {
             'color' => (new StylesColor())
                 ->background('var(--wp--preset--color--body-bg)')
                 ->text('var(--wp--preset--color--body-color)'),
-            'typography' => (new Typography())
-                ->fontSize('var(--wp--preset--font-size--base)')
-                ->fontFamily('var(--wp--preset--font-family--base)'),
+            'typography' => (new Typography($presets))
+                ->fontSize(FontSize::CATEGORY . '.base')
+                ->fontFamily(FontFamily::CATEGORY . '.base'),
             'elements' => [
                 'link' => [ // .wp-block-file a
-                    'color' => (new StylesColor())
-                        ->text('var(--wp--preset--color--base)')
+                    'color' => $container->get(StylesColor::class)
+                        ->text(Palette::CATEGORY . '.base')
                         ->background('transparent'),
                 ],
             ],
