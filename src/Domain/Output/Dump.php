@@ -50,15 +50,15 @@ class Dump
             $injector = $this->configureContainer();
             /** @psalm-suppress UnresolvableInclude */
             $injector->execute(require $file);
-            $collection = $injector->make(PresetsInterface::class);
+            $presets = $injector->make(PresetsInterface::class);
             $blueprint = $injector->make(Blueprint::class);
-            $blueprint->setCollection($collection);
+            $blueprint->setPresets($presets);
 
             /**
              * @todo Add subscription configuration.
              */
-            $dispatcher = $injector->make(EventDispatcherInterface::class);
-            $dispatcher->dispatch($blueprint);
+//            $dispatcher = $injector->make(EventDispatcherInterface::class);
+//            $dispatcher->dispatch($blueprint);
 
             if ($message->isDryRun()) {
                 $this->dispatcher->dispatch(new DryRunMode());
@@ -106,7 +106,7 @@ class Dump
 
         $collection = $injector->make(PresetsInterface::class);
         $blueprint = $injector->make(Blueprint::class);
-        $blueprint->setCollection($collection);
+        $blueprint->setPresets($collection);
 
         (new JsonFileWriter($message->getRootFolder() . DIRECTORY_SEPARATOR . $fileName . '.json'))
             ->write($blueprint);

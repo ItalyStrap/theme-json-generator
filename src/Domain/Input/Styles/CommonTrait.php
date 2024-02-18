@@ -21,10 +21,10 @@ trait CommonTrait
      * @param array<string, string> $properties
      */
     public function __construct(
-        PresetsInterface $collection = null,
+        PresetsInterface $presets = null,
         array $properties = []
     ) {
-        $this->collection = $collection ?? new NullPresets();
+        $this->collection = $presets ?? new NullPresets();
         $this->properties = $properties;
     }
 

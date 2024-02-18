@@ -48,7 +48,7 @@ final class Blueprint extends Config implements \JsonSerializable
         return $this->set(SectionNames::STYLES . '.blocks.' . $blockName . '.css', $css);
     }
 
-    public function setCollection(PresetsInterface $collection): bool
+    public function setPresets(PresetsInterface $collection): bool
     {
         $keys = [
             Palette::KEY => Palette::CATEGORY,

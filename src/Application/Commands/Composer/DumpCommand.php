@@ -102,8 +102,6 @@ final class DumpCommand extends BaseCommand
         $composer = $this->requireComposer();
         $rootFolder = $this->rootFolder();
 
-        $output->writeln('<info>Generating theme.json file</info>');
-
         $package = $composer->getPackage();
         /** @psalm-suppress MixedArgument */
         $this->config->merge($package->getExtra()[self::COMPOSER_EXTRA_THEME_JSON_KEY] ?? []);
@@ -143,10 +141,11 @@ final class DumpCommand extends BaseCommand
 
         try {
             if (\is_callable($callback)) {
+                $output->writeln('<info>Generating theme.json file</info>');
                 $this->dump->processBlueprint($message, 'theme', $callback);
+                $output->writeln('<info>Generated theme.json file</info>');
+                $output->writeln('========================');
             }
-
-            $output->writeln('<info>Generated theme.json file</info>');
         } catch (\Exception $exception) {
             $output->writeln($exception->getMessage());
         }

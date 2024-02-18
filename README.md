@@ -428,6 +428,71 @@ The Other folder are not needed for the configuration of a JSON file but are use
 The `Application` folder contains all the classes used for running
 The `Infrastructure` folder contains all the classes used to interact with the external world, like the `CLI` classes, the `WP_CLI` classes, `Filesystem`, etc.
 
+Questa è la struttura attuale della cartella `Domain\Input\Settings`:
+
+```text
+├── SectionNames.php
+├── Settings
+│   ├── Color
+│   │   ├── Duotone.php
+│   │   ├── Gradient.php
+│   │   ├── Palette.php
+│   │   └── Utilities
+│   │       ├── AchromaticColorsExperimental.php
+│   │       ├── AnalogousColorsExperimental.php
+│   │       ├── Color.php
+│   │       ├── ColorFactory.php
+│   │       ├── ColorFactoryInterface.php
+│   │       ├── ColorInterface.php
+│   │       ├── ColorModifier.php
+│   │       ├── ColorModifierInterface.php
+│   │       ├── ColorsGenerator.php
+│   │       ├── ComplementaryColorsExperimental.php
+│   │       ├── GradientInterface.php
+│   │       ├── LinearGradient.php
+│   │       ├── MonochromaticColorsExperimental.php
+│   │       ├── ShadesGeneratorExperimental.php
+│   │       ├── SplitComplementaryColorsExperimental.php
+│   │       ├── SquareColorsExperimental.php
+│   │       └── TriadicColorsExperimental.php
+│   ├── Custom
+│   │   ├── CollectionAdapter.php
+│   │   └── Custom.php
+│   ├── NullPresets.php
+│   ├── PresetInterface.php
+│   ├── PresetTrait.php
+│   ├── Presets.php
+│   ├── PresetsInterface.php
+│   ├── Typography
+│   │   ├── FontFamily.php
+│   │   ├── FontSize.php
+│   │   └── Utilities
+│   │       ├── Fluid.php
+│   │       └── FontFace.php
+│   └── Utilities
+│       ├── CalcExperimental.php
+│       ├── ClampExperimental.php
+│       ├── DimensionExperimental.php
+│       ├── SupportedUnitsExperimental.php
+│       └── UnitInterfaceExperimental.php
+└── Styles
+    ├── ArrayableInterface.php
+    ├── Border.php
+    ├── Color.php
+    ├── CommonTrait.php
+    ├── CssExperimental.php
+    ├── Outline.php
+    ├── Spacing.php
+    └── Typography.php
+```
+
+Le classi usate per strutturare il file theme.json sono tutte contenute nella cartella `Domain\Input` e sono divise in sezioni, come ad esempio `Settings`, `Styles`, `CustomTemplates`, `TemplateParts`, ecc.
+Tutte le altre directories sono usate internamente dal tool e non sono necessarie per la configurazione del file JSON.
+
+Possiamo intanto andare a vedere come configurare le `Settings` e gli `Styles` del file `theme.json`.
+La prima classe che possiamo trovare nella cartella `Settings` è Presets, la classe Presets è un contenitore o collection di oggetti che implementano l'interfaccia PresetInterface
+L'interfaccia PresetInterface è implementata da tutti i Value Object che rappresentano un valore utilizzato epr definire appunto i presets del file theme.json, come ad esempio un colore, una grandezza di testo, una famiglia di font, ecc.
+* 
 
 
 ### Advanced Service Injection with Empress and PSR-11 Container

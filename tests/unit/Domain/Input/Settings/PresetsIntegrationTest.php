@@ -9,7 +9,7 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Palette;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\Color;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ShadesGeneratorExperimental;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Custom\CollectionAdapter;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Custom\CustomToPresets;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\FontSize;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Typography;
 
@@ -35,7 +35,7 @@ class PresetsIntegrationTest extends UnitTestCase
 //        $sut->addMultiple(ShadesGeneratorExperimental::fromColorInfo($body_text, 'bodyColor')->toArray());
         $sut->addMultiple(ShadesGeneratorExperimental::fromPalette($bodyClrPalette)->toArray());
 
-        $sut->addMultiple((new CollectionAdapter([
+        $sut->addMultiple((new CustomToPresets([
             'contentSize' => 'clamp(16rem, 60vw, 60rem)',
             'wideSize' => 'clamp(16rem, 85vw, 70rem)',
             'baseFontSize' => "{{fontSize.base}}",
@@ -134,7 +134,7 @@ EOF
             $fontSizesCollection
         );
 
-        $sut->addMultiple((new CollectionAdapter([
+        $sut->addMultiple((new CustomToPresets([
             'contentSize' => 'clamp(16rem, 60vw, 60rem)',
             'wideSize' => 'clamp(16rem, 85vw, 70rem)',
             'baseFontSize' => "{{fontSize.base}}",

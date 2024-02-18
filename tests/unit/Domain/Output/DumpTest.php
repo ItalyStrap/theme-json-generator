@@ -29,4 +29,28 @@ class DumpTest extends UnitTestCase
 
         $this->makeInstance()->handle(new DumpMessage('', '', false));
     }
+
+    public function testItShouldBasicExample(): void
+    {
+        $advancedExample = new \SplFileInfo(\codecept_data_dir('fixtures/basic-example.php'));
+        $this->filesFinder
+            ->find(Argument::type('string'), Argument::exact('php'))
+            ->willReturn([
+                $advancedExample->getFilename() => $advancedExample,
+            ]);
+
+        $this->makeInstance()->handle(new DumpMessage('', '', false));
+    }
+
+    public function testItShouldAdvancedExample(): void
+    {
+        $advancedExample = new \SplFileInfo(\codecept_data_dir('fixtures/advanced-example.php'));
+        $this->filesFinder
+            ->find(Argument::type('string'), Argument::exact('php'))
+            ->willReturn([
+                $advancedExample->getFilename() => $advancedExample,
+            ]);
+
+        $this->makeInstance()->handle(new DumpMessage('', '', false));
+    }
 }

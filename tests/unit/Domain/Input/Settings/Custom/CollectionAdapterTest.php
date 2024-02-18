@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace ItalyStrap\Tests\Unit\Domain\Input\Settings\Custom;
 
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Custom\CollectionAdapter;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Custom\CustomToPresets;
 
 class CollectionAdapterTest extends UnitTestCase
 {
     private array $items = [];
 
-    protected function makeInstance(): CollectionAdapter
+    protected function makeInstance(): CustomToPresets
     {
-        return new CollectionAdapter($this->items);
+        return new CustomToPresets($this->items);
     }
 }

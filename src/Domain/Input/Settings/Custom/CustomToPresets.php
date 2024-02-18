@@ -7,25 +7,25 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Custom;
 /**
  * @psalm-api
  */
-class CollectionAdapter
+class CustomToPresets
 {
     /**
      * @var array<string, mixed>
      */
-    private array $collection = [];
+    private array $customs = [];
 
     /**
-     * @param array<string, mixed> $collection
+     * @param array<string, mixed> $customs
      */
     public function __construct(
-        array $collection = []
+        array $customs = []
     ) {
-        $this->collection = $collection;
+        $this->customs = $customs;
     }
 
     public function toArray(): array
     {
-        return $this->collectionToFlat($this->collection);
+        return $this->collectionToFlat($this->customs);
     }
 
     private function collectionToFlat(array $collection, string $prefix = ''): array
