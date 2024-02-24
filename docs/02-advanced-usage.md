@@ -1,3 +1,5 @@
+[Previous: Basic Usage](./01-basic-usage.md)
+
 # Introduction
 
 Venture beyond the basics into the thrilling world of advanced theme development with the ItalyStrap Theme Json Generator. This section unlocks the tool's full potential, guiding you through advanced configurations and techniques that elevate your work.
@@ -334,3 +336,52 @@ You can see more examples in the [tests/_data/fixtures/advanced-example.php](../
 
 
 
+### Advanced Service Injection with Empress and PSR-11 Container
+
+In the advanced configuration of your theme's JSON, [Empress](https://github.com/ItalyStrap/empress) (our powerful dependency injection tool, evolved from Auryn\Injector) serves as a powerful backbone for service resolution, providing the flexibility to inject services directly into your configuration's callable. To complement this, we also leverage the PSR-11 ContainerInterface, offering a standardized way to access services, enhancing the usability and familiarity for developers.
+
+Understanding Empress and PSR-11 Integration
+
+* **Empress Injector:** At its core, `Empress` utilizes the `Injector::make()` method to resolve services, configuring only those requiring specific setups. This approach minimizes overhead and simplifies service management.
+* **PSR-11 Container:** To provide a common interface for service retrieval, we integrate the PSR-11 `ContainerInterface`. This ensures that accessing services is straightforward, using `Container::get()` as a preferred method for most use cases. The `get()` method effectively wraps `Injector::make()`, ensuring consistency in service resolution.
+
+Best Practices for Service Injection
+
+* **Be Pragmatic:** Whether you choose to pass `ItalyStrap\Empress\Injector` or `ContainerInterface` into your callable, both approaches offer seamless access to previously registered services and those requiring no explicit configuration, thanks to the dynamic capabilities of `Empress`.
+* **Prefer PSR-11 for Daily Use:** For routine access to services, the PSR-11 **ContainerInterface** is recommended. Its common interface simplifies the retrieval process, making it ideal for regular use.
+* **Maintain Minimalism:** Despite the flexibility in accessing and configuring services, adhering to the principle of minimalism remains crucial. Inject only essential services into your callable, ensuring your code remains clean and maintainable.
+
+```php
+declare(strict_types=1);
+
+namespace YourVendor\YourProject;
+
+use ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint;
+use Psr\Container\ContainerInterface;
+
+return static function (Blueprint $blueprint, ContainerInterface $container): void {
+// Utilize the $blueprint and $container for your configuration
+};
+```
+
+The Synergy of Empress and PSR-11
+
+This integrated approach, combining the power of `Empress` for internal configurations and the `ContainerInterface` for a standardized external interface, optimizes the development workflow. Instances of `ItalyStrap\Empress\Injector` and `ContainerInterface` are shared, and it means that every time you call one of them you'll get the same instance of the object, ensuring efficient service access through both `make` and `get` methods. Yet, for ease of use and to adhere to best practices, the PSR-11 interface is preferred for accessing services.
+
+By balancing the advanced capabilities of `Empress` with the simplicity and standardization of PSR-11, developers can craft sophisticated theme configurations while keeping the process streamlined and accessible.
+
+So, the example above can be rewritten as:
+
+```php
+declare(strict_types=1);
+
+namespace YourVendor\YourProject;
+
+use ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint;
+use Psr\Container\ContainerInterface;
+
+return static function (Blueprint $blueprint, ContainerInterface $container): void {
+    /** @var SomeService $someService */
+    $someService = $container->get(SomeService::class);
+};
+```
