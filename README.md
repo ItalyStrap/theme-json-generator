@@ -396,7 +396,7 @@ This basic configuration guide aims to get you started quickly, keeping complexi
 
 ## Advanced Usage
 
-As you venture beyond the fundamentals, the real adventure begins. This section is where you'll unlock the full potential of the ItalyStrap Theme Json Generator, diving into advanced configurations and techniques that can truly elevate your theme development experience. Prepare to explore the depths of customization and efficiency that were once beyond reach. From sophisticated service injection with Empress and the PSR-11 Container, to mastering dynamic JSON generation, every piece of knowledge here is designed to not just enhance your capabilities but to also inject fun into the creative process. Let's embark on this journey together, where complexity meets creativity, and learning becomes an exhilarating part of crafting your themes.
+Venture beyond the basics into the thrilling world of advanced theme development with the ItalyStrap Theme Json Generator. This section unlocks the tool's full potential, guiding you through advanced configurations and techniques that elevate your work.
 
 ### Important note for the tool structure
 
@@ -433,48 +433,48 @@ Questa è la struttura attuale della cartella `Domain\Input\Settings`:
 ```text
 ├── SectionNames.php
 ├── Settings
-│   ├── Color
-│   │   ├── Duotone.php
-│   │   ├── Gradient.php
-│   │   ├── Palette.php
-│   │   └── Utilities
-│   │       ├── AchromaticColorsExperimental.php
-│   │       ├── AnalogousColorsExperimental.php
-│   │       ├── Color.php
-│   │       ├── ColorFactory.php
-│   │       ├── ColorFactoryInterface.php
-│   │       ├── ColorInterface.php
-│   │       ├── ColorModifier.php
-│   │       ├── ColorModifierInterface.php
-│   │       ├── ColorsGenerator.php
-│   │       ├── ComplementaryColorsExperimental.php
-│   │       ├── GradientInterface.php
-│   │       ├── LinearGradient.php
-│   │       ├── MonochromaticColorsExperimental.php
-│   │       ├── ShadesGeneratorExperimental.php
-│   │       ├── SplitComplementaryColorsExperimental.php
-│   │       ├── SquareColorsExperimental.php
-│   │       └── TriadicColorsExperimental.php
-│   ├── Custom
-│   │   ├── CollectionAdapter.php
-│   │   └── Custom.php
-│   ├── NullPresets.php
-│   ├── PresetInterface.php
-│   ├── PresetTrait.php
-│   ├── Presets.php
-│   ├── PresetsInterface.php
-│   ├── Typography
-│   │   ├── FontFamily.php
-│   │   ├── FontSize.php
-│   │   └── Utilities
-│   │       ├── Fluid.php
-│   │       └── FontFace.php
-│   └── Utilities
-│       ├── CalcExperimental.php
-│       ├── ClampExperimental.php
-│       ├── DimensionExperimental.php
-│       ├── SupportedUnitsExperimental.php
-│       └── UnitInterfaceExperimental.php
+│    ├── Color
+│    │    ├── Duotone.php
+│    │    ├── Gradient.php
+│    │    ├── Palette.php
+│    │    └── Utilities
+│    │        ├── AchromaticColorsExperimental.php
+│    │        ├── AnalogousColorsExperimental.php
+│    │        ├── Color.php
+│    │        ├── ColorFactory.php
+│    │        ├── ColorFactoryInterface.php
+│    │        ├── ColorInterface.php
+│    │        ├── ColorModifier.php
+│    │        ├── ColorModifierInterface.php
+│    │        ├── ColorsGenerator.php
+│    │        ├── ComplementaryColorsExperimental.php
+│    │        ├── GradientInterface.php
+│    │        ├── LinearGradient.php
+│    │        ├── MonochromaticColorsExperimental.php
+│    │        ├── ShadesGeneratorExperimental.php
+│    │        ├── SplitComplementaryColorsExperimental.php
+│    │        ├── SquareColorsExperimental.php
+│    │        └── TriadicColorsExperimental.php
+│    ├── Custom
+│    │    ├── CollectionAdapter.php
+│    │    └── Custom.php
+│    ├── NullPresets.php
+│    ├── PresetInterface.php
+│    ├── PresetTrait.php
+│    ├── Presets.php
+│    ├── PresetsInterface.php
+│    ├── Typography
+│    │    ├── FontFamily.php
+│    │    ├── FontSize.php
+│    │    └── Utilities
+│    │        ├── Fluid.php
+│    │        └── FontFace.php
+│    └── Utilities
+│        ├── CalcExperimental.php
+│        ├── ClampExperimental.php
+│        ├── DimensionExperimental.php
+│        ├── SupportedUnitsExperimental.php
+│        └── UnitInterfaceExperimental.php
 └── Styles
     ├── ArrayableInterface.php
     ├── Border.php
@@ -584,7 +584,7 @@ use \ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Presets;
 $presets = new Presets();
 ```
 
-The presets has a few methods you can use:
+The `Presets` has a few methods you can use:
 
 ```php
 interface PresetsInterface

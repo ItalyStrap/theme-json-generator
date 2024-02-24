@@ -16,8 +16,8 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Custom\CustomToPresets;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\FontFamily;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\FontSize;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Color as StylesColor;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Typography;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles;
+
 use Psr\Container\ContainerInterface;
 
 return static function (Blueprint $blueprint, Presets $presets, ContainerInterface $container): void {
@@ -109,24 +109,24 @@ return static function (Blueprint $blueprint, Presets $presets, ContainerInterfa
             ],
         ],
         SectionNames::STYLES => [
-            'color' => (new StylesColor())
+            'color' => (new Styles\Color())
                 ->background('var(--wp--preset--color--body-bg)')
                 ->text('var(--wp--preset--color--body-color)'),
-            'typography' => (new Typography($presets))
+            'typography' => (new Styles\Typography($presets))
                 ->fontSize(FontSize::CATEGORY . '.base')
                 ->fontFamily(FontFamily::CATEGORY . '.base'),
             'elements' => [
                 'link' => [ // .wp-block-file a
-                    'color' => $container->get(StylesColor::class)
+                    'color' => $container->get(Styles\Color::class)
                         ->text(Palette::CATEGORY . '.base')
                         ->background('transparent'),
                 ],
             ],
             'blocks' => [
                 'core/paragraph' => [
-                    'color' => (new StylesColor())
+                    'color' => (new Styles\Color())
                         ->text('var(--wp--preset--color--body-color)'),
-                    'typography' => (new Typography())
+                    'typography' => (new Styles\Typography())
                         ->fontSize('var(--wp--preset--font-size--base)')
                         ->fontFamily('var(--wp--preset--font-family--base)'),
                 ],
