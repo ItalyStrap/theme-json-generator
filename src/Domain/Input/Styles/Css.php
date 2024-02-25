@@ -9,6 +9,16 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetsInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\NullPresets;
 
 /**
+ * @link https://make.wordpress.org/core/2023/03/06/custom-css-for-global-styles-and-per-block/
+ * @link https://fullsiteediting.com/lessons/how-to-use-custom-css-in-theme-json/
+ * @link https://developer.wordpress.org/news/2023/04/21/per-block-css-with-theme-json/
+ * @link https://github.com/WordPress/wordpress-develop/blob/trunk/tests/phpunit/tests/theme/wpThemeJson.php
+ * @link https://developer.wordpress.org/themes/global-settings-and-styles/
+ *
+ * @link https://www.google.it/search?q=php+inline+css+content&sca_esv=596560865&ei=mAicZaTCGp3Axc8Pq7yT8AQ&ved=0ahUKEwik7p-Rgs6DAxUdYPEDHSveBE4Q4dUDCBA&uact=5&oq=php+inline+css+content&gs_lp=Egxnd3Mtd2l6LXNlcnAiFnBocCBpbmxpbmUgY3NzIGNvbnRlbnQyBRAhGKABMgUQIRigATIIECEYFhgeGB0yCBAhGBYYHhgdMggQIRgWGB4YHUjvogFQmgdYwJcBcAF4AZABAJgBsQGgAZkSqgEEMC4xOLgBA8gBAPgBAcICChAAGEcY1gQYsAPCAgoQABiABBiKBRhDwgIFEAAYgATCAgYQABgWGB7CAgcQABiABBgTwgIIEAAYFhgeGBPiAwQYACBBiAYBkAYI&sclient=gws-wiz-serp#ip=1
+ * @link https://github.com/topics/inline-css?l=php
+ * @link https://github.com/sabberworm/PHP-CSS-Parser
+ *
  * @psalm-api
  * @see CssTest
  */
