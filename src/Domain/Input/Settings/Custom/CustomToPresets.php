@@ -25,20 +25,20 @@ class CustomToPresets
 
     public function toArray(): array
     {
-        return $this->collectionToFlat($this->customs);
+        return $this->presetsToFlat($this->customs);
     }
 
-    private function collectionToFlat(array $collection, string $prefix = ''): array
+    private function presetsToFlat(array $presets, string $prefix = ''): array
     {
         $processed = [];
 
         /**
          * @var string|array|\Stringable $value
          */
-        foreach ($collection as $key => $value) {
+        foreach ($presets as $key => $value) {
             $fullKey = (string)($prefix === '' ? $key : $prefix . '.' . $key);
             if (\is_array($value)) {
-                $processed = \array_merge($processed, $this->collectionToFlat($value, $fullKey));
+                $processed = \array_merge($processed, $this->presetsToFlat($value, $fullKey));
                 continue;
             }
 

@@ -24,17 +24,17 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\NullPresets;
  */
 class Css
 {
-    private PresetsInterface $collection;
+    private PresetsInterface $presets;
 
     public function __construct(
-        PresetsInterface $collection = null
+        PresetsInterface $presets = null
     ) {
-        $this->collection = $collection ?? new NullPresets();
+        $this->presets = $presets ?? new NullPresets();
     }
 
     public function parseString(string $css, string $selector = ''): string
     {
-        $css = $this->collection->parse($css);
+        $css = $this->presets->parse($css);
 
         if ($selector === '') {
             return $css;

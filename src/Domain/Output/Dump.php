@@ -106,9 +106,9 @@ class Dump
         $injector = $this->configureContainer();
         $injector->execute($entryPoint);
 
-        $collection = $injector->make(PresetsInterface::class);
+        $presets = $injector->make(PresetsInterface::class);
         $blueprint = $injector->make(Blueprint::class);
-        $blueprint->setPresets($collection);
+        $blueprint->setPresets($presets);
 
         (new JsonFileWriter($message->getRootFolder() . DIRECTORY_SEPARATOR . $fileName . '.json'))
             ->write($blueprint);
