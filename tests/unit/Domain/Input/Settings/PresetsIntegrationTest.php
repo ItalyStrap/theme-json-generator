@@ -112,7 +112,7 @@ EOF
 //        $this->assertSame('var(--wp--preset--font-size--h-1)', $sut->get('fontSize.h1')->var());
 //        $this->assertSame('var(--wp--preset--font-size--h-2)', $sut->get('fontSize.h2')->var());
 
-        $fontSizesCollection = $sut->toArrayByCategory(FontSize::CATEGORY);
+        $fontSizesCollection = $sut->toArrayByCategory(FontSize::TYPE);
         $this->assertSame(
             [
                 [

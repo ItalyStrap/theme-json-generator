@@ -17,7 +17,7 @@ class Custom implements PresetInterface
     /**
      * @var string
      */
-    public const CATEGORY = 'custom';
+    public const TYPE = 'custom';
 
     private string $key;
 
@@ -43,7 +43,7 @@ class Custom implements PresetInterface
     {
         return \sprintf(
             '--wp--%s--%s',
-            $this->category(),
+            $this->type(),
             $this->camelToSnake(\str_replace('.', '--', $this->key))
         );
     }

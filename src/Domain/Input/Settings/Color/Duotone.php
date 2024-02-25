@@ -17,7 +17,7 @@ class Duotone implements PresetInterface
     /**
      * @var string
      */
-    public const CATEGORY = 'duotone';
+    public const TYPE = 'duotone';
 
     private string $name;
 

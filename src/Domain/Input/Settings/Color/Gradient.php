@@ -18,7 +18,7 @@ class Gradient implements PresetInterface
     /**
      * @var string
      */
-    public const CATEGORY = 'gradient';
+    public const TYPE = 'gradient';
 
     private string $slug;
 

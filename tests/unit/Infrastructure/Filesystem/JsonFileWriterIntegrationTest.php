@@ -16,7 +16,7 @@ use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\JsonFileWriter;
 
 class JsonFileWriterIntegrationTest extends UnitTestCase
 {
-    public const COLOR_HEADING_TEXT = Palette::CATEGORY . '.headingColor';
+    public const COLOR_HEADING_TEXT = Palette::TYPE . '.headingColor';
 
     public const FONT_SIZE_H1 = 'font-size-h1';
 

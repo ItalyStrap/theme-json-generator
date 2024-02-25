@@ -18,7 +18,7 @@ class Palette implements PresetInterface
     /**
      * @var string
      */
-    public const CATEGORY = 'color';
+    public const TYPE = 'color';
 
     /**
      * @var string

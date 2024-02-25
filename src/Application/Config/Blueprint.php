@@ -51,12 +51,12 @@ final class Blueprint extends Config implements \JsonSerializable
     public function setPresets(PresetsInterface $presets): bool
     {
         $keys = [
-            'settings.color.palette' => Palette::CATEGORY,
-            'settings.color.gradients' => Gradient::CATEGORY,
-            'settings.color.duotone' => Duotone::CATEGORY,
-            'settings.typography.fontSizes' => FontSize::CATEGORY,
-            'settings.typography.fontFamilies' => FontFamily::CATEGORY,
-            'settings.custom' => Custom::CATEGORY,
+            'settings.color.palette' => Palette::TYPE,
+            'settings.color.gradients' => Gradient::TYPE,
+            'settings.color.duotone' => Duotone::TYPE,
+            'settings.typography.fontSizes' => FontSize::TYPE,
+            'settings.typography.fontFamilies' => FontFamily::TYPE,
+            'settings.custom' => Custom::TYPE,
         ];
 
         foreach ($keys as $key => $value) {

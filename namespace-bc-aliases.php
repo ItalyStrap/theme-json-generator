@@ -1,11 +1,8 @@
 <?php
 
-/**
- * @todo Remove this after the commit is pushed
- */
-
 declare(strict_types=1);
 
+// @todo Remove spl_autoload_register after the branch is merged
 \spl_autoload_register(function (string $class): void {
     $prefix = 'ItalyStrap\\Bus\\';
     $base_dir = __DIR__ . '/bus/';

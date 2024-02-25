@@ -123,7 +123,7 @@ class PresetsTest extends UnitTestCase
                 ];
             }
 
-            public function category(): string
+            public function type(): string
             {
                 return 'category' . $this->val;
             }

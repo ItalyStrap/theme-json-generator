@@ -17,7 +17,7 @@ class FontFamily implements PresetInterface
     /**
      * @var string
      */
-    public const CATEGORY = 'fontFamily';
+    public const TYPE = 'fontFamily';
 
     private string $slug;
 

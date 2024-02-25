@@ -112,12 +112,12 @@ return static function (Blueprint $blueprint, Presets $presets, ContainerInterfa
                 ->background('var(--wp--preset--color--body-bg)')
                 ->text('var(--wp--preset--color--body-color)'),
             'typography' => (new Styles\Typography($presets))
-                ->fontSize(FontSize::CATEGORY . '.base')
-                ->fontFamily(FontFamily::CATEGORY . '.base'),
+                ->fontSize(FontSize::TYPE . '.base')
+                ->fontFamily(FontFamily::TYPE . '.base'),
             'elements' => [
                 'link' => [ // .wp-block-file a
                     'color' => $container->get(Styles\Color::class)
-                        ->text(Palette::CATEGORY . '.base')
+                        ->text(Palette::TYPE . '.base')
                         ->background('transparent'),
                 ],
             ],

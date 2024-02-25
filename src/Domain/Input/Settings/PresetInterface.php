@@ -10,7 +10,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings;
 // phpcs:ignore PHPCompatibility.Interfaces.NewInterfaces.stringableFound
 interface PresetInterface extends \Stringable
 {
-    public function category(): string;
+    public function type(): string;
 
     public function slug(): string;
 

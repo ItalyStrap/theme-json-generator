@@ -15,7 +15,7 @@ trait PresetCommonTrait
     public function testItShouldReturnRef(): void
     {
         $sut = $this->makeInstance();
-        $this->assertSame('{{' . $sut->category() . '.' . $sut->slug() . '}}', $sut->ref());
+        $this->assertSame('{{' . $sut->type() . '.' . $sut->slug() . '}}', $sut->ref());
     }
 
     public function testItShouldReturnProp(): void

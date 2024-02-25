@@ -31,7 +31,7 @@ class Presets implements PresetsInterface, \JsonSerializable
          * The slug method can return a value like this "navbar.min.height"
          * So the key needs to be built before all the insert value in the correct position
          */
-        $key = $item->category() . '.' . $item->slug();
+        $key = $item->type() . '.' . $item->slug();
 
         $this->assertIsUnique($key, $item);
 
@@ -88,7 +88,7 @@ class Presets implements PresetsInterface, \JsonSerializable
              *
              * @var PresetInterface|null $item
              */
-            $item = $this->get($match[0], $this->get(Custom::CATEGORY . '.' . $match[0]));
+            $item = $this->get($match[0], $this->get(Custom::TYPE . '.' . $match[0]));
 
             if ($item === null) {
                 throw new \RuntimeException(sprintf('{{%s}} does not exists', $match[0]));
@@ -189,7 +189,7 @@ class Presets implements PresetsInterface, \JsonSerializable
                 \sprintf(
                     '%s already registered in %s category: got %s',
                     $item->slug(),
-                    $item->category(),
+                    $item->type(),
                     $key
                 )
             );

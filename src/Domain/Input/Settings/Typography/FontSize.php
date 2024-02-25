@@ -18,7 +18,7 @@ class FontSize implements PresetInterface
     /**
      * @var string
      */
-    public const CATEGORY = 'fontSize';
+    public const TYPE = 'fontSize';
 
     private string $slug;
 

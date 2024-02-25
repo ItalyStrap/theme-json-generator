@@ -9,9 +9,9 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings;
  */
 trait PresetTrait
 {
-    public function category(): string
+    public function type(): string
     {
-        return self::CATEGORY;
+        return self::TYPE;
     }
 
     public function slug(): string
@@ -24,7 +24,7 @@ trait PresetTrait
     {
         return \sprintf(
             '{{%s.%s}}',
-            $this->category(),
+            $this->type(),
             $this->slug()
         );
     }
@@ -33,7 +33,7 @@ trait PresetTrait
     {
         return $this->camelToSnake(\sprintf(
             '--wp--preset--%s--%s',
-            $this->category(),
+            $this->type(),
             $this->slug()
         ));
     }
