@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Plugin Name: Theme Json Generator
  * Description:
@@ -13,6 +11,8 @@ declare(strict_types=1);
  * Text Domain: italystrap
  * Domain Path: languages
  */
+
+declare(strict_types=1);
 
 /*
 
