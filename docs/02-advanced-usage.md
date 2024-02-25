@@ -385,3 +385,5 @@ return static function (Blueprint $blueprint, ContainerInterface $container): vo
     $someService = $container->get(SomeService::class);
 };
 ```
+
+[🆙](#introduction)

@@ -17,7 +17,6 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\FontFamily;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\FontSize;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles;
-
 use Psr\Container\ContainerInterface;
 
 return static function (Blueprint $blueprint, Presets $presets, ContainerInterface $container): void {

@@ -16,7 +16,7 @@ class DumpTest extends UnitTestCase
     {
         return new Dump(
             $this->makeDispatcher(),
-//            $this->makeConfig(),
+            //            $this->makeConfig(),
             new Config(),
             $this->makeFilesFinder(),
         );

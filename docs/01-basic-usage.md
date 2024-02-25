@@ -1,6 +1,6 @@
 [Readme](../README.md)
 
-## Basic Usage
+# Basic Usage
 
 Following the introduction to the tool's capabilities and its intended development use, let's dive into how to leverage its functionalities effectively.
 
@@ -338,5 +338,7 @@ Now to generate your JSON file simply use the command:
 ```
 
 This basic configuration guide aims to get you started quickly, keeping complexities at bay. As your project grows, you may explore advanced configurations to leverage the full power of our tool.
+
+[🆙](#basic-usage)
 
 [Next: Advanced Usage](./02-advanced-usage.md)
