@@ -61,8 +61,7 @@ This package adheres to the [SemVer](http://semver.org/) specification and will 
 
 ## Changelog
 
-Refactored the files structure:
-You have to change the Composer Plugin call -> You should call "ItalyStrap\\ThemeJsonGenerator\\Composer\\Plugin::run" See above in the docs
+
 
 [🆙](#table-of-contents)
 
