@@ -6,7 +6,7 @@ namespace ItalyStrap\Tests\Unit\Domain\Input\Styles;
 
 use ItalyStrap\Tests\CssStyleStringProviderTrait;
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\CssExperimental;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Css;
 use ScssPhp\ScssPhp\Compiler;
 
 /**
@@ -26,9 +26,9 @@ class CssTest extends UnitTestCase
         styleProvider as styleProviderTrait;
     }
 
-    private function makeInstance(): CssExperimental
+    private function makeInstance(): Css
     {
-        return new CssExperimental();
+        return new Css();
     }
 
     public static function styleProvider(): iterable

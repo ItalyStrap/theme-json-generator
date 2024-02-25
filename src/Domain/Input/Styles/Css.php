@@ -12,7 +12,7 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\NullPresets;
  * @psalm-api
  * @see CssTest
  */
-class CssExperimental
+class Css
 {
     private PresetsInterface $collection;
 
@@ -30,7 +30,7 @@ class CssExperimental
             return $css;
         }
 
-        $exploded = (array)\explode($selector, $css);
+        $exploded = \explode($selector, $css);
 
         $rootRule = [];
         $explodedNew = [];
