@@ -48,10 +48,10 @@ final class Blueprint extends Config implements \JsonSerializable
         return $this->set(SectionNames::STYLES . '.blocks.' . $blockName . '.css', $css);
     }
 
-    public function setPresets(PresetsInterface $collection): bool
+    public function setPresets(PresetsInterface $presets): bool
     {
         $keys = [
-            Palette::KEY => Palette::CATEGORY,
+            'settings.color.palette' => Palette::CATEGORY,
             'settings.color.gradients' => Gradient::CATEGORY,
             'settings.color.duotone' => Duotone::CATEGORY,
             'settings.typography.fontSizes' => FontSize::CATEGORY,
@@ -62,7 +62,7 @@ final class Blueprint extends Config implements \JsonSerializable
         foreach ($keys as $key => $value) {
             try {
                 /**  @psalm-suppress UndefinedInterfaceMethod */
-                $this->set($key, $collection->toArrayByCategory($value));
+                $this->set($key, $presets->toArrayByCategory($value));
             } catch (\Exception $e) {
                 continue;
             }

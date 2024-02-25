@@ -49,8 +49,6 @@ class Dump
          *         'theme' => 'theme.json'
          */
         foreach ($this->filesFinder->find($message->getRootFolder(), 'php') as $fileName => $file) {
-            codecept_debug($fileName);
-            codecept_debug($file);
             $injector = $this->configureContainer();
             /** @psalm-suppress UnresolvableInclude */
             $injector->execute(require $file);
@@ -135,7 +133,7 @@ class Dump
          * Injector resolve to null if a param is nullable, so we need to be explicit and declare the param
          * I need this for all the classes under the Styles namespace
          */
-        $injector->defineParam('collection', $injector->make(PresetsInterface::class));
+        $injector->defineParam('presets', $injector->make(PresetsInterface::class));
 
         $injector->share(Blueprint::class);
 

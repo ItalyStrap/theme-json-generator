@@ -15,7 +15,7 @@ trait CommonTrait
      */
     private array $properties;
 
-    private PresetsInterface $collection;
+    private PresetsInterface $presets;
 
     /**
      * @param array<string, string> $properties
@@ -24,7 +24,7 @@ trait CommonTrait
         PresetsInterface $presets = null,
         array $properties = []
     ) {
-        $this->collection = $presets ?? new NullPresets();
+        $this->presets = $presets ?? new NullPresets();
         $this->properties = $properties;
     }
 
@@ -69,7 +69,7 @@ trait CommonTrait
         /**
          * @var PresetInterface|mixed $value
          */
-        $value = $this->collection->get($value, $value);
+        $value = $this->presets->get($value, $value);
 
         if ($value instanceof PresetInterface) {
             $value = $value->var();
@@ -81,10 +81,10 @@ trait CommonTrait
          * instead we want to return the value of the placeholder like this:
          * var(--wp--preset--color--base)
          */
-        $this->properties[$key] =  $this->collection->parse((string)$value);
+        $this->properties[$key] =  $this->presets->parse((string)$value);
 
         $class = self::class;
-        return new $class($this->collection, $this->properties);
+        return new $class($this->presets, $this->properties);
     }
 
     final public function __clone()

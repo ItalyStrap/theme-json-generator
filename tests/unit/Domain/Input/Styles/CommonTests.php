@@ -6,6 +6,7 @@ namespace ItalyStrap\Tests\Unit\Domain\Input\Styles;
 
 use ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\SectionNames;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\CommonTrait;
 
 trait CommonTests
 {
@@ -111,5 +112,23 @@ trait CommonTests
         $sut_cloned->property('style', '#000000');
 
         $this->assertNotSame($sut->toArray(), $sut_cloned->toArray(), '');
+    }
+
+    public function testTheNameOfVariableInConstructorMustBePresets(): void
+    {
+        $styleObject = new class {
+            use CommonTrait;
+        };
+
+        $reflection = new \ReflectionClass($styleObject);
+        $constructor = $reflection->getConstructor();
+        $parameters = $constructor->getParameters();
+        $this->assertSame(
+            'presets',
+            $parameters[0]->getName(),
+            // phpcs:disable
+            'The name of the variable in the constructor of \ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\CommonTrait must be presets'
+            // phpcs:enable
+        );
     }
 }
