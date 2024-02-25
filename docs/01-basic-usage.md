@@ -4,17 +4,17 @@
 
 Following the introduction to the tool's capabilities and its intended development use, let's dive into how to leverage its functionalities effectively.
 
-### Understanding the Workflow
+## Understanding the Workflow
 
 The CLI tool simplifies the process of working with JSON configurations for your WordPress themes through a streamlined workflow, consisting of the following key steps:
 
-1. **Initialization:** Start by initializing the entry point. This setup phase prepares the environment for generating your `theme.json` file, ensuring that all necessary prerequisites are met.
-2. **Generation:** Utilizing the initialized entry point, the tool then can proceed to generate the JSON file. This step takes your PHP configurations and translates them into a structured `theme.json` file, ready for use in your theme development.
-3. **Validation:** After generation, the tool can perform a validation check on the generated JSON files. This ensures that the files are correctly formatted and meet the expected standards, ready for integration into your WordPress theme.
+1. **Initialization:** Start by initializing the entry point. This setup phase prepares the environment for generating your `theme.json` file if it doesn't exist and the related entrypoint PHP files, ensuring that all necessary prerequisites are met.
+2. **Generation:** Utilizing the initialized entry point, the tool then can proceed to generate the JSON file. This step takes your PHP configurations and translates them into a structured `*.json` file, ready for use in your theme development.
+3. **Validation:** After generation, the tool can perform a validation check on the generated JSON files. This ensures that the files are correctly formatted and meet the expected standards.
 
-#### Initializing the Environment: The init Command
+### Initializing the Environment: The init Command
 
-To kickstart the development process and prepare your theme for JSON configuration, the `init` command lays the foundational structure required for generating your `theme.json` and related JSON files efficiently.
+To kickstart the development process and prepare your theme for JSON configuration, the `init` command lays the foundational structure required for generating your `theme.json` and entrypoint PHP files efficiently.
 
 How to Use
 
@@ -26,12 +26,12 @@ Execute the command below in your terminal:
 
 What Happens Next?
 
-Upon execution, this command performs a series of actions to ensure your theme is ready for further development:
+Upon execution, this command performs a series of actions to ensure your `*.json` file is ready for further development:
 
-1. **Checks for theme.json or others json files:** Initially, it looks for an existing `theme.json` file at the root of your theme (and inside `styles` folder if exists). If found, it proceeds with the existing structure; if not, a new `theme.json` file is created to get you started. By default, only the `theme.json` file is created, but you can create other JSON files inside the `styles` folder by adding the `--styles` option to the command (this is not yet implemented).
-2. **Entrypoint Creation:** For each JSON file (including `theme.json` and any JSON files within the styles folder of block-based themes), the command creates a corresponding PHP entrypoint file. This file serves as a bridge, allowing you to manage your JSON configurations dynamically with PHP, to doing so this file must return a callable used to add your custom configuration for structuring the JSON file.
+1. **Checks for theme.json or others json files:** Initially, it looks for an existing `theme.json` file at the root of your theme folder (and also it looks inside `styles` folder if exists). If it founds any, it proceeds with the existing structure; if not, a new `theme.json` file is created to get you started. By default, only the `theme.json` file is created.
+2. **Entrypoint Creation:** For each JSON file (including `theme.json` and any JSON files within the `styles` folder of a block-based themes), the command creates a corresponding PHP entrypoint file. This file serves as a bridge, allowing you to manage your JSON configurations dynamically with PHP, to doing so this file must return a callable used to add your custom configuration for structuring the JSON file.
 3. **Content Transfer:** If an existing JSON file contains data, its contents are automatically transferred to the newly created entrypoint file in array format. This feature simplifies the initial setup by negating the need for manual data entry into the entrypoint files.
-4. **Synchronization with dump Command:** From this point forward, executing the `dump` command will update the content of the JSON files to reflect the configurations specified in the PHP entrypoint files.
+4. **Synchronization with dump Command:** From this point forward, executing the `dump` command will update the content of the JSON files to reflect the configurations specified in the PHP entrypoint files, so remember that from now on all the changes made to the `*.json` files will be lost if you don't update the PHP entrypoint files.
 
 Naming and Organization
 
@@ -42,7 +42,7 @@ Key Takeaway
 
 The `init` command is designed to streamline the setup process, making it easier for you to manage and generate your theme’s JSON configurations with the power and flexibility of PHP.
 
-##### FAQs/Troubleshooting
+#### FAQs/Troubleshooting
 
 **Q: What should I do if I encounter permission issues when running the init command on Linux?**
 
@@ -74,7 +74,7 @@ This command changes the ownership of the theme directory and all its contents t
 
 **Note:** Always exercise caution when changing permissions and ownership of files and directories on your system, especially when using `sudo`. These actions can affect the security and functionality of your system.
 
-#### Generating and Updating JSON Files: The dump Command
+### Generating and Updating JSON Files: The dump Command
 
 Once you've set up your environment with the `init` command, the `dump` command is your next step in the workflow. It's designed to take the configurations from your PHP entrypoint files and generate the corresponding JSON files for your theme.
 
@@ -89,7 +89,6 @@ To execute the dump command, run the following in your terminal:
 Key Features
 
 * **JSON File Generation:** Utilizes the PHP entrypoint files prepared by the `init` command to generate or update your `theme.json` and any other related JSON files in your theme directory. This ensures that your theme configurations are accurately reflected in the JSON files used by WordPress.
-
 * **Validation Option:** With the `--validate` option, you can ensure the integrity and format of your JSON files immediately after generation. This step is crucial for preventing errors in your theme due to malformed JSON.
 
 ```shell
@@ -113,7 +112,7 @@ Tips for Effective Use
 
 (for watching the changes and automatically generate the JSON files you can use any of the available task runners like Gulp, Grunt, Webpack, etc.)
 
-#### Validating JSON Files: The validate Command
+### Validating JSON Files: The validate Command
 
 To maintain the highest standards of quality and compatibility for your WordPress theme, the `validate` command plays a crucial role. It scrutinizes your JSON files to ensure they adhere to the WordPress Theme JSON schema, leveraging the robust validation capabilities of the [justinrainbow/json-schema](https://github.com/justinrainbow/json-schema) package.
 
@@ -148,7 +147,7 @@ Tips for Effective Use
 * Regular validation of your JSON files is essential for maintaining theme quality and compatibility. Incorporate the `validate` command into your regular development workflow to catch and correct issues promptly.
 * Utilize the `--force` option if you suspect schema updates or when you wish to ensure validation against the latest schema standards.
 
-### Getting Started with Basic Configuration
+## Getting Started with Basic Configuration
 
 Diving into the world of theme development with our tool begins with understanding the basic structure of a Global Style JSON file. Here's a simple example to illustrate the schema you'll be working with:
 
@@ -201,6 +200,8 @@ Transformed, the generated JSON file looks like this:
 }
 ```
 
+You can find more information about hwo to encode PHP array to JSON [here](https://www.php.net/manual/en/function.json-encode.php).
+
 Adhering to the WordPress Theme JSON schema is vital for creating valid JSON files. The `validate` command assists in ensuring your configurations meet the schema requirements. Future schema updates are seamlessly integrated, allowing your configurations to evolve without needing constant documentation checks.
 
 The Entrypoint: Your Configuration Hub
@@ -221,7 +222,7 @@ return static function (Blueprint $blueprint): void {
 
 _This approach utilizes the [Empress](https://github.com/ItalyStrap/empress) package for dependency resolution, emphasizing simplicity and adherence to the KISS principle, we'll see more later._
 
-The `BLueprint` extends the [Config](https://github.com/ItalyStrap/config) package adding some helper methods to simplify the process of adding the configuration.
+The `BLueprint` extends the [Config](https://github.com/ItalyStrap/config) package adding some helper methods to simplify the process of configuring the JSON file.
 
 ```php
 declare(strict_types=1);

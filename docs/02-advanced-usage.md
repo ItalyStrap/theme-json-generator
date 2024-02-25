@@ -12,7 +12,7 @@ The ItalyStrap Theme Json Generator project is structured around Domain-Driven D
 
 * **Application:** Contains service interfaces and application logic, orchestrating the flow of data and interactions.
 * **Domain:** The heart of the project, where the business logic resides. It's further split into:
-    * **Input:** Houses classes for configuring the JSON schema, including settings and styles. This is where developers will primarily interact to define theme configurations.
+    * **Input:** Houses classes for configuring the JSON schema, including `settings` and `styles`. This is where developers will primarily interact to define theme configurations.
     * **Output:** Encompasses the logic used by the CLI to execute commands, without direct involvement in the configuration process.
 * **Infrastructure:** Supports the application and domain with technical capabilities, such as data persistence and external services integration.
 
@@ -22,10 +22,10 @@ This structure ensures a clean separation of concerns, facilitating easier maint
 
 > All classes with `Experimental` suffix may change the name and the logic in the future.
 
-The `Input` directory within the `Domain` is pivotal for theme developers. It is structured to mirror the `theme.json` schema, ensuring an intuitive and direct mapping of your theme's configuration. Key subdirectories include:
+The `Input` directory within the `Domain` is pivotal for theme developers. It is structured to mirror the `*.json` schema, ensuring an intuitive and direct mapping of your theme's configuration. Key subdirectories include:
 
-* **Settings:** Contains classes for detailed theme settings like color schemes, typography, and custom presets, facilitating granular control over theme appearance.
-* **Styles:** Dedicated to defining the theme's visual styles, including border, color, typography, and spacing configurations.
+* **Settings:** Contains classes for detailed theme settings like color, typography, and custom presets, facilitating granular control over theme appearance.
+* **Styles:** Dedicated to defining the theme's visual styles, including border, color, typography, spacing and so on to configurations.
 
 By focusing on the `Input` directory, developers can effectively tailor the theme's JSON files to their specific design requirements, enhancing the theme's functionality and aesthetic appeal.
 
@@ -65,7 +65,7 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Palette;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\Color;
 
 $presets
-    // `add` method is used to add the preset to the collection
+    // `add` method is used to add the preset instance to the collection
     ->add(new Palette(
         'base',
         'Brand Base Color',
@@ -105,12 +105,13 @@ $presets
 ```
 
 The `LinearGradient` is a Value Object that represents a linear gradient in the CSS format.
+
 It accepts three parameters:
 
 1. string Angle.
-2. object `Color`.
-3. object `Color`.
-4. ... more colors.
+2. object `Palette`.
+3. object `Palette`.
+4. ... more Palette colors.
 
 The `LinearGradient` class is another utility class under the utilities' folder.
 
@@ -121,7 +122,7 @@ The `Gradient` accepts three parameters:
 3. object that implements `GradientInterface`.
 
 As you can see in the example above we can access value from the `$presets` object using the `get` method.
-The `get` method accepts a string as a parameter and returns an object, in this case, a `Color` object.
+The `get` method accepts a string as a parameter and returns a `PresetInterface` object, in this case, a `Palette` object.
 The string used as key has the form `type.slug` where `type` is the type of the preset and `slug` is the slug of the preset.
 
 #### Duotone
@@ -144,10 +145,10 @@ The `Duotone` accepts three parameters:
 
 1. string Slug.
 2. string Name.
-3. object `Color`.
-4. ... more colors.
+3. object `Palette`.
+4. ... more Palette colors.
 
-#### Typography Preset, FontFamily, and FontSize
+#### Typography Presets: FontFamily, and FontSize
 
 Configure typography presets with the `FontFamily` and `FontSize` classes:
 
@@ -175,7 +176,7 @@ The `Custom` class accepts two parameters:
 1. string Slug.
 2. string Value.
 
-Customs value can be added using a Factory object, `CustomToPresets`:
+Customs can be added using a Factory object, `CustomToPresets`:
 
 ```php
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Custom\CustomToPresets;
@@ -198,7 +199,7 @@ $presets
 
 The `CustomToPresets` class accepts an array of customs values (strings) and returns an array of `Custom` objects with the method `toArray`.
 
-In the example above you see a method called `addMultiple` that accepts an array of `Custom` objects.
+In the example above you see a method called `addMultiple` that accepts an array of `PresetInterface` objects.
 
 ```php
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Custom\Custom;
@@ -252,7 +253,9 @@ As you can see in the example above the key passed to the method will be passed 
 }
 ```
 
-By passing the `$presets` collection to a style class constructor, you can access and use predefined settings within your styles, enhancing reusability and consistency:
+But we made some effort to initialize all `Presets`, how can we use them in the `Styles` section?
+
+Pass the `$presets` collection to a style class constructor, this way you can access and use `Presets` value within your styles section, enhancing reusability and consistency:
 
 ```php
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Color;
@@ -265,6 +268,8 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Color;
     ],
 ];
 ```
+
+In this case the key passed to the method will be used as a key in the `$presets` collection.
 
 In JSON format:
 
@@ -310,35 +315,19 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Color;
 ];
 ```
 
-In JSON format:
-
-```json
-{
-  "styles": {
-    "color": {
-      "background": "var(--wp--preset--color--base)",
-      "text": "var(--wp--preset--color--body-color)"
-    }
-  }
-}
-```
-
-As you can see with the `$container` object you can use the `Color` class without the need to pass the `$presets` object to the constructor because the `Color` dependencies are already registered in the container.
+As you can see with the `$container` object you can use a `Color` class without the need to pass the `$presets` object to the constructor because all the dependencies of the `Color` are already registered in the container.
 
 ### Available Style Classes
 
-The `Styles` directory includes various classes tailored to different aspects of theme styling, aligned with the `theme.json` structure. These classes, such as `Border`, `Color`, `Css`, `Outline`, `Spacing`, `Typography`, offer specific methods for configuring corresponding style properties, all method declared in each class follows the `theme.json` schema.
-
-// tests/_data/fixtures/advanced-example.php
+The `Styles` directory includes various classes tailored to different aspects of theme styling, aligned with the `theme.json` structure. These classes, such as `Border`, `Color`, `Css`, `Outline`, `Spacing`, `Typography`, offer specific methods for configuring corresponding style properties, all method declared in each class follows the `theme.json` schema and each class has its own methods following the properties they represent.
 
 You can see more examples in the [tests/_data/fixtures/advanced-example.php](../tests/_data/fixtures/advanced-example.php) file.
 
-
-
-
 ### Advanced Service Injection with Empress and PSR-11 Container
 
-In the advanced configuration of your theme's JSON, [Empress](https://github.com/ItalyStrap/empress) (our powerful dependency injection tool, evolved from Auryn\Injector) serves as a powerful backbone for service resolution, providing the flexibility to inject services directly into your configuration's callable. To complement this, we also leverage the PSR-11 ContainerInterface, offering a standardized way to access services, enhancing the usability and familiarity for developers.
+Let's talk more about the Container and the `Empress` service injection.
+
+In the advanced configuration of your theme's JSON, [Empress](https://github.com/ItalyStrap/empress) (our powerful dependency injection tool, evolved from Auryn\Injector) serves as a powerful backbone for service resolution, providing the flexibility to inject services directly into your configuration's callable. To complement this, we also leverage the PSR-11 `ContainerInterface`, offering a standardized way to access services, enhancing the usability and familiarity for developers.
 
 Understanding Empress and PSR-11 Integration
 
@@ -366,7 +355,7 @@ return static function (Blueprint $blueprint, ContainerInterface $container): vo
 
 The Synergy of Empress and PSR-11
 
-This integrated approach, combining the power of `Empress` for internal configurations and the `ContainerInterface` for a standardized external interface, optimizes the development workflow. Instances of `ItalyStrap\Empress\Injector` and `ContainerInterface` are shared, and it means that every time you call one of them you'll get the same instance of the object, ensuring efficient service access through both `make` and `get` methods. Yet, for ease of use and to adhere to best practices, the PSR-11 interface is preferred for accessing services.
+This integrated approach, combining the power of `Empress` for internal configurations and the `ContainerInterface` for a standardized external interface, optimizes the development workflow. Instances of `ItalyStrap\Empress\Injector` and `ContainerInterface` are shared, this means that every time you call one of them you'll get the same instance of the object, ensuring efficient service access through both `make` and `get` methods. Yet, for ease of use and to adhere to best practices, the PSR-11 interface is preferred for accessing services.
 
 By balancing the advanced capabilities of `Empress` with the simplicity and standardization of PSR-11, developers can craft sophisticated theme configurations while keeping the process streamlined and accessible.
 
