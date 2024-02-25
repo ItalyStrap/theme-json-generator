@@ -17,9 +17,9 @@ class FilesFinderIntegrationTest extends UnitTestCase
 
     public static function extensionProvider(): iterable
     {
-        yield ['php'];
+        yield 'PHP' => ['php'];
 
-        yield ['json'];
+        yield 'JSON' => ['json'];
     }
 
     /**

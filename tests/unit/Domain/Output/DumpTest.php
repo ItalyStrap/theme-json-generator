@@ -34,29 +34,35 @@ class DumpTest extends UnitTestCase
 
     public function testItShouldBasicExample(): void
     {
-        $advancedExample = new \SplFileInfo(\codecept_data_dir('fixtures/basic-example.php'));
+        $basicExample = new \SplFileInfo(\codecept_data_dir('fixtures/basic-example.json.php'));
         $this->filesFinder
             ->find(Argument::type('string'), Argument::exact('php'))
             ->willReturn([
-                $advancedExample->getFilename() => $advancedExample,
+                $basicExample->getBasename('.json.php') => $basicExample,
             ]);
 
         $this->makeInstance()->handle(new DumpMessage('', '', false));
+
+        $generatedFile = new \SplFileInfo(\codecept_data_dir('fixtures/basic-example.json'));
+        $this->assertFileExists($generatedFile->getPathname(), 'The file was not generated');
+
+        \unlink($generatedFile->getPathname());
     }
 
     public function testItShouldAdvancedExample(): void
     {
-        $advancedExample = new \SplFileInfo(\codecept_data_dir('fixtures/advanced-example.php'));
+        $advancedExample = new \SplFileInfo(\codecept_data_dir('fixtures/advanced-example.json.php'));
         $this->filesFinder
             ->find(Argument::type('string'), Argument::exact('php'))
             ->willReturn([
-                $advancedExample->getFilename() => $advancedExample,
+                $advancedExample->getBasename('.json.php') => $advancedExample,
             ]);
 
-//        $this->config
-//            ->has(Argument::type('string'))
-//            ->willReturn(false);
-
         $this->makeInstance()->handle(new DumpMessage('', '', false));
+
+        $generatedFile = new \SplFileInfo(\codecept_data_dir('fixtures/advanced-example.json'));
+        $this->assertFileExists($generatedFile->getPathname(), 'The file was not generated');
+
+        \unlink($generatedFile->getPathname());
     }
 }

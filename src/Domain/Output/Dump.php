@@ -23,6 +23,8 @@ use Psr\EventDispatcher\EventDispatcherInterface;
  */
 class Dump
 {
+    public const JSON_FILE_SUFFIX = '.json';
+
     private ConfigInterface $config;
 
     private FilesFinder $filesFinder;
@@ -47,6 +49,8 @@ class Dump
          *         'theme' => 'theme.json'
          */
         foreach ($this->filesFinder->find($message->getRootFolder(), 'php') as $fileName => $file) {
+            codecept_debug($fileName);
+            codecept_debug($file);
             $injector = $this->configureContainer();
             /** @psalm-suppress UnresolvableInclude */
             $injector->execute(require $file);
@@ -76,12 +80,12 @@ class Dump
         \SplFileInfo $file,
         Blueprint $blueprint
     ): void {
-        $this->dispatcher->dispatch(new GeneratingFile($fileName . '.test.json'));
+        $this->dispatcher->dispatch(new GeneratingFile($fileName . self::JSON_FILE_SUFFIX));
 
-        (new JsonFileWriter($file->getPath() . DIRECTORY_SEPARATOR . $fileName . '.test.json'))
+        (new JsonFileWriter($file->getPath() . DIRECTORY_SEPARATOR . $fileName . self::JSON_FILE_SUFFIX))
             ->write($blueprint);
 
-        $this->dispatcher->dispatch(new GeneratedFile($fileName . '.test.json'));
+        $this->dispatcher->dispatch(new GeneratedFile($fileName . self::JSON_FILE_SUFFIX));
     }
 
     private function generateScssFile(DumpMessage $command, string $fileName, Blueprint $blueprint): void

@@ -28,7 +28,16 @@ class FilesFinder
         string $rootFolder,
         string $extension
     ): iterable {
-        $rootFile = $rootFolder . DIRECTORY_SEPARATOR . self::ROOT_FILE_NAME . '.' . $extension;
+        $maybeWithJsonExtensionToo = '';
+        if ($extension === 'php') {
+            $maybeWithJsonExtensionToo = 'json';
+        }
+
+        $rootFile = \implode('.', \array_filter([
+            $rootFolder . DIRECTORY_SEPARATOR . self::ROOT_FILE_NAME,
+            $maybeWithJsonExtensionToo,
+            $extension,
+        ]));
 
         $rootFileInfo = new \SplFileInfo($rootFile);
         if ($rootFileInfo->isFile()) {

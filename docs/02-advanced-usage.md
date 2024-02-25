@@ -321,7 +321,7 @@ As you can see with the `$container` object you can use a `Color` class without 
 
 The `Styles` directory includes various classes tailored to different aspects of theme styling, aligned with the `theme.json` structure. These classes, such as `Border`, `Color`, `Css`, `Outline`, `Spacing`, `Typography`, offer specific methods for configuring corresponding style properties, all method declared in each class follows the `theme.json` schema and each class has its own methods following the properties they represent.
 
-You can see more examples in the [tests/_data/fixtures/advanced-example.php](../tests/_data/fixtures/advanced-example.php) file.
+You can see more examples in the [tests/_data/fixtures/advanced-example.json.php](../tests/_data/fixtures/advanced-example.json.php) file.
 
 ### Advanced Service Injection with Empress and PSR-11 Container
 
