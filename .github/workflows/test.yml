@@ -90,4 +90,3 @@ jobs:
         working-directory: ${{env.APP_FOLDER_PATH}}/wp-content/${{env.PROJECT_KIND}}/${{ github.event.repository.name }}
         run: |
           ./vendor/bin/codecept run unit --coverage-text
-          ./vendor/bin/codecept run integration

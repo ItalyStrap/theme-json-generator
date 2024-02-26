@@ -61,7 +61,7 @@ This package adheres to the [SemVer](http://semver.org/) specification and will 
 
 ## Changelog
 
-
+Until the first stable version is released BC breaks may occur.
 
 [🆙](#table-of-contents)
 
