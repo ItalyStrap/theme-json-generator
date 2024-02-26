@@ -85,9 +85,9 @@ jobs:
           wp site empty --yes
           wp plugin activate ${{ github.event.repository.name }}
           wp plugin list --status=active
-          chmod -R 777 wp-content/${{env.PROJECT_KIND}}/${{ github.event.repository.name }}
-          ls -la wp-content/${{env.PROJECT_KIND}}/${{ github.event.repository.name }}
-          wp db export wp-content/${{env.PROJECT_KIND}}/${{ github.event.repository.name }}/tests/_data/dump.sql
+          chmod -R 777 ${{env.APP_FOLDER_PATH}}/wp-content/${{env.PROJECT_KIND}}/${{ github.event.repository.name }}
+          ls -la ${{env.APP_FOLDER_PATH}}/wp-content/${{env.PROJECT_KIND}}/${{ github.event.repository.name }}
+          wp db export ${{env.APP_FOLDER_PATH}}/wp-content/${{env.PROJECT_KIND}}/${{ github.event.repository.name }}/tests/_data/dump.sql
 
       - name: Build codeception
         working-directory: ${{env.APP_FOLDER_PATH}}/wp-content/${{env.PROJECT_KIND}}/${{ github.event.repository.name }}
