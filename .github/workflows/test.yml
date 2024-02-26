@@ -94,5 +94,5 @@ jobs:
       - name: Run Unit & Integration test
         working-directory: ${{env.APP_FOLDER_PATH}}/wp-content/${{env.PROJECT_KIND}}/${{ github.event.repository.name }}
         run: |
-          ls -la /tmp/app/wp-includes/class-wpdb.php
+          ls -la ${{env.APP_FOLDER_PATH}}/wp-includes/class-wpdb.php
           ./vendor/bin/codecept run integration
