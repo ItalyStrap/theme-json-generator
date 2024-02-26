@@ -71,6 +71,7 @@ jobs:
           wp core update-db
           cp -r $GITHUB_WORKSPACE ${{env.APP_FOLDER_PATH}}/wp-content/${{env.PROJECT_KIND}}/${{ github.event.repository.name }}
           cp $GITHUB_WORKSPACE/tests/_data/index.php ${{env.APP_FOLDER_PATH}}/wp-content/${{env.PROJECT_KIND}}/${{ github.event.repository.name }}/index.php
+          pwd
           ls -la
 
       - uses: "ramsey/composer-install@v2"
