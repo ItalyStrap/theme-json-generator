@@ -17,8 +17,13 @@ on:
   workflow_dispatch:
   pull_request:
   push:
-    branches:
-      - master
+    paths:
+      - '**workflows/test.yml'
+      - '**.env'
+      - '**.php'
+      - '**codeception.dist.yml'
+      - '**composer.json'
+      - '**infection.dist'
 
 
 jobs:
