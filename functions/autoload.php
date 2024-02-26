@@ -1,16 +1,9 @@
 <?php
+
 declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator;
 
-use WP_CLI;
+use ItalyStrap\ThemeJsonGenerator\Infrastructure\Cli\WPCLI\Bootstrap;
 
-if ( !class_exists('WP_CLI') ) {
-	return;
-}
-
-function test_callable( string $path ): array {
-	return ['key'=>'value'];
-}
-
-WP_CLI::add_command( 'theme-json generate', '\ItalyStrap\ThemeJsonGenerator\CLI\Command' );
+(new Bootstrap())();

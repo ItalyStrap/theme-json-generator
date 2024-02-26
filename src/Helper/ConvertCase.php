@@ -18,7 +18,7 @@ trait ConvertCase
     private function camelToUnderscore(string $string, string $us = '-'): string
     {
         return strtolower((string)preg_replace(
-            '/(?<=\d)(?=[A-Za-z])|(?<=[A-Za-z])(?=\d)|(?<=[a-z])(?=[A-Z])/',
+            '#(?<=\d)(?=[A-Za-z])|(?<=[A-Za-z])(?=\d)|(?<=[a-z])(?=[A-Z])#',
             $us,
             $string
         ));

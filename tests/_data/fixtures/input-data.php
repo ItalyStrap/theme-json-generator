@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\Tests;
 
-use ItalyStrap\ThemeJsonGenerator\SectionNames;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\SectionNames;
 
 return [
     SectionNames::VERSION => 1,
@@ -315,7 +315,7 @@ return [
             'fontFamilies' => [
                 [
 					// phpcs:ignore
-					'fontFamily' => '-apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Oxygen-Sans, Ubuntu, Cantarell, \'Helvetica Neue\', sans-serif',
+					'fontFamily' => "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif",
                     'slug' => 'system-font',
                     'name' => 'System Font',
                 ],

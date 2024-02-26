@@ -14,8 +14,16 @@ use Composer\Package\PackageInterface;
 use Composer\Package\RootPackageInterface;
 use Composer\Repository\RepositoryManager;
 use ItalyStrap\Config\ConfigInterface;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Palette;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorInterface;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\GradientInterface;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetInterface;
+use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FilesFinder;
+use JsonSchema\Validator;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
+use Psr\EventDispatcher\EventDispatcherInterface;
+use ScssPhp\ScssPhp\Compiler;
 use UnitTester;
 
 class UnitTestCase extends Unit
@@ -33,6 +41,13 @@ class UnitTestCase extends Unit
     protected function inputData(): array
     {
         return $this->input_data;
+    }
+
+    protected ObjectProphecy $item;
+
+    protected function makeItem(): PresetInterface
+    {
+        return $this->item->reveal();
     }
 
     protected ObjectProphecy $config;
@@ -98,8 +113,63 @@ class UnitTestCase extends Unit
         return $this->package->reveal();
     }
 
-	// phpcs:ignore -- Method from Codeception
-	protected function _before() {
+    protected ObjectProphecy $colorInfo;
+
+    protected function makeColorInfo(): ColorInterface
+    {
+        return $this->colorInfo->reveal();
+    }
+
+    protected ObjectProphecy $gradient;
+
+    protected function makeGradient(): GradientInterface
+    {
+        return $this->gradient->reveal();
+    }
+
+    protected ObjectProphecy $palette;
+
+    protected function makePalette(): Palette
+    {
+        return $this->palette->reveal();
+    }
+
+    protected ObjectProphecy $dispatcher;
+
+    protected function makeDispatcher(): EventDispatcherInterface
+    {
+        return $this->dispatcher->reveal();
+    }
+
+    protected ObjectProphecy $filesFinder;
+
+    protected function makeFilesFinder(): FilesFinder
+    {
+        return $this->filesFinder->reveal();
+    }
+
+    protected ObjectProphecy $validator;
+
+    protected function makeValidator(): Validator
+    {
+        return $this->validator->reveal();
+    }
+
+    protected ObjectProphecy $compiler;
+
+    protected function makeCompiler(): Compiler
+    {
+        return $this->compiler->reveal();
+    }
+
+    // phpcs:ignore -- Method from Codeception
+    protected function _before()
+    {
+        $this->item = $this->prophesize(PresetInterface::class);
+        $this->colorInfo = $this->prophesize(ColorInterface::class);
+        $this->gradient = $this->prophesize(GradientInterface::class);
+        $this->palette = $this->prophesize(Palette::class);
+
         $this->config = $this->prophesize(ConfigInterface::class);
         $this->jsonFile = $this->prophesize(JsonFile::class);
         $this->composer = $this->prophesize(Composer::class);
@@ -109,6 +179,10 @@ class UnitTestCase extends Unit
         $this->link = $this->prophesize(Link::class);
         $this->repositoryManager = $this->prophesize(RepositoryManager::class);
         $this->package = $this->prophesize(PackageInterface::class);
+        $this->dispatcher = $this->prophesize(EventDispatcherInterface::class);
+        $this->filesFinder = $this->prophesize(FilesFinder::class);
+        $this->validator = $this->prophesize(Validator::class);
+        $this->compiler = $this->prophesize(Compiler::class);
 
         $this->composer->getConfig()->willReturn($this->makeComposerConfig());
         $this->composer->getPackage()->willReturn($this->makeRootPackage());

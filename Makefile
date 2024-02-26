@@ -2,6 +2,9 @@ DOCKER_FOLDER = .docker
 DOCKER_DIR = cd $(DOCKER_FOLDER) &&
 HOST_OWNER = $(shell id -u):$(shell id -g)
 FILES_OWNERSHIP = sudo chown -R $(HOST_OWNER) .
+DB_USER = $(shell cat .docker/.env | grep DB_USER | cut -d '=' -f2)
+DB_PASSWORD = $(shell cat .docker/.env | grep DB_PASSWORD | cut -d '=' -f2)
+DB_NAME = $(shell cat .docker/.env | grep DB_NAME | cut -d '=' -f2)
 
 default: help
 
@@ -11,7 +14,7 @@ default: help
 help: ## Display this help screen
 	@grep -hP '^\w.*?:.*##.*$$' $(MAKEFILE_LIST) | sort -u | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-.PHONY: files/mod
+.PHONY: files/permission
 files/permission:	### Set the executable files in Docker folder permissions to 777
 	@echo "Checking files permissions"
 	@find $(DOCKER_FOLDER) -maxdepth 1 -type f -exec grep -lE '^#!' {} \; | xargs chmod 777
@@ -43,6 +46,12 @@ down:	### Stop the containers inside the ./docker folder
 	@echo "Stopping the containers"
 	@$(DOCKER_DIR) docker-compose down --remove-orphans --volumes
 	@echo "Containers stopped"
+
+.PHONY: db/create
+db/create: up	### Create the database for the tests
+	@echo "Creating the database for the tests"
+	@$(DOCKER_DIR) docker-compose exec mysql mysql -u $(DB_USER) -p$(DB_PASSWORD) -e "CREATE DATABASE IF NOT EXISTS $(DB_NAME);"
+	@echo "Database created"
 
 # Composer commands
 
@@ -115,10 +124,10 @@ acceptance: up	### Run the acceptance tests
 	@$(DOCKER_DIR) ./codecept run acceptance
 
 .PHONY: tests
-tests: unit	### Run unit and integration tests
+tests: unit	integration functional ### Run unit and integration tests
 
 .PHONY: qa
-qa: cs psalm unit ### Run all the tests
+qa: cs psalm unit integration functional ### Run all the tests
 
 # Infection commands
 
@@ -172,12 +181,6 @@ generate: up	### Run the codeception generate test files in unit and integration
 	@if [ ! -z "$(FILE)" -a ! -f "tests/unit/$(FILE)Test.php" ]; then \
 		echo "File does not exists, generating now."; \
 		./vendor/bin/codecept generate:test unit $(FILE); \
-	else \
-		echo "FILE variable empty or file already generated"; \
-	fi
-	@if [ ! -z "$(FILE)" -a ! -f "tests/integration/$(FILE)Test.php" ]; then \
-		echo "File does not exists, generating now."; \
-		./vendor/bin/codecept generate:wpunit integration $(FILE); \
 	else \
 		echo "FILE variable empty or file already generated"; \
 	fi

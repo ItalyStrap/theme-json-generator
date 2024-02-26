@@ -5,8 +5,8 @@
 # Codeception
 codeception.yml
 
-# Rector
-rector.php
+# PHPCS
+.phpcs-cache
 
 # Common File
 *.local

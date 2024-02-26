@@ -15,8 +15,15 @@
     <rule ref="PHPCompatibility"/>
     <config name="testVersion" value="7.4-"/>
 
+    <file>./bin/</file>
+    <file>./bus/</file>
+    <file>./functions/</file>
     <file>./src/</file>
     <file>./tests/</file>
+    <file>.phpstorm.meta.php</file>
+    <file>ecs.php</file>
+    <file>namespace-bc-aliases.php</file>
+    <file>rector.php</file>
 
     <rule ref="PSR12">
     </rule>

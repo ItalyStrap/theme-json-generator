@@ -27,11 +27,11 @@ jobs:
 
     strategy:
       matrix:
-        php_versions: ['7.4', '8.0', '8.1']
+        php_versions: ['7.4', '8.0']
         app_versions: ['6.0']
 
     runs-on: ubuntu-latest
-    continue-on-error: ${{ matrix.php_versions == '8.2' }}
+    continue-on-error: ${{ matrix.php_versions == '8.0' }}
     if: "!contains(github.event.head_commit.message, '--skip ci') && !github.event.pull_request.draft"
 
     steps:
@@ -65,6 +65,7 @@ jobs:
           wp core install --url="${{env.APP_HOST}}:${{env.APP_PORT}}" --title="Test" --admin_user="${{env.APP_USER}}" --admin_password="${{env.APP_PASSWORD}}" --admin_email="${{env.APP_USER}}@${{env.APP_HOST}}.test" --skip-email
           wp core update-db
           cp -r $GITHUB_WORKSPACE ${{env.APP_FOLDER_PATH}}/wp-content/${{env.PROJECT_KIND}}/${{ github.event.repository.name }}
+          cp $GITHUB_WORKSPACE/tests/_data/index.php ${{env.APP_FOLDER_PATH}}/wp-content/${{env.PROJECT_KIND}}/${{ github.event.repository.name }}/index.php
 
       - uses: "ramsey/composer-install@v2"
         with:

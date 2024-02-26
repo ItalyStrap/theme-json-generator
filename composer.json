@@ -2,7 +2,7 @@
     "name": "italystrap/theme-json-generator",
     "description": "WordPress theme.json generator from a PHP array",
     "keywords": ["WordPress", "WordPress theme.json", "theme.json"],
-    "type": "composer-plugin",
+    "type": "library",
     "license": "MIT",
     "authors": [
         {
@@ -12,22 +12,35 @@
             "role": "Developer"
         }
     ],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
         "php" : ">=7.4",
+        "ext-json": "*",
+        "composer/composer": "^2.1",
         "composer-plugin-api": "^2.0",
+
         "italystrap/config": "^2.4",
+        "italystrap/empress": "^2.0",
+        "italystrap/finder": "dev-master",
+
         "mexitek/phpcolors": "^1.0",
-        "spatie/color": "~1.5.0"
+        "spatie/color": "~1.5.0",
+        "phenx/php-font-lib": "^0.5.4",
+
+        "justinrainbow/json-schema": "^5.2",
+        "scssphp/scssphp": "^1.12.1",
+        "brick/varexporter": "^0.3.8",
+        "webimpress/safe-writer": "^2.2",
+
+        "symfony/polyfill-php80": "^1.22"
     },
     "require-dev": {
         "lucatume/wp-browser": "^3.1",
-        "lucatume/function-mocker-le": "^1.0",
-        "codeception/module-asserts": "^1.0",
         "phpspec/prophecy-phpunit": "^2.0",
 
+        "codeception/module-asserts": "^1.0",
         "codeception/module-phpbrowser": "^1.0",
-        "codeception/module-webdriver": "^1.0",
         "codeception/module-db": "^1.0",
         "codeception/module-filesystem": "^1.0",
         "codeception/module-cli": "^1.0",
@@ -35,7 +48,7 @@
 
         "squizlabs/php_codesniffer": "*",
         "phpcompatibility/php-compatibility": "*",
-        "dealerdirect/phpcodesniffer-composer-installer": "^0.7",
+        "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
 
         "vimeo/psalm": "^5.6",
 
@@ -45,38 +58,45 @@
         "infection/infection": "^0.26.6",
         "infection/codeception-adapter": "^0.4.1",
 
-        "rector/rector": "^0.15.17",
+        "rector/rector": "^0.19.0",
+        "symplify/easy-coding-standard": "^12.0",
 
         "italystrap/debug": "dev-master",
-        "composer/composer": "^2.1",
-        "wp-cli/wp-cli": "^2.7"
+        "wp-cli/wp-cli": "^2.7",
+
+        "psr/event-dispatcher": "^1.0",
+        "sabberworm/php-css-parser": "^8.0"
     },
     "autoload": {
         "psr-4": {
+            "ItalyStrap\\Bus\\": "bus/",
             "ItalyStrap\\ThemeJsonGenerator\\": "src/"
         },
         "files": [
-            "functions/autoload.php"
+            "functions/autoload.php",
+            "namespace-bc-aliases.php"
         ]
     },
     "autoload-dev": {
         "psr-4": {
             "ItalyStrap\\Tests\\": "tests/src/",
-            "ItalyStrap\\Tests\\Unit\\": "tests/unit/"
+            "ItalyStrap\\Tests\\Unit\\": "tests/unit/",
+            "ItalyStrap\\Tests\\Integration\\": "tests/integration/",
+            "ItalyStrap\\Tests\\Functional\\": "tests/functional/"
         }
     },
     "suggest": {
         "spatie/color": "Allows to convert CSS color"
     },
-    "extra": {
-        "class": "ItalyStrap\\ThemeJsonGenerator\\ComposerPlugin"
-    },
+    "bin": [
+        "bin/theme-json"
+    ],
     "scripts": {
         "cs": [
-            "@php vendor/bin/phpcs -p"
+            "@php ./vendor/bin/phpcs -p"
         ],
         "cs:fix": [
-            "@php vendor/bin/phpcbf -p"
+            "@php ./vendor/bin/phpcbf -p"
         ],
         "psalm": [
             "@php ./vendor/bin/psalm --no-cache"
@@ -93,7 +113,7 @@
             "@php ./vendor/bin/infection --threads=max"
         ],
         "bench": [
-            "@php ./vendor/bin/phpbench run tests/Benchmark --report=performance"
+            "@php ./vendor/bin/phpbench run"
         ],
         "metrics": [
             "@php ./vendor/bin/phpmetrics --report-html='./tests/_output/report' ./src"
@@ -107,9 +127,8 @@
         "qa": [
             "@cs",
             "@psalm",
-            "@unit",
-            "@integration",
-            "@infection"
+            "@rector",
+            "@unit"
         ],
         "rector": [
             "@php ./vendor/bin/rector process --dry-run"
@@ -117,9 +136,27 @@
         "rector:fix": [
             "@php ./vendor/bin/rector process"
         ],
-        "json": [
-            "ItalyStrap\\ThemeJsonGenerator\\ComposerPlugin::run"
+        "ecs": [
+            "@php ./vendor/bin/ecs"
+        ],
+        "ecs:fix": [
+            "@php ./vendor/bin/ecs --fix"
         ]
+    },
+    "scripts-descriptions": {
+        "cs": "Run Code Sniffer",
+        "cs:fix": "Run Code Sniffer and fix errors",
+        "psalm": "Run Psalm",
+        "unit": "Run Unit tests",
+        "integration": "Run Integration tests",
+        "infection": "Run Infection",
+        "bench": "Run Benchmark",
+        "metrics": "Run Metrics",
+        "insights": "Run Insights",
+        "clean": "Clean Codeception cache",
+        "qa": "Run all QA tools",
+        "rector": "Run Rector",
+        "rector:fix": "Run Rector and fix errors"
     },
     "support"    : {
         "issues": "https://github.com/ItalyStrap/theme-json-generator/issues",
