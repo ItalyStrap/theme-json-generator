@@ -66,7 +66,6 @@
         "italystrap/debug": "dev-master",
         "wp-cli/wp-cli": "^2.7",
 
-        "psr/event-dispatcher": "^1.0",
         "sabberworm/php-css-parser": "^8.0"
     },
     "autoload": {
@@ -88,7 +87,6 @@
         }
     },
     "suggest": {
-        "spatie/color": "Allows to convert CSS color"
     },
     "bin": [
         "bin/theme-json"

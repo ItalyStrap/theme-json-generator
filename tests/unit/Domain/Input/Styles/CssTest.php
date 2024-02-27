@@ -12,7 +12,7 @@ use ScssPhp\ScssPhp\Compiler;
 class CssTest extends UnitTestCase
 {
     use CssStyleStringProviderTrait {
-        styleProvider as styleProviderTrait;
+        CssStyleStringProviderTrait::styleProvider as styleProviderTrait;
     }
 
     private function makeInstance(): Css

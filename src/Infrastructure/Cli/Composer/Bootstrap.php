@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator\Infrastructure\Cli\Composer;
 
 use Composer\Console\Application;
+use ItalyStrap\Bus\Bus;
 use ItalyStrap\Config\Config;
 use ItalyStrap\Config\ConfigInterface;
 use ItalyStrap\Empress\Injector;
@@ -49,8 +50,8 @@ final class Bootstrap
         $application->add($injector->make(DumpCommand::class));
         /** @psalm-suppress InvalidArgument */
         $application->add($injector->make(ValidateCommand::class, [
-            '+bus' => static function (string $named_param, Injector $injector): \ItalyStrap\Bus\Bus {
-                $bus = new \ItalyStrap\Bus\Bus(
+            '+bus' => static function (string $named_param, Injector $injector): Bus {
+                $bus = new Bus(
                     $injector->make(Validate::class)
                 );
                 $bus->addMiddleware(
@@ -61,11 +62,9 @@ final class Bootstrap
             },
         ]));
         $application->add($injector->make(InfoCommand::class, [
-            '+bus' => static function (string $named_param, Injector $injector): \ItalyStrap\Bus\Bus {
-                return new \ItalyStrap\Bus\Bus(
-                    $injector->make(Info::class)
-                );
-            },
+            '+bus' => static fn(string $named_param, Injector $injector): Bus => new Bus(
+                $injector->make(Info::class)
+            ),
         ]));
         return $application->run();
     }
