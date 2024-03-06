@@ -398,6 +398,7 @@ To know more about `css` field:
 * https://developer.wordpress.org/news/2023/04/21/per-block-css-with-theme-json/
 * https://developer.wordpress.org/themes/global-settings-and-styles/
 * https://fullsiteediting.com/lessons/how-to-use-custom-css-in-theme-json/
+* https://make.wordpress.org/core/2022/12/22/whats-new-in-gutenberg-14-8-21-december/#Add-custom-CSS-rules-for-your-site
 
 ### Advanced Service Injection with Empress and PSR-11 Container
 
