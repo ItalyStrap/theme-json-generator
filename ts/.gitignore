@@ -1,0 +1,8 @@
+# Node folder
+node_modules/
+
+# Dist folder
+dist/
+
+# Theme.json file
+theme.json

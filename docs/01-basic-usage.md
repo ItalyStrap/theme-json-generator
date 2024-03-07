@@ -14,6 +14,7 @@ The CLI tool simplifies the process of working with JSON configurations for your
 
 ### Initializing the Environment: The init Command
 
+
 To kickstart the development process and prepare your theme for JSON configuration, the `init` command lays the foundational structure required for generating your `theme.json` and entrypoint PHP files efficiently.
 
 How to Use
