@@ -9,6 +9,7 @@
 		"outDir": "dist",
 		"module": "node16",
 		"target": "es2022",
+		"downlevelIteration": true,
 		"strict": true,
 		"noUncheckedIndexedAccess": true,
 		"esModuleInterop": true,
