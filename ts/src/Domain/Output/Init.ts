@@ -1,4 +1,4 @@
-import {InitMessage} from '../../Application/InitMessage';
+import {InitMessage} from '../../Application';
 import {File, FilesFinder} from "../../Infrastructure/Filesystem";
 
 export class Init {

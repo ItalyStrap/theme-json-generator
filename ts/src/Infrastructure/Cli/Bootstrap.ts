@@ -3,12 +3,13 @@ import {Command} from 'commander';
 import {DumpCommand, InfoCommand, InitCommand, ValidateCommand} from "../../Application/Commands";
 import {Init, Validate} from "../../Domain/Output";
 import {FilesFinder} from "../Filesystem";
+import {Dump} from "../../Domain/Output/Dump";
 
 export class Bootstrap {
     run(): void {
         const program = new Command();
         const initCommand = new InitCommand(new Init(new FilesFinder()));
-        const dumpCommand = new DumpCommand();
+        const dumpCommand = new DumpCommand(new Dump(new FilesFinder()));
         const validateCommand = new ValidateCommand(new Validate(new FilesFinder()));
         const infoCommand = new InfoCommand();
 
