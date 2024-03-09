@@ -1,9 +1,8 @@
 import {Command} from 'commander';
 //
 import {DumpCommand, InfoCommand, InitCommand, ValidateCommand} from "../../Application/Commands";
-import {Init, Validate} from "../../Domain/Output";
+import {Init, Validate, Dump} from "../../Domain/Output";
 import {FilesFinder} from "../Filesystem";
-import {Dump} from "../../Domain/Output/Dump";
 
 export class Bootstrap {
     run(): void {

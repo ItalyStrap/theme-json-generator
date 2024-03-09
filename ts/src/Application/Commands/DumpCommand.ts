@@ -16,6 +16,7 @@ export class DumpCommand extends Command implements CommandType{
     public configure(): void {
         this.name('dump');
         this.description('Dump the application state');
+        this.option('-d, --dry-run', 'Dry run mode');
     }
 
     public execute(): DumpCommand {
@@ -23,7 +24,7 @@ export class DumpCommand extends Command implements CommandType{
         this.action(() => {
             const rootFolder = process.cwd();
 
-            const message = new DumpMessage(rootFolder);
+            const message = new DumpMessage(rootFolder, this.opts().dryRun || false);
             this.dump.handle(message);
         });
 
