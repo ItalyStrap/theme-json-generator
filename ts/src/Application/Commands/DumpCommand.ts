@@ -24,7 +24,7 @@ export class DumpCommand extends Command implements CommandType{
         this.action(() => {
             const rootFolder = process.cwd();
 
-            const message = new DumpMessage(rootFolder, this.opts().dryRun || false);
+            const message = new DumpMessage(rootFolder, this.opts()?.dryRun);
             this.dump.handle(message);
         });
 

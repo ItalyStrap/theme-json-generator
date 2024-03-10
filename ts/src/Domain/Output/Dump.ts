@@ -1,5 +1,6 @@
 import {File, FilesFinder} from "../../Infrastructure/Filesystem";
 import {DumpMessage} from "../../Application";
+import {Config} from "../../Application/Config";
 
 export class Dump {
     private fileFinder: FilesFinder;
@@ -9,26 +10,40 @@ export class Dump {
     }
 
     public handle(message: DumpMessage): void {
-        console.log('Dump logic goes here');
-        const files = this.fileFinder.find(message.getRootFolder(), 'js');
+        const files = this.fileFinder.find(message.getRootFolder(), 'json.js');
 
         for (const file of files) {
+            console.log(`Dumping file: ${file.getFileName()}`);
+
             if (message.isDryRun()) {
                 console.log('Dry run mode');
                 continue;
             }
 
-            console.log(`Dumping file: ${file.getFileName()}`);
-
-            this.dumpFile(file).then(r => { console.log('done') } );
+            this.dumpFile(file)
+                .then(r => {
+                    // console.log('done')
+                    // console.log(r)
+                } )
+                .catch(e => { console.error(e) } );
         }
     }
 
-    private async dumpFile(file: File): Promise<void> {
+    private async dumpFile(file: File): Promise<number> {
         try {
-            console.log(`Dumping file: ${file.getFileName()}`);
+            console.log(`Async Dump file: ${file.getFileName()}`);
+            console.log(file.getFilePath());
+            // const module = await import(file.getFilePath());
+            // console.log(module.default);
+            const module = require(file.getFilePath());
 
+            const config = new Config();
+            module(config);
+            console.log(JSON.stringify(config, null, 2));
 
+            // console.log('blueprint');
+            // console.log(blueprint.version);
+            // console.log(JSON.stringify(blueprint, null, 2));
 
             // console.log(file.getFilePath());
             // // const module = await import(file.getFilePath());
@@ -43,8 +58,10 @@ export class Dump {
             // // console.log(module.default);
             // console.log(module.default('ciao'));
 
+            return 0;
         } catch (e) {
             console.error(e);
+            return 1;
         }
     }
 }

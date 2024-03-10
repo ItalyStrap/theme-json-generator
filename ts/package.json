@@ -14,7 +14,10 @@
   "scripts": {
     "dev": "tsc --watch",
     "build": "tsc",
-    "test": "jest"
+    "test": "jest",
+    "tj:init": "node bin/theme-json init",
+    "tj:dump": "node bin/theme-json dump",
+    "tj:validate": "node bin/theme-json validate"
   },
   "repository": {
     "type": "git",

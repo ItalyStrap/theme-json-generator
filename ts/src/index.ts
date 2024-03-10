@@ -1,4 +1,5 @@
 import {Bootstrap} from './Infrastructure/Cli/Bootstrap';
 
-const bootstrap = new Bootstrap();
-bootstrap.run();
+((bootstrap) => {
+    bootstrap.run();
+})(new Bootstrap());
