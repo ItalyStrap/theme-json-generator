@@ -1,9 +1,9 @@
-import {Command} from "commander";
+import {Command} from 'commander';
 //
-import {CommandType} from "./CommandType";
+import {CommandType} from './CommandType';
 //
-import {ValidateMessage} from "../ValidateMessage";
-import {Validate} from "../../Domain/Output";
+import {ValidateMessage} from '../ValidateMessage';
+import {Validate} from '../../Domain/Output';
 
 export class ValidateCommand extends Command implements CommandType {
     private validate: Validate;

@@ -4,7 +4,7 @@ export class Config<K extends string, V> {
     private default = null as V | null;
 
     constructor(initialConfig: Record<K, V> = {} as Record<K, V>) {
-        this.merge(initialConfig)
+        this.merge(initialConfig);
     }
 
     get(key: K, defaultValue: V | null = null): V | null {
@@ -45,7 +45,11 @@ export class Config<K extends string, V> {
         return this.storage;
     }
 
-    private findValue(object: any, keys: Array<string | number>, defaultValue: any = null): any {
+    private findValue(
+        object: any,
+        keys: Array<string | number>,
+        defaultValue: any = null
+    ): any {
         let current = object;
 
         for (const key of keys) {
@@ -58,7 +62,11 @@ export class Config<K extends string, V> {
         return current;
     }
 
-    private insertValue(object: any, keys: Array<string | number>, value: any): boolean {
+    private insertValue(
+        object: any,
+        keys: Array<string | number>,
+        value: any
+    ): boolean {
         let current = object;
 
         if (keys.length === 0) {
@@ -77,8 +85,13 @@ export class Config<K extends string, V> {
 
             if (current[key] === undefined) {
                 current[key] = shouldCreateArray ? [] : {};
-            } else if (typeof current[key] !== 'object' || (shouldCreateArray && !Array.isArray(current[key]))) {
-                throw new Error(`Expected an object or array at key "${key}", found: ${typeof current[key]}`);
+            } else if (
+                typeof current[key] !== 'object' ||
+                (shouldCreateArray && !Array.isArray(current[key]))
+            ) {
+                throw new Error(
+                    `Expected an object or array at key "${key}", found: ${typeof current[key]}`
+                );
             }
 
             current = current[key];

@@ -1,5 +1,5 @@
-import {ValidateMessage} from "../../Application";
-import {FilesFinder} from "../../Infrastructure/Filesystem";
+import {ValidateMessage} from '../../Application';
+import {FilesFinder} from '../../Infrastructure/Filesystem';
 
 export class Validate {
     private fileFinder: FilesFinder;

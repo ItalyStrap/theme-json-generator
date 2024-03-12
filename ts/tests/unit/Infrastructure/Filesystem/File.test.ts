@@ -1,5 +1,5 @@
 import {describe, expect, test} from '@jest/globals';
-import * as fs from "fs";
+import * as fs from 'fs';
 //
 import {File} from '../../../../src/Infrastructure/Filesystem';
 
@@ -38,12 +38,16 @@ describe('File class', () => {
     });
 
     test('Get Short Name', () => {
-        const file = new File(`${process.cwd()}/tests/fixtures/simple/theme.json`);
+        const file = new File(
+            `${process.cwd()}/tests/fixtures/simple/theme.json`
+        );
         expect(file.getShortName()).toBe('theme');
     });
 
     test('Get Base Name', () => {
-        const file = new File(`${process.cwd()}/tests/fixtures/simple/theme.json`);
+        const file = new File(
+            `${process.cwd()}/tests/fixtures/simple/theme.json`
+        );
         expect(file.getBaseName()).toBe('theme.json');
         expect(file.getBaseName('.json')).toBe('theme');
     });

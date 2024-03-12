@@ -1,5 +1,5 @@
 import {InitMessage} from '../../Application';
-import {File, FilesFinder} from "../../Infrastructure/Filesystem";
+import {File, FilesFinder} from '../../Infrastructure/Filesystem';
 
 export class Init {
     private fileFinder: FilesFinder;

@@ -1,9 +1,9 @@
 const interpret = require('interpret');
 import * as fs from 'fs';
 //
-import {File, FilesFinder} from "../../Infrastructure/Filesystem";
-import {DumpMessage} from "../../Application";
-import {Config} from "../../Application/Config";
+import {File, FilesFinder} from '../../Infrastructure/Filesystem';
+import {DumpMessage} from '../../Application';
+import {Config} from '../../Application/Config';
 
 export class Dump {
     private fileFinder: FilesFinder;
@@ -24,11 +24,13 @@ export class Dump {
             }
 
             this.dumpFile(file)
-                .then(r => {
+                .then((r) => {
                     // console.log('done')
                     // console.log(r)
-                } )
-                .catch(e => { console.error(e) } );
+                })
+                .catch((e) => {
+                    console.error(e);
+                });
         }
 
         return 0;

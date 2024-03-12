@@ -7,11 +7,11 @@ module.exports = (config = null) => {
         [SectionNames.TITLE]: 'Example Theme',
         [SectionNames.DESCRIPTION]: 'This is an example theme.',
         [SectionNames.SETTINGS]: {
-            "layout": {
-                "contentSize": "var(--wp--custom--content-size)",
-                "wideSize": "var(--wp--custom--wide-size)"
+            layout: {
+                contentSize: 'var(--wp--custom--content-size)',
+                wideSize: 'var(--wp--custom--wide-size)',
             },
         },
         [SectionNames.STYLES]: {},
     });
-}
+};

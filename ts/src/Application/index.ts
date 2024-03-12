@@ -1,3 +1,3 @@
-export * from './InitMessage'
-export * from './DumpMessage'
-export * from './ValidateMessage'
+export * from './InitMessage';
+export * from './DumpMessage';
+export * from './ValidateMessage';

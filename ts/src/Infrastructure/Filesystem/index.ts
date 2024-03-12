@@ -1,2 +1,2 @@
-export * from './FilesFinder'
-export * from './File'
+export * from './FilesFinder';
+export * from './File';

@@ -1,7 +1,7 @@
 import {describe, expect, test} from '@jest/globals';
 //
-import {Blueprint, Config} from "../../../../src/Application/Config";
-import exp = require("constants");
+import {Blueprint, Config} from '../../../../src/Application/Config';
+import exp = require('constants');
 //
 
 describe('Config class', () => {
@@ -12,7 +12,9 @@ describe('Config class', () => {
 
         config.set('key2', 1);
         expect(config.get('key2')).toBe(1);
-        expect(JSON.stringify(config, null, 2)).toBe('{\n  "key": "value",\n  "key2": 1\n}');
+        expect(JSON.stringify(config, null, 2)).toBe(
+            '{\n  "key": "value",\n  "key2": 1\n}'
+        );
     });
 
     test('Config class merge', () => {
@@ -40,7 +42,10 @@ describe('Config class', () => {
         const config = new Config<string, number | string>();
         config.set('key', 'value');
         config.set('key2', 1);
-        expect(config.toArray()).toStrictEqual([['key', 'value'], ['key2', 1]]);
+        expect(config.toArray()).toStrictEqual([
+            ['key', 'value'],
+            ['key2', 1],
+        ]);
     });
 
     test('Config class toJSON', () => {
@@ -59,13 +64,29 @@ describe('Config class', () => {
         expect(config.toJSON()).toStrictEqual({key: {key: 'new value'}});
 
         config.set('key.key2.key4', 'value');
-        expect(config.toJSON()).toStrictEqual({key: {key: 'new value', key2: {key4: 'value'}}});
+        expect(config.toJSON()).toStrictEqual({
+            key: {key: 'new value', key2: {key4: 'value'}},
+        });
 
         config.set('key.key2.key3.0', {key: 'value'});
-        expect(config.toJSON()).toStrictEqual({key: {key: 'new value', key2: {key4: 'value', key3: [{key: 'value'}]}}});
+        expect(config.toJSON()).toStrictEqual({
+            key: {
+                key: 'new value',
+                key2: {key4: 'value', key3: [{key: 'value'}]},
+            },
+        });
 
         config.set('key.key2.key5', [{key: 'value'}, {key: 'value'}]);
-        expect(config.toJSON()).toStrictEqual({key: {key: 'new value', key2: {key4: 'value', key3: [{key: 'value'}], key5: [{key: 'value'}, {key: 'value'}]}}});
+        expect(config.toJSON()).toStrictEqual({
+            key: {
+                key: 'new value',
+                key2: {
+                    key4: 'value',
+                    key3: [{key: 'value'}],
+                    key5: [{key: 'value'}, {key: 'value'}],
+                },
+            },
+        });
     });
 });
 

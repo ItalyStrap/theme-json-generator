@@ -2,8 +2,8 @@ import {describe, expect, test} from '@jest/globals';
 //
 import {FilesFinder} from '../../../../src/Infrastructure/Filesystem';
 import {Dump} from '../../../../src/Domain/Output';
-import {DumpMessage} from "../../../../src/Application";
-import {Blueprint, Config} from "../../../../src/Application/Config";
+import {DumpMessage} from '../../../../src/Application';
+import {Blueprint, Config} from '../../../../src/Application/Config';
 
 describe('Dump class', () => {
     test('Dump message', () => {

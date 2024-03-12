@@ -1,9 +1,9 @@
 import {Command} from 'commander';
 //
-import {CommandType} from "./CommandType";
+import {CommandType} from './CommandType';
 //
 import {InitMessage} from '../InitMessage';
-import {Init} from "../../Domain/Output";
+import {Init} from '../../Domain/Output';
 
 export class InitCommand extends Command implements CommandType {
     private init: Init;
@@ -16,7 +16,10 @@ export class InitCommand extends Command implements CommandType {
     public configure(): void {
         this.name('init');
         this.description('Initialize theme.json file');
-        this.option('-s, --styles [styles]', 'Init JSON file inside styles folder');
+        this.option(
+            '-s, --styles [styles]',
+            'Init JSON file inside styles folder'
+        );
     }
 
     public execute(): InitCommand {

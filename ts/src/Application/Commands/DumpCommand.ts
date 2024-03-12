@@ -1,11 +1,11 @@
-import {Command} from "commander";
+import {Command} from 'commander';
 //
-import {CommandType} from "./CommandType";
-import {Dump} from "../../Domain/Output";
-import {DumpMessage} from "../DumpMessage";
+import {CommandType} from './CommandType';
+import {Dump} from '../../Domain/Output';
+import {DumpMessage} from '../DumpMessage';
 //
 
-export class DumpCommand extends Command implements CommandType{
+export class DumpCommand extends Command implements CommandType {
     private dump: Dump;
 
     public constructor(dump: Dump) {

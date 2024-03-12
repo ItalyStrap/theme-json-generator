@@ -1,6 +1,6 @@
-import {Command} from "commander";
+import {Command} from 'commander';
 //
-import {CommandType} from "./CommandType";
+import {CommandType} from './CommandType';
 
 export class InfoCommand extends Command implements CommandType {
     public configure(): void {
