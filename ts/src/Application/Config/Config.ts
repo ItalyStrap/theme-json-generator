@@ -1,41 +1,36 @@
-export class Config<K extends string | number, V> {
+export class Config<K extends string, V> {
     private storage: Record<K, V> = {} as Record<K, V>;
+    private temp = null as V | null;
+    private default = null as V | null;
 
     constructor(initialConfig: Record<K, V> = {} as Record<K, V>) {
         this.merge(initialConfig)
     }
 
     get(key: K, defaultValue: V | null = null): V | null {
-        return this.storage.hasOwnProperty(key) ? this.storage[key] : defaultValue;
-    }
-
-    set(key: K, value: V): void {
-        if (typeof key === 'string' && key.includes('.')) {
-            const parts = key.split('.');
-            const lastKey = parts.pop()!;
-            const lastObj = parts.reduce((acc, part) => {
-                if (acc[part] === undefined) acc[part] = {};
-                return acc[part];
-            }, this.storage as any);
-            lastObj[lastKey] = value;
-            return;
+        this.default = defaultValue;
+        if (!this.has(key)) {
+            return defaultValue;
         }
-
-        this.storage[key] = value;
+        return this.temp as V;
     }
 
     has(key: K): boolean {
-        return this.storage.hasOwnProperty(key);
+        this.temp = this.findValue(this.storage, key.split('.'), this.default);
+        return this.temp !== undefined && this.temp !== this.default;
+    }
+
+    set(key: K, value: V): boolean {
+        const keys = key.split('.');
+        return this.insertValue(this.storage, keys, value);
     }
 
     update(key: K, value: V): void {
-        if (this.has(key)) {
-            this.set(key, value);
-        }
+        this.set(key, value);
     }
 
-    delete(): void {
-        this.storage = {} as Record<K, V>;
+    delete(key: K): boolean {
+        return this.deleteValue(this.storage, key.split('.'));
     }
 
     merge(newConfig: Record<K, V>): void {
@@ -48,5 +43,87 @@ export class Config<K extends string | number, V> {
 
     toJSON(): Record<K, V> {
         return this.storage;
+    }
+
+    private findValue(object: any, keys: Array<string | number>, defaultValue: any = null): any {
+        let current = object;
+
+        for (const key of keys) {
+            if (current[key] === undefined) {
+                return defaultValue;
+            }
+            current = current[key];
+        }
+
+        return current;
+    }
+
+    private insertValue(object: any, keys: Array<string | number>, value: any): boolean {
+        let current = object;
+
+        if (keys.length === 0) {
+            return false;
+        }
+
+        for (let i = 0; i < keys.length - 1; i++) {
+            const key = keys[i];
+
+            if (key === undefined) {
+                return false;
+            }
+
+            const nextKey = keys[i + 1];
+            const shouldCreateArray = !isNaN(Number(nextKey));
+
+            if (current[key] === undefined) {
+                current[key] = shouldCreateArray ? [] : {};
+            } else if (typeof current[key] !== 'object' || (shouldCreateArray && !Array.isArray(current[key]))) {
+                throw new Error(`Expected an object or array at key "${key}", found: ${typeof current[key]}`);
+            }
+
+            current = current[key];
+        }
+
+        const lastKey = keys[keys.length - 1];
+        if (!isNaN(Number(lastKey)) && Array.isArray(current)) {
+            current[Number(lastKey)] = value;
+        } else if (typeof lastKey === 'string') {
+            current[lastKey] = value;
+        } else {
+            console.error(`Invalid last key: ${lastKey}`);
+            return false;
+        }
+
+        return true;
+    }
+
+    private deleteValue(object: any, keys: Array<string | number>): boolean {
+        let current = object;
+
+        for (let i = 0; i < keys.length - 1; i++) {
+            const key = keys[i];
+
+            if (key === undefined) {
+                return false;
+            }
+
+            if (current[key] === undefined) {
+                return false;
+            }
+            current = current[key];
+        }
+
+        const lastKey = keys[keys.length - 1];
+
+        if (lastKey === undefined) {
+            return false;
+        }
+
+        if (current[lastKey] !== undefined) {
+            delete current[lastKey];
+            return true;
+        }
+
+        return false;
     }
 }

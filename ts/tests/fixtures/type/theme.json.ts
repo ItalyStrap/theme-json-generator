@@ -1,6 +1,8 @@
-const {SectionNames} = require('../../../src/Domain/Input/SectionNames');
+import {Config} from "../../../src/Application/Config";
+import {SectionNames} from "../../../src/Domain/Input/SectionNames";
 
-module.exports = (config = null) => {
+
+export default (config: Config<string, number | string | object>) => {
     config.merge({
         [SectionNames.SCHEMA]: 'https://schemas.wp.org/trunk/theme.json',
         [SectionNames.VERSION]: 2,

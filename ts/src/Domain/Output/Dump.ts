@@ -1,3 +1,6 @@
+const interpret = require('interpret');
+import * as fs from 'fs';
+//
 import {File, FilesFinder} from "../../Infrastructure/Filesystem";
 import {DumpMessage} from "../../Application";
 import {Config} from "../../Application/Config";
@@ -9,7 +12,7 @@ export class Dump {
         this.fileFinder = fileFinder;
     }
 
-    public handle(message: DumpMessage): void {
+    public handle(message: DumpMessage): number {
         const files = this.fileFinder.find(message.getRootFolder(), 'json.js');
 
         for (const file of files) {
@@ -27,36 +30,40 @@ export class Dump {
                 } )
                 .catch(e => { console.error(e) } );
         }
+
+        return 0;
     }
 
     private async dumpFile(file: File): Promise<number> {
         try {
-            console.log(`Async Dump file: ${file.getFileName()}`);
-            console.log(file.getFilePath());
-            // const module = await import(file.getFilePath());
-            // console.log(module.default);
-            const module = require(file.getFilePath());
+            // console.log(interpret.jsVariants['.ts'][0]);
+            // const obj = require(interpret.jsVariants['.ts'][0])
+            // console.log(typeof obj);
+
+            const filePath = file.getFilePath(); // Ottieni il percorso del file
+            let module;
+
+            if (filePath.endsWith('.ts')) {
+                require('ts-node').register();
+                module = await import(filePath);
+            } else {
+                module = require(filePath);
+            }
+
+            module = module.default || module;
 
             const config = new Config();
+            if (typeof module !== 'function') {
+                console.error('Module is not callable');
+                return 1;
+            }
+
             module(config);
-            console.log(JSON.stringify(config, null, 2));
 
-            // console.log('blueprint');
-            // console.log(blueprint.version);
-            // console.log(JSON.stringify(blueprint, null, 2));
+            const generatedContent = JSON.stringify(config, null, 2);
 
-            // console.log(file.getFilePath());
-            // // const module = await import(file.getFilePath());
-            // const module = await import(`${file.getFilePath()}.mjs`);
-            // // const module = require(`${file.getFilePath()}.js`);
-            // // check if is callable
-            // console.log(module.default);
-            // if (typeof module === 'function') {
-            //     console.log('is callable');
-            //     console.log(module('ciao'));
-            // }
-            // // console.log(module.default);
-            // console.log(module.default('ciao'));
+            const generatedFilePath = file.getFilePath().replace(/.js$/, '');
+            fs.writeFileSync(generatedFilePath, generatedContent);
 
             return 0;
         } catch (e) {

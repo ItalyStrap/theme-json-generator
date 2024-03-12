@@ -20,7 +20,16 @@ describe('Dump class', () => {
     test('Dump file', () => {
         const fileFinder = new FilesFinder();
         const dump = new Dump(fileFinder);
-        const rootFolder = `${process.cwd()}/tests/fixtures/simple`;
+        const rootFolder = `${process.cwd()}/tests/fixtures/with-js-entrypoint`;
+        const message = new DumpMessage(rootFolder, false);
+        const isHandled = dump.handle(message);
+        expect(isHandled).toBe(0);
+    });
+
+    test('Dump ts file', () => {
+        const fileFinder = new FilesFinder();
+        const dump = new Dump(fileFinder);
+        const rootFolder = `${process.cwd()}/tests/fixtures/type`;
         const message = new DumpMessage(rootFolder, false);
         dump.handle(message);
     });

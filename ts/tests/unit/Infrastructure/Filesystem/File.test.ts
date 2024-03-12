@@ -4,16 +4,6 @@ import * as fs from "fs";
 import {File} from '../../../../src/Infrastructure/Filesystem';
 
 describe('File class', () => {
-    test('Return correct extension', () => {
-        const file = new File('theme.json');
-        expect(file.getExtension()).toBe('json');
-    });
-
-    test('Return correct file name', () => {
-        const file = new File('folder/theme.json');
-        expect(file.getFileName()).toBe('theme.json');
-    });
-
     test('File does not exist', () => {
         let file = new File('does-not-exist.json');
         expect(file.exists()).toBe(false);
@@ -50,5 +40,21 @@ describe('File class', () => {
     test('Get Short Name', () => {
         const file = new File(`${process.cwd()}/tests/fixtures/simple/theme.json`);
         expect(file.getShortName()).toBe('theme');
+    });
+
+    test('Get Base Name', () => {
+        const file = new File(`${process.cwd()}/tests/fixtures/simple/theme.json`);
+        expect(file.getBaseName()).toBe('theme.json');
+        expect(file.getBaseName('.json')).toBe('theme');
+    });
+
+    test('Get file name', () => {
+        const file = new File('folder/theme.json');
+        expect(file.getFileName()).toBe('theme.json');
+    });
+
+    test('Get extension', () => {
+        const file = new File('theme.json');
+        expect(file.getExtension()).toBe('.json');
     });
 });
