@@ -1,4 +1,4 @@
-export class Config<K extends string, V> {
+export class Config<K extends string, V> implements Iterable<[K, V]> {
     private storage: Record<K, V> = {} as Record<K, V>;
     private temp = null as V | null;
     private default = null as V | null;
@@ -7,7 +7,7 @@ export class Config<K extends string, V> {
         this.merge(initialConfig);
     }
 
-    get(key: K, defaultValue: V | null = null): V | null {
+    public get(key: K, defaultValue: V | null = null): V | null {
         this.default = defaultValue;
         if (!this.has(key)) {
             return defaultValue;
@@ -15,34 +15,49 @@ export class Config<K extends string, V> {
         return this.temp as V;
     }
 
-    has(key: K): boolean {
+    public has(key: K): boolean {
         this.temp = this.findValue(this.storage, key.split('.'), this.default);
         return this.temp !== undefined && this.temp !== this.default;
     }
 
-    set(key: K, value: V): boolean {
+    public set(key: K, value: V): boolean {
         const keys = key.split('.');
         return this.insertValue(this.storage, keys, value);
     }
 
-    update(key: K, value: V): void {
+    public update(key: K, value: V): void {
         this.set(key, value);
     }
 
-    delete(key: K): boolean {
+    public delete(key: K): boolean {
         return this.deleteValue(this.storage, key.split('.'));
     }
 
-    merge(newConfig: Record<K, V>): void {
+    public merge(newConfig: Record<K, V>): void {
         this.storage = {...this.storage, ...newConfig};
     }
 
-    toArray(): Array<[K, V]> {
+    public toArray(): Array<[K, V]> {
         return Object.entries(this.storage) as Array<[K, V]>;
     }
 
-    toJSON(): Record<K, V> {
+    public toJSON(): Record<K, V> {
         return this.storage;
+    }
+
+    public [Symbol.iterator](): IterableIterator<[K, V]> {
+        const entries = this.toArray();
+        let index = 0;
+        return {
+            next: () => {
+                if (index < entries.length) {
+                    const result = {value: entries[index], done: false};
+                    index++;
+                    return result;
+                }
+                return {value: undefined, done: true};
+            },
+        } as IterableIterator<[K, V]>;
     }
 
     private findValue(

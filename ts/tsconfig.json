@@ -13,7 +13,10 @@
         "esModuleInterop": true,
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
-        "moduleResolution": "node16"
+        "moduleResolution": "node16",
+        "paths": {
+            "@italystrap/bus": ["./bus"]
+        }
     },
     "include": ["src"],
     "exclude": ["node_modules"]

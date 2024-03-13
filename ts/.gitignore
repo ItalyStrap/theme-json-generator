@@ -6,3 +6,4 @@ dist/
 
 # Theme.json file
 theme.json
+!tests/**/theme.json

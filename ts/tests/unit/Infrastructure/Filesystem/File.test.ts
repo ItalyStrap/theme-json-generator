@@ -1,5 +1,7 @@
 import {describe, expect, test} from '@jest/globals';
+//
 import * as fs from 'fs';
+import * as path from 'path';
 //
 import {File} from '../../../../src/Infrastructure/Filesystem';
 
@@ -30,11 +32,18 @@ describe('File class', () => {
     });
 
     test('File content', () => {
-        const path = `${process.cwd()}/tests/fixtures/simple/theme.json`;
-        const file = new File(path);
-        expect(file.toString()).toBe(path);
-        const content = fs.readFileSync(path, 'utf-8');
-        expect(content).toBe('{"version": 2}');
+        const filePath = path.join(
+            process.cwd(),
+            'tests',
+            'fixtures',
+            'simple',
+            'theme.json'
+        );
+        const file = new File(filePath);
+        expect(file.toString()).toBe(filePath);
+        expect(file.exists()).toBe(true);
+        const content = fs.readFileSync(file.getFilePath(), 'utf-8');
+        expect(content).toContain('{"version": 2}');
     });
 
     test('Get Short Name', () => {

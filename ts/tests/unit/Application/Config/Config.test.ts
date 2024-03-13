@@ -1,7 +1,6 @@
 import {describe, expect, test} from '@jest/globals';
 //
 import {Blueprint, Config} from '../../../../src/Application/Config';
-import exp = require('constants');
 //
 
 describe('Config class', () => {
@@ -18,10 +17,24 @@ describe('Config class', () => {
     });
 
     test('Config class merge', () => {
-        const config = new Config<string, number | string>();
+        const config = new Config<string, number | string | object>({
+            key: 'old value',
+            key2: 0,
+        });
+
         config.merge({key: 'value', key2: 1});
         expect(config.get('key')).toBe('value');
         expect(config.get('key2')).toBe(1);
+
+        // Merge with new key
+        config.merge({key: 'new value', key2: 2});
+        expect(config.get('key')).toBe('new value');
+        expect(config.get('key2')).toBe(2);
+
+        // Merge nested key
+        config.merge({key: {key: 'value'}});
+        expect(config.get('key.key')).toBe('value');
+        expect(config.get('key2')).toBe(2);
     });
 
     test('Config class update', () => {
@@ -88,6 +101,20 @@ describe('Config class', () => {
             },
         });
     });
+
+    test('Config iteration', () => {
+        const config = new Config<string, string>({
+            key1: 'value1',
+            key2: 'value2',
+            key3: 'value3',
+            key4: 'value4',
+        }) as Config<string, string>;
+
+        // @ts-ignore
+        for (const [key, value] of config) {
+            expect(config.get(key)).toBe(value);
+        }
+    });
 });
 
 describe('Config class Has', () => {
@@ -127,4 +154,21 @@ describe('Config class Has', () => {
     //     expect(config.get('0')).toBe('value');
     //     expect(config.toJSON()).toBe(['value']);
     // } );
+});
+
+describe('Blueprint class', () => {
+    test('Blueprint class', () => {
+        const initialConfig = {
+            init: 'init value',
+        };
+
+        const blueprint = new Blueprint<string, number | string>(initialConfig);
+        expect(blueprint.get('init')).toBe('init value');
+
+        blueprint.set('key', 'value');
+        expect(blueprint.get('key')).toBe('value');
+
+        blueprint.set('key2', 1);
+        expect(blueprint.get('key2')).toBe(1);
+    });
 });

@@ -1,7 +1,8 @@
 const {SectionNames} = require('../../../src/Domain/Input/SectionNames');
 
-module.exports = (config = null) => {
-    config.merge({
+module.exports = (app) => {
+    const {blueprint} = app;
+    blueprint.merge({
         [SectionNames.SCHEMA]: 'https://schemas.wp.org/trunk/theme.json',
         [SectionNames.VERSION]: 2,
         [SectionNames.TITLE]: 'Example Theme',

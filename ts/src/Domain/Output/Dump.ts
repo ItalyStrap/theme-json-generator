@@ -3,7 +3,7 @@ import * as fs from 'fs';
 //
 import {File, FilesFinder} from '../../Infrastructure/Filesystem';
 import {DumpMessage} from '../../Application';
-import {Config} from '../../Application/Config';
+import {Blueprint, Config} from '../../Application/Config';
 
 export class Dump {
     private fileFinder: FilesFinder;
@@ -53,16 +53,15 @@ export class Dump {
             }
 
             module = module.default || module;
-
-            const config = new Config();
             if (typeof module !== 'function') {
                 console.error('Module is not callable');
                 return 1;
             }
 
-            module(config);
+            const blueprint = new Blueprint();
+            module({blueprint});
 
-            const generatedContent = JSON.stringify(config, null, 2);
+            const generatedContent = JSON.stringify(blueprint, null, 2);
 
             const generatedFilePath = file.getFilePath().replace(/.js$/, '');
             fs.writeFileSync(generatedFilePath, generatedContent);
