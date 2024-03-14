@@ -1,11 +1,21 @@
-export class ValidateMessage {
-    private readonly rootFolder: string;
+import {File} from '../Infrastructure/Filesystem';
 
-    constructor(rootFolder: string) {
-        this.rootFolder = rootFolder;
+export class ValidateMessage {
+    constructor(
+        private readonly rootFolder: string,
+        private readonly fileSchema: File,
+        private readonly force: boolean = false
+    ) {}
+
+    public getRootFolder(): string {
+        return this.rootFolder;
     }
 
-    getRootFolder(): string {
-        return this.rootFolder;
+    public getFileSchema(): File {
+        return this.fileSchema;
+    }
+
+    public isForce(): boolean {
+        return this.force;
     }
 }

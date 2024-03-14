@@ -5,7 +5,7 @@
     "bin": {
         "theme-json": "bin/theme-json"
     },
-    "main": "dist/index.js",
+    "main": "dist/src/index.js",
     "directories": {
         "bin": "bin",
         "doc": "../docs",

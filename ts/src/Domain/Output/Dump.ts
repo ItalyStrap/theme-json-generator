@@ -1,8 +1,10 @@
 const interpret = require('interpret');
+//
 import * as fs from 'fs';
 //
 import {File, FilesFinder} from '../../Infrastructure/Filesystem';
 import {DumpMessage} from '../../Application';
+import {Command} from '../../Application/Commands';
 import {Blueprint, Config} from '../../Application/Config';
 
 export class Dump {
@@ -66,10 +68,10 @@ export class Dump {
             const generatedFilePath = file.getFilePath().replace(/.js$/, '');
             fs.writeFileSync(generatedFilePath, generatedContent);
 
-            return 0;
+            return Command.SUCCESS;
         } catch (e) {
             console.error(e);
-            return 1;
+            return Command.FAILURE;
         }
     }
 }

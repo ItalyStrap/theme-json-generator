@@ -33,6 +33,10 @@ export class File {
         return this.filePath;
     }
 
+    public getMTime(): number {
+        return fs.statSync(this.filePath).mtimeMs;
+    }
+
     public exists(): boolean {
         return fs.existsSync(this.filePath);
     }
