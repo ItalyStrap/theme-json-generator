@@ -8,7 +8,7 @@ import {File, FilesFinder} from '../../Infrastructure/Filesystem';
 //
 import {ValidateMessage} from '../../Application';
 //
-import {VALID_FILE, VALIDATED_FAILS, VALIDATING_FILE} from './Events';
+import {ValidatingFile, ValidatedFails, ValidFile} from './Events';
 
 export class Validate implements HandlerInterface<ValidateMessage, number> {
     public constructor(
@@ -21,7 +21,10 @@ export class Validate implements HandlerInterface<ValidateMessage, number> {
         const files = this.fileFinder.find(message.rootFolder, 'json');
 
         for (const file of files) {
-            this.eventEmitter.emit(VALIDATING_FILE, file);
+            this.eventEmitter.emit(
+                ValidatingFile.name,
+                new ValidatingFile(file)
+            );
             this.validateJsonFile(file, message.fileSchema);
             this.validator.reset();
             /**
@@ -43,13 +46,12 @@ export class Validate implements HandlerInterface<ValidateMessage, number> {
 
         if (!this.validator.isValid()) {
             this.eventEmitter.emit(
-                VALIDATED_FAILS,
-                file,
-                this.validator.getErrors()
+                ValidatedFails.name,
+                new ValidatedFails(file, this.validator.getErrors())
             );
             return;
         }
 
-        this.eventEmitter.emit(VALID_FILE, file);
+        this.eventEmitter.emit(ValidFile.name, new ValidFile(file));
     }
 }

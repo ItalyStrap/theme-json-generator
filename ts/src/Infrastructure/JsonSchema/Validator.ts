@@ -1,7 +1,7 @@
 // @thanks to https://github.com/DekodeInteraktiv/create-theme-json for some hints using the ajv-draft-04 package
 import Ajv, {ErrorObject} from 'ajv-draft-04';
 
-type ValidatorErrorsType = ErrorObject[] | null | undefined;
+export type ValidatorErrorsType = ErrorObject[] | null | undefined;
 
 export class Validator {
     private valid: boolean = false;

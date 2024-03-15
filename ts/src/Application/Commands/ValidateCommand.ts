@@ -11,9 +11,9 @@ import {CommandType} from './CommandType';
 import {ValidateMessage} from '../ValidateMessage';
 import {File} from '../../Infrastructure/Filesystem';
 import {
-    VALID_FILE,
-    VALIDATED_FAILS,
-    VALIDATING_FILE,
+    ValidatingFile,
+    ValidatedFails,
+    ValidFile,
 } from '../../Domain/Output/Events';
 
 type ValidateOptions = {
@@ -45,31 +45,34 @@ export class ValidateCommand extends Command implements CommandType {
                 path.join(rootFolder, 'theme.schema.json')
             );
 
-            this.eventEmitter.on(VALIDATING_FILE, (file: File) => {
-                console.log(`Validating ${file.getFileName()}`);
-            });
-
-            this.eventEmitter.on(VALID_FILE, (file: File) => {
-                console.log(`Valid ${file.getFileName()}`);
-            });
+            this.eventEmitter.on(
+                ValidatingFile.name,
+                (event: ValidatingFile) => {
+                    console.log(`Validating ${event.file.getFileName()}`);
+                }
+            );
 
             this.eventEmitter.on(
-                VALIDATED_FAILS,
-                (file: File, errors: ErrorObject[] | null | undefined) => {
-                    console.log(`Fail to validate ${file.getFileName()}`);
-                    if (!errors || errors.length === 0) {
+                ValidatedFails.name,
+                (event: ValidatedFails) => {
+                    console.log(`Fail to validate ${event.file.getFileName()}`);
+                    if (!event.errors || event.errors.length === 0) {
                         console.log('No errors found');
                         return;
                     }
 
                     console.log('Errors found:');
-                    for (const error of errors) {
+                    for (const error of event.errors) {
                         const instancePath =
                             error.instancePath.replace(/\//g, '.') || '';
                         console.log(`- ${instancePath} ${error.message}`);
                     }
                 }
             );
+
+            this.eventEmitter.on(ValidFile.name, (event: ValidFile) => {
+                console.log(`Valid ${event.file.getFileName()}`);
+            });
 
             const message: ValidateMessage = {
                 rootFolder,
