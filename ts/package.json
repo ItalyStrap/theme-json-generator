@@ -17,6 +17,7 @@
         "test": "jest",
         "cs": "prettier --check .",
         "cs:fix": "prettier --write .",
+        "qa": "yarn cs && yarn test",
         "tj:init": "node bin/theme-json init",
         "tj:dump": "node bin/theme-json dump",
         "tj:validate": "node bin/theme-json validate"

@@ -15,12 +15,12 @@ export class Dump {
     }
 
     public handle(message: DumpMessage): number {
-        const files = this.fileFinder.find(message.getRootFolder(), 'json.js');
+        const files = this.fileFinder.find(message.rootFolder, 'json.js');
 
         for (const file of files) {
             console.log(`Dumping file: ${file.getFileName()}`);
 
-            if (message.isDryRun()) {
+            if (message.dryRun) {
                 console.log('Dry run mode');
                 continue;
             }

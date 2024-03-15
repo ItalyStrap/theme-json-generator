@@ -12,7 +12,7 @@ export class SchemaJsonMiddleware
         message: ValidateMessage,
         handler: HandlerInterface<ValidateMessage, number>
     ): number {
-        const fileSchema = message.getFileSchema();
+        const fileSchema = message.fileSchema;
         if (
             !fileSchema.exists() ||
             this.isFileSchemaOlderThanOneWeek(fileSchema)

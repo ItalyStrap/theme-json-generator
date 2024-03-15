@@ -1,4 +1,4 @@
-import {EventEmitter} from 'events';
+import {EventEmitter} from 'node:events';
 //
 import {Command} from 'commander';
 import Ajv from 'ajv-draft-04';
@@ -18,16 +18,17 @@ import {
     DeleteSchemaJsonMiddleware,
     SchemaJsonMiddleware,
 } from '../../Application/Commands/Middleware';
-import {Init, Validate, Dump} from '../../Domain/Output';
+import {Info, Init, Validate, Dump} from '../../Domain/Output';
 
 export class Bootstrap {
     run(): void {
         const eventEmitter = new EventEmitter();
+        const finder = new FilesFinder();
 
         const validateBus = new Bus(
             new Validate(
                 eventEmitter,
-                new FilesFinder(),
+                finder,
                 new Validator(
                     new Ajv({
                         allErrors: true,
@@ -43,10 +44,17 @@ export class Bootstrap {
         validateBus.addMiddleware(new DeleteSchemaJsonMiddleware());
 
         const application = new Command();
-        const initCommand = new InitCommand(new Init(new FilesFinder()));
-        const dumpCommand = new DumpCommand(new Dump(new FilesFinder()));
+
+        const initCommand = new InitCommand(eventEmitter, new Init(finder));
+
+        const dumpCommand = new DumpCommand(eventEmitter, new Dump(finder));
+
         const validateCommand = new ValidateCommand(eventEmitter, validateBus);
-        const infoCommand = new InfoCommand();
+
+        const infoCommand = new InfoCommand(
+            eventEmitter,
+            new Bus(new Info(eventEmitter, finder))
+        );
 
         // https://github.com/tj/commander.js/blob/83c3f4e391754d2f80b179acc4bccc2d4d0c863d/examples/nestedCommands.js
         application.addCommand(initCommand.execute());

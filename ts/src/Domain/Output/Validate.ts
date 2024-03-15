@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import {EventEmitter} from 'events';
+import {EventEmitter} from 'node:events';
 //
 import {HandlerInterface} from '../../../bus';
 //
@@ -8,7 +8,7 @@ import {File, FilesFinder} from '../../Infrastructure/Filesystem';
 //
 import {ValidateMessage} from '../../Application';
 //
-import {ValidatedFails, ValidatingFile, ValidFile} from './Events';
+import {VALID_FILE, VALIDATED_FAILS, VALIDATING_FILE} from './Events';
 
 export class Validate implements HandlerInterface<ValidateMessage, number> {
     public constructor(
@@ -18,11 +18,11 @@ export class Validate implements HandlerInterface<ValidateMessage, number> {
     ) {}
 
     public handle(message: ValidateMessage): number {
-        const files = this.fileFinder.find(message.getRootFolder(), 'json');
+        const files = this.fileFinder.find(message.rootFolder, 'json');
 
         for (const file of files) {
-            this.eventEmitter.emit(ValidatingFile.name, file);
-            this.validateJsonFile(file, message.getFileSchema());
+            this.eventEmitter.emit(VALIDATING_FILE, file);
+            this.validateJsonFile(file, message.fileSchema);
             this.validator.reset();
             /**
              * @todo Implementing scss validation
@@ -43,13 +43,13 @@ export class Validate implements HandlerInterface<ValidateMessage, number> {
 
         if (!this.validator.isValid()) {
             this.eventEmitter.emit(
-                ValidatedFails.name,
+                VALIDATED_FAILS,
                 file,
                 this.validator.getErrors()
             );
             return;
         }
 
-        this.eventEmitter.emit(ValidFile.name, file);
+        this.eventEmitter.emit(VALID_FILE, file);
     }
 }

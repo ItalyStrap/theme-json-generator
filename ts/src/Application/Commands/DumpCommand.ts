@@ -1,3 +1,5 @@
+import {EventEmitter} from 'events';
+//
 import {Command} from 'commander';
 //
 import {CommandType} from './CommandType';
@@ -6,11 +8,11 @@ import {DumpMessage} from '../DumpMessage';
 //
 
 export class DumpCommand extends Command implements CommandType {
-    private dump: Dump;
-
-    public constructor(dump: Dump) {
+    public constructor(
+        private readonly eventEmitter: EventEmitter,
+        private readonly dump: Dump
+    ) {
         super();
-        this.dump = dump;
     }
 
     public configure(): void {
@@ -24,7 +26,12 @@ export class DumpCommand extends Command implements CommandType {
         this.action(() => {
             const rootFolder = process.cwd();
 
-            const message = new DumpMessage(rootFolder, this.opts()?.dryRun);
+            // const message = new DumpMessage(rootFolder, this.opts()?.dryRun);
+            const message: DumpMessage = {
+                rootFolder: rootFolder,
+                dryRun: this.opts()?.dryRun,
+            };
+
             this.dump.handle(message);
         });
 

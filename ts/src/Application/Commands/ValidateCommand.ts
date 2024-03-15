@@ -10,23 +10,20 @@ import {CommandType} from './CommandType';
 //
 import {ValidateMessage} from '../ValidateMessage';
 import {File} from '../../Infrastructure/Filesystem';
-import {ValidatedFails, ValidatingFile} from '../../Domain/Output/Events';
-import {ValidFile} from '../../Domain/Output/Events';
+import {
+    VALID_FILE,
+    VALIDATED_FAILS,
+    VALIDATING_FILE,
+} from '../../Domain/Output/Events';
 
 type ValidateOptions = {
     force: boolean | undefined;
 };
 
-type ValidateType<T> = {
-    rootFolder: string;
-    fileSchema: File;
-    options: T;
-};
-
 export class ValidateCommand extends Command implements CommandType {
     public constructor(
-        private eventEmitter: EventEmitter,
-        private bus: Bus<ValidateMessage, number>
+        private readonly eventEmitter: EventEmitter,
+        private readonly bus: Bus<ValidateMessage, number>
     ) {
         super();
     }
@@ -48,16 +45,16 @@ export class ValidateCommand extends Command implements CommandType {
                 path.join(rootFolder, 'theme.schema.json')
             );
 
-            this.eventEmitter.on(ValidatingFile.name, (file: File) => {
+            this.eventEmitter.on(VALIDATING_FILE, (file: File) => {
                 console.log(`Validating ${file.getFileName()}`);
             });
 
-            this.eventEmitter.on(ValidFile.name, (file: File) => {
+            this.eventEmitter.on(VALID_FILE, (file: File) => {
                 console.log(`Valid ${file.getFileName()}`);
             });
 
             this.eventEmitter.on(
-                ValidatedFails.name,
+                VALIDATED_FAILS,
                 (file: File, errors: ErrorObject[] | null | undefined) => {
                     console.log(`Fail to validate ${file.getFileName()}`);
                     if (!errors || errors.length === 0) {
@@ -74,17 +71,12 @@ export class ValidateCommand extends Command implements CommandType {
                 }
             );
 
-            const testValidate: ValidateType<ValidateOptions> = {
+            const message: ValidateMessage = {
                 rootFolder,
                 fileSchema,
-                options,
+                force: options.force || false,
             };
 
-            const message = new ValidateMessage(
-                rootFolder,
-                fileSchema,
-                options.force || false
-            );
             this.bus.handle(message);
         });
 

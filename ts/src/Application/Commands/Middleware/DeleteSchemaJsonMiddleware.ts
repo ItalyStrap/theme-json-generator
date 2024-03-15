@@ -11,8 +11,8 @@ export class DeleteSchemaJsonMiddleware
         message: ValidateMessage,
         handler: HandlerInterface<ValidateMessage, number>
     ): number {
-        const fileSchema = message.getFileSchema();
-        if (message.isForce() && fileSchema.exists()) {
+        const fileSchema = message.fileSchema;
+        if (message.force && fileSchema.exists()) {
             fs.unlinkSync(fileSchema.getFilePath());
         }
 
