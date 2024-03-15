@@ -2,6 +2,7 @@ import {EventEmitter} from 'events';
 import path from 'path';
 //
 import {Command} from 'commander';
+import {ErrorObject} from 'ajv-draft-04';
 //
 import {Bus} from '../../../bus';
 //
@@ -10,7 +11,7 @@ import {CommandType} from './CommandType';
 import {ValidateMessage} from '../ValidateMessage';
 import {File} from '../../Infrastructure/Filesystem';
 import {ValidatedFails, ValidatingFile} from '../../Domain/Output/Events';
-import {ValidFile} from '../../Domain/Output/Events/ValidFile';
+import {ValidFile} from '../../Domain/Output/Events';
 
 type ValidateOptions = {
     force: boolean | undefined;
@@ -55,9 +56,23 @@ export class ValidateCommand extends Command implements CommandType {
                 console.log(`Valid ${file.getFileName()}`);
             });
 
-            this.eventEmitter.on(ValidatedFails.name, (file: File) => {
-                console.log(`Fail to validate ${file.getFileName()}`);
-            });
+            this.eventEmitter.on(
+                ValidatedFails.name,
+                (file: File, errors: ErrorObject[] | null | undefined) => {
+                    console.log(`Fail to validate ${file.getFileName()}`);
+                    if (!errors || errors.length === 0) {
+                        console.log('No errors found');
+                        return;
+                    }
+
+                    console.log('Errors found:');
+                    for (const error of errors) {
+                        const instancePath =
+                            error.instancePath.replace(/\//g, '.') || '';
+                        console.log(`- ${instancePath} ${error.message}`);
+                    }
+                }
+            );
 
             const testValidate: ValidateType<ValidateOptions> = {
                 rootFolder,

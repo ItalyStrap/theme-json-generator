@@ -1,16 +1,20 @@
+import * as fs from 'fs';
 import {EventEmitter} from 'events';
 //
 import {HandlerInterface} from '../../../bus';
 //
-import {ValidateMessage} from '../../Application';
+import {Validator} from '../../Infrastructure/JsonSchema';
 import {File, FilesFinder} from '../../Infrastructure/Filesystem';
+//
+import {ValidateMessage} from '../../Application';
 //
 import {ValidatedFails, ValidatingFile, ValidFile} from './Events';
 
 export class Validate implements HandlerInterface<ValidateMessage, number> {
     public constructor(
         private eventEmitter: EventEmitter,
-        private fileFinder: FilesFinder
+        private fileFinder: FilesFinder,
+        private validator: Validator
     ) {}
 
     public handle(message: ValidateMessage): number {
@@ -19,6 +23,7 @@ export class Validate implements HandlerInterface<ValidateMessage, number> {
         for (const file of files) {
             this.eventEmitter.emit(ValidatingFile.name, file);
             this.validateJsonFile(file, message.getFileSchema());
+            this.validator.reset();
             /**
              * @todo Implementing scss validation
              */
@@ -28,10 +33,21 @@ export class Validate implements HandlerInterface<ValidateMessage, number> {
     }
 
     private validateJsonFile(file: File, schema: File): void {
-        // @todo do some validation here
+        let data = fs.readFileSync(file.getFilePath(), 'utf8');
+        data = JSON.parse(data);
 
-        if (true) {
-            this.eventEmitter.emit(ValidatedFails.name, file);
+        let jsonSchema = fs.readFileSync(schema.getFilePath(), 'utf8');
+        jsonSchema = JSON.parse(jsonSchema);
+
+        this.validator.validate(data, jsonSchema);
+
+        if (!this.validator.isValid()) {
+            this.eventEmitter.emit(
+                ValidatedFails.name,
+                file,
+                this.validator.getErrors()
+            );
+            return;
         }
 
         this.eventEmitter.emit(ValidFile.name, file);

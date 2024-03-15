@@ -1,8 +1,12 @@
 import {EventEmitter} from 'events';
 //
 import {Command} from 'commander';
+import Ajv from 'ajv-draft-04';
 //
 import {Bus} from '../../../bus';
+//
+import {Validator} from '../JsonSchema';
+import {FilesFinder} from '../Filesystem';
 //
 import {
     DumpCommand,
@@ -15,14 +19,25 @@ import {
     SchemaJsonMiddleware,
 } from '../../Application/Commands/Middleware';
 import {Init, Validate, Dump} from '../../Domain/Output';
-import {FilesFinder} from '../Filesystem';
 
 export class Bootstrap {
     run(): void {
         const eventEmitter = new EventEmitter();
 
         const validateBus = new Bus(
-            new Validate(eventEmitter, new FilesFinder())
+            new Validate(
+                eventEmitter,
+                new FilesFinder(),
+                new Validator(
+                    new Ajv({
+                        allErrors: true,
+                        strict: true,
+                        verbose: true,
+                        allowMatchingProperties: true,
+                        allowUnionTypes: true,
+                    })
+                )
+            )
         );
         validateBus.addMiddleware(new SchemaJsonMiddleware());
         validateBus.addMiddleware(new DeleteSchemaJsonMiddleware());
