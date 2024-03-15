@@ -71,7 +71,7 @@ export class ValidateCommand extends Command implements CommandType {
             );
 
             this.eventEmitter.on(ValidFile.name, (event: ValidFile) => {
-                console.log(`Valid ${event.file.getFileName()}`);
+                console.log(`${event.file.getFileName()} is valid`);
             });
 
             const message: ValidateMessage = {

@@ -33,10 +33,11 @@ describe('Validate class', () => {
             'fixtures',
             'with-js-entrypoint'
         );
-        const message = new ValidateMessage(
-            rootFolder,
-            new File(path.join(rootFolder, 'theme.schema.json'))
-        );
+        const message: ValidateMessage = {
+            rootFolder: rootFolder,
+            fileSchema: new File(path.join(rootFolder, 'theme.schema.json')),
+            force: false,
+        };
         const isHandled = dump.handle(message);
         expect(isHandled).toBe(0);
     });

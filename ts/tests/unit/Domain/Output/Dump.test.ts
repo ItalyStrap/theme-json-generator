@@ -6,21 +6,31 @@ import {DumpMessage} from '../../../../src/Application';
 
 describe('Dump class', () => {
     test('Dump message', () => {
-        const message = new DumpMessage('rootFolder', false);
-        expect(message.getRootFolder()).toBe('rootFolder');
-        expect(message.isDryRun()).toBe(false);
+        const message: DumpMessage = {
+            rootFolder: 'rootFolder',
+            dryRun: false,
+        };
+        expect(message.rootFolder).toBe('rootFolder');
+        expect(message.dryRun).toBe(false);
     });
 
     test('Dump message dry run', () => {
-        const message = new DumpMessage('rootFolder', true);
-        expect(message.isDryRun()).toBe(true);
+        const message: DumpMessage = {
+            rootFolder: 'rootFolder',
+            dryRun: true,
+        };
+        expect(message.rootFolder).toBe('rootFolder');
+        expect(message.dryRun).toBe(true);
     });
 
     test('Dump file', () => {
         const fileFinder = new FilesFinder();
         const dump = new Dump(fileFinder);
         const rootFolder = `${process.cwd()}/tests/fixtures/with-js-entrypoint`;
-        const message = new DumpMessage(rootFolder, false);
+        const message: DumpMessage = {
+            rootFolder: rootFolder,
+            dryRun: false,
+        };
         const isHandled = dump.handle(message);
         expect(isHandled).toBe(0);
     });
@@ -29,7 +39,11 @@ describe('Dump class', () => {
         const fileFinder = new FilesFinder();
         const dump = new Dump(fileFinder);
         const rootFolder = `${process.cwd()}/tests/fixtures/type`;
-        const message = new DumpMessage(rootFolder, false);
-        dump.handle(message);
+        const message: DumpMessage = {
+            rootFolder: rootFolder,
+            dryRun: false,
+        };
+        const isHandled = dump.handle(message);
+        expect(isHandled).toBe(0);
     });
 });
