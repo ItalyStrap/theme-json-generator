@@ -26,7 +26,7 @@ export class Validate implements HandlerInterface<ValidateMessage, number> {
                 ValidatingFile.name,
                 new ValidatingFile(file)
             );
-            // this.validateJsonFile(file, message.fileSchema);
+            this.validateJsonFile(file, message.fileSchema);
             this.validator.reset();
             /**
              * @todo Implementing scss validation

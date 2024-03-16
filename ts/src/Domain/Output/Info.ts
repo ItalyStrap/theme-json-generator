@@ -1,9 +1,10 @@
+import {EventEmitter} from 'events';
+//
 import {HandlerInterface} from '../../bus';
 //
 import {File, FilesFinder} from '../../Infrastructure/Filesystem';
 //
 import {InfoMessage} from '../../Application/InfoMessage';
-import {EventEmitter} from 'events';
 
 export class Info implements HandlerInterface<InfoMessage, number> {
     public constructor(

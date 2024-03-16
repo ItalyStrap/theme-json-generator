@@ -1,7 +1,11 @@
+import {HandlerInterface} from '../../bus';
+//
 import {InitMessage} from '../../Application';
+import {InfoMessage} from '../../Application/InfoMessage';
+//
 import {File, FilesFinder} from '../../Infrastructure/Filesystem';
 
-export class Init {
+export class Init implements HandlerInterface<InfoMessage, number> {
     private fileFinder: FilesFinder;
 
     public constructor(fileFinder: FilesFinder) {

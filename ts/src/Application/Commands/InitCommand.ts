@@ -5,12 +5,12 @@ import {Command} from 'commander';
 import {CommandInterface} from './CommandInterface';
 //
 import {InitMessage} from '../InitMessage';
-import {Init} from '../../Domain/Output';
+import {Bus} from '../../bus';
 
 export class InitCommand extends Command implements CommandInterface {
     public constructor(
         private readonly eventEmitter: EventEmitter,
-        private readonly init: Init
+        private readonly bus: Bus<InitMessage, number>
     ) {
         super();
     }
@@ -32,7 +32,7 @@ export class InitCommand extends Command implements CommandInterface {
                 stylesOption: options.stylesOption || '',
             };
 
-            process.exitCode = this.init.handle(message);
+            process.exitCode = this.bus.handle(message);
         });
 
         return this;

@@ -5,12 +5,13 @@ import {Command} from 'commander';
 import {CommandInterface} from './CommandInterface';
 import {Dump} from '../../Domain/Output';
 import {DumpMessage} from '../DumpMessage';
+import {Bus} from '../../bus';
 //
 
 export class DumpCommand extends Command implements CommandInterface {
     public constructor(
         private readonly eventEmitter: EventEmitter,
-        private readonly dump: Dump
+        private readonly bus: Bus<DumpMessage, number>
     ) {
         super();
     }
@@ -29,7 +30,7 @@ export class DumpCommand extends Command implements CommandInterface {
                 dryRun: options.dryRun || false,
             };
 
-            process.exitCode = this.dump.handle(message);
+            process.exitCode = this.bus.handle(message);
         });
 
         return this;

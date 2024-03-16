@@ -2,12 +2,15 @@ const interpret = require('interpret');
 //
 import * as fs from 'fs';
 //
+import {HandlerInterface} from '../../bus';
+//
 import {File, FilesFinder} from '../../Infrastructure/Filesystem';
 import {DumpMessage} from '../../Application';
 import {CommandCode} from '../../Application/Commands';
 import {Blueprint, Config} from '../../Application/Config';
+import {InfoMessage} from '../../Application/InfoMessage';
 
-export class Dump {
+export class Dump implements HandlerInterface<InfoMessage, number> {
     private fileFinder: FilesFinder;
 
     public constructor(fileFinder: FilesFinder) {

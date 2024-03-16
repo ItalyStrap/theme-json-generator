@@ -3,7 +3,7 @@ import {EventEmitter} from 'node:events';
 import {Command} from 'commander';
 import Ajv from 'ajv-draft-04';
 //
-import {Bus} from "../../bus";
+import {Bus} from '../../bus';
 //
 import {Validator} from '../JsonSchema';
 import {FilesFinder} from '../Filesystem';
@@ -25,6 +25,14 @@ export class Bootstrap {
         const eventEmitter = new EventEmitter();
         const finder = new FilesFinder();
 
+        const application = new Command();
+
+        const initBus = new Bus(new Init(finder));
+        const initCommand = new InitCommand(eventEmitter, initBus);
+
+        const dumpBus = new Bus(new Dump(finder));
+        const dumpCommand = new DumpCommand(eventEmitter, dumpBus);
+
         const validateBus = new Bus(
             new Validate(
                 eventEmitter,
@@ -40,24 +48,17 @@ export class Bootstrap {
                 )
             )
         );
+
         // The Delete middleware must be called before the Create middleware
         // This way if you use the --force option, the schema.json file will be deleted and recreated
         // before the validation process.
         validateBus.addMiddleware(new DeleteSchemaJsonMiddleware());
         validateBus.addMiddleware(new CreateSchemaJsonMiddleware());
 
-        const application = new Command();
-
-        const initCommand = new InitCommand(eventEmitter, new Init(finder));
-
-        const dumpCommand = new DumpCommand(eventEmitter, new Dump(finder));
-
         const validateCommand = new ValidateCommand(eventEmitter, validateBus);
 
-        const infoCommand = new InfoCommand(
-            eventEmitter,
-            new Bus(new Info(eventEmitter, finder))
-        );
+        const infoBus = new Bus(new Info(eventEmitter, finder));
+        const infoCommand = new InfoCommand(eventEmitter, infoBus);
 
         // https://github.com/tj/commander.js/blob/83c3f4e391754d2f80b179acc4bccc2d4d0c863d/examples/nestedCommands.js
         application.addCommand(initCommand.execute());
