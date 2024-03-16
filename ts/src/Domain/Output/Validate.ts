@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import {EventEmitter} from 'node:events';
 //
-import {HandlerInterface} from '../../../bus';
+import {HandlerInterface} from '../../bus';
 //
 import {Validator} from '../../Infrastructure/JsonSchema';
 import {File, FilesFinder} from '../../Infrastructure/Filesystem';

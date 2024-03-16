@@ -3,7 +3,7 @@ import {EventEmitter} from 'node:events';
 import {Command} from 'commander';
 import Ajv from 'ajv-draft-04';
 //
-import {Bus} from '../../../bus';
+import {Bus} from "../../bus";
 //
 import {Validator} from '../JsonSchema';
 import {FilesFinder} from '../Filesystem';

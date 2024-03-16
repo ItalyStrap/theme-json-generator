@@ -4,7 +4,7 @@ import path from 'path';
 import {Command} from 'commander';
 import {ErrorObject} from 'ajv-draft-04';
 //
-import {Bus} from '../../../bus';
+import {Bus} from '../../bus';
 //
 import {CommandInterface} from './CommandInterface';
 //

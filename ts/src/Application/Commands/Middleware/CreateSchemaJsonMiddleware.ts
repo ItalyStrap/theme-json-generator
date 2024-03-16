@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 //
-import {HandlerInterface, MiddlewareInterface} from '../../../../bus';
+import {HandlerInterface, MiddlewareInterface} from '../../../bus';
 //
 import {ValidateMessage} from '../../ValidateMessage';
 import {File} from '../../../Infrastructure/Filesystem';

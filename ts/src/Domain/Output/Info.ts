@@ -1,4 +1,4 @@
-import {HandlerInterface} from '../../../bus';
+import {HandlerInterface} from '../../bus';
 //
 import {File, FilesFinder} from '../../Infrastructure/Filesystem';
 //

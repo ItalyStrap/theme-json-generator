@@ -2,7 +2,7 @@ import {EventEmitter} from 'events';
 //
 import {Command} from 'commander';
 //
-import {Bus} from '../../../bus';
+import {Bus} from '../../bus';
 //
 import {CommandInterface} from './CommandInterface';
 import {InfoMessage} from '../InfoMessage';
