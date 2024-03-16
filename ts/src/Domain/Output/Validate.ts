@@ -7,6 +7,7 @@ import {Validator} from '../../Infrastructure/JsonSchema';
 import {File, FilesFinder} from '../../Infrastructure/Filesystem';
 //
 import {ValidateMessage} from '../../Application';
+import {CommandCode} from '../../Application/Commands';
 //
 import {ValidatingFile, ValidatedFails, ValidFile} from './Events';
 
@@ -25,14 +26,14 @@ export class Validate implements HandlerInterface<ValidateMessage, number> {
                 ValidatingFile.name,
                 new ValidatingFile(file)
             );
-            this.validateJsonFile(file, message.fileSchema);
+            // this.validateJsonFile(file, message.fileSchema);
             this.validator.reset();
             /**
              * @todo Implementing scss validation
              */
         }
 
-        return 0;
+        return CommandCode.SUCCESS;
     }
 
     private validateJsonFile(file: File, schema: File): void {

@@ -5,7 +5,7 @@ import {HandlerInterface, MiddlewareInterface} from '../../../../bus';
 import {ValidateMessage} from '../../ValidateMessage';
 import {File} from '../../../Infrastructure/Filesystem';
 
-export class SchemaJsonMiddleware
+export class CreateSchemaJsonMiddleware
     implements MiddlewareInterface<ValidateMessage, number>
 {
     public process(

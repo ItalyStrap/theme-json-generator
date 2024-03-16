@@ -16,7 +16,7 @@ import {
 } from '../../Application/Commands';
 import {
     DeleteSchemaJsonMiddleware,
-    SchemaJsonMiddleware,
+    CreateSchemaJsonMiddleware,
 } from '../../Application/Commands/Middleware';
 import {Info, Init, Validate, Dump} from '../../Domain/Output';
 
@@ -40,8 +40,11 @@ export class Bootstrap {
                 )
             )
         );
-        validateBus.addMiddleware(new SchemaJsonMiddleware());
+        // The Delete middleware must be called before the Create middleware
+        // This way if you use the --force option, the schema.json file will be deleted and recreated
+        // before the validation process.
         validateBus.addMiddleware(new DeleteSchemaJsonMiddleware());
+        validateBus.addMiddleware(new CreateSchemaJsonMiddleware());
 
         const application = new Command();
 

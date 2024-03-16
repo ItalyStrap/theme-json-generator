@@ -1,2 +1,2 @@
-export * from './SchemaJsonMiddleware';
+export * from './CreateSchemaJsonMiddleware';
 export * from './DeleteSchemaJsonMiddleware';
