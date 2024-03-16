@@ -4,7 +4,7 @@ import * as fs from 'fs';
 //
 import {File, FilesFinder} from '../../Infrastructure/Filesystem';
 import {DumpMessage} from '../../Application';
-import {Command} from '../../Application/Commands';
+import {CommandCode} from '../../Application/Commands';
 import {Blueprint, Config} from '../../Application/Config';
 
 export class Dump {
@@ -35,7 +35,7 @@ export class Dump {
                 });
         }
 
-        return 0;
+        return CommandCode.SUCCESS;
     }
 
     private async dumpFile(file: File): Promise<number> {
@@ -57,7 +57,7 @@ export class Dump {
             module = module.default || module;
             if (typeof module !== 'function') {
                 console.error('Module is not callable');
-                return 1;
+                return CommandCode.FAILURE;
             }
 
             const blueprint = new Blueprint();
@@ -68,10 +68,10 @@ export class Dump {
             const generatedFilePath = file.getFilePath().replace(/.js$/, '');
             fs.writeFileSync(generatedFilePath, generatedContent);
 
-            return Command.SUCCESS;
+            return CommandCode.SUCCESS;
         } catch (e) {
             console.error(e);
-            return Command.FAILURE;
+            return CommandCode.FAILURE;
         }
     }
 }

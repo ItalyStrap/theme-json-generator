@@ -2,12 +2,12 @@ import {EventEmitter} from 'events';
 //
 import {Command} from 'commander';
 //
-import {CommandType} from './CommandType';
+import {CommandInterface} from './CommandInterface';
 //
 import {InitMessage} from '../InitMessage';
 import {Init} from '../../Domain/Output';
 
-export class InitCommand extends Command implements CommandType {
+export class InitCommand extends Command implements CommandInterface {
     public constructor(
         private readonly eventEmitter: EventEmitter,
         private readonly init: Init
@@ -26,16 +26,13 @@ export class InitCommand extends Command implements CommandType {
 
     public execute(): InitCommand {
         this.configure();
-        this.action(() => {
-            const rootFolder = process.cwd();
-            const stylesOption = this.opts().styles || '';
-
+        this.action((options: InitMessage) => {
             const message: InitMessage = {
-                rootFolder,
-                stylesOption,
+                rootFolder: process.cwd(),
+                stylesOption: options.stylesOption || '',
             };
 
-            this.init.handle(message);
+            process.exitCode = this.init.handle(message);
         });
 
         return this;

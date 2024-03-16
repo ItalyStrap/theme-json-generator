@@ -4,10 +4,10 @@ import {Command} from 'commander';
 //
 import {Bus} from '../../../bus';
 //
-import {CommandType} from './CommandType';
+import {CommandInterface} from './CommandInterface';
 import {InfoMessage} from '../InfoMessage';
 
-export class InfoCommand extends Command implements CommandType {
+export class InfoCommand extends Command implements CommandInterface {
     public constructor(
         private readonly eventEmitter: EventEmitter,
         private readonly bus: Bus<InfoMessage, number>
@@ -27,7 +27,7 @@ export class InfoCommand extends Command implements CommandType {
                 rootFolder: process.cwd(),
             };
 
-            this.bus.handle(message);
+            process.exitCode = this.bus.handle(message);
         });
 
         return this;

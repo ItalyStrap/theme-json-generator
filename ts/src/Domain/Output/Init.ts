@@ -8,13 +8,15 @@ export class Init {
         this.fileFinder = fileFinder;
     }
 
-    public handle(message: InitMessage): void {
+    public handle(message: InitMessage): number {
         console.log('Initialization logic goes here');
         const files = this.fileFinder.find(message.rootFolder, 'json');
 
         for (const file of files) {
             this.generateEntryPointDataFile(file);
         }
+
+        return 0;
     }
 
     private generateEntryPointDataFile(file: File): void {

@@ -6,7 +6,7 @@ import {ErrorObject} from 'ajv-draft-04';
 //
 import {Bus} from '../../../bus';
 //
-import {CommandType} from './CommandType';
+import {CommandInterface} from './CommandInterface';
 //
 import {ValidateMessage} from '../ValidateMessage';
 import {File} from '../../Infrastructure/Filesystem';
@@ -20,7 +20,7 @@ type ValidateOptions = {
     force: boolean | undefined;
 };
 
-export class ValidateCommand extends Command implements CommandType {
+export class ValidateCommand extends Command implements CommandInterface {
     public constructor(
         private readonly eventEmitter: EventEmitter,
         private readonly bus: Bus<ValidateMessage, number>
@@ -80,7 +80,7 @@ export class ValidateCommand extends Command implements CommandType {
                 force: options.force || false,
             };
 
-            this.bus.handle(message);
+            process.exitCode = this.bus.handle(message);
         });
 
         return this;
