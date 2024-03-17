@@ -25,7 +25,6 @@ export class InitCommand extends Command implements CommandInterface {
     public configure(): void {
         this.name('init');
         this.description('Initialize theme.json file');
-        this.option('-s, --styles [styles]', 'Init JSON file inside styles folder');
         this.option('-fn, --filename [filename]', 'Init JSON file with a specific filename');
     }
 
