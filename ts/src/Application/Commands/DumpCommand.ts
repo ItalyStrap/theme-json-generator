@@ -3,7 +3,6 @@ import {EventEmitter} from 'events';
 import {Command} from 'commander';
 //
 import {CommandInterface} from './CommandInterface';
-import {Dump} from '../../Domain/Output';
 import {DumpMessage} from '../DumpMessage';
 import {Bus} from '../../bus';
 //
