@@ -5,18 +5,10 @@ import {HandlerInterface, MiddlewareInterface} from '../../../bus';
 import {ValidateMessage} from '../../ValidateMessage';
 import {File} from '../../../Infrastructure/Filesystem';
 
-export class CreateSchemaJsonMiddleware
-    implements MiddlewareInterface<ValidateMessage, number>
-{
-    public process(
-        message: ValidateMessage,
-        handler: HandlerInterface<ValidateMessage, number>
-    ): number {
+export class CreateSchemaJsonMiddleware implements MiddlewareInterface<ValidateMessage, number> {
+    public process(message: ValidateMessage, handler: HandlerInterface<ValidateMessage, number>): number {
         const fileSchema = message.fileSchema;
-        if (
-            !fileSchema.exists() ||
-            this.isFileSchemaOlderThanOneWeek(fileSchema)
-        ) {
+        if (!fileSchema.exists() || this.isFileSchemaOlderThanOneWeek(fileSchema)) {
             this.createFileSchema(fileSchema)
                 .then(() => {
                     console.log('File schema created');

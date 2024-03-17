@@ -32,13 +32,7 @@ describe('File class', () => {
     });
 
     test('File content', () => {
-        const filePath = path.join(
-            process.cwd(),
-            'tests',
-            'fixtures',
-            'simple',
-            'theme.json'
-        );
+        const filePath = path.join(process.cwd(), 'tests', 'fixtures', 'simple', 'theme.json');
         const file = new File(filePath);
         expect(file.toString()).toBe(filePath);
         expect(file.exists()).toBe(true);
@@ -47,16 +41,12 @@ describe('File class', () => {
     });
 
     test('Get Short Name', () => {
-        const file = new File(
-            `${process.cwd()}/tests/fixtures/simple/theme.json`
-        );
+        const file = new File(`${process.cwd()}/tests/fixtures/simple/theme.json`);
         expect(file.getShortName()).toBe('theme');
     });
 
     test('Get Base Name', () => {
-        const file = new File(
-            `${process.cwd()}/tests/fixtures/simple/theme.json`
-        );
+        const file = new File(`${process.cwd()}/tests/fixtures/simple/theme.json`);
         expect(file.getBaseName()).toBe('theme.json');
         expect(file.getBaseName('.json')).toBe('theme');
     });

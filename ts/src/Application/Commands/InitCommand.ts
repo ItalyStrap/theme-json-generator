@@ -6,6 +6,13 @@ import {CommandInterface} from './CommandInterface';
 //
 import {InitMessage} from '../InitMessage';
 import {Bus} from '../../bus';
+import {
+    CreatingEntryPointFile,
+    CreatingFile,
+    EntryPointExists,
+    EntryPointFileCreated,
+    NoFileFound,
+} from '../../Domain/Output/Events';
 
 export class InitCommand extends Command implements CommandInterface {
     public constructor(
@@ -18,10 +25,8 @@ export class InitCommand extends Command implements CommandInterface {
     public configure(): void {
         this.name('init');
         this.description('Initialize theme.json file');
-        this.option(
-            '-s, --styles [styles]',
-            'Init JSON file inside styles folder'
-        );
+        this.option('-s, --styles [styles]', 'Init JSON file inside styles folder');
+        this.option('-fn, --filename [filename]', 'Init JSON file with a specific filename');
     }
 
     public execute(): InitCommand {
@@ -29,8 +34,28 @@ export class InitCommand extends Command implements CommandInterface {
         this.action((options: InitMessage) => {
             const message: InitMessage = {
                 rootFolder: process.cwd(),
-                stylesOption: options.stylesOption || '',
+                filename: options.filename || '',
             };
+
+            this.eventEmitter.on(CreatingFile.name, (event: CreatingFile) => {
+                console.log(`Creating ${event.file.getFileName()} file`);
+            });
+
+            this.eventEmitter.on(NoFileFound.name, (event: NoFileFound) => {
+                console.log(`No ${event.filename} file found`);
+            });
+
+            this.eventEmitter.on(CreatingEntryPointFile.name, (event: CreatingEntryPointFile) => {
+                console.log(`Creating entry point ${event.file.getFileName()} file`);
+            });
+
+            this.eventEmitter.on(EntryPointFileCreated.name, (event: EntryPointFileCreated) => {
+                console.log(`${event.file.getFileName()} file created`);
+            });
+
+            this.eventEmitter.on(EntryPointExists.name, (event: EntryPointExists) => {
+                console.log(`${event.file.getFileName()} file already exists`);
+            });
 
             process.exitCode = this.bus.handle(message);
         });

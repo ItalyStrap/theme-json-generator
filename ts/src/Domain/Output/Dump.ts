@@ -1,3 +1,5 @@
+import {EventEmitter} from 'node:events';
+//
 const interpret = require('interpret');
 //
 import * as fs from 'fs';
@@ -11,11 +13,10 @@ import {Blueprint, Config} from '../../Application/Config';
 import {InfoMessage} from '../../Application/InfoMessage';
 
 export class Dump implements HandlerInterface<InfoMessage, number> {
-    private fileFinder: FilesFinder;
-
-    public constructor(fileFinder: FilesFinder) {
-        this.fileFinder = fileFinder;
-    }
+    public constructor(
+        private readonly eventEmitter: EventEmitter,
+        private readonly fileFinder: FilesFinder
+    ) {}
 
     public handle(message: DumpMessage): number {
         const files = this.fileFinder.find(message.rootFolder, 'json.js');

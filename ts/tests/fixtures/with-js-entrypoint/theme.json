@@ -1,13 +1,13 @@
 {
-    "$schema": "https://schemas.wp.org/trunk/theme.json",
-    "version": 2,
-    "title": "Example Theme",
-    "description": "This is an example theme.",
-    "settings": {
-        "layout": {
-            "contentSize": "var(--wp--custom--content-size)",
-            "wideSize": "var(--wp--custom--wide-size)"
-        }
-    },
-    "styles": {}
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 2,
+  "title": "Example Theme",
+  "description": "This is an example theme.",
+  "settings": {
+    "layout": {
+      "contentSize": "var(--wp--custom--content-size)",
+      "wideSize": "var(--wp--custom--wide-size)"
+    }
+  },
+  "styles": {}
 }

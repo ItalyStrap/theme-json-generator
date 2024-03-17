@@ -4,10 +4,7 @@ import * as path from 'path';
 import {File} from '.';
 
 export class FilesFinder {
-    public *find(
-        rootFolder: string,
-        extension: string
-    ): IterableIterator<File> {
+    public *find(rootFolder: string, extension: string): IterableIterator<File> {
         const rootFile = path.join(rootFolder, `theme.${extension}`);
         const rootFileInfo = new File(rootFile);
         if (rootFileInfo.exists()) {

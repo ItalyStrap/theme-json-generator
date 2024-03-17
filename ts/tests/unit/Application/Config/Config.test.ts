@@ -11,9 +11,7 @@ describe('Config class', () => {
 
         config.set('key2', 1);
         expect(config.get('key2')).toBe(1);
-        expect(JSON.stringify(config, null, 2)).toBe(
-            '{\n  "key": "value",\n  "key2": 1\n}'
-        );
+        expect(JSON.stringify(config, null, 2)).toBe('{\n  "key": "value",\n  "key2": 1\n}');
     });
 
     test('Config class merge', () => {

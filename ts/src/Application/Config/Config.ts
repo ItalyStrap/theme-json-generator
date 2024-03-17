@@ -60,11 +60,7 @@ export class Config<K extends string, V> implements Iterable<[K, V]> {
         } as IterableIterator<[K, V]>;
     }
 
-    private findValue(
-        object: any,
-        keys: Array<string | number>,
-        defaultValue: any = null
-    ): any {
+    private findValue(object: any, keys: Array<string | number>, defaultValue: any = null): any {
         let current = object;
 
         for (const key of keys) {
@@ -77,11 +73,7 @@ export class Config<K extends string, V> implements Iterable<[K, V]> {
         return current;
     }
 
-    private insertValue(
-        object: any,
-        keys: Array<string | number>,
-        value: any
-    ): boolean {
+    private insertValue(object: any, keys: Array<string | number>, value: any): boolean {
         let current = object;
 
         if (keys.length === 0) {
@@ -100,13 +92,8 @@ export class Config<K extends string, V> implements Iterable<[K, V]> {
 
             if (current[key] === undefined) {
                 current[key] = shouldCreateArray ? [] : {};
-            } else if (
-                typeof current[key] !== 'object' ||
-                (shouldCreateArray && !Array.isArray(current[key]))
-            ) {
-                throw new Error(
-                    `Expected an object or array at key "${key}", found: ${typeof current[key]}`
-                );
+            } else if (typeof current[key] !== 'object' || (shouldCreateArray && !Array.isArray(current[key]))) {
+                throw new Error(`Expected an object or array at key "${key}", found: ${typeof current[key]}`);
             }
 
             current = current[key];

@@ -22,10 +22,7 @@ export class Validate implements HandlerInterface<ValidateMessage, number> {
         const files = this.fileFinder.find(message.rootFolder, 'json');
 
         for (const file of files) {
-            this.eventEmitter.emit(
-                ValidatingFile.name,
-                new ValidatingFile(file)
-            );
+            this.eventEmitter.emit(ValidatingFile.name, new ValidatingFile(file));
             this.validateJsonFile(file, message.fileSchema);
             this.validator.reset();
             /**
@@ -46,10 +43,7 @@ export class Validate implements HandlerInterface<ValidateMessage, number> {
         this.validator.validate(data, jsonSchema);
 
         if (!this.validator.isValid()) {
-            this.eventEmitter.emit(
-                ValidatedFails.name,
-                new ValidatedFails(file, this.validator.getErrors())
-            );
+            this.eventEmitter.emit(ValidatedFails.name, new ValidatedFails(file, this.validator.getErrors()));
             return;
         }
 

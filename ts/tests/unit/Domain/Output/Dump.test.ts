@@ -1,5 +1,7 @@
 import {describe, expect, test} from '@jest/globals';
 //
+import {EventEmitter} from 'events';
+//
 import {FilesFinder} from '../../../../src/Infrastructure/Filesystem';
 import {Dump} from '../../../../src/Domain/Output';
 import {DumpMessage} from '../../../../src/Application';
@@ -25,7 +27,8 @@ describe('Dump class', () => {
 
     test('Dump file', () => {
         const fileFinder = new FilesFinder();
-        const dump = new Dump(fileFinder);
+        const eventEmitter = new EventEmitter();
+        const dump = new Dump(eventEmitter, fileFinder);
         const rootFolder = `${process.cwd()}/tests/fixtures/with-js-entrypoint`;
         const message: DumpMessage = {
             rootFolder: rootFolder,
@@ -37,7 +40,8 @@ describe('Dump class', () => {
 
     test('Dump ts file', () => {
         const fileFinder = new FilesFinder();
-        const dump = new Dump(fileFinder);
+        const eventEmitter = new EventEmitter();
+        const dump = new Dump(eventEmitter, fileFinder);
         const rootFolder = `${process.cwd()}/tests/fixtures/type`;
         const message: DumpMessage = {
             rootFolder: rootFolder,

@@ -27,12 +27,7 @@ describe('Validate class', () => {
         const fileFinder = new FilesFinder();
         const validator = new Validator(new Ajv());
         const dump = new Validate(eventEmitter, fileFinder, validator);
-        const rootFolder = path.join(
-            process.cwd(),
-            'tests',
-            'fixtures',
-            'with-js-entrypoint'
-        );
+        const rootFolder = path.join(process.cwd(), 'tests', 'fixtures', 'with-js-entrypoint');
         const message: ValidateMessage = {
             rootFolder: rootFolder,
             fileSchema: new File(path.join(rootFolder, 'theme.schema.json')),

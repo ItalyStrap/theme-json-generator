@@ -8,16 +8,8 @@ import {Bus} from '../../bus';
 import {Validator} from '../JsonSchema';
 import {FilesFinder} from '../Filesystem';
 //
-import {
-    DumpCommand,
-    InfoCommand,
-    InitCommand,
-    ValidateCommand,
-} from '../../Application/Commands';
-import {
-    DeleteSchemaJsonMiddleware,
-    CreateSchemaJsonMiddleware,
-} from '../../Application/Commands/Middleware';
+import {DumpCommand, InfoCommand, InitCommand, ValidateCommand} from '../../Application/Commands';
+import {DeleteSchemaJsonMiddleware, CreateSchemaJsonMiddleware} from '../../Application/Commands/Middleware';
 import {Info, Init, Validate, Dump} from '../../Domain/Output';
 
 export class Bootstrap {
@@ -27,10 +19,10 @@ export class Bootstrap {
 
         const application = new Command();
 
-        const initBus = new Bus(new Init(finder));
+        const initBus = new Bus(new Init(eventEmitter, finder));
         const initCommand = new InitCommand(eventEmitter, initBus);
 
-        const dumpBus = new Bus(new Dump(finder));
+        const dumpBus = new Bus(new Dump(eventEmitter, finder));
         const dumpCommand = new DumpCommand(eventEmitter, dumpBus);
 
         const validateBus = new Bus(
