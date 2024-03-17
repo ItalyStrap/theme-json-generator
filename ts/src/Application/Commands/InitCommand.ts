@@ -14,6 +14,10 @@ import {
     NoFileFound,
 } from '../../Domain/Output/Events';
 
+type InitOptions = {
+    filename: string | undefined;
+};
+
 export class InitCommand extends Command implements CommandInterface {
     public constructor(
         private readonly eventEmitter: EventEmitter,
@@ -30,7 +34,7 @@ export class InitCommand extends Command implements CommandInterface {
 
     public execute(): InitCommand {
         this.configure();
-        this.action((options: InitMessage) => {
+        this.action((options: InitOptions) => {
             const message: InitMessage = {
                 rootFolder: process.cwd(),
                 filename: options.filename || '',

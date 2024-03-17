@@ -7,6 +7,10 @@ import {DumpMessage} from '../DumpMessage';
 import {Bus} from '../../bus';
 //
 
+type DumpOptions = {
+    dryRun: boolean | undefined;
+};
+
 export class DumpCommand extends Command implements CommandInterface {
     public constructor(
         private readonly eventEmitter: EventEmitter,
@@ -23,7 +27,7 @@ export class DumpCommand extends Command implements CommandInterface {
 
     public execute(): DumpCommand {
         this.configure();
-        this.action((options: DumpMessage) => {
+        this.action((options: DumpOptions) => {
             const message: DumpMessage = {
                 rootFolder: process.cwd(),
                 dryRun: options.dryRun || false,
