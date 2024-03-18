@@ -48,7 +48,7 @@ export class ValidateCommand extends Command implements CommandInterface {
 
                 console.log('Errors found:');
                 for (const error of event.errors) {
-                    const instancePath = error.instancePath.replace(/\//g, '.') || '';
+                    const instancePath = error.instancePath.replace(/\//g, '.') ?? '';
                     console.log(`- ${instancePath} ${error.message}`);
                 }
             });
@@ -60,7 +60,7 @@ export class ValidateCommand extends Command implements CommandInterface {
             const message: ValidateMessage = {
                 rootFolder,
                 fileSchema,
-                force: options.force || false,
+                force: options.force ?? false,
             };
 
             process.exitCode = this.bus.handle(message);

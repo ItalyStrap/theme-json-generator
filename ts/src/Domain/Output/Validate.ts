@@ -34,13 +34,10 @@ export class Validate implements HandlerInterface<ValidateMessage, number> {
     }
 
     private validateJsonFile(file: File, schema: File): void {
-        let data = fs.readFileSync(file.getFilePath(), 'utf8');
-        data = JSON.parse(data);
+        const data = fs.readFileSync(file.getFilePath(), 'utf8');
+        const jsonSchema = fs.readFileSync(schema.getFilePath(), 'utf8');
 
-        let jsonSchema = fs.readFileSync(schema.getFilePath(), 'utf8');
-        jsonSchema = JSON.parse(jsonSchema);
-
-        this.validator.validate(data, jsonSchema);
+        this.validator.validate(JSON.parse(data), JSON.parse(jsonSchema));
 
         if (!this.validator.isValid()) {
             this.eventEmitter.emit(ValidatedFails.name, new ValidatedFails(file, this.validator.getErrors()));

@@ -7,7 +7,7 @@ export class Validator {
     private valid: boolean = false;
     private errors: ValidatorErrorsType;
     public constructor(private ajv: Ajv) {}
-    public validate(data: {}, schema: {}): void {
+    public validate(data: object, schema: object): void {
         try {
             const validate = this.ajv.compile(schema);
             this.valid = validate(data);

@@ -9,7 +9,7 @@ import {HandlerInterface} from '../../bus';
 import {File, FilesFinder} from '../../Infrastructure/Filesystem';
 import {DumpMessage} from '../../Application';
 import {CommandCode} from '../../Application/Commands';
-import {Blueprint, Config} from '../../Application/Config';
+import {Blueprint} from '../../Application/Config';
 import {InfoMessage} from '../../Application/InfoMessage';
 
 export class Dump implements HandlerInterface<InfoMessage, number> {
@@ -31,8 +31,8 @@ export class Dump implements HandlerInterface<InfoMessage, number> {
 
             this.dumpFile(file)
                 .then((r) => {
-                    // console.log('done')
-                    // console.log(r)
+                    console.log('done');
+                    console.log(r);
                 })
                 .catch((e) => {
                     console.error(e);
@@ -48,17 +48,25 @@ export class Dump implements HandlerInterface<InfoMessage, number> {
             // const obj = require(interpret.jsVariants['.ts'][0])
             // console.log(typeof obj);
 
-            const filePath = file.getFilePath(); // Ottieni il percorso del file
+            // const filePath = file.getFilePath(); // Ottieni il percorso del file
             let module;
 
-            if (filePath.endsWith('.ts')) {
-                require('ts-node').register();
-                module = await import(filePath);
-            } else {
-                module = require(filePath);
+            // if (filePath.endsWith('.ts')) {
+            //     require('ts-node').register();
+                // check if ts-node is installed
+                // module = require(file.getFilePath());
+            //     module = await import(filePath);
+            // } else {
+            //     module = require(filePath);
+            // }
+
+            console.log(interpret.jsVariants['.ts']);
+            console.log(interpret.jsVariants[file.getExtension()]);
+            if (file.getExtension() === '.js') {
+                module = require(file.getFilePath());
             }
 
-            module = module.default || module;
+            module = module.default ?? module;
             if (typeof module !== 'function') {
                 console.error('Module is not callable');
                 return CommandCode.FAILURE;

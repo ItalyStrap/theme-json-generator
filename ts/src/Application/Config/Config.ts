@@ -1,3 +1,5 @@
+type arrayKey = string | number;
+
 export class Config<K extends string, V> implements Iterable<[K, V]> {
     private storage: Record<K, V> = {} as Record<K, V>;
     private temp = null as V | null;
@@ -60,21 +62,22 @@ export class Config<K extends string, V> implements Iterable<[K, V]> {
         } as IterableIterator<[K, V]>;
     }
 
-    private findValue(object: any, keys: Array<string | number>, defaultValue: any = null): any {
-        let current = object;
+    private findValue(object: Record<K, V>, keys: Array<arrayKey>, defaultValue: V | null = null): V | null {
+        let current: Record<K, V> | V = object;
 
         for (const key of keys) {
-            if (current[key] === undefined) {
+            if (this.currentIsNotValid(current, key)) {
                 return defaultValue;
             }
-            current = current[key];
+
+            current = (current as Record<K, V>)[key as K];
         }
 
-        return current;
+        return current as V;
     }
 
-    private insertValue(object: any, keys: Array<string | number>, value: any): boolean {
-        let current = object;
+    private insertValue(object: Record<K, V>, keys: Array<arrayKey>, value: V): boolean {
+        let current: Record<K, V> | V = object;
 
         if (keys.length === 0) {
             return false;
@@ -87,15 +90,20 @@ export class Config<K extends string, V> implements Iterable<[K, V]> {
                 return false;
             }
 
+            if (current === null) {
+                return false;
+            }
+
             const nextKey = keys[i + 1];
             const shouldCreateArray = !isNaN(Number(nextKey));
 
+            // @ts-expect-error - We know that current is not null
             if (current[key] === undefined) {
+                // @ts-expect-error - At this point, current is undefined but not null
                 current[key] = shouldCreateArray ? [] : {};
-            } else if (typeof current[key] !== 'object' || (shouldCreateArray && !Array.isArray(current[key]))) {
-                throw new Error(`Expected an object or array at key "${key}", found: ${typeof current[key]}`);
             }
 
+            // @ts-expect-error - Reassigning current
             current = current[key];
         }
 
@@ -103,6 +111,7 @@ export class Config<K extends string, V> implements Iterable<[K, V]> {
         if (!isNaN(Number(lastKey)) && Array.isArray(current)) {
             current[Number(lastKey)] = value;
         } else if (typeof lastKey === 'string') {
+            // @ts-expect-error - Reassigning current
             current[lastKey] = value;
         } else {
             console.error(`Invalid last key: ${lastKey}`);
@@ -112,8 +121,8 @@ export class Config<K extends string, V> implements Iterable<[K, V]> {
         return true;
     }
 
-    private deleteValue(object: any, keys: Array<string | number>): boolean {
-        let current = object;
+    private deleteValue(object: Record<K, V>, keys: Array<arrayKey>): boolean {
+        let current: Record<K, V> | V = object;
 
         for (let i = 0; i < keys.length - 1; i++) {
             const key = keys[i];
@@ -122,10 +131,11 @@ export class Config<K extends string, V> implements Iterable<[K, V]> {
                 return false;
             }
 
-            if (current[key] === undefined) {
+            if (this.currentIsNotValid(current, key)) {
                 return false;
             }
-            current = current[key];
+
+            current = (current as Record<K, V>)[key as K];
         }
 
         const lastKey = keys[keys.length - 1];
@@ -134,11 +144,19 @@ export class Config<K extends string, V> implements Iterable<[K, V]> {
             return false;
         }
 
-        if (current[lastKey] !== undefined) {
-            delete current[lastKey];
-            return true;
+        if (this.currentIsNotValid(current, lastKey)) {
+            return false;
         }
 
-        return false;
+        delete (current as Record<K, V>)[lastKey as K];
+        return true;
+    }
+
+    private currentIsValid(current: Record<K, V> | V, key: arrayKey) {
+        return !this.currentIsNotValid(current, key);
+    }
+
+    private currentIsNotValid(current: Record<K, V> | V, key: arrayKey) {
+        return current === null || typeof current !== 'object' || !(key in current) || !(current instanceof Object);
     }
 }

@@ -41,7 +41,7 @@ export class Bootstrap {
             )
         );
 
-        // The Delete middleware must be called before the Create middleware
+        // The 'Delete' middleware must be called before the 'Create' middleware
         // This way if you use the --force option, the schema.json file will be deleted and recreated
         // before the validation process.
         validateBus.addMiddleware(new DeleteSchemaJsonMiddleware());

@@ -37,7 +37,7 @@ export class InitCommand extends Command implements CommandInterface {
         this.action((options: InitOptions) => {
             const message: InitMessage = {
                 rootFolder: process.cwd(),
-                filename: options.filename || '',
+                filename: options.filename ?? '',
             };
 
             this.eventEmitter.on(CreatingFile.name, (event: CreatingFile) => {

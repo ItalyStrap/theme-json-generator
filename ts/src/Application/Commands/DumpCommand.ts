@@ -30,7 +30,7 @@ export class DumpCommand extends Command implements CommandInterface {
         this.action((options: DumpOptions) => {
             const message: DumpMessage = {
                 rootFolder: process.cwd(),
-                dryRun: options.dryRun || false,
+                dryRun: options.dryRun ?? false,
             };
 
             process.exitCode = this.bus.handle(message);

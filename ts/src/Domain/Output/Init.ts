@@ -18,8 +18,9 @@ export class Init implements HandlerInterface<InfoMessage, number> {
     ) {}
 
     public handle(message: InitMessage): number {
-        if (message.filename) {
-            const filename = message.filename.replace('.json', '');
+        const messageFilename = message.filename ?? '';
+        if (messageFilename !== '') {
+            const filename = messageFilename.replace('.json', '');
             this.generateJsonFileWithEntryPoint(message, path.join('styles', `${filename}.json`));
             return CommandCode.SUCCESS;
         }

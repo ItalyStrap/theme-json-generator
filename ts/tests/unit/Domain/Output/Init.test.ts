@@ -17,15 +17,15 @@ beforeEach(() => {
 
 const makeInstance = () => {
     const fileFinder = new FilesFinder();
-    // const eventEmitter = new EventEmitter();
 
     class MyEmitter extends EventEmitter {
         constructor() {
             super();
         }
 
-        public on(event: string | symbol, listener: (...args: any[]) => void): this {
-            return this;
+        public emit(event: string | symbol, ...args: any[]): boolean {
+            // console.log('emit', event);
+            return true;
         }
     }
 

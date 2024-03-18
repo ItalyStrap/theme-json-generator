@@ -5,7 +5,9 @@ export const CommandCode = {
     SUCCESS: 0,
     FAILURE: 1,
     INVALID: 2,
-};
+} as const;
+
+export type CommandCodeType = (typeof CommandCode)[keyof typeof CommandCode];
 
 export interface CommandInterface {
     configure(): void;

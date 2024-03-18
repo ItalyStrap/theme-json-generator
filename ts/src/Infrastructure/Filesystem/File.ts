@@ -22,7 +22,7 @@ export class File {
     }
 
     public getShortName(): string {
-        return this.getBaseName().split('.').shift() || '';
+        return this.getBaseName().split('.').shift() ?? '';
     }
 
     public getBaseName(omitExtension: string | undefined = undefined): string {

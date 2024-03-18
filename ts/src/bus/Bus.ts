@@ -15,7 +15,7 @@ export class Bus<T extends object, R> implements HandlerInterface<T, R> {
         }
 
         const middleware = this.middlewares.shift();
-        // @ts-ignore - TS doesn't understand that middleware is not undefined, see the if statement above
+        // @ts-expect-error - TS doesn't understand that middleware is not undefined, see the if statement above
         return middleware.process(message, this);
     }
 }
