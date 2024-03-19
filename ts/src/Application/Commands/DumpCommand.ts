@@ -9,6 +9,7 @@ import {Bus} from '../../bus';
 
 type DumpOptions = {
     dryRun: boolean | undefined;
+    ext: string | undefined;
 };
 
 export class DumpCommand extends Command implements CommandInterface {
@@ -23,6 +24,7 @@ export class DumpCommand extends Command implements CommandInterface {
         this.name('dump');
         this.description('Dump the application state');
         this.option('-d, --dry-run', 'Dry run mode');
+        this.option('--ext <ext>', 'File extension to dump', 'js');
     }
 
     public execute(): DumpCommand {
@@ -31,6 +33,7 @@ export class DumpCommand extends Command implements CommandInterface {
             const message: DumpMessage = {
                 rootFolder: process.cwd(),
                 dryRun: options.dryRun ?? false,
+                ext: options.ext ?? 'js',
             };
 
             process.exitCode = this.bus.handle(message);

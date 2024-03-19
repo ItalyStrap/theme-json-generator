@@ -46,6 +46,7 @@ describe('Dump class', () => {
         const message: DumpMessage = {
             rootFolder: rootFolder,
             dryRun: false,
+            // ext: 'ts',
         };
         const isHandled = dump.handle(message);
         expect(isHandled).toBe(0);

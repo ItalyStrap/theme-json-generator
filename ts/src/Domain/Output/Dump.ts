@@ -1,6 +1,7 @@
 import {EventEmitter} from 'node:events';
 //
-const interpret = require('interpret');
+import interpret from 'interpret';
+import rechoir from 'rechoir';
 //
 import * as fs from 'fs';
 //
@@ -19,7 +20,7 @@ export class Dump implements HandlerInterface<InfoMessage, number> {
     ) {}
 
     public handle(message: DumpMessage): number {
-        const files = this.fileFinder.find(message.rootFolder, 'json.js');
+        const files = this.fileFinder.find(message.rootFolder, `json.${message.ext}`);
 
         for (const file of files) {
             console.log(`Dumping file: ${file.getFileName()}`);
@@ -44,27 +45,26 @@ export class Dump implements HandlerInterface<InfoMessage, number> {
 
     private async dumpFile(file: File): Promise<number> {
         try {
-            // console.log(interpret.jsVariants['.ts'][0]);
-            // const obj = require(interpret.jsVariants['.ts'][0])
-            // console.log(typeof obj);
-
-            // const filePath = file.getFilePath(); // Ottieni il percorso del file
             let module;
+            console.log('file', file);
+            const autoloads = rechoir.prepare(interpret.jsVariants, file.getFilePath());
+            console.log('rechoir', autoloads);
 
-            // if (filePath.endsWith('.ts')) {
-            //     require('ts-node').register();
-                // check if ts-node is installed
-                // module = require(file.getFilePath());
-            //     module = await import(filePath);
-            // } else {
-            //     module = require(filePath);
-            // }
-
-            console.log(interpret.jsVariants['.ts']);
-            console.log(interpret.jsVariants[file.getExtension()]);
             if (file.getExtension() === '.js') {
                 module = require(file.getFilePath());
             }
+
+            if (file.getExtension() === '.ts') {
+                console.log('Is TS file');
+                // @ts-ignore
+                // const attempt = autoloads[autoloads.length - 1];
+                // console.log('attempt', attempt.moduleName);
+                // require(attempt.moduleName);
+                // require('ts-node').register();
+                module = await import(file.getFilePath());
+            }
+
+            // console.log(module);
 
             module = module.default ?? module;
             if (typeof module !== 'function') {
@@ -78,7 +78,7 @@ export class Dump implements HandlerInterface<InfoMessage, number> {
             const generatedContent = JSON.stringify(blueprint, null, 2);
 
             const generatedFilePath = file.getFilePath().replace(/.js$/, '');
-            fs.writeFileSync(generatedFilePath, generatedContent);
+            // fs.writeFileSync(generatedFilePath, generatedContent);
 
             return CommandCode.SUCCESS;
         } catch (e) {

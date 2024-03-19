@@ -53,7 +53,13 @@ export class Init implements HandlerInterface<InfoMessage, number> {
         this.eventEmitter.emit(CreatingEntryPointFile.name, new CreatingEntryPointFile(entryPointFile));
         if (!entryPointFile.exists()) {
             const data = fs.readFileSync(file.getFilePath(), 'utf8');
-            fs.writeFileSync(entryPointFile.toString(), 'module.exports = ' + data);
+            fs.writeFileSync(
+                entryPointFile.toString(),
+                `module.exports = (app) => {
+    const {blueprint} = app;
+    blueprint.merge(${data});
+};`
+            );
             this.eventEmitter.emit(EntryPointFileCreated.name, new EntryPointFileCreated(entryPointFile));
             return;
         }

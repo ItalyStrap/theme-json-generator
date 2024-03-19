@@ -1,4 +1,5 @@
 export type DumpMessage = Readonly<{
     rootFolder: string;
-    dryRun: boolean;
+    dryRun?: boolean;
+    ext?: string;
 }>;
