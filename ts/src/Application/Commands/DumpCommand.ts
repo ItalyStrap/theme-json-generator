@@ -5,7 +5,14 @@ import {Command} from 'commander';
 import {CommandInterface} from './CommandInterface';
 import {DumpMessage} from '../DumpMessage';
 import {Bus} from '../../bus';
-import {DryRunMode, GeneratedFile, GeneratingFails, GeneratingFile, NoFileFound} from '../../Domain/Output/Events';
+import {
+    DryRunMode,
+    GeneratedFile,
+    GeneratingFails,
+    GeneratingFile,
+    NoFileFound,
+    ValidationSubProcess,
+} from '../../Domain/Output/Events';
 //
 
 type DumpOptions = {
@@ -58,7 +65,11 @@ export class DumpCommand extends Command implements CommandInterface {
 
             this.eventEmitter.on(NoFileFound.name, (event: NoFileFound) => {
                 console.error(`${event.filenameOrMessage}`);
-            } );
+            });
+
+            this.eventEmitter.on(ValidationSubProcess.name, (event: ValidationSubProcess) => {
+                console.log(event.message);
+            });
 
             process.exitCode = this.bus.handle(message);
         });

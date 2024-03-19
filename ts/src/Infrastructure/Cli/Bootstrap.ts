@@ -9,7 +9,11 @@ import {Validator} from '../JsonSchema';
 import {FilesFinder} from '../Filesystem';
 //
 import {DumpCommand, InfoCommand, InitCommand, ValidateCommand} from '../../Application/Commands';
-import {DeleteSchemaJsonMiddleware, CreateSchemaJsonMiddleware} from '../../Application/Commands/Middleware';
+import {
+    DeleteSchemaJsonMiddleware,
+    CreateSchemaJsonMiddleware,
+    ValidateHandlerSubProcessMiddleware,
+} from '../../Application/Commands/Middleware';
 import {Info, Init, Validate, Dump} from '../../Domain/Output';
 
 export class Bootstrap {
@@ -23,6 +27,9 @@ export class Bootstrap {
         const initCommand = new InitCommand(eventEmitter, initBus);
 
         const dumpBus = new Bus(new Dump(eventEmitter, finder));
+        // This middleware needs to be called after all the other middlewares if any and before the main handler is called
+        dumpBus.addMiddleware(new ValidateHandlerSubProcessMiddleware(eventEmitter));
+
         const dumpCommand = new DumpCommand(eventEmitter, dumpBus);
 
         const validateBus = new Bus(

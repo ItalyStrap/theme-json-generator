@@ -1,6 +1,7 @@
 export * from './ValidatingFile';
 export * from './ValidatedFails';
 export * from './ValidFile';
+export * from './ValidationSubProcess';
 export * from './CreatingFile';
 export * from './CreatingEntryPointFile';
 export * from './EntryPointFileCreated';

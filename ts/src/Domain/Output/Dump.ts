@@ -33,16 +33,20 @@ export class Dump implements HandlerInterface<InfoMessage, number> {
 
             this.dumpFile(file)
                 .then((r) => {
-                    console.log('done');
-                    console.log(r);
+                    // @todo: think about if this is necessary
+                    // console.log('done');
+                    // console.log(r);
                 })
                 .catch((e) => {
-                    console.error(e);
+                    // console.error(e);
                 });
         }
 
         if (count === 0) {
-            this.eventEmitter.emit(NoFileFound.name, new NoFileFound('No files found for dumping, try to run `init` command first.'));
+            this.eventEmitter.emit(
+                NoFileFound.name,
+                new NoFileFound('No files found for dumping, try to run `init` command first.')
+            );
             return CommandCode.FAILURE;
         }
 
@@ -55,9 +59,9 @@ export class Dump implements HandlerInterface<InfoMessage, number> {
 
             let module;
             const autoloads = rechoir.prepare(interpret.jsVariants, file.getFilePath());
-            // console.log('rechoir', autoloads);
-            if (autoloads) {
-                console.log('autoloads', autoloads);
+
+            if (!autoloads) {
+                console.error('No autoloads found');
             }
 
             if (file.getExtension() === '.js') {
@@ -88,11 +92,12 @@ export class Dump implements HandlerInterface<InfoMessage, number> {
             const blueprint = new Blueprint();
             module({blueprint});
 
-            const generatedContent = JSON.stringify(blueprint, null, 2);
+            const generatedContent = JSON.stringify(blueprint, null, 4);
 
             const generatedFilePath = file.getFilePath().replace(/.js$/, '');
             fs.writeFileSync(generatedFilePath, generatedContent);
             this.eventEmitter.emit(GeneratedFile.name, new GeneratedFile(new File(generatedFilePath)));
+
             return CommandCode.SUCCESS;
         } catch (e) {
             console.error(e);
