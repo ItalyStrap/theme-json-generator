@@ -45,7 +45,7 @@ export class InitCommand extends Command implements CommandInterface {
             });
 
             this.eventEmitter.on(NoFileFound.name, (event: NoFileFound) => {
-                console.log(`No ${event.filename} file found`);
+                console.log(`No ${event.filenameOrMessage} file found`);
             });
 
             this.eventEmitter.on(CreatingEntryPointFile.name, (event: CreatingEntryPointFile) => {

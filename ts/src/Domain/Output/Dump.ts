@@ -12,6 +12,7 @@ import {DumpMessage} from '../../Application';
 import {CommandCode} from '../../Application/Commands';
 import {Blueprint} from '../../Application/Config';
 import {InfoMessage} from '../../Application/InfoMessage';
+import {DryRunMode, GeneratedFile, GeneratingFile, GeneratingFails, NoFileFound} from './Events';
 
 export class Dump implements HandlerInterface<InfoMessage, number> {
     public constructor(
@@ -22,11 +23,11 @@ export class Dump implements HandlerInterface<InfoMessage, number> {
     public handle(message: DumpMessage): number {
         const files = this.fileFinder.find(message.rootFolder, `json.${message.ext}`);
 
+        let count = 0;
         for (const file of files) {
-            console.log(`Dumping file: ${file.getFileName()}`);
-
+            count++;
             if (message.dryRun) {
-                console.log('Dry run mode');
+                this.eventEmitter.emit(DryRunMode.name);
                 continue;
             }
 
@@ -40,22 +41,31 @@ export class Dump implements HandlerInterface<InfoMessage, number> {
                 });
         }
 
+        if (count === 0) {
+            this.eventEmitter.emit(NoFileFound.name, new NoFileFound('No files found for dumping, try to run `init` command first.'));
+            return CommandCode.FAILURE;
+        }
+
         return CommandCode.SUCCESS;
     }
 
     private async dumpFile(file: File): Promise<number> {
         try {
+            this.eventEmitter.emit(GeneratingFile.name, new GeneratingFile(file));
+
             let module;
-            console.log('file', file);
             const autoloads = rechoir.prepare(interpret.jsVariants, file.getFilePath());
-            console.log('rechoir', autoloads);
+            // console.log('rechoir', autoloads);
+            if (autoloads) {
+                console.log('autoloads', autoloads);
+            }
 
             if (file.getExtension() === '.js') {
                 module = require(file.getFilePath());
             }
 
             if (file.getExtension() === '.ts') {
-                console.log('Is TS file');
+                // console.log('Is TS file');
                 // @ts-ignore
                 // const attempt = autoloads[autoloads.length - 1];
                 // console.log('attempt', attempt.moduleName);
@@ -68,7 +78,10 @@ export class Dump implements HandlerInterface<InfoMessage, number> {
 
             module = module.default ?? module;
             if (typeof module !== 'function') {
-                console.error('Module is not callable');
+                this.eventEmitter.emit(
+                    GeneratingFails.name,
+                    new GeneratingFails('Module is not callable: got ' + typeof module)
+                );
                 return CommandCode.FAILURE;
             }
 
@@ -78,8 +91,8 @@ export class Dump implements HandlerInterface<InfoMessage, number> {
             const generatedContent = JSON.stringify(blueprint, null, 2);
 
             const generatedFilePath = file.getFilePath().replace(/.js$/, '');
-            // fs.writeFileSync(generatedFilePath, generatedContent);
-
+            fs.writeFileSync(generatedFilePath, generatedContent);
+            this.eventEmitter.emit(GeneratedFile.name, new GeneratedFile(new File(generatedFilePath)));
             return CommandCode.SUCCESS;
         } catch (e) {
             console.error(e);

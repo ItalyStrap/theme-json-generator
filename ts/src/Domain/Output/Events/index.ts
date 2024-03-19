@@ -7,3 +7,7 @@ export * from './EntryPointFileCreated';
 export * from './EntryPointExists';
 export * from './EntryPointFileCreated';
 export * from './NoFileFound';
+export * from './DryRunMode';
+export * from './GeneratedFile';
+export * from './GeneratingFile';
+export * from './GeneratingFails';

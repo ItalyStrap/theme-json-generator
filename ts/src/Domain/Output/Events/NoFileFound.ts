@@ -1,3 +1,3 @@
 export class NoFileFound {
-    public constructor(public readonly filename: string) {}
+    public constructor(public readonly filenameOrMessage: string) {}
 }
