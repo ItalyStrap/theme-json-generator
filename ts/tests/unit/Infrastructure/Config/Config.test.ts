@@ -1,6 +1,7 @@
 import {describe, expect, test} from '@jest/globals';
 //
-import {Blueprint, Config} from '../../../../src/Application/Config';
+import {Blueprint} from '../../../../src/Application/Config';
+import {Config} from '../../../../src/Infrastructure/Config';
 //
 
 describe('Config class', () => {
