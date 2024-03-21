@@ -14,6 +14,7 @@ export class Config<K extends string, V> implements Iterable<[K, V]> {
         if (!this.has(key)) {
             return defaultValue;
         }
+
         return this.temp as V;
     }
 
@@ -41,6 +42,10 @@ export class Config<K extends string, V> implements Iterable<[K, V]> {
 
     public toArray(): Array<[K, V]> {
         return Object.entries(this.storage) as Array<[K, V]>;
+    }
+
+    public toObject(): Record<K, V> {
+        return this.storage;
     }
 
     public toJSON(): Record<K, V> {

@@ -5,11 +5,13 @@ import {Preset} from '../../../../../src/Domain/Input/Settings';
 
 const makeInstance = (preset: string, slug: string) => {
     return new (class extends Preset {
+        static readonly TYPE = 'color';
+
         public constructor(type: string, slugName: string) {
             super(type, slugName);
         }
 
-        toArray(): Record<string, string | Record<string, unknown>> {
+        toObject(): Record<string, string | Record<string, unknown>> {
             return {
                 slug: this.slug(),
                 name: 'name',
@@ -28,7 +30,7 @@ describe('Preset class', () => {
         expect(sut.prop()).toBe('--wp--preset--preset--slug');
         expect(sut.var()).toBe('var(--wp--preset--preset--slug)');
         expect(sut.toString()).toBe('var(--wp--preset--preset--slug)');
-        expect(sut.toArray()).toEqual({slug: 'slug', name: 'name'});
+        expect(sut.toObject()).toEqual({slug: 'slug', name: 'name'});
     });
 
     test('camelToSnake', () => {

@@ -11,5 +11,5 @@ export interface PresetInterface {
 
     toString(): string;
 
-    toArray(): Record<string, string | Record<string, unknown>>;
+    toObject(): Record<string, string | Record<string, unknown>>;
 }

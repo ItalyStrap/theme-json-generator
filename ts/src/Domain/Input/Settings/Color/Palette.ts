@@ -13,11 +13,11 @@ export class Palette extends Preset implements PresetInterface {
         super(Palette.TYPE, slugName);
     }
 
-    public toArray(): Record<string, string> {
+    public toObject(): Record<string, string> {
         return {
             slug: this.slug(),
             name: this.name,
-            color: this.color.toString(),
+            color: `${this.color}`,
         };
     }
 }

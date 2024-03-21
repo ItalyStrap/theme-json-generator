@@ -13,6 +13,7 @@ import {CommandCode} from '../../Application/Commands';
 import {Blueprint} from '../../Application/Config';
 import {InfoMessage} from '../../Application/InfoMessage';
 import {DryRunMode, GeneratedFile, GeneratingFile, GeneratingFails, NoFileFound} from './Events';
+import {Presets} from '../Input/Settings';
 
 export class Dump implements HandlerInterface<InfoMessage, number> {
     public constructor(
@@ -90,7 +91,9 @@ export class Dump implements HandlerInterface<InfoMessage, number> {
             }
 
             const blueprint = new Blueprint();
-            module({blueprint});
+            const presets = new Presets();
+            module({blueprint, presets});
+            blueprint.setPresets(presets);
 
             const generatedContent = JSON.stringify(blueprint, null, 4);
 

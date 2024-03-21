@@ -35,7 +35,7 @@ export abstract class Preset implements PresetInterface {
         return this.var();
     }
 
-    public abstract toArray(): Record<string, string | Record<string, unknown>>;
+    public abstract toObject(): Record<string, string | Record<string, unknown>>;
 
     protected assertSlugIsWellFormed(slug: string): void {
         if (slug.match(/\s/) || slug === '') {

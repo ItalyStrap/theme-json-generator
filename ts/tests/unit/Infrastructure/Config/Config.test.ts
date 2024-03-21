@@ -1,6 +1,5 @@
 import {describe, expect, test} from '@jest/globals';
 //
-import {Blueprint} from '../../../../src/Application/Config';
 import {Config} from '../../../../src/Infrastructure/Config';
 //
 
@@ -153,21 +152,4 @@ describe('Config class Has', () => {
     //     expect(config.get('0')).toBe('value');
     //     expect(config.toJSON()).toBe(['value']);
     // } );
-});
-
-describe('Blueprint class', () => {
-    test('Blueprint class', () => {
-        const initialConfig = {
-            init: 'init value',
-        };
-
-        const blueprint = new Blueprint<string, number | string>(initialConfig);
-        expect(blueprint.get('init')).toBe('init value');
-
-        blueprint.set('key', 'value');
-        expect(blueprint.get('key')).toBe('value');
-
-        blueprint.set('key2', 1);
-        expect(blueprint.get('key2')).toBe(1);
-    });
 });

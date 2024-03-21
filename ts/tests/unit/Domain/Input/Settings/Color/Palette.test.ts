@@ -11,6 +11,6 @@ const makeInstance = (preset: string, slug: string) => {
 describe('Palette class', () => {
     test('Palette', () => {
         const sut = makeInstance('color', 'slug');
-        expect(sut.toArray()).toEqual({slug: 'slug', name: 'name', color: 'rgba(0,0,0,1)'});
+        expect(sut.toObject()).toEqual({slug: 'slug', name: 'name', color: 'rgba(0,0,0,1)'});
     });
 });
