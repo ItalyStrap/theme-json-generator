@@ -14,6 +14,7 @@ import {Blueprint} from '../../Application/Config';
 import {InfoMessage} from '../../Application/InfoMessage';
 import {DryRunMode, GeneratedFile, GeneratingFile, GeneratingFails, NoFileFound} from './Events';
 import {Presets} from '../Input/Settings';
+import {Border, Color, Outline, Spacing, Typography} from '../Input/Styles';
 
 export class Dump implements HandlerInterface<InfoMessage, number> {
     public constructor(
@@ -27,17 +28,19 @@ export class Dump implements HandlerInterface<InfoMessage, number> {
         let count = 0;
         for (const file of files) {
             count++;
-            if (message.dryRun) {
+            if (message.dryRun === true) {
                 this.eventEmitter.emit(DryRunMode.name);
                 continue;
             }
 
             this.dumpFile(file)
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 .then((r) => {
                     // @todo: think about if this is necessary
                     // console.log('done');
                     // console.log(r);
                 })
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 .catch((e) => {
                     // console.error(e);
                 });
@@ -61,7 +64,7 @@ export class Dump implements HandlerInterface<InfoMessage, number> {
             let module;
             const autoloads = rechoir.prepare(interpret.jsVariants, file.getFilePath());
 
-            if (!autoloads) {
+            if (autoloads !== true && autoloads.length === 0) {
                 console.error('No autoloads found');
             }
 
@@ -71,6 +74,7 @@ export class Dump implements HandlerInterface<InfoMessage, number> {
 
             if (file.getExtension() === '.ts') {
                 // console.log('Is TS file');
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 // const attempt = autoloads[autoloads.length - 1];
                 // console.log('attempt', attempt.moduleName);
@@ -92,7 +96,51 @@ export class Dump implements HandlerInterface<InfoMessage, number> {
 
             const blueprint = new Blueprint();
             const presets = new Presets();
-            module({blueprint, presets});
+
+            const container = new (class {
+                private readonly services: Record<string, object> = {};
+
+                set<T extends object>(id: string, service: T): void {
+                    this.services[id] = service;
+                }
+
+                has(id: string): boolean {
+                    return this.services[id] !== undefined;
+                }
+
+                get<T>(id: string): T | null {
+                    if (!this.has(id)) {
+                        return null;
+                    }
+
+                    return this.services[id] as T;
+                }
+            })();
+
+            container.set<typeof presets>('presets', presets);
+            container.set<typeof blueprint>('blueprint', blueprint);
+            const border = new Border(presets);
+            container.set<typeof border>('border', border);
+            const color = new Color(presets);
+            container.set<typeof color>(Color.name, color);
+            const outline = new Outline(presets);
+            container.set<typeof outline>('outline', outline);
+            const spacing = new Spacing(presets);
+            container.set<typeof spacing>('spacing', spacing);
+            const typography = new Typography(presets);
+            container.set<typeof typography>('typography', typography);
+
+            module({
+                blueprint,
+                presets,
+                border,
+                color,
+                outline,
+                spacing,
+                typography,
+                container,
+            });
+
             blueprint.setPresets(presets);
 
             const generatedContent = JSON.stringify(blueprint, null, 4);

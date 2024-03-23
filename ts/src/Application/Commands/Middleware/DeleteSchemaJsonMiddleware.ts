@@ -7,7 +7,7 @@ import {ValidateMessage} from '../../ValidateMessage';
 export class DeleteSchemaJsonMiddleware implements MiddlewareInterface<ValidateMessage, number> {
     public process(message: ValidateMessage, handler: HandlerInterface<ValidateMessage, number>): number {
         const fileSchema = message.fileSchema;
-        if (message.force && fileSchema.exists()) {
+        if (message.force === true && fileSchema.exists()) {
             fs.unlinkSync(fileSchema.getFilePath());
         }
 

@@ -1,7 +1,11 @@
 type arrayKey = string | number;
 
+type NestedRecord<K extends string, V> = {
+    [key in K]: NestedRecord<K, V> | NestedRecord<K, V>[] | V;
+};
+
 export class Config<K extends string, V> implements Iterable<[K, V]> {
-    private storage: Record<K, V> = {} as Record<K, V>;
+    private storage: NestedRecord<K, V> = {} as NestedRecord<K, V>;
     private temp = null as V | null;
     private default = null as V | null;
 
@@ -44,11 +48,11 @@ export class Config<K extends string, V> implements Iterable<[K, V]> {
         return Object.entries(this.storage) as Array<[K, V]>;
     }
 
-    public toObject(): Record<K, V> {
+    public toObject(): NestedRecord<K, V> {
         return this.storage;
     }
 
-    public toJSON(): Record<K, V> {
+    public toJSON(): NestedRecord<K, V> {
         return this.storage;
     }
 
@@ -67,8 +71,8 @@ export class Config<K extends string, V> implements Iterable<[K, V]> {
         } as IterableIterator<[K, V]>;
     }
 
-    private findValue(object: Record<K, V>, keys: Array<arrayKey>, defaultValue: V | null = null): V | null {
-        let current: Record<K, V> | V = object;
+    private findValue(object: NestedRecord<K, V>, keys: Array<arrayKey>, defaultValue: V | null = null): V | null {
+        let current: NestedRecord<K, V> | V = object;
 
         for (const key of keys) {
             if (this.currentIsNotValid(current, key)) {
@@ -81,8 +85,8 @@ export class Config<K extends string, V> implements Iterable<[K, V]> {
         return current as V;
     }
 
-    private insertValue(object: Record<K, V>, keys: Array<arrayKey>, value: V): boolean {
-        let current: Record<K, V> | V = object;
+    private insertValue(object: NestedRecord<K, V>, keys: Array<arrayKey>, value: V): boolean {
+        let current: NestedRecord<K, V> | V = object;
 
         if (keys.length === 0) {
             return false;
@@ -126,8 +130,8 @@ export class Config<K extends string, V> implements Iterable<[K, V]> {
         return true;
     }
 
-    private deleteValue(object: Record<K, V>, keys: Array<arrayKey>): boolean {
-        let current: Record<K, V> | V = object;
+    private deleteValue(object: NestedRecord<K, V>, keys: Array<arrayKey>): boolean {
+        let current: NestedRecord<K, V> | V = object;
 
         for (let i = 0; i < keys.length - 1; i++) {
             const key = keys[i];
@@ -161,7 +165,7 @@ export class Config<K extends string, V> implements Iterable<[K, V]> {
         return !this.currentIsNotValid(current, key);
     }
 
-    private currentIsNotValid(current: Record<K, V> | V, key: arrayKey) {
+    private currentIsNotValid(current: NestedRecord<K, V> | V, key: arrayKey) {
         return current === null || typeof current !== 'object' || !(key in current) || !(current instanceof Object);
     }
 }

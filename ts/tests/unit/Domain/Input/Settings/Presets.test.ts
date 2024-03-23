@@ -44,4 +44,18 @@ describe('Presets class', () => {
 
         expect('length' in presetsFound && presetsFound.length).toEqual(2);
     });
+
+    test('Presets parse', () => {
+        const sut = makeInstance();
+        sut.add(makePreset('color', 'base'));
+        sut.add(makePreset('color', 'accent'));
+        sut.add(makePreset('font', 'base'));
+        sut.add(makePreset('font', 'accent'));
+
+        expect(sut.parse('{{color.base}}')).toEqual(sut.get('color.base')?.var());
+        expect(sut.parse('{{color.base}}')).toEqual('var(--wp--preset--color--base)');
+        expect(sut.parse('{{color.accent}}')).toEqual('var(--wp--preset--color--accent)');
+
+        expect(sut.parse('{{type.notPresent}}')).toEqual('{{type.notPresent}}');
+    });
 });

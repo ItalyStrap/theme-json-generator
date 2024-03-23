@@ -15,7 +15,7 @@ export class ValidateHandlerSubProcessMiddleware implements MiddlewareInterface<
         const commandResult = handler.handle(message);
 
         // This is the subprocess to call conditionally
-        if (message.validate) {
+        if (message.validate === true) {
             const themeJsonPath = path.join(process.cwd(), 'node_modules', 'theme-json-generator', 'bin', 'theme-json');
             const command = `node ${themeJsonPath} validate`;
             exec(command, (error, stdout, stderr) => {
@@ -23,7 +23,7 @@ export class ValidateHandlerSubProcessMiddleware implements MiddlewareInterface<
                     console.error(`error: ${error.message}`);
                     return;
                 }
-                if (stderr) {
+                if (stderr !== '') {
                     console.error(`stderr: ${stderr}`);
                     return;
                 }

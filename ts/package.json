@@ -12,7 +12,7 @@
         "test": "tests"
     },
     "scripts": {
-        "dev": "tsc --watch",
+        "dev": "rimraf ./dist/* && tsc --watch",
         "build": "tsc",
         "test": "jest",
         "cs": "prettier --check .",
@@ -58,6 +58,7 @@
         "jest": "^29.7.0",
         "liftoff": "^5.0.0",
         "prettier": "3.2.5",
+        "rimraf": "^5.0.5",
         "ts-jest": "^29.1.2",
         "ts-node": "^10.9.2",
         "typescript": "*"

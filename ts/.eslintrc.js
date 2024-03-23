@@ -12,13 +12,13 @@ module.exports = {
                 allowNumber: false,
             },
         ],
-        'sort-imports': [
-            'error',
-            {
-                ignoreDeclarationSort: false,
-                allowSeparatedGroups: true,
-            },
-        ],
+        // 'sort-imports': [
+        //     'error',
+        //     {
+        //         ignoreDeclarationSort: false,
+        //         allowSeparatedGroups: true,
+        //     },
+        // ],
     },
     ignorePatterns: ['src/**/*.test.ts'],
 };

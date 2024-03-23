@@ -1,6 +1,7 @@
 import {Config} from '../../Infrastructure/Config';
-import {PresetInterface, PresetsInterface} from '../../Domain/Input/Settings';
+import {PresetInterface, PresetRecord, PresetsInterface} from '../../Domain/Input/Settings';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export class Blueprint extends Config<string, any> {
     public setPresets(presets: PresetsInterface): boolean {
         const keys = {
@@ -12,7 +13,9 @@ export class Blueprint extends Config<string, any> {
             'settings.custom': 'custom',
         };
 
-        const filterDuplicates = (v: any, i: number, a: any[]) => a.findIndex((t) => t.slug === v.slug) === i;
+        const filterDuplicates = function (v: {slug: string}, i: number, a: {slug: string}[]) {
+            return a.findIndex((t) => t.slug === v.slug) === i;
+        };
 
         for (const [key, type] of Object.entries(keys)) {
             const foundPresets = presets.findAllByType(type);
@@ -26,7 +29,7 @@ export class Blueprint extends Config<string, any> {
             const initialPresets = this.get(key, []);
 
             if (type === 'custom') {
-                this.processCustoms(initialPresets, foundPresets, presets);
+                this.processCustoms(initialPresets, foundPresets as PresetRecord, presets);
                 this.set(key, initialPresets);
                 continue;
             }
@@ -46,6 +49,7 @@ export class Blueprint extends Config<string, any> {
         const newPresets: Record<string, string>[] = [];
         for (const preset of foundPresets) {
             const newItems: Record<string, string> = {};
+            // eslint-disable-next-line prefer-const
             for (let [key, value] of Object.entries(preset.toObject())) {
                 if (typeof value !== 'string') {
                     throw new Error('Preset value must be a string');
@@ -61,21 +65,26 @@ export class Blueprint extends Config<string, any> {
         return newPresets;
     }
 
-    private processCustoms(original: any, updates: any, presets: PresetsInterface) {
-        Object.keys(updates).forEach((key) => {
-            const value = updates[key];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    private processCustoms(initialPresets: any, foundPresets: any, presets: PresetsInterface) {
+        Object.keys(foundPresets).forEach((key) => {
+            const value = foundPresets[key];
+
+            if (value === undefined) {
+                return;
+            }
 
             if ('toObject' in value && typeof value.toObject === 'function') {
-                original[key] = presets.parse(`${value}`);
+                initialPresets[key] = presets.parse(`${value}`);
                 return;
             }
 
             if (typeof value === 'object') {
-                if (!original[key]) {
-                    original[key] = {};
+                if (initialPresets[key] === undefined) {
+                    initialPresets[key] = {};
                 }
 
-                this.processCustoms(original[key], value, presets);
+                this.processCustoms(initialPresets[key], value, presets);
                 return;
             }
         });

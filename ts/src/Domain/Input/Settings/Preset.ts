@@ -1,6 +1,7 @@
 import {PresetInterface} from './PresetInterface';
 
 export abstract class Preset implements PresetInterface {
+    static readonly TYPE: string;
     protected readonly slugName: string;
 
     protected constructor(
@@ -35,7 +36,7 @@ export abstract class Preset implements PresetInterface {
         return this.var();
     }
 
-    public abstract toObject(): Record<string, string | Record<string, unknown>>;
+    public abstract toObject(): Record<string, string | string[] | Record<string, unknown>>;
 
     protected assertSlugIsWellFormed(slug: string): void {
         if (slug.match(/\s/) || slug === '') {

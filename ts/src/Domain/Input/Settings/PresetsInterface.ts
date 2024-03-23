@@ -9,5 +9,5 @@ export interface PresetsInterface {
 
     parse(content: string): string;
 
-    findAllByType(type: string): PresetInterface[] | [] | {};
+    findAllByType(type: string): Record<string, PresetInterface> | PresetInterface[] | object;
 }
