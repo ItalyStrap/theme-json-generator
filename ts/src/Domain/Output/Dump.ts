@@ -83,8 +83,6 @@ export class Dump implements HandlerInterface<InfoMessage, number> {
                 module = await import(file.getFilePath());
             }
 
-            // console.log(module);
-
             module = module.default ?? module;
             if (typeof module !== 'function') {
                 this.eventEmitter.emit(
@@ -97,10 +95,10 @@ export class Dump implements HandlerInterface<InfoMessage, number> {
             const blueprint = new Blueprint();
             const presets = new Presets();
 
-            const container = new (class {
-                private readonly services: Record<string, object> = {};
+            const container = new (class<T extends object> {
+                private readonly services: Record<string, T> = {};
 
-                set<T extends object>(id: string, service: T): void {
+                set(id: string, service: T): void {
                     this.services[id] = service;
                 }
 
@@ -108,7 +106,7 @@ export class Dump implements HandlerInterface<InfoMessage, number> {
                     return this.services[id] !== undefined;
                 }
 
-                get<T>(id: string): T | null {
+                get(id: string): T | null {
                     if (!this.has(id)) {
                         return null;
                     }
@@ -117,18 +115,18 @@ export class Dump implements HandlerInterface<InfoMessage, number> {
                 }
             })();
 
-            container.set<typeof presets>('presets', presets);
-            container.set<typeof blueprint>('blueprint', blueprint);
+            container.set('presets', presets);
+            container.set('blueprint', blueprint);
             const border = new Border(presets);
-            container.set<typeof border>('border', border);
+            container.set('border', border);
             const color = new Color(presets);
-            container.set<typeof color>(Color.name, color);
+            container.set(Color.name, color);
             const outline = new Outline(presets);
-            container.set<typeof outline>('outline', outline);
+            container.set('outline', outline);
             const spacing = new Spacing(presets);
-            container.set<typeof spacing>('spacing', spacing);
+            container.set('spacing', spacing);
             const typography = new Typography(presets);
-            container.set<typeof typography>('typography', typography);
+            container.set('typography', typography);
 
             module({
                 blueprint,

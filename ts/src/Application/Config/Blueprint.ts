@@ -65,6 +65,9 @@ export class Blueprint extends Config<string, any> {
         return newPresets;
     }
 
+    /**
+     * @todo Remove any
+     */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private processCustoms(initialPresets: any, foundPresets: any, presets: PresetsInterface) {
         Object.keys(foundPresets).forEach((key) => {

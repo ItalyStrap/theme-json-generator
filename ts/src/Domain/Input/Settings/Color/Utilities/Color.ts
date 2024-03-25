@@ -1,3 +1,4 @@
+// https://pinetools.com/lighten-color
 import BaseColor from 'color';
 //
 import {ColorInterface} from './ColorInterface';
@@ -7,6 +8,7 @@ export class Color implements ColorInterface {
     private readonly kind?: string;
 
     public constructor(color: string) {
+        color = color.replace(/\s/g, '');
         this.color = BaseColor(color);
         this.kind = this.findColorKind(color);
     }
@@ -16,27 +18,27 @@ export class Color implements ColorInterface {
     }
 
     public red(): string | number {
-        return this.color.red();
+        return this.sanitizeHslRgbValue(this.color.red());
     }
 
     public green(): string | number {
-        return this.color.green();
+        return this.sanitizeHslRgbValue(this.color.green());
     }
 
     public blue(): string | number {
-        return this.color.blue();
+        return this.sanitizeHslRgbValue(this.color.blue());
     }
 
     public hue(): number {
-        return Math.round(this.color.hue());
+        return this.sanitizeHslRgbValue(this.color.hue());
     }
 
     public saturation(): number {
-        return Math.round(this.color.saturationl());
+        return this.sanitizeHslRgbValue(this.color.saturationl());
     }
 
     public lightness(): number {
-        return Math.round(this.color.lightness());
+        return this.sanitizeHslRgbValue(this.color.lightness());
     }
 
     public isDark(): boolean {
@@ -51,26 +53,26 @@ export class Color implements ColorInterface {
         return this.color.luminosity();
     }
 
-    public toHex(): ColorInterface {
+    public toHex(): Color {
         return new Color(this.color.hex());
     }
 
-    public toHsl(): ColorInterface {
+    public toHsl(): Color {
         const color = `hsl(${this.hue()},${this.saturation()}%,${this.lightness()}%)`;
         return new Color(color);
     }
 
-    public toHsla(alpha: number): ColorInterface {
+    public toHsla(alpha: number = 1): Color {
         const color = `hsla(${this.hue()},${this.saturation()}%,${this.lightness()}%,${alpha})`;
         return new Color(color);
     }
 
-    public toRgb(): ColorInterface {
+    public toRgb(): Color {
         const color = `rgb(${this.red()},${this.green()},${this.blue()})`;
         return new Color(color);
     }
 
-    public toRgba(alpha: number): ColorInterface {
+    public toRgba(alpha: number = 1): Color {
         const color = `rgba(${this.red()},${this.green()},${this.blue()},${alpha})`;
         return new Color(color);
     }
@@ -125,5 +127,9 @@ export class Color implements ColorInterface {
         }
 
         throw new Error(`Unrecognized color kind: ${color}`);
+    }
+
+    private sanitizeHslRgbValue(value: string | number): number {
+        return Math.round(Number(value));
     }
 }

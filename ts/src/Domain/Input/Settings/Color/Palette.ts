@@ -8,16 +8,20 @@ export class Palette extends Preset implements PresetInterface {
     public constructor(
         protected readonly slugName: string,
         private readonly name: string,
-        private readonly color: ColorInterface
+        private readonly initialColor: ColorInterface
     ) {
         super(Palette.TYPE, slugName);
+    }
+
+    public color(): ColorInterface {
+        return this.initialColor;
     }
 
     public toObject(): Record<string, string> {
         return {
             slug: this.slug(),
             name: this.name,
-            color: `${this.color}`,
+            color: `${this.initialColor}`,
         };
     }
 }

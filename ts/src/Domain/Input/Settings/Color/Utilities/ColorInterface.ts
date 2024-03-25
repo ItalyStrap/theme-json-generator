@@ -9,11 +9,11 @@ export interface ColorInterface {
 
     toHsl(): ColorInterface;
 
-    toHsla(alpha: number): ColorInterface;
+    toHsla(alpha?: number): ColorInterface;
 
     toRgb(): ColorInterface;
 
-    toRgba(alpha: number): ColorInterface;
+    toRgba(alpha?: number): ColorInterface;
 
     red(): string | number;
 

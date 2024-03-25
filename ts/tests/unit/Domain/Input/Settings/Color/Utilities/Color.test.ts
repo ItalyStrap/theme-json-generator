@@ -1,10 +1,17 @@
 import {describe, expect, test} from '@jest/globals';
 
-import {Color} from '../../../../../../../src/Domain/Input/Settings/Color/Utilities';
+import {Color, ColorInterface} from '../../../../../../../src/Domain/Input/Settings/Color/Utilities';
 
-const makeInstance = (color: string) => {
+const makeInstance = (color: string): Color => {
     return new Color(color);
 };
+
+describe('Color class', () => {
+    test('Color instance of', () => {
+        const color: ColorInterface = new Color('rgba(0,0,0,0)');
+        expect(color).toBeInstanceOf(Color);
+    });
+});
 
 function colorProvider() {
     return [
@@ -109,7 +116,12 @@ function colorProvider() {
     ];
 }
 
-describe.each(colorProvider())('Color class', (colorProvider) => {
+type ColorProvider = {
+    color: string;
+    [key: string]: string | number | boolean;
+};
+
+describe.each(colorProvider())('Color class', (colorProvider: ColorProvider) => {
     test('Color', () => {
         const sut = makeInstance(colorProvider.color);
         expect(sut.type()).toBe(colorProvider.expectedType);
@@ -140,5 +152,25 @@ describe.each(colorProvider())('Color class', (colorProvider) => {
 
         expect(sut.toRgba(sut.alpha())).toBeInstanceOf(Color);
         expect(sut.toRgba(sut.alpha()).toString()).toBe(colorProvider.rgba);
+    });
+});
+
+describe('Color class', () => {
+    test('Color change', () => {
+        const sut = makeInstance('#000000');
+        expect(sut.toString()).toBe('#000000');
+        expect(sut.toHex().toString()).toBe('#000000');
+        expect(sut.toHsl().toString()).toBe('hsl(0,0%,0%)');
+        expect(sut.toHsla().toString()).toBe('hsla(0,0%,0%,1)');
+        expect(sut.toHsla(0).toString()).toBe('hsla(0,0%,0%,0)');
+        expect(sut.toRgb().toString()).toBe('rgb(0,0,0)');
+        expect(sut.toRgba().toString()).toBe('rgba(0,0,0,1)');
+        expect(sut.toRgba(0).toString()).toBe('rgba(0,0,0,0)');
+    });
+
+    test('Color change multiple', () => {
+        const sut = makeInstance('#000000');
+        expect(sut.toString()).toBe('#000000');
+        expect(sut.toHex().toHsl().toRgb().toRgba().toHsla().toString()).toBe('hsla(0,0%,0%,1)');
     });
 });
