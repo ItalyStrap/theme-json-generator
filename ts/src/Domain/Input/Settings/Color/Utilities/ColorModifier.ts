@@ -77,6 +77,21 @@ export class ColorModifier implements ColorModifierInterface {
         );
     }
 
+    /**
+     * https://en.wikipedia.org/wiki/Grayscale#Converting_color_to_grayscale
+     * https://github.com/Qix-/color
+     * @todo Implement grayscale in the PHP version
+     */
+    public greyScale(): ColorInterface {
+        const r = this.initialColor.red();
+        const g = this.initialColor.green();
+        const b = this.initialColor.blue();
+        const value = Math.round(Number(r) * 0.299 + Number(g) * 0.587 + Number(b) * 0.114);
+        const rgba = `rgba(${value},${value},${value},${this.initialColor.alpha()})`;
+        const newColor = this.factory.fromColorString(rgba);
+        return this.callMethodOnColorObject(newColor);
+    }
+
     private createNewColorWithChangedLightnessOrOpacity(amount: number, alpha: number = 1): ColorInterface {
         return this.createNewColorFrom(
             this.initialColor.hue().toString(),

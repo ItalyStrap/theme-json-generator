@@ -1,7 +1,7 @@
 import {ColorInterface} from '.';
 
 export interface ColorModifierInterface {
-    tint(weight: number): ColorInterface;
+    tint(weight?: number): ColorInterface;
 
     shade(weight: number): ColorInterface;
 
@@ -18,6 +18,8 @@ export interface ColorModifierInterface {
     contrast(amount: number): ColorInterface;
 
     hueRotate(amount: number): ColorInterface;
+
+    greyScale(): ColorInterface;
 
     complementary(): ColorInterface;
 

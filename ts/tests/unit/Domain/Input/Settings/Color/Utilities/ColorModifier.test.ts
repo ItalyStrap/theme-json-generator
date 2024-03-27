@@ -36,6 +36,7 @@ function colorProvider() {
             invert: 'rgba(255,255,255,0)',
             hueRotateModifier: 25,
             expectedHueRotate: 'rgba(0,0,0,0)',
+            expectedGreyScale: 'rgba(0,0,0,0)',
         },
         {
             color: 'rgba(0,0,0,1)',
@@ -57,6 +58,7 @@ function colorProvider() {
             invert: 'rgba(255,255,255,1)',
             hueRotateModifier: 25,
             expectedHueRotate: 'rgba(0,0,0,1)',
+            expectedGreyScale: 'rgba(0,0,0,1)',
         },
         {
             color: 'rgba(255,255,255,1)',
@@ -78,6 +80,7 @@ function colorProvider() {
             invert: 'rgba(0,0,0,1)',
             hueRotateModifier: 25,
             expectedHueRotate: 'rgba(255,255,255,1)',
+            expectedGreyScale: 'rgba(255,255,255,1)',
         },
         {
             color: 'rgba(179,139,32,1)',
@@ -99,6 +102,7 @@ function colorProvider() {
             invert: 'rgba(224,185,77,1)',
             hueRotateModifier: 25,
             expectedHueRotate: 'rgba(156,178,31,1)',
+            expectedGreyScale: 'rgba(139,139,139,1)',
         },
     ];
 }
@@ -117,5 +121,6 @@ describe.each(colorProvider())('ColorModifier class', (data) => {
         expect(colorModifier.complementary().toString()).toBe(data.complementary);
         expect(colorModifier.invert().toString()).toBe(data.invert);
         expect(colorModifier.hueRotate(data.hueRotateModifier).toString()).toBe(data.expectedHueRotate);
+        expect(colorModifier.greyScale().toString()).toBe(data.expectedGreyScale);
     });
 });
