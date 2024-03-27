@@ -1,3 +1,5 @@
+export type PresetObjectReturnType<T> = Record<string, string | string[] | Record<string, T>>;
+
 export interface PresetInterface {
     type(): string;
 
@@ -11,5 +13,5 @@ export interface PresetInterface {
 
     toString(): string;
 
-    toObject(): Record<string, string | string[] | Record<string, unknown>>;
+    toObject(): Record<string, string | string[] | Record<string, unknown> | null>;
 }
