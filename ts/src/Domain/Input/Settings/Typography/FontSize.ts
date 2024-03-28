@@ -1,7 +1,7 @@
-import {Preset, PresetInterface} from '../';
+import {Preset} from '../';
 import {Fluid} from './Utilities';
 
-export class FontSize extends Preset implements PresetInterface {
+export class FontSize extends Preset {
     public static readonly TYPE = 'fontSize';
 
     public constructor(

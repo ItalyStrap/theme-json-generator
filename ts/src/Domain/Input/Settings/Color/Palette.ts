@@ -1,8 +1,7 @@
-import {PresetInterface} from '../PresetInterface';
 import {ColorInterface} from './Utilities';
 import {Preset} from '../Preset';
 
-export class Palette extends Preset implements PresetInterface {
+export class Palette extends Preset {
     static readonly TYPE = 'color';
 
     public constructor(

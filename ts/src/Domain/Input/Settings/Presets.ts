@@ -1,5 +1,6 @@
 import {PresetInterface, PresetsInterface} from '.';
 import {Config} from '../../../Infrastructure/Config';
+import {Custom} from './Custom';
 
 export type PresetRecord = Record<string, PresetInterface>;
 
@@ -20,21 +21,20 @@ export class Presets extends Config<string, PresetInterface> implements PresetsI
     public parse(content: string): string {
         const pattern = /{{([\w.]+)}}/;
         const matches = content.match(pattern);
+
         if (matches === null) {
             return content;
         }
 
-        matches.forEach((match) => {
-            const key = match.replace('{{', '').replace('}}', '');
-            const preset = this.get(key, null);
-            if (preset === null) {
-                return;
-            }
+        const replace = matches[0] ?? '';
+        const key = matches[1] ?? '';
+        const preset = this.get(key, this.get(`${Custom.TYPE}.${key}`));
 
-            content = content.replace(match, preset.toString());
-        });
+        if (preset === null) {
+            return content;
+        }
 
-        return content;
+        return content.replace(replace, preset.var());
     }
 
     public findAllByType(type: string): PresetRecord | PresetInterface[] {

@@ -1,8 +1,7 @@
 import {Preset} from '../Preset';
-import {PresetInterface} from '../PresetInterface';
 import {ColorInterface} from './Utilities';
 
-export class Duotone extends Preset implements PresetInterface {
+export class Duotone extends Preset {
     static readonly TYPE = 'duotone';
 
     public constructor(

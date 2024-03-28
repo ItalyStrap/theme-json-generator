@@ -1,8 +1,7 @@
 import {Preset} from '../Preset';
-import {PresetInterface} from '../PresetInterface';
 import {GradientInterface} from './Utilities';
 
-export class Gradient extends Preset implements PresetInterface {
+export class Gradient extends Preset {
     static readonly TYPE = 'gradient';
 
     public constructor(
@@ -13,7 +12,7 @@ export class Gradient extends Preset implements PresetInterface {
         super(Gradient.TYPE, slugName);
     }
 
-    toObject(): Record<string, string | string[]> {
+    toObject(): Record<string, string> {
         return {
             slug: this.slug(),
             name: this.name,

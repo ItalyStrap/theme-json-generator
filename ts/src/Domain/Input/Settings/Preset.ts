@@ -36,6 +36,10 @@ export abstract class Preset implements PresetInterface {
         return this.var();
     }
 
+    public toJSON() {
+        return this.var();
+    }
+
     public abstract toObject(): Record<string, string | string[] | Record<string, unknown>>;
 
     protected assertSlugIsWellFormed(slug: string): void {

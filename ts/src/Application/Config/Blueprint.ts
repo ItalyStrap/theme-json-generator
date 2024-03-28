@@ -1,5 +1,5 @@
 import {Config} from '../../Infrastructure/Config';
-import {PresetInterface, PresetRecord, PresetsInterface} from '../../Domain/Input/Settings';
+import {Preset, PresetInterface, PresetRecord, PresetsInterface} from '../../Domain/Input/Settings';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export class Blueprint extends Config<string, any> {
@@ -26,14 +26,18 @@ export class Blueprint extends Config<string, any> {
                 continue;
             }
 
-            const initialPresets = this.get(key, []);
+            let initialPresets;
 
             if (type === 'custom') {
+                // Default value for custom presets must be an object
+                initialPresets = this.get(key, {});
                 this.processCustoms(initialPresets, foundPresets as PresetRecord, presets);
                 this.set(key, initialPresets);
                 continue;
             }
 
+            // Default value for other presets must be an array
+            initialPresets = this.get(key, []);
             this.set(
                 key,
                 [...initialPresets, ...this.processPresets(foundPresets as PresetInterface[], presets)].filter(
@@ -77,7 +81,7 @@ export class Blueprint extends Config<string, any> {
                 return;
             }
 
-            if ('toObject' in value && typeof value.toObject === 'function') {
+            if (value instanceof Preset) {
                 initialPresets[key] = presets.parse(`${value}`);
                 return;
             }

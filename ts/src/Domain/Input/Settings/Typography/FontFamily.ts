@@ -1,7 +1,6 @@
 import {Preset} from '../Preset';
-import {PresetInterface} from '../PresetInterface';
 
-export class FontFamily extends Preset implements PresetInterface {
+export class FontFamily extends Preset {
     public static readonly TYPE = 'fontFamily';
 
     public constructor(

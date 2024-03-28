@@ -18,7 +18,7 @@
         "cs": "prettier --check .",
         "cs:fix": "prettier --write .",
         "lint": "eslint ./src --ext .ts",
-        "qa": "yarn cs && yarn test",
+        "qa": "yarn cs && yarn lint && yarn test",
         "tj:init": "node bin/theme-json init",
         "tj:dump": "node bin/theme-json dump",
         "tj:validate": "node bin/theme-json validate"

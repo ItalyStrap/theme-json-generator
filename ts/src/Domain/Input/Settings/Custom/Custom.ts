@@ -1,6 +1,6 @@
-import {Preset, PresetInterface} from '../';
+import {Preset} from '../';
 
-export class Custom extends Preset implements PresetInterface {
+export class Custom extends Preset {
     static readonly TYPE = 'custom';
 
     private readonly name: string;
@@ -24,7 +24,7 @@ export class Custom extends Preset implements PresetInterface {
         return `--wp--${this.type()}--${this.camelToSnake(this.key.replace('.', '--'))}`;
     }
 
-    public toObject(): Record<string, string | Record<string, unknown>> {
+    public toObject(): Record<string, string> {
         return {
             key: this.key,
             name: this.name,
