@@ -1,4 +1,4 @@
-import {Custom} from './Custom';
+import {Custom} from '.';
 import {PresetsInterface} from '../PresetsInterface';
 import {Preset} from '../Preset';
 
@@ -26,7 +26,13 @@ export class CustomToPresets {
                 continue;
             }
 
-            this.presets.add(new Custom(fullKey, value as string));
+            if (typeof value === 'string' && value === '') {
+                continue;
+            }
+
+            // At this point, value should be a string, the value is cast to a string to avoid TS errors
+            // Maybe to avoid this try to pass a better type to Record<string, unknown>
+            this.presets.add(new Custom(fullKey, `${value}`));
         }
     }
 }

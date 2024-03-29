@@ -1,4 +1,4 @@
-import {PresetInterface} from './PresetInterface';
+import {PresetInterface} from '.';
 
 export abstract class Preset implements PresetInterface {
     static readonly TYPE: string;
