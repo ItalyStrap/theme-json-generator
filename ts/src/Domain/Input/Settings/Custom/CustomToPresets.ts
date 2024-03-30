@@ -26,6 +26,7 @@ export class CustomToPresets {
                 continue;
             }
 
+            // @todo mirror this to the PHP version
             if (typeof value === 'string' && value === '') {
                 continue;
             }
