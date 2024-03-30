@@ -3,8 +3,8 @@ import {describe, expect, test} from '@jest/globals';
 import {FontFamily} from '../../../../../../src/Domain/Input/Settings/Typography';
 import {FontFace} from '../../../../../../src/Domain/Input/Settings/Typography/Utilities';
 
-const makeInstance = (slugName: string, name: string, family: string, faces?: FontFace[]): FontFamily => {
-    return new FontFamily(slugName, name, family);
+const makeInstance = (slugName: string, name: string, fontFamily: string, faces?: FontFace[]): FontFamily => {
+    return new FontFamily(slugName, name, fontFamily);
 };
 
 describe('FontFamily class', () => {
@@ -18,7 +18,7 @@ describe('FontFamily class', () => {
         expect(fontFamily.toObject()).toEqual({
             slug: 'slug',
             name: 'name',
-            family: 'family',
+            fontFamily: 'family',
         });
     });
 });

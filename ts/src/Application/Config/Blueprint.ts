@@ -50,12 +50,19 @@ export class Blueprint extends Config<string, any> {
     }
 
     private processPresets(foundPresets: PresetInterface[], presets: PresetsInterface) {
-        const newPresets: Record<string, string>[] = [];
+        const newPresets: Record<string, string | string[]>[] = [];
         for (const preset of foundPresets) {
-            const newItems: Record<string, string> = {};
+            const newItems: Record<string, string | string[]> = {};
             // eslint-disable-next-line prefer-const
             for (let [key, value] of Object.entries(preset.toObject())) {
+                if (Array.isArray(value)) {
+                    value = value.map((v) => presets.parse(v));
+                    newItems[key] = value;
+                    continue;
+                }
+
                 if (typeof value !== 'string') {
+                    console.log(Array.isArray(value));
                     throw new Error('Preset value must be a string');
                 }
 

@@ -2,7 +2,7 @@ import {describe, expect, test} from '@jest/globals';
 //
 import {Blueprint} from '../../../../src/Application/Config';
 import {Presets} from '../../../../src/Domain/Input/Settings';
-import {Palette} from '../../../../src/Domain/Input/Settings/Color';
+import {Duotone, Palette} from '../../../../src/Domain/Input/Settings/Color';
 import {Color} from '../../../../src/Domain/Input/Settings/Color/Utilities';
 import {Custom} from '../../../../src/Domain/Input/Settings/Custom';
 
@@ -27,6 +27,8 @@ describe('Blueprint class', () => {
         const light = new Palette('light', 'Lighter color', new Color('hsla(0,0%,100%,1)'));
         const dark = new Palette('dark', 'Darker color', new Color('hsla(0,0%,0%,1)'));
 
+        const duotone = new Duotone('duotone', 'Duotone color', light, dark);
+
         const contentSize = new Custom('contentSize', 'clamp(16rem, 60vw, 60rem)');
         const wideSize = new Custom('wideSize', 'clamp(16rem, 85vw, 70rem)');
         const spacerBase = new Custom('spacer.base', '1rem');
@@ -38,6 +40,7 @@ describe('Blueprint class', () => {
         presets.add(base);
         presets.add(light);
         presets.add(dark);
+        presets.add(duotone);
         presets.add(contentSize);
         presets.add(wideSize);
         presets.add(spacerBase);
@@ -51,6 +54,11 @@ describe('Blueprint class', () => {
         expect(blueprint.get('settings.color.palette.0.slug')).toBe('base');
         expect(blueprint.get('settings.color.palette.0.name')).toBe('Brand base color');
         expect(blueprint.get('settings.color.palette.0.color')).toBe('hsla(212,73%,55%,1)');
+
+        expect(blueprint.get('settings.color.duotone.0.slug')).toBe('duotone');
+        expect(blueprint.get('settings.color.duotone.0.name')).toBe('Duotone color');
+        expect(blueprint.get('settings.color.duotone.0.colors.0')).toBe('rgba(255,255,255,1)');
+        expect(blueprint.get('settings.color.duotone.0.colors.1')).toBe('rgba(0,0,0,1)');
 
         expect(blueprint.get('settings.custom.contentSize')).toBe('clamp(16rem, 60vw, 60rem)');
         expect(blueprint.get('settings.custom.wideSize')).toBe('clamp(16rem, 85vw, 70rem)');

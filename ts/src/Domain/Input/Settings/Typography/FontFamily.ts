@@ -15,7 +15,7 @@ export class FontFamily extends Preset {
         return {
             slug: this.slug(),
             name: this.name,
-            family: this.family,
+            fontFamily: this.family,
         };
     }
 }
