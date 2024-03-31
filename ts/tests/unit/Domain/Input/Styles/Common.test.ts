@@ -59,7 +59,7 @@ describe('Common class', () => {
             link: 'valueLink2',
         });
 
-        expect(sut.toJson()).toEqual({
+        expect(sut.toJSON()).toEqual({
             background: 'valueBg2',
             gradient: 'valueGradient2',
             text: 'valueText2',
@@ -74,7 +74,7 @@ describe('Common class', () => {
             .testProperty('link', 'valueLink')
             .testProperty('text', '');
 
-        expect(sut.toJson()).toEqual({
+        expect(sut.toJSON()).toEqual({
             background: 'valueBg',
             link: 'valueLink',
         });
@@ -89,7 +89,7 @@ describe('Common class with presets', () => {
 
         const sut = makeInstance(presets).testProperty('background', 'color.base').testProperty('text', 'color.accent');
 
-        expect(sut.toJson()).toEqual({
+        expect(sut.toJSON()).toEqual({
             background: 'var(--wp--preset--color--base)',
             text: 'var(--wp--preset--color--accent)',
         });

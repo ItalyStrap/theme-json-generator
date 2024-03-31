@@ -12,7 +12,7 @@ describe('Border class', () => {
 
         expect(sut).toBeInstanceOf(Border);
 
-        expect(sut.toJson()).toEqual({
+        expect(sut.toJSON()).toEqual({
             radius: 'valueRadius',
             width: 'valueWidth',
             style: 'valueStyle',

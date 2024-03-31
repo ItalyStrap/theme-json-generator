@@ -1,8 +1,13 @@
 import {Config} from '../../Infrastructure/Config';
 import {Preset, PresetInterface, PresetRecord, PresetsInterface} from '../../Domain/Input/Settings';
+import {SectionNames} from '../../Domain/Input';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export class Blueprint extends Config<string, any> {
+    public setBlockStyle(blockName: string, config: Record<string, unknown>): boolean {
+        return this.set(`${SectionNames.STYLES}.blocks.${blockName}`, config);
+    }
+
     public setPresets(presets: PresetsInterface): boolean {
         const keys = {
             'settings.color.palette': 'color',

@@ -12,7 +12,7 @@ describe('Color class', () => {
 
         expect(sut).toBeInstanceOf(Color);
 
-        expect(sut.toJson()).toEqual({
+        expect(sut.toJSON()).toEqual({
             background: 'valueBg',
             gradient: 'valueGradient',
             text: 'valueText',

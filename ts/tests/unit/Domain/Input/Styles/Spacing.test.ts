@@ -12,7 +12,7 @@ describe('Spacing class', () => {
 
         expect(sut).toBeInstanceOf(Spacing);
 
-        expect(sut.toJson()).toEqual({
+        expect(sut.toJSON()).toEqual({
             top: 'valueTop',
             right: 'valueRight',
             bottom: 'valueBottom',

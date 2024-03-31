@@ -1,10 +1,11 @@
-import {PresetsInterface} from '../Settings';
+import {Preset, PresetInterface, PresetsInterface} from '../Settings';
 import {NullPresets} from '../Settings/NullPresets';
+import {JsonSerializable} from '../../../Infrastructure/Json';
 
 export type CommonPresets = PresetsInterface | null;
 export type CommonProperties = Record<string, string>;
 
-export class Common<T extends typeof Common> {
+export class Common<T extends typeof Common> implements JsonSerializable<CommonProperties> {
     public constructor(
         protected readonly presets: CommonPresets = null,
         private properties: CommonProperties = {}
@@ -20,26 +21,24 @@ export class Common<T extends typeof Common> {
 
     protected setProperty(key: string, value: string): this {
         /**
-         * string | PresetInterface | null
+         * PresetInterface | string
          */
-        let newValue = this.presets!.get(value, value);
+        let presetOrValue = this.presets!.get(value, value);
 
-        if (
-            newValue !== null &&
-            typeof newValue === 'object' &&
-            'var' in newValue &&
-            typeof newValue.var === 'function'
-        ) {
-            newValue = newValue.var() as string;
+        if (presetOrValue instanceof Preset) {
+            presetOrValue = presetOrValue.var();
         }
 
-        this.properties[key] = this.presets!.parse(newValue as string);
+        if (typeof presetOrValue === 'string') {
+            this.properties[key] = this.presets!.parse(presetOrValue);
+        }
+
         const result = this.properties;
         this.properties = {};
         return new (this.constructor as T)(this.presets, result) as this;
     }
 
-    public toJson(): CommonProperties {
+    public toJSON(): CommonProperties {
         const result = Object.entries(this.properties).reduce((acc, [key, value]) => {
             if (value !== '') {
                 acc[key] = value;

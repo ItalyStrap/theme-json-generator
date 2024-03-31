@@ -20,7 +20,7 @@ describe('Typography class', () => {
 
         expect(sut).toBeInstanceOf(Typography);
 
-        expect(sut.toJson()).toEqual({
+        expect(sut.toJSON()).toEqual({
             fontFamily: 'valueFontFamily',
             fontSize: 'valueFontSize',
             fontStyle: 'valueFontStyle',

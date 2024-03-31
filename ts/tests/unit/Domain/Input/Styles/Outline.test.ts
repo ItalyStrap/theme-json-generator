@@ -12,7 +12,7 @@ describe('Outline class', () => {
 
         expect(sut).toBeInstanceOf(Outline);
 
-        expect(sut.toJson()).toEqual({
+        expect(sut.toJSON()).toEqual({
             color: 'valueColor',
             offset: 'valueOffset',
             style: 'valueStyle',
