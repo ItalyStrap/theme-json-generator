@@ -14,7 +14,7 @@ import {Blueprint} from '../../Application/Config';
 import {InfoMessage} from '../../Application/InfoMessage';
 import {DryRunMode, GeneratedFile, GeneratingFile, GeneratingFails, NoFileFound} from './Events';
 import {Presets} from '../Input/Settings';
-import {Border, Color, Outline, Spacing, Typography} from '../Input/Styles';
+import {Border, Color, Css, Outline, Spacing, Typography} from '../Input/Styles';
 
 export class Dump implements HandlerInterface<InfoMessage, number> {
     public constructor(
@@ -121,6 +121,8 @@ export class Dump implements HandlerInterface<InfoMessage, number> {
             container.set('border', border);
             const color = new Color(presets);
             container.set(Color.name, color);
+            const css = new Css(presets);
+            container.set('css', css);
             const outline = new Outline(presets);
             container.set('outline', outline);
             const spacing = new Spacing(presets);
@@ -133,6 +135,7 @@ export class Dump implements HandlerInterface<InfoMessage, number> {
                 presets,
                 border,
                 color,
+                css,
                 outline,
                 spacing,
                 typography,

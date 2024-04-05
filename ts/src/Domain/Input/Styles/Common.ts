@@ -1,5 +1,4 @@
-import {Preset, PresetInterface, PresetsInterface} from '../Settings';
-import {NullPresets} from '../Settings/NullPresets';
+import {Preset, PresetsInterface, NullPresets} from '../Settings';
 import {JsonSerializable} from '../../../Infrastructure/Json';
 
 export type CommonPresets = PresetsInterface | null;

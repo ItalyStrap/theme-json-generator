@@ -4,8 +4,24 @@ import {SectionNames} from '../../Domain/Input';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export class Blueprint extends Config<string, any> {
+    public setGlobalCss(css: string): boolean {
+        return this.set(`${SectionNames.STYLES}.css`, css);
+    }
+
+    public setElementStyle(elementName: string, config: Record<string, unknown>): boolean {
+        return this.set(`${SectionNames.STYLES}.elements.${elementName}`, config);
+    }
+
+    public setBlockSettings(blockName: string, config: Record<string, unknown>): boolean {
+        return this.set(`${SectionNames.SETTINGS}.blocks.${blockName}`, config);
+    }
+
     public setBlockStyle(blockName: string, config: Record<string, unknown>): boolean {
         return this.set(`${SectionNames.STYLES}.blocks.${blockName}`, config);
+    }
+
+    public setPerBlockCss(blockName: string, css: string): boolean {
+        return this.set(`${SectionNames.STYLES}.blocks.${blockName}.css`, css);
     }
 
     public setPresets(presets: PresetsInterface): boolean {

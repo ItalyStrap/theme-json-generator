@@ -378,6 +378,7 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Css;
 
 All methods also support a special syntax to find value in the `$presets` collection, `{{type.slug}}`, this syntax will be used internally to find the value in the `$presets` collection.
 
+> Important to remember: you can use the syntax `{{type.slug}}` only if the value is previously added to the `$presets` collection, otherwise, the method will throw an exception. 
 
 ```php
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Css;
