@@ -28,6 +28,12 @@ final class Blueprint extends Config implements \JsonSerializable
         return $this->set(SectionNames::STYLES . '.css', $css);
     }
 
+    public function appendGlobalCss(string $css): bool
+    {
+        $currentCss = $this->get(SectionNames::STYLES . '.css', '');
+        return $this->set(SectionNames::STYLES . '.css', $currentCss . $css);
+    }
+
     public function setElementStyle(string $elementName, array $config): bool
     {
         return $this->set(SectionNames::STYLES . '.elements.' . $elementName, $config);
