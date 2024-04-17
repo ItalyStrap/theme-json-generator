@@ -8,6 +8,11 @@ export class Blueprint extends Config<string, any> {
         return this.set(`${SectionNames.STYLES}.css`, css);
     }
 
+    public appendGlobalCss(css: string): boolean {
+        const currentCss = this.get(`${SectionNames.STYLES}.css`, '');
+        return this.set(`${SectionNames.STYLES}.css`, currentCss + css);
+    }
+
     public setElementStyle(elementName: string, config: Record<string, unknown>): boolean {
         return this.set(`${SectionNames.STYLES}.elements.${elementName}`, config);
     }
