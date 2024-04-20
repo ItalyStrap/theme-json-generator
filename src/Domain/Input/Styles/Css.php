@@ -41,6 +41,7 @@ class Css
         }
 
         $css = $this->presets->parse($css);
+        $css = $this->duplicateRulesForSelectorList($css);
 
         if ($selector === '') {
             return $css;
@@ -66,5 +67,45 @@ class Css
         }
 
         return \ltrim(\implode('', $rootRule) . \implode('&', $explodedNew), "\t\n\r\0\x0B&");
+    }
+
+    /**
+     * Right now the algorithm used by WordPress to apply custom CSS does not convert selector list
+     * correctly, so I need to duplicate the rules for each selector in the list.
+     */
+    private function duplicateRulesForSelectorList(string $css): string
+    {
+        $pattern = '/\{(.*)}/s';
+        \preg_match($pattern, $css, $matches);
+
+        if (!isset($matches[1])) {
+            return $css;
+        }
+
+
+        $pos = \strpos($css, '{');
+        if ($pos === false) {
+            return $css;
+        }
+
+        $selectors = \trim(\substr($css, 0, $pos));
+        $selectorArray = \explode(',', $selectors);
+
+        if (\count($selectorArray) === 1) {
+            return $css;
+        }
+
+        $lastSelector = \array_pop($selectorArray);
+
+        $cssFinal = "";
+        $rules = $matches[1];
+
+        foreach ($selectorArray as $selector) {
+            $cssFinal .= \trim($selector) . " {{$rules}}\n";
+        }
+
+        $cssFinal .= \trim($lastSelector) . " {{$rules}}\n";
+
+        return $cssFinal;
     }
 }
