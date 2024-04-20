@@ -76,6 +76,7 @@ class Css
     private function duplicateRulesForSelectorList(string $css): string
     {
         $pattern = '/\{(.*)}/s';
+//        $pattern = '/\s*\{([^}]*)}\s*/';
         \preg_match($pattern, $css, $matches);
 
         if (!isset($matches[1])) {
@@ -98,13 +99,13 @@ class Css
         $lastSelector = \array_pop($selectorArray);
 
         $cssFinal = "";
-        $rules = $matches[1];
+        $rules = $matches[0];
 
         foreach ($selectorArray as $selector) {
-            $cssFinal .= \trim($selector) . " {{$rules}}\n";
+            $cssFinal .= \rtrim($selector) . " $rules\n";
         }
 
-        $cssFinal .= \trim($lastSelector) . " {{$rules}}\n";
+        $cssFinal .= \rtrim($lastSelector) . " $rules\n";
 
         return $cssFinal;
     }

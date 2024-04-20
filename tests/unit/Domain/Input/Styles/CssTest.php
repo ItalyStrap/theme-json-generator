@@ -73,8 +73,16 @@ CUSTOM_CSS,
         yield 'with list selectors' => [
             // phpcs:disable
             'selector' => '.test-selector',
-            'original' => '.test-selector .one, .test-selector .two, .test-selector .three{color: red;}',
+            'original' => '.test-selector .one ,.test-selector .two,.test-selector .three{color: red;}',
             'expected' => " .one {color: red;}\n& .two {color: red;}\n& .three {color: red;}\n",
+            // phpcs:enable
+        ];
+
+        yield 'with list selectors and new line' => [
+            // phpcs:disable
+            'selector' => '.test-selector',
+            'original' => ".test-selector .one ,.test-selector .two,.test-selector .three{\ncolor: red;\n}",
+            'expected' => " .one {\ncolor: red;\n}\n& .two {\ncolor: red;\n}\n& .three {\ncolor: red;\n}\n",
             // phpcs:enable
         ];
     }
