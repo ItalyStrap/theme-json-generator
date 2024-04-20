@@ -80,6 +80,14 @@ CUSTOM_CSS,
         $this->assertSame($expected, $parseString, 'The parsed string is not the same as expected');
     }
 
+    public function testItShouldThrowErrorIfCssStartWithAmpersand(): void
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage(Css::M_AMPERSAND_MUST_NOT_BE_AT_THE_BEGINNING);
+
+        $this->makeInstance()->parseString('& .foo{color: red;}');
+    }
+
     /**
      * @dataProvider styleProvider
      */

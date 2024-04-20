@@ -24,6 +24,8 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\NullPresets;
  */
 class Css
 {
+    const M_AMPERSAND_MUST_NOT_BE_AT_THE_BEGINNING = 'CSS cannot begin with an ampersand (&)';
+
     private PresetsInterface $presets;
 
     public function __construct(
@@ -34,6 +36,10 @@ class Css
 
     public function parseString(string $css, string $selector = ''): string
     {
+        if (\str_starts_with(\trim($css), '&')) {
+            throw new \RuntimeException(self::M_AMPERSAND_MUST_NOT_BE_AT_THE_BEGINNING);
+        }
+
         $css = $this->presets->parse($css);
 
         if ($selector === '') {
