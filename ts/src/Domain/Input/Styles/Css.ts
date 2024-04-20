@@ -2,6 +2,8 @@ import {NullPresets} from '../Settings';
 import {CommonPresets} from './Common';
 
 export class Css {
+    public static readonly M_AMPERSAND_MUST_NOT_BE_AT_THE_BEGINNING = 'CSS cannot begin with an ampersand (&)';
+
     public constructor(protected readonly presets: CommonPresets = null) {
         if (presets === null) {
             this.presets = new NullPresets();
@@ -9,6 +11,10 @@ export class Css {
     }
 
     public parseString(css: string, selector: string = ''): string {
+        if (css.trim().startsWith('&')) {
+            throw new Error(Css.M_AMPERSAND_MUST_NOT_BE_AT_THE_BEGINNING);
+        }
+
         css = this.presets?.parse(css) ?? css;
 
         if (selector === '') {

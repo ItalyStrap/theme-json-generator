@@ -14,6 +14,11 @@ describe('Css class', () => {
         const css = new Css();
         expect(css.parseString('some css')).toBe('some css');
     });
+
+    test('ItShouldThrowErrorIfCssStartWithAmpersand', () => {
+        const css = new Css();
+        expect(() => css.parseString(' &some css')).toThrow(Css.M_AMPERSAND_MUST_NOT_BE_AT_THE_BEGINNING);
+    });
 });
 
 type Fixture = {
