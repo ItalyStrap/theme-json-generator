@@ -85,6 +85,14 @@ CUSTOM_CSS,
             'expected' => " .one {\ncolor: red;\n}\n& .two {\ncolor: red;\n}\n& .three {\ncolor: red;\n}\n",
             // phpcs:enable
         ];
+
+        yield 'with list selectors and new line without original selector' => [
+            // phpcs:disable
+            'selector' => '',
+            'original' => " .one,& .two,& .three{\ncolor: red;\n}",
+            'expected' => " .one {\ncolor: red;\n}\n& .two {\ncolor: red;\n}\n& .three {\ncolor: red;\n}\n",
+            // phpcs:enable
+        ];
     }
 
     /**

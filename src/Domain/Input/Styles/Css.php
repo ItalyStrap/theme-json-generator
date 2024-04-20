@@ -76,7 +76,6 @@ class Css
     private function duplicateRulesForSelectorList(string $css): string
     {
         $pattern = '/\{(.*)}/s';
-//        $pattern = '/\s*\{([^}]*)}\s*/';
         \preg_match($pattern, $css, $matches);
 
         if (!isset($matches[1])) {
@@ -89,7 +88,7 @@ class Css
             return $css;
         }
 
-        $selectors = \trim(\substr($css, 0, $pos));
+        $selectors = \substr($css, 0, $pos);
         $selectorArray = \explode(',', $selectors);
 
         if (\count($selectorArray) === 1) {
