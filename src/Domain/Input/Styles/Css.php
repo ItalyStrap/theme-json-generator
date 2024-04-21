@@ -24,9 +24,10 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\NullPresets;
  */
 class Css
 {
-    const M_AMPERSAND_MUST_NOT_BE_AT_THE_BEGINNING = 'CSS cannot begin with an ampersand (&)';
+    public const M_AMPERSAND_MUST_NOT_BE_AT_THE_BEGINNING = 'CSS cannot begin with an ampersand (&)';
 
     private PresetsInterface $presets;
+    private bool $isCompressed = false;
 
     public function __construct(
         PresetsInterface $presets = null
@@ -67,6 +68,64 @@ class Css
         }
 
         return \ltrim(\implode('', $rootRule) . \implode('&', $explodedNew), "\t\n\r\0\x0B&");
+    }
+
+    public function parse(string $css, string $selector = ''): string
+    {
+        if (\str_starts_with(\trim($css), '&')) {
+            throw new \RuntimeException(self::M_AMPERSAND_MUST_NOT_BE_AT_THE_BEGINNING);
+        }
+
+        $css = $this->presets->parse($css);
+
+        if ($selector === '') {
+            return $css;
+        }
+
+        $parser = new \Sabberworm\CSS\Parser($css);
+        $doc = $parser->parse();
+
+        $rootRules = '';
+        $additionalSelectors = [];
+        $this->isCompressed = true;
+
+        /**
+         * @psalm-suppress RedundantCondition
+         * @psalm-suppress TypeDoesNotContainType
+         */
+        $newLine = $this->isCompressed ? '' : PHP_EOL;
+
+        /**
+         * @psalm-suppress RedundantCondition
+         * @psalm-suppress TypeDoesNotContainType
+         */
+        $space = $this->isCompressed ? '' : \implode('', \array_fill(0, 4, ' '));
+
+        foreach ($doc->getAllDeclarationBlocks() as $declarationBlock) {
+            foreach ($declarationBlock->getSelectors() as $cssSelector) {
+                if ($cssSelector->getSelector() === $selector) {
+                    foreach ($declarationBlock->getRules() as $rule) {
+                        $ruleText = $rule->getRule() . ': ' . $rule->getValue() . ';' . $newLine;
+                        $rootRules .= $ruleText;
+                    }
+
+                    continue;
+                }
+
+                $actualSelector = $cssSelector->getSelector();
+                $newSelector = \substr($actualSelector, \strlen($selector));
+
+                $cssBlock = $newSelector . ' {' . $newLine;
+                foreach ($declarationBlock->getRules() as $rule) {
+                    $cssBlock .= $space . $rule->getRule() . ': ' . $rule->getValue() . ';' . $newLine;
+                }
+                $cssBlock .= '}' . $newLine;
+                $additionalSelectors[] = $cssBlock;
+            }
+        }
+
+        \array_unshift($additionalSelectors, $rootRules);
+        return \trim(\implode('&', $additionalSelectors), "\t\n\r\0\x0B&");
     }
 
     /**

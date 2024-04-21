@@ -13,6 +13,7 @@ class CssTest extends UnitTestCase
 {
     use CssStyleStringProviderTrait {
         CssStyleStringProviderTrait::styleProvider as styleProviderTrait;
+        CssStyleStringProviderTrait::newStyleProvider as newStyleProviderTrait;
     }
 
     private function makeInstance(): Css
@@ -137,5 +138,54 @@ CUSTOM_CSS,
 
         $actual = $this->makeInstance()->parseString($result->getCss(), '.test-selector');
         $this->assertTrue(true, 'Let this test pass, is a check for the compiler');
+    }
+
+    public static function newStyleProvider(): iterable
+    {
+        foreach (self::newStyleProviderTrait() as $key => $value) {
+            yield $key => $value;
+        }
+    }
+
+    /**
+     * @dataProvider newStyleProvider
+     */
+    public function testItShouldParseWithNewMethod(string $selector, string $actual, string $expected): void
+    {
+        $parseString = $this->makeInstance()->parse($actual, $selector);
+        $this->assertSame($expected, $parseString, 'The parsed string is not the same as expected');
+    }
+
+    public function testCssParser(): void
+    {
+        $css =  <<<CSS
+.wp-block-query-pagination {
+    gap: 0;
+}
+.wp-block-query-pagination.page-numbers,
+.wp-block-query-pagination #page-numbers,
+.wp-block-query-pagination .page-numbers,
+.wp-block-query-pagination .wp-block-query-pagination-previous,
+.wp-block-query-pagination .wp-block-query-pagination-next {
+    border-color: #ddd;
+    border-width: 1px;
+    border-style: solid;
+    padding: .375em .75em;
+    margin: 0 0 0 -1px;
+}
+.wp-block-query-pagination .wp-block-query-pagination-numbers {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
+.wp-block-query-pagination {
+    margin: 0;
+    --margin: 0;
+}
+CSS;
+        $selector = '.wp-block-query-pagination';
+        $sut = $this->makeInstance();
+//        codecept_debug($sut->parse($css, $selector));
     }
 }
