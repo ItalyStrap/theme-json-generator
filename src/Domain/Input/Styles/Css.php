@@ -27,7 +27,7 @@ class Css
     public const M_AMPERSAND_MUST_NOT_BE_AT_THE_BEGINNING = 'CSS cannot begin with an ampersand (&)';
 
     private PresetsInterface $presets;
-    private bool $isCompressed = false;
+    private bool $isCompressed = true;
 
     public function __construct(
         PresetsInterface $presets = null
@@ -87,25 +87,19 @@ class Css
 
         $rootRules = '';
         $additionalSelectors = [];
-        $this->isCompressed = true;
 
-        /**
-         * @psalm-suppress RedundantCondition
-         * @psalm-suppress TypeDoesNotContainType
-         */
         $newLine = $this->isCompressed ? '' : PHP_EOL;
-
-        /**
-         * @psalm-suppress RedundantCondition
-         * @psalm-suppress TypeDoesNotContainType
-         */
         $space = $this->isCompressed ? '' : \implode('', \array_fill(0, 4, ' '));
 
         foreach ($doc->getAllDeclarationBlocks() as $declarationBlock) {
             foreach ($declarationBlock->getSelectors() as $cssSelector) {
+                if (\is_string($cssSelector)) {
+                    $cssSelector = new \Sabberworm\CSS\Property\Selector($cssSelector);
+                }
+
                 if ($cssSelector->getSelector() === $selector) {
                     foreach ($declarationBlock->getRules() as $rule) {
-                        $ruleText = $rule->getRule() . ': ' . $rule->getValue() . ';' . $newLine;
+                        $ruleText = $rule->getRule() . ': ' . (string)$rule->getValue() . ';' . $newLine;
                         $rootRules .= $ruleText;
                     }
 
@@ -117,7 +111,7 @@ class Css
 
                 $cssBlock = $newSelector . ' {' . $newLine;
                 foreach ($declarationBlock->getRules() as $rule) {
-                    $cssBlock .= $space . $rule->getRule() . ': ' . $rule->getValue() . ';' . $newLine;
+                    $cssBlock .= $space . $rule->getRule() . ': ' . (string)$rule->getValue() . ';' . $newLine;
                 }
                 $cssBlock .= '}' . $newLine;
                 $additionalSelectors[] = $cssBlock;
