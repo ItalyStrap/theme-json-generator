@@ -7,6 +7,8 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles;
 use ItalyStrap\Tests\Unit\Domain\Input\Styles\CssTest;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetsInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\NullPresets;
+use Sabberworm\CSS\Parser;
+use Sabberworm\CSS\Parsing\SourceException;
 
 /**
  * @link https://make.wordpress.org/core/2023/03/06/custom-css-for-global-styles-and-per-block/
@@ -33,6 +35,12 @@ class Css
         PresetsInterface $presets = null
     ) {
         $this->presets = $presets ?? new NullPresets();
+    }
+
+    public function expanded(): self
+    {
+        $this->isCompressed = false;
+        return $this;
     }
 
     /**
@@ -73,6 +81,9 @@ class Css
         return \ltrim(\implode('', $rootRule) . \implode('&', $explodedNew), "\t\n\r\0\x0B&");
     }
 
+    /**
+     * @throws SourceException
+     */
     public function parse(string $css, string $selector = ''): string
     {
         if (\str_starts_with(\trim($css), '&')) {
@@ -86,13 +97,14 @@ class Css
             return $css;
         }
 
-        $parser = new \Sabberworm\CSS\Parser($css);
+        $parser = new Parser($css);
         $doc = $parser->parse();
 
         $rootRules = '';
         $additionalSelectors = [];
 
         $newLine = $this->isCompressed ? '' : PHP_EOL;
+        $newLineAfterBlock = $this->isCompressed ? '' : PHP_EOL . PHP_EOL;
         $space = $this->isCompressed ? '' : \implode('', \array_fill(0, 4, ' '));
         $spaceAfterSelector = $this->isCompressed ? '' : ' ';
 
@@ -118,12 +130,12 @@ class Css
                 foreach ($declarationBlock->getRules() as $rule) {
                     $cssBlock .= $space . $rule->getRule() . ': ' . (string)$rule->getValue() . ';' . $newLine;
                 }
-                $cssBlock .= '}' . $newLine;
+                $cssBlock .= '}' . $newLineAfterBlock;
                 $additionalSelectors[] = $cssBlock;
             }
         }
 
-        \array_unshift($additionalSelectors, $rootRules);
+        \array_unshift($additionalSelectors, $rootRules . $newLine);
         return \trim(\implode('&', $additionalSelectors), "\t\n\r\0\x0B&");
     }
 

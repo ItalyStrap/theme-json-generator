@@ -7,6 +7,7 @@ namespace ItalyStrap\Tests\Unit\Domain\Input\Styles;
 use ItalyStrap\Tests\CssStyleStringProviderTrait;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Css;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Scss;
 use ScssPhp\ScssPhp\Compiler;
 
 class CssTest extends UnitTestCase
@@ -110,7 +111,7 @@ CUSTOM_CSS,
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage(Css::M_AMPERSAND_MUST_NOT_BE_AT_THE_BEGINNING);
 
-        $this->makeInstance()->parseString('& .foo{color: red;}');
+        $this->makeInstance()->parse('& .foo{color: red;}');
     }
 
     /**
@@ -136,7 +137,7 @@ CUSTOM_CSS,
 
         $result = $compiler->compileString($css);
 
-        $actual = $this->makeInstance()->parseString($result->getCss(), '.test-selector');
+        $actual = $this->makeInstance()->parse($result->getCss(), '.test-selector');
         $this->assertTrue(true, 'Let this test pass, is a check for the compiler');
     }
 
@@ -202,5 +203,50 @@ CSS;
         $selector = '.wp-block-query-pagination';
         $sut = $this->makeInstance();
 //        codecept_debug($sut->parse($css, $selector));
+    }
+
+    public function testScssParser(): void
+    {
+        $css =  <<<CSS
+.wp-block-query-pagination {
+    gap: 0;
+    margin: 0;
+    --margin: 0;
+    &.page-numbers,
+    & #page-numbers,
+    & .page-numbers,
+    & .wp-block-query-pagination-previous,
+    & .wp-block-query-pagination-next {
+        border-color: #ddd;
+        border-width: 1px;
+        border-style: solid;
+        padding: .375em .75em;
+        margin: 0 0 0 -1px;
+    }
+    & .wp-block-query-pagination-numbers {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
+    }
+}
+CSS;
+        $selector = '.wp-block-query-pagination';
+        $sut = $this->makeInstance();
+//        codecept_debug($sut->parse($css, $selector));
+
+//        $compiler = new Compiler();
+//        $compiler->setOutputStyle('expanded');
+//
+//        $result = $compiler->compileString($css);
+//
+//        codecept_debug($result->getCss());
+//
+//        $actual = $this->makeInstance()->expanded()->parse($result->getCss(), '.wp-block-query-pagination');
+//        codecept_debug($actual);
+
+        $scss = new Scss($sut, new Compiler());
+        $result = $scss->expanded()->parse($css, $selector);
+//        codecept_debug($result);
     }
 }
