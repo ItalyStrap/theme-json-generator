@@ -325,7 +325,7 @@ You can find an implementation example in the [tests/_data/fixtures/advanced-exa
 
 ### Custom CSS for Global Styles and per Block
 
-The introduction of the `css` field in [WordPress 6.2](https://wordpress.org/news/2023/03/dolphy/) enables the addition of [custom CSS](https://make.wordpress.org/core/2023/03/06/custom-css-for-global-styles-and-per-block/) directly within the `theme.json` file, both globally under `styles.css` and per block within `styles.blocks.[block-name].css`. Utilizing the `\ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Css` class and its `parseString(string $css, string $selector = ''): string` method, developers can now seamlessly integrate custom styles without the need to remember the format to use like spaces and separators, just write your CSS as you would in a regular CSS file and let the `Css` class handle the rest.
+The introduction of the `css` field in [WordPress 6.2](https://wordpress.org/news/2023/03/dolphy/) enables the addition of [custom CSS](https://make.wordpress.org/core/2023/03/06/custom-css-for-global-styles-and-per-block/) directly within the `theme.json` file, both globally under `styles.css` and per block within `styles.blocks.[block-name].css`. Utilizing the `\ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Css` class and its `parse(string $css, string $selector = ''): string` method, developers can now seamlessly integrate custom styles without the need to remember the format to use like spaces and separators, just write your CSS as you would in a regular CSS file and let the `Css` class handle the rest.
 This method accepts two parameters: the CSS to parse and an optional selector to scope the CSS rules accordingly.
 
 How It Works
@@ -336,12 +336,12 @@ So, let's see some examples:
 
 ```php
 // Result: 'height: 100%;'
-echo (new Css($presets))->parseString('.test-selector{height: 100%;}', '.test-selector');
+echo (new Css($presets))->parse('.test-selector{height: 100%;}', '.test-selector');
 ```
 
 ```php
 // Result: 'height: 100%;width: 100%;color: red;&:hover {color: red;}&::placeholder {color: red;}'
-echo (new Css($presets))->parseString('.test-selector{height: 100%;width: 100%;color: red;}.test-selector:hover {color: red;}.test-selector::placeholder {color: red;}', '.test-selector');
+echo (new Css($presets))->parse('.test-selector{height: 100%;width: 100%;color: red;}.test-selector:hover {color: red;}.test-selector::placeholder {color: red;}', '.test-selector');
 ```
 
 Like the other classes in the `Styles` directory, you can use the `Css` class directly or pass the `$presets` collection to the constructor or use the `$container` object to get the instance you need.
@@ -354,7 +354,7 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Css;
 [
     SectionNames::STYLES => [
         'css' => $container->get(Css::class) // Or (new Css($presets))
-            ->parseString('.test-selector{height: 100%;width: 100%;color: red;}.test-selector:hover {color: red;}.test-selector::placeholder {color: red;}', '.test-selector'),
+            ->parse('.test-selector{height: 100%;width: 100%;color: red;}.test-selector:hover {color: red;}.test-selector::placeholder {color: red;}', '.test-selector'),
     ],
 ];
 ```
@@ -369,7 +369,7 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Css;
         'blocks' => [
             'my-namespace/test-block' => [
                 'css' => $container->get(Css::class) // Or (new Css($presets))
-                    ->parseString('.test-selector{height: 100%;width: 100%;color: red;}.test-selector:hover {color: red;}.test-selector::placeholder {color: red;}', '.test-selector'),
+                    ->parse('.test-selector{height: 100%;width: 100%;color: red;}.test-selector:hover {color: red;}.test-selector::placeholder {color: red;}', '.test-selector'),
             ],
         ],
     ],
@@ -385,9 +385,19 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Css;
 [
     SectionNames::STYLES => [
         'css' => $container->get(Css::class) // Or (new Css($presets))
-            ->parseString('.test-selector{color: {{color.base}};}', '.test-selector'),
+            ->parse('.test-selector{color: {{color.base}};}', '.test-selector'),
     ],
 ];
+```
+
+The `{{color.base}}` will be replaced with the value of the `color.base` previously set in the `$presets` collection.
+
+```json
+{
+  "styles": {
+    "css": ".test-selector{color: var(--wp--preset--color--base);}"
+  }
+}
 ```
 
 More examples can be found in the [tests/_data/fixtures/advanced-example.json.php](../tests/_data/fixtures/advanced-example.json.php) file.

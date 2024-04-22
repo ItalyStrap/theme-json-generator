@@ -35,6 +35,9 @@ class Css
         $this->presets = $presets ?? new NullPresets();
     }
 
+    /**
+     * @deprecated Use parse() instead
+     */
     public function parseString(string $css, string $selector = ''): string
     {
         if (\str_starts_with(\trim($css), '&')) {
@@ -77,6 +80,7 @@ class Css
         }
 
         $css = $this->presets->parse($css);
+        $selector = \trim($selector);
 
         if ($selector === '') {
             return $css;
@@ -90,6 +94,7 @@ class Css
 
         $newLine = $this->isCompressed ? '' : PHP_EOL;
         $space = $this->isCompressed ? '' : \implode('', \array_fill(0, 4, ' '));
+        $spaceAfterSelector = $this->isCompressed ? '' : ' ';
 
         foreach ($doc->getAllDeclarationBlocks() as $declarationBlock) {
             foreach ($declarationBlock->getSelectors() as $cssSelector) {
@@ -109,7 +114,7 @@ class Css
                 $actualSelector = $cssSelector->getSelector();
                 $newSelector = \substr($actualSelector, \strlen($selector));
 
-                $cssBlock = $newSelector . ' {' . $newLine;
+                $cssBlock = $newSelector . $spaceAfterSelector . '{' . $newLine;
                 foreach ($declarationBlock->getRules() as $rule) {
                     $cssBlock .= $space . $rule->getRule() . ': ' . (string)$rule->getValue() . ';' . $newLine;
                 }

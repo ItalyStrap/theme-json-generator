@@ -30,6 +30,7 @@
 
         "justinrainbow/json-schema": "^5.2",
         "scssphp/scssphp": "^1.12.1",
+        "sabberworm/php-css-parser": "^8.5",
         "brick/varexporter": "^0.3.8",
         "webimpress/safe-writer": "^2.2",
 
@@ -64,9 +65,7 @@
         "symplify/easy-coding-standard": "^12.0",
 
         "italystrap/debug": "dev-master",
-        "wp-cli/wp-cli": "^2.7",
-
-        "sabberworm/php-css-parser": "^8.5"
+        "wp-cli/wp-cli": "^2.7"
     },
     "autoload": {
         "psr-4": {

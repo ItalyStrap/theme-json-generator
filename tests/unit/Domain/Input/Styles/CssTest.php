@@ -145,6 +145,21 @@ CUSTOM_CSS,
         foreach (self::newStyleProviderTrait() as $key => $value) {
             yield $key => $value;
         }
+
+        yield 'selector list' => [
+            // phpcs:disable
+            'selector' => '.test-selector',
+            'actual' => '.test-selector .one ,.test-selector .two,.test-selector.three,.test-selector #four{color: red;}',
+            'expected' => ' .one{color: red;}& .two{color: red;}&.three{color: red;}& #four{color: red;}',
+            // phpcs:enable
+        ];
+
+        yield 'selector used also as prefix for nested selectors' => [
+            // phpcs:disable
+            'selector' => '.test-selector',
+            'actual' => '.test-selector .test-selector-one{color: blue;}.test-selector .test-selector-two{color: red;}',
+            'expected' => ' .test-selector-one{color: blue;}& .test-selector-two{color: red;}',
+        ];
     }
 
     /**
