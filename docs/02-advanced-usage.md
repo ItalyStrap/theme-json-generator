@@ -325,12 +325,21 @@ You can find an implementation example in the [tests/_data/fixtures/advanced-exa
 
 ### Custom CSS for Global Styles and per Block
 
-The introduction of the `css` field in [WordPress 6.2](https://wordpress.org/news/2023/03/dolphy/) enables the addition of [custom CSS](https://make.wordpress.org/core/2023/03/06/custom-css-for-global-styles-and-per-block/) directly within the `theme.json` file, both globally under `styles.css` and per block within `styles.blocks.[block-name].css`. Utilizing the `\ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Css` class and its `parse(string $css, string $selector = ''): string` method, developers can now seamlessly integrate custom styles without the need to remember the format to use like spaces and separators, just write your CSS as you would in a regular CSS file and let the `Css` class handle the rest.
+More information about the `css` field can be found in:
+
+* [WordPress 6.2 release notes](https://wordpress.org/news/2023/03/dolphy/).
+* [Custom CSS for Global Styles and per Block](https://make.wordpress.org/core/2023/03/06/custom-css-for-global-styles-and-per-block/).
+* [Per Block CSS with theme.json](https://developer.wordpress.org/news/2023/04/21/per-block-css-with-theme-json/).
+* [Global Settings and Styles](https://developer.wordpress.org/themes/global-settings-and-styles/).
+* [How to use custom CSS in theme.json - fullsiteediting.com](https://fullsiteediting.com/lessons/how-to-use-custom-css-in-theme-json/).
+
+The introduction of the `css` field in [WordPress 6.2](https://wordpress.org/news/2023/03/dolphy/) enables the addition of [custom CSS](https://make.wordpress.org/core/2023/03/06/custom-css-for-global-styles-and-per-block/) directly within the `theme.json` file, both globally under `styles.css` and per block within `styles.blocks.[block-name].css`. Utilizing the {`\ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Css`|`\ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Scss`} classes and theirs `parse(string $css, string $selector = ''): string` method, developers can now seamlessly integrate custom styles without the need to remember the format to use with `&` separator, just write your CSS (or Scss) as you would in a regular CSS|SCSS file and let the `Css`|`Scss` class handle the rest.
+
 This method accepts two parameters: the CSS to parse and an optional selector to scope the CSS rules accordingly.
 
 How It Works
 
-The `Css` class efficiently parses the provided CSS, extracting and formatting rules based on the specified selector. This functionality ensures that the output is fully compatible with the `theme.json` structure, enhancing the flexibility and customization of theme development.
+The `Css`|`Scss` class efficiently parses the provided CSS, extracting and formatting rules based on the specified selector. This functionality ensures that the output is fully compatible with the `theme.json` structure, enhancing the flexibility and customization of theme development.
 
 So, let's see some examples:
 
@@ -344,16 +353,18 @@ echo (new Css($presets))->parse('.test-selector{height: 100%;}', '.test-selector
 echo (new Css($presets))->parse('.test-selector{height: 100%;width: 100%;color: red;}.test-selector:hover {color: red;}.test-selector::placeholder {color: red;}', '.test-selector');
 ```
 
-Like the other classes in the `Styles` directory, you can use the `Css` class directly or pass the `$presets` collection to the constructor or use the `$container` object to get the instance you need.
+Like the other classes in the `Styles` directory, you can use the `Css` class directly or pass the `$presets` collection to the constructor or use the `$container` object to get the instance you need, the only exception is for the `Scss` class that need an instance of `Css` class and an instance of `ScssPhp\ScssPhp\Compiler` class to work, but if you use the `$container` object you don't need to worry about it because all the dependencies are already registered in the container.
 
-Let's see in action:
+As the name suggests, the `Scss` class is used to parse SCSS styles, so you are free to write your styles in SCSS format and let the class handle the conversion for you.
+
+Let's see it in action:
 
 ```php
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Css;
 
 [
     SectionNames::STYLES => [
-        'css' => $container->get(Css::class) // Or (new Css($presets))
+        'css' => $container->get(Css::class) // Or (new Css($presets)) or (new Scss(new Css($presets), $scssCompiler, $presets))
             ->parse('.test-selector{height: 100%;width: 100%;color: red;}.test-selector:hover {color: red;}.test-selector::placeholder {color: red;}', '.test-selector'),
     ],
 ];
@@ -368,7 +379,7 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Css;
     SectionNames::STYLES => [
         'blocks' => [
             'my-namespace/test-block' => [
-                'css' => $container->get(Css::class) // Or (new Css($presets))
+                'css' => $container->get(Css::class) // Or (new Css($presets)) or (new Scss(new Css($presets), $scssCompiler, $presets))
                     ->parse('.test-selector{height: 100%;width: 100%;color: red;}.test-selector:hover {color: red;}.test-selector::placeholder {color: red;}', '.test-selector'),
             ],
         ],
@@ -376,7 +387,7 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Css;
 ];
 ```
 
-All methods also support a special syntax to find value in the `$presets` collection, `{{type.slug}}`, this syntax will be used internally to find the value in the `$presets` collection.
+All methods also support a special syntax to resolve value in the `$presets` collection, `{{type.slug}}`, this syntax will be used internally to find the value in the `$presets` collection registered before.
 
 
 ```php

@@ -18,6 +18,7 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Palette;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\GradientInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetInterface;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetsInterface;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FilesFinder;
 use JsonSchema\Validator;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -162,6 +163,13 @@ class UnitTestCase extends Unit
         return $this->compiler->reveal();
     }
 
+    protected ObjectProphecy $presets;
+
+    protected function makePresets(): PresetsInterface
+    {
+        return $this->presets->reveal();
+    }
+
     // phpcs:ignore -- Method from Codeception
     protected function _before()
     {
@@ -183,6 +191,7 @@ class UnitTestCase extends Unit
         $this->filesFinder = $this->prophesize(FilesFinder::class);
         $this->validator = $this->prophesize(Validator::class);
         $this->compiler = $this->prophesize(Compiler::class);
+        $this->presets = $this->prophesize(PresetsInterface::class);
 
         $this->composer->getConfig()->willReturn($this->makeComposerConfig());
         $this->composer->getPackage()->willReturn($this->makeRootPackage());
