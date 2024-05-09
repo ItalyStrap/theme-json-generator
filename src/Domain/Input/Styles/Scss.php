@@ -42,24 +42,24 @@ class Scss implements CssInterface
         return $this;
     }
 
-    public function parse(string $scss, string $selector = ''): string
+    public function parse(string $css, string $selector = ''): string
     {
-        if (\str_starts_with(\trim($scss), '&')) {
+        if (\str_starts_with(\trim($css), '&')) {
             throw new \RuntimeException(CssInterface::M_AMPERSAND_MUST_NOT_BE_AT_THE_BEGINNING);
         }
 
         $this->css->stopResolveVariables();
-        $scss = $this->presets->parse($scss);
+        $css = $this->presets->parse($css);
 
         $selector = \trim($selector);
 
         if ($selector === '') {
-            return $scss;
+            return $css;
         }
 
         $this->compiler->setOutputStyle($this->outputStyle);
-        $css = $this->compiler->compileString($scss);
+        $cssCompiled = $this->compiler->compileString($css);
 
-        return $this->css->parse($css->getCss(), $selector);
+        return $this->css->parse($cssCompiled->getCss(), $selector);
     }
 }
