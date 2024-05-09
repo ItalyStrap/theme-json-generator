@@ -14,7 +14,7 @@ use ScssPhp\ScssPhp\OutputStyle;
  * @psalm-api
  * @see ScssTest
  */
-class Scss
+class Scss implements CssInterface
 {
     private Css $css;
     private Compiler $compiler;
@@ -44,11 +44,20 @@ class Scss
 
     public function parse(string $scss, string $selector = ''): string
     {
-        $this->compiler->setOutputStyle($this->outputStyle);
+        if (\str_starts_with(\trim($scss), '&')) {
+            throw new \RuntimeException(CssInterface::M_AMPERSAND_MUST_NOT_BE_AT_THE_BEGINNING);
+        }
 
         $this->css->stopResolveVariables();
         $scss = $this->presets->parse($scss);
 
+        $selector = \trim($selector);
+
+        if ($selector === '') {
+            return $scss;
+        }
+
+        $this->compiler->setOutputStyle($this->outputStyle);
         $css = $this->compiler->compileString($scss);
 
         return $this->css->parse($css->getCss(), $selector);

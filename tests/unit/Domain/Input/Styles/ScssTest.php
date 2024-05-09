@@ -48,6 +48,19 @@ class ScssTest extends UnitTestCase
 CSS,
             'expected' => 'gap: 0;&.test-selector-one{color: blue;}& .test-selector-two{color: blue;}',
         ];
+
+        yield 'selector used also as prefix for nested selectors with nested selectors' => [
+            'selector' => '.test-selector',
+            'actual' => <<<CSS
+.test-selector__button-inside {
+    & .test-selector__button {
+        margin-left: -1px;
+        transition: margin-left 0.3s;
+    }
+}
+CSS,
+            'expected' => '__button-inside .test-selector__button{margin-left: -1px;transition: margin-left .3s;}',
+        ];
     }
 
     /**

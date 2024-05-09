@@ -20,10 +20,8 @@ use Sabberworm\CSS\Property\Selector;
  * @psalm-api
  * @see CssTest
  */
-class Css
+class Css implements CssInterface
 {
-    public const M_AMPERSAND_MUST_NOT_BE_AT_THE_BEGINNING = 'CSS cannot begin with an ampersand (&)';
-
     private PresetsInterface $presets;
     private bool $isCompressed = true;
     private bool $shouldResolveVariables = true;
@@ -52,7 +50,7 @@ class Css
     public function parse(string $css, string $selector = ''): string
     {
         if (\str_starts_with(\trim($css), '&')) {
-            throw new \RuntimeException(self::M_AMPERSAND_MUST_NOT_BE_AT_THE_BEGINNING);
+            throw new \RuntimeException(CssInterface::M_AMPERSAND_MUST_NOT_BE_AT_THE_BEGINNING);
         }
 
         if ($this->shouldResolveVariables) {
@@ -113,7 +111,7 @@ class Css
     public function parseString(string $css, string $selector = ''): string
     {
         if (\str_starts_with(\trim($css), '&')) {
-            throw new \RuntimeException(self::M_AMPERSAND_MUST_NOT_BE_AT_THE_BEGINNING);
+            throw new \RuntimeException(CssInterface::M_AMPERSAND_MUST_NOT_BE_AT_THE_BEGINNING);
         }
 
         $css = $this->presets->parse($css);

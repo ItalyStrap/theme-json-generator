@@ -7,6 +7,7 @@ namespace ItalyStrap\Tests\Unit\Domain\Input\Styles;
 use ItalyStrap\Tests\CssStyleStringProviderTrait;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Css;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\CssInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Scss;
 use ScssPhp\ScssPhp\Compiler;
 
@@ -109,7 +110,7 @@ CUSTOM_CSS,
     public function testItShouldThrowErrorIfCssStartWithAmpersand(): void
     {
         $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage(Css::M_AMPERSAND_MUST_NOT_BE_AT_THE_BEGINNING);
+        $this->expectExceptionMessage(CssInterface::M_AMPERSAND_MUST_NOT_BE_AT_THE_BEGINNING);
 
         $this->makeInstance()->parse('& .foo{color: red;}');
     }
