@@ -7,12 +7,15 @@ namespace ItalyStrap\Tests\Unit\Domain\Input\Styles;
 use ItalyStrap\Tests\CssStyleStringProviderTrait;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Css;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\CssInterface;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Scss;
 use ScssPhp\ScssPhp\Compiler;
 
 class CssTest extends UnitTestCase
 {
     use CssStyleStringProviderTrait {
         CssStyleStringProviderTrait::styleProvider as styleProviderTrait;
+        CssStyleStringProviderTrait::newStyleProvider as newStyleProviderTrait;
     }
 
     private function makeInstance(): Css
@@ -107,35 +110,39 @@ CUSTOM_CSS,
     public function testItShouldThrowErrorIfCssStartWithAmpersand(): void
     {
         $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage(Css::M_AMPERSAND_MUST_NOT_BE_AT_THE_BEGINNING);
+        $this->expectExceptionMessage(CssInterface::M_AMPERSAND_MUST_NOT_BE_AT_THE_BEGINNING);
 
-        $this->makeInstance()->parseString('& .foo{color: red;}');
+        $this->makeInstance()->parse('& .foo{color: red;}');
+    }
+
+    public static function newStyleProvider(): iterable
+    {
+        foreach (self::newStyleProviderTrait() as $key => $value) {
+            yield $key => $value;
+        }
+
+        yield 'selector list' => [
+            // phpcs:disable
+            'selector' => '.test-selector',
+            'actual' => '.test-selector .one ,.test-selector .two,.test-selector.three,.test-selector #four{color: red;}',
+            'expected' => ' .one{color: red;}& .two{color: red;}&.three{color: red;}& #four{color: red;}',
+            // phpcs:enable
+        ];
+
+        yield 'selector used also as prefix for nested selectors' => [
+            // phpcs:disable
+            'selector' => '.test-selector',
+            'actual' => '.test-selector .test-selector-one{color: blue;}.test-selector .test-selector-two{color: red;}',
+            'expected' => ' .test-selector-one{color: blue;}& .test-selector-two{color: red;}',
+        ];
     }
 
     /**
-     * @dataProvider styleProvider
+     * @dataProvider newStyleProvider
      */
-    public function testItShouldCompileExpanded(string $selector, string $css, string $expected): void
+    public function testItShouldParseWithNewMethod(string $selector, string $actual, string $expected): void
     {
-        $this->expandedCompiler($css, 'expanded');
-    }
-
-    /**
-     * @dataProvider styleProvider
-     */
-    public function testItShouldCompileCompressed(string $selector, string $css, string $expected): void
-    {
-        $this->expandedCompiler($css, 'compressed');
-    }
-
-    private function expandedCompiler(string $css, string $style): void
-    {
-        $compiler = new Compiler();
-        $compiler->setOutputStyle($style);
-
-        $result = $compiler->compileString($css);
-
-        $actual = $this->makeInstance()->parseString($result->getCss(), '.test-selector');
-        $this->assertTrue(true, 'Let this test pass, is a check for the compiler');
+        $parseString = $this->makeInstance()->parse($actual, $selector);
+        $this->assertSame($expected, $parseString, 'The parsed string is not the same as expected');
     }
 }

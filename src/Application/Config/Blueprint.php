@@ -30,7 +30,7 @@ final class Blueprint extends Config implements \JsonSerializable
 
     public function appendGlobalCss(string $css): bool
     {
-        $currentCss = $this->get(SectionNames::STYLES . '.css', '');
+        $currentCss = (string)$this->get(SectionNames::STYLES . '.css');
         return $this->set(SectionNames::STYLES . '.css', $currentCss . $css);
     }
 
