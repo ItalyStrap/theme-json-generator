@@ -82,7 +82,10 @@ class Css implements CssInterface
 
                 if ($cssSelector->getSelector() === $selector) {
                     foreach ($declarationBlock->getRules() as $rule) {
-                        $ruleText = $rule->getRule() . ': ' . (string)$rule->getValue() . ';' . $newLine;
+                        $important = $rule->getIsImportant() ? ' !important' : '';
+                        // phpcs:disable
+                        $ruleText = $space . $rule->getRule() . ': ' . (string)$rule->getValue() . $important . ';' . $newLine;
+                        // phpcs:enable
                         $rootRules .= $ruleText;
                     }
 
@@ -94,7 +97,10 @@ class Css implements CssInterface
 
                 $cssBlock = $newSelector . $spaceAfterSelector . '{' . $newLine;
                 foreach ($declarationBlock->getRules() as $rule) {
-                    $cssBlock .= $space . $rule->getRule() . ': ' . (string)$rule->getValue() . ';' . $newLine;
+                    $important = $rule->getIsImportant() ? ' !important' : '';
+                    // phpcs:disable
+                    $cssBlock .= $space . $rule->getRule() . ': ' . (string)$rule->getValue() . $important . ';' . $newLine;
+                    // phpcs:enable
                 }
                 $cssBlock .= '}' . $newLineAfterBlock;
                 $additionalSelectors[] = $cssBlock;

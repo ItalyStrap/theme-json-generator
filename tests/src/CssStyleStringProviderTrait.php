@@ -274,5 +274,19 @@ trait CssStyleStringProviderTrait
             'expected' => 'color: red;margin: auto;&.one{color: blue;}& .two{color: green;}',
             // phpcs:enable
         ];
+
+        yield 'with !important' => [
+            'selector' => '.test-selector',
+            'actual' => '.test-selector{color: red !important;}',
+            'expected' => 'color: red !important;',
+        ];
+
+        yield 'with nested selector and !important to some rule' => [
+            // phpcs:disable
+            'selector' => '.test-selector',
+            'original' => '.test-selector{color: red; margin: auto;}.test-selector.one{color: blue;}.test-selector .two{color: green !important;}',
+            'expected' => 'color: red;margin: auto;&.one{color: blue;}& .two{color: green !important;}',
+            // phpcs:enable
+        ];
     }
 }
