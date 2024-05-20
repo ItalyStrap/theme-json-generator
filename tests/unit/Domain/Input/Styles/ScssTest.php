@@ -61,6 +61,23 @@ CSS,
 CSS,
             'expected' => '__button-inside .test-selector__button{margin-left: -1px;transition: margin-left .3s;}',
         ];
+
+        yield 'without selector' => [
+            'selector' => '',
+            'actual' => <<<CSS
+.test-selector {
+    gap: 0;
+
+    &.test-selector-one,
+    & .test-selector-two {
+        color: blue;
+    }
+}
+CSS,
+            // phpcs:disable
+            'expected' => '.test-selector{gap:0}.test-selector.test-selector-one,.test-selector .test-selector-two{color:blue}',
+            // phpcs:enable
+        ];
     }
 
     /**

@@ -53,10 +53,6 @@ class Scss implements CssInterface
 
         $selector = \trim($selector);
 
-        if ($selector === '') {
-            return $css;
-        }
-
         $this->compiler->setOutputStyle($this->outputStyle);
         $cssCompiled = $this->compiler->compileString($css);
 
