@@ -9,6 +9,8 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\SectionNames;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Duotone;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Gradient;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Palette;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Shadow;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\BoxShadow;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\Color;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorModifier;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\LinearGradient;
@@ -38,11 +40,10 @@ return static function (Blueprint $blueprint, Presets $presets, ContainerInterfa
         ->add(new Gradient(
             'base-to-white',
             'Base to white',
-            new LinearGradient(
-                '135deg',
-                $presets->get('color.base'),
-                $presets->get('color.bodyColor')
-            )
+            (new LinearGradient())
+                ->direction('135deg')
+                ->colorStop($presets->get('color.base'))
+                ->colorStop($presets->get('color.bodyColor'))
         ));
 
     // Duotone
@@ -52,6 +53,18 @@ return static function (Blueprint $blueprint, Presets $presets, ContainerInterfa
             'Base to Body Color',
             $presets->get('color.base'),
             $presets->get('color.bodyColor')
+        ));
+
+    $presets
+        ->add(new Shadow(
+            'base',
+            'Base shadow',
+            (new BoxShadow())
+                ->offsetX('0')
+                ->offsetY('4px')
+                ->blur('8px')
+                ->spread('0')
+                ->color($presets->get('color.bodyColor'))
         ));
 
     // Font size
