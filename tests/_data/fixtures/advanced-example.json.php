@@ -38,11 +38,10 @@ return static function (Blueprint $blueprint, Presets $presets, ContainerInterfa
         ->add(new Gradient(
             'base-to-white',
             'Base to white',
-            new LinearGradient(
-                '135deg',
-                $presets->get('color.base'),
-                $presets->get('color.bodyColor')
-            )
+            (new LinearGradient())
+                ->direction('135deg')
+                ->colorStop($presets->get('color.base'))
+                ->colorStop($presets->get('color.bodyColor'))
         ));
 
     // Duotone
