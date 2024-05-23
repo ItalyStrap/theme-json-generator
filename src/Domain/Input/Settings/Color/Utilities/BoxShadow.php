@@ -88,8 +88,26 @@ class BoxShadow
 
     private function assertValidCssDimension(string $value): void
     {
-        if (!\preg_match('/^(-?\d*\.?\d+)(px|em|rem|%)$/', $value)) {
-            throw new \RuntimeException('Invalid CSS dimension');
+        $unit = \implode('|', [
+            'px',
+            'em',
+            'rem',
+            '%',
+            'in',
+            'cm',
+            'mm',
+            'pt',
+            'pc',
+            'ch',
+            'ex',
+            'vw',
+            'vh',
+            'vmin',
+            'vmax',
+        ]);
+
+        if (!\preg_match('/^(-?\d*\.?\d+)(' . $unit . ')$/', $value) && $value !== '0') {
+            throw new \RuntimeException('Invalid CSS dimension: given ' . $value);
         }
     }
 }
