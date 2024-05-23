@@ -79,7 +79,7 @@ class BoxShadow
         }
 
         $shadow = [
-            $this->inset ? 'inset ' : '',
+            $this->inset ? 'inset' : '',
             $this->x,
             $this->y,
             $this->blur,
