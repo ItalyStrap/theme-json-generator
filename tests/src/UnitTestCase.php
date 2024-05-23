@@ -15,6 +15,7 @@ use Composer\Package\RootPackageInterface;
 use Composer\Repository\RepositoryManager;
 use ItalyStrap\Config\ConfigInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Palette;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\BoxShadow;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\GradientInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetInterface;
@@ -128,6 +129,13 @@ class UnitTestCase extends Unit
         return $this->gradient->reveal();
     }
 
+    protected ObjectProphecy $boxShadow;
+
+    protected function makeBoxShadow(): BoxShadow
+    {
+        return $this->boxShadow->reveal();
+    }
+
     protected ObjectProphecy $palette;
 
     protected function makePalette(): Palette
@@ -176,6 +184,7 @@ class UnitTestCase extends Unit
         $this->item = $this->prophesize(PresetInterface::class);
         $this->colorInfo = $this->prophesize(ColorInterface::class);
         $this->gradient = $this->prophesize(GradientInterface::class);
+        $this->boxShadow = $this->prophesize(BoxShadow::class);
         $this->palette = $this->prophesize(Palette::class);
 
         $this->config = $this->prophesize(ConfigInterface::class);
