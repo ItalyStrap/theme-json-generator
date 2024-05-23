@@ -22,9 +22,13 @@ class Shadow implements PresetInterface
 
     private string $slug;
     private string $name;
-    private BoxShadow $shadow;
 
-    public function __construct(string $slug, string $name, BoxShadow $shadow)
+    /**
+     * @var BoxShadow[]
+     */
+    private array $shadow;
+
+    public function __construct(string $slug, string $name, BoxShadow ...$shadow)
     {
         $this->slug = $slug;
         $this->name = $name;
@@ -39,7 +43,7 @@ class Shadow implements PresetInterface
         return [
             'slug' => $this->slug,
             'name' => $this->name,
-            'shadow' => (string)$this->shadow,
+            'shadow' => \trim(\implode(', ', $this->shadow), ', ')
         ];
     }
 }

@@ -42,11 +42,41 @@ class BoxShadowTest extends UnitTestCase
             ->willReturn('var(--color-foo, #fff)');
 
         $sut = $this->makeInstance();
-        $sut->offsetX('10px');
+        $sut->offsetX('0');
         $sut->offsetY('10px');
         $sut->color($this->makePalette());
         $this->assertSame(
-            '10px 10px var(--color-foo, #fff)',
+            '0 10px var(--color-foo, #fff)',
+            (string)$sut
+        );
+    }
+
+    public function testWithStringColor(): void
+    {
+        $sut = $this->makeInstance();
+        $sut->offsetX('0')
+            ->offsetY('10px')
+            ->blur('0')
+            ->spread('0')
+            ->color('#fff');
+        $this->assertSame(
+            '0 10px 0 0 #ffffff',
+            (string)$sut
+        );
+    }
+
+    public function testWithColorObject(): void
+    {
+        $color = $this->colorInfo
+            ->__toString()
+            ->willReturn('#fff');
+
+        $sut = $this->makeInstance();
+        $sut->offsetX('0');
+        $sut->offsetY('10px');
+        $sut->color($this->makeColorInfo());
+        $this->assertSame(
+            '0 10px #fff',
             (string)$sut
         );
     }

@@ -258,7 +258,7 @@ class ColorTest extends UnitTestCase
         $this->assertSame(212, $sut->hue(), '');
         $this->assertSame(73, $sut->saturation(), '');
         $this->assertSame(75, $sut->lightness(), '');
-        $this->assertSame(1.0, $sut->alpha(), '');
+        $this->assertSame('ff', $sut->alpha(), '');
     }
 
     public function testItShouldReturnLuminanceValue(): void
@@ -277,5 +277,23 @@ class ColorTest extends UnitTestCase
         $sut = $this->makeInstance('#000000');
         $color = $this->makeInstance('#bada55');
         $this->assertTrue($sut->relativeLuminance($color) >= 4.5, '');
+    }
+
+    public function testConversionToDifferentFormat(): void
+    {
+        $sut = $this->makeInstance('rgba(0,0,0,0.25)');
+        $this->assertSame(0.25, $sut->alpha(), '');
+
+        $sut = $this->makeInstance('#000000');
+        $this->assertSame('ff', $sut->alpha(), '');
+
+        $sut = $this->makeInstance('hsla(0,0,0,0.25)');
+        $this->assertSame(0.25, $sut->alpha(), '');
+
+        $this->assertStringMatchesFormat('#000000', (string)$sut->toHex(), '');
+        $this->assertStringMatchesFormat('rgb(0,0,0)', (string)$sut->toRgb(), '');
+        $this->assertStringMatchesFormat('rgba(0,0,0,0.25)', (string)$sut->toRgba(), '');
+        $this->assertStringMatchesFormat('hsl(0,0%,0%)', (string)$sut->toHsl(), '');
+        $this->assertStringMatchesFormat('hsla(0,0%,0%,0.25)', (string)$sut->toHsla(), '');
     }
 }

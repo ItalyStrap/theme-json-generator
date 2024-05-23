@@ -61,7 +61,7 @@ final class Blueprint extends Config implements \JsonSerializable
             'settings.color.palette' => Palette::TYPE,
             'settings.color.gradients' => Gradient::TYPE,
             'settings.color.duotone' => Duotone::TYPE,
-            'settings.shadows.presets' => Shadow::TYPE,
+            'settings.shadow.presets' => Shadow::TYPE,
             'settings.typography.fontSizes' => FontSize::TYPE,
             'settings.typography.fontFamilies' => FontFamily::TYPE,
             'settings.custom' => Custom::TYPE,

@@ -64,7 +64,14 @@ return static function (Blueprint $blueprint, Presets $presets, ContainerInterfa
                 ->offsetY('4px')
                 ->blur('8px')
                 ->spread('0')
-                ->color($presets->get('color.bodyColor'))
+                ->color($presets->get('color.bodyColor')),
+            (new BoxShadow())
+                ->inset()
+                ->offsetX('0')
+                ->offsetY('4px')
+                ->blur('8px')
+                ->spread('0')
+                ->color('#fff')
         ));
 
     // Font size

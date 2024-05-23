@@ -16,7 +16,7 @@ class BoxShadow
     private string $y = '';
     private string $blur = '';
     private string $spread = '';
-    private ?string $color = '';
+    private string $color = '';
 
     public function inset(bool $inset = true): self
     {
@@ -52,9 +52,23 @@ class BoxShadow
         return $this;
     }
 
-    public function color(Palette $color): self
+    /**
+     * @param Palette|ColorInterface|string $color
+     * @throws \Exception
+     */
+    public function color($color): self
     {
-        $this->color = $color->var((string)$color->color());
+        if ($color instanceof Palette) {
+            $this->color = $color->var((string)$color->color());
+            return $this;
+        }
+
+        if ($color instanceof ColorInterface) {
+            $this->color = (string)$color;
+            return $this;
+        }
+
+        $this->color = (string)(new ColorFactory())->fromColorString($color);
         return $this;
     }
 
@@ -73,7 +87,7 @@ class BoxShadow
             $this->color,
         ];
 
-        return \trim(\implode(' ', \array_filter($shadow)));
+        return \trim(\implode(' ', \array_filter($shadow, static fn($value) => $value !== '')));
     }
 
     public function __clone()
