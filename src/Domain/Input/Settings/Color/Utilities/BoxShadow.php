@@ -26,6 +26,7 @@ class BoxShadow
 
     public function offsetX(string $x): self
     {
+        $this->assertIsUnique($this->x, 'offset-x');
         $this->assertValidCssDimension($x);
         $this->x = $x;
         return $this;
@@ -33,6 +34,7 @@ class BoxShadow
 
     public function offsetY(string $y): self
     {
+        $this->assertIsUnique($this->y, 'offset-y');
         $this->assertValidCssDimension($y);
         $this->y = $y;
         return $this;
@@ -40,6 +42,7 @@ class BoxShadow
 
     public function blur(string $blur): self
     {
+        $this->assertIsUnique($this->blur, 'blur');
         $this->assertValidCssDimension($blur);
         $this->blur = $blur;
         return $this;
@@ -47,6 +50,7 @@ class BoxShadow
 
     public function spread(string $spread): self
     {
+        $this->assertIsUnique($this->spread, 'spread');
         $this->assertValidCssDimension($spread);
         $this->spread = $spread;
         return $this;
@@ -58,6 +62,8 @@ class BoxShadow
      */
     public function color($color): self
     {
+        $this->assertIsUnique($this->color, 'color');
+
         if ($color instanceof Palette) {
             $this->color = $color->var((string)$color->color());
             return $this;
@@ -75,7 +81,7 @@ class BoxShadow
     public function __toString(): string
     {
         if ($this->x === '' && $this->y === '') {
-            throw new \RuntimeException('You must add at least 2 value');
+            throw new \RuntimeException('You must add at least 2 value, offset-x and offset-y');
         }
 
         $shadow = [
@@ -87,17 +93,13 @@ class BoxShadow
             $this->color,
         ];
 
+        $this->reset();
         return \trim(\implode(' ', \array_filter($shadow, static fn($value) => $value !== '')));
     }
 
     public function __clone()
     {
-        $this->inset = false;
-        $this->x = '';
-        $this->y = '';
-        $this->blur = '';
-        $this->spread = '';
-        $this->color = '';
+        $this->reset();
     }
 
     private function assertValidCssDimension(string $value): void
@@ -123,5 +125,25 @@ class BoxShadow
         if (!\preg_match('/^(-?\d*\.?\d+)(' . $unit . ')$/', $value) && $value !== '0') {
             throw new \RuntimeException('Invalid CSS dimension: given ' . $value);
         }
+    }
+
+    private function assertIsUnique(string $param, string $name): void
+    {
+        if ($param !== '') {
+            throw new \RuntimeException('You can add only one value for ' . $name);
+        }
+    }
+
+    /**
+     * @return void
+     */
+    private function reset(): void
+    {
+        $this->inset = false;
+        $this->x = '';
+        $this->y = '';
+        $this->blur = '';
+        $this->spread = '';
+        $this->color = '';
     }
 }

@@ -24,11 +24,23 @@ class LinearGradient implements GradientInterface
         return $this;
     }
 
-    public function colorStop(Palette $color = null, string $stop = ''): self
+    /**
+     * @param Palette|ColorInterface|string $color
+     * @throws \Exception
+     */
+    public function colorStop($color = null, string $stop = ''): self
     {
         $colorVar = '';
-        if ($color) {
+        if ($color instanceof Palette) {
             $colorVar = $color->var((string)$color->color());
+        }
+
+        if ($color instanceof ColorInterface) {
+            $colorVar = (string)$color;
+        }
+
+        if (\is_string($color)) {
+            $colorVar = (string)(new ColorFactory())->fromColorString($color);
         }
 
         $result = \trim($colorVar . ' ' . $stop);
