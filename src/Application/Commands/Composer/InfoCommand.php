@@ -13,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * @psalm-api
  */
-class InfoCommand extends BaseCommand
+class InfoCommand extends Command
 {
     use RootFolderTrait;
 

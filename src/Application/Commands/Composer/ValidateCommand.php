@@ -19,7 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * @psalm-api
  */
-class ValidateCommand extends BaseCommand
+class ValidateCommand extends Command
 {
     use RootFolderTrait;
     use DataFromJsonTrait;

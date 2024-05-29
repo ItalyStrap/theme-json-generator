@@ -6,15 +6,19 @@ namespace ItalyStrap\Tests\Unit\Application\Commands\Composer;
 
 use Composer\Console\Application;
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Application\Commands\Composer\ThemeJson as SUT;
+use ItalyStrap\ThemeJsonGenerator\Application\Commands\Composer\DumpCommand;
 use Prophecy\Argument;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class ThemeJson extends UnitTestCase
 {
-    private function makeInstance(): SUT
+    private function makeInstance(): DumpCommand
     {
-        return new SUT($this->makeConfig());
+        return new DumpCommand(
+            $this->makeEventDispatcher(),
+            $this->makeDump(),
+            $this->makeConfig()
+        );
     }
 
     public function testItShouldBeInstantiatable(): void

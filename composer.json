@@ -4,6 +4,7 @@
     "keywords": ["WordPress", "WordPress theme.json", "theme.json"],
     "type": "library",
     "license": "MIT",
+    "version": "0.0.3",
     "authors": [
         {
             "name": "Enea Overclokk",
@@ -17,8 +18,6 @@
     "require": {
         "php" : ">=7.4",
         "ext-json": "*",
-        "composer/composer": "^2.1",
-        "composer-plugin-api": "^2.0",
 
         "italystrap/config": "^2.4",
         "italystrap/empress": "^2.0",
@@ -34,6 +33,7 @@
         "brick/varexporter": "^0.3.8",
         "webimpress/safe-writer": "^2.2",
 
+        "symfony/console": "^6.0",
         "symfony/polyfill-php80": "^1.22",
         "symfony/event-dispatcher": "^5.4",
         "webmozart/assert": "^1.11"

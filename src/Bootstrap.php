@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\ThemeJsonGenerator\Infrastructure\Cli\Composer;
+namespace ItalyStrap\ThemeJsonGenerator;
 
-use Composer\Console\Application;
+use Symfony\Component\Console\Application;
 use ItalyStrap\Bus\Bus;
 use ItalyStrap\Config\Config;
 use ItalyStrap\Config\ConfigInterface;

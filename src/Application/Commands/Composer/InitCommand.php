@@ -19,7 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * @psalm-api
  */
-class InitCommand extends BaseCommand
+class InitCommand extends Command
 {
     use RootFolderTrait;
     use DataFromJsonTrait;

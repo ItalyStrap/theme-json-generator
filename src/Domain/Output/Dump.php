@@ -12,6 +12,7 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetsInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\DryRunMode;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\GeneratedFile;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\GeneratingFile;
+use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\NoFileFound;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FilesFinder;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\JsonFileWriter;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\ScssFileWriter;
@@ -43,6 +44,7 @@ class Dump
 
     public function handle(DumpMessage $message): void
     {
+        $count = 0;
         /**
          * Let's test the new workflow
          * @example $name => $file
@@ -55,6 +57,7 @@ class Dump
             $presets = $injector->make(PresetsInterface::class);
             $blueprint = $injector->make(Blueprint::class);
             $blueprint->setPresets($presets);
+            $count++;
 
             /**
              * @todo Add subscription configuration.
@@ -70,48 +73,35 @@ class Dump
             $this->generateJsonFile($message, $fileName, $file, $blueprint);
             $this->generateScssFile($message, $fileName, $blueprint);
         }
+
+        if ($count === 0) {
+            $this->dispatcher->dispatch(new NoFileFound());
+        }
     }
 
     private function generateJsonFile(
-        DumpMessage $command,
-        string $fileName,
+        DumpMessage  $message,
+        string       $fileName,
         \SplFileInfo $file,
-        Blueprint $blueprint
+        Blueprint    $blueprint
     ): void {
         $this->dispatcher->dispatch(new GeneratingFile($fileName . self::JSON_FILE_SUFFIX));
 
-        (new JsonFileWriter($file->getPath() . DIRECTORY_SEPARATOR . $fileName . self::JSON_FILE_SUFFIX))
+        (new JsonFileWriter($this->filesFinder->resolveJsonFile($file)))
             ->write($blueprint);
 
         $this->dispatcher->dispatch(new GeneratedFile($fileName . self::JSON_FILE_SUFFIX));
     }
 
-    private function generateScssFile(DumpMessage $command, string $fileName, Blueprint $blueprint): void
+    private function generateScssFile(DumpMessage $message, string $fileName, Blueprint $blueprint): void
     {
-        $this->dispatcher->dispatch(new GeneratingFile($fileName . '.scss'));
-
-        $path_for_theme_sass = $command->getRootFolder() . DIRECTORY_SEPARATOR . $command->getSassFolder();
-        if ($command->getSassFolder() !== '' && \is_writable($path_for_theme_sass)) {
+        $path_for_theme_sass = $message->getRootFolder() . DIRECTORY_SEPARATOR . $message->getSassFolder();
+        if ($message->getSassFolder() !== '' && \is_writable($path_for_theme_sass)) {
+            $this->dispatcher->dispatch(new GeneratingFile($fileName . '.scss'));
             (new ScssFileWriter($path_for_theme_sass . DIRECTORY_SEPARATOR . $fileName . '.scss'))
                 ->write($blueprint);
             $this->dispatcher->dispatch(new GeneratedFile($fileName . '.scss'));
         }
-    }
-
-    public function processBlueprint(
-        DumpMessage $message,
-        string $fileName,
-        callable $entryPoint
-    ): void {
-        $injector = $this->configureContainer();
-        $injector->execute($entryPoint);
-
-        $presets = $injector->make(PresetsInterface::class);
-        $blueprint = $injector->make(Blueprint::class);
-        $blueprint->setPresets($presets);
-
-        (new JsonFileWriter($message->getRootFolder() . DIRECTORY_SEPARATOR . $fileName . '.json'))
-            ->write($blueprint);
     }
 
     private function configureContainer(): \ItalyStrap\Empress\Injector
