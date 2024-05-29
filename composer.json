@@ -4,7 +4,6 @@
     "keywords": ["WordPress", "WordPress theme.json", "theme.json"],
     "type": "library",
     "license": "MIT",
-    "version": "0.0.3",
     "authors": [
         {
             "name": "Enea Overclokk",
