@@ -6,7 +6,7 @@ namespace ItalyStrap\Tests\Unit\Domain\Output;
 
 use ItalyStrap\Config\Config;
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Application\Commands\DumpMessage;
+use ItalyStrap\ThemeJsonGenerator\Application\DumpMessage;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Dump;
 use Prophecy\Argument;
 

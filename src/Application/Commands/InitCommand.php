@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\ThemeJsonGenerator\Application\Commands\Composer;
+namespace ItalyStrap\ThemeJsonGenerator\Application\Commands;
 
-use Composer\Command\BaseCommand;
-use ItalyStrap\ThemeJsonGenerator\Application\Commands\InitMessage;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\DataFromJsonTrait;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\RootFolderTrait;
+use ItalyStrap\ThemeJsonGenerator\Application\InitMessage;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\EntryPointCanNotBeCreated;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\EntryPointCreated;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\EntryPointDoesNotExist;

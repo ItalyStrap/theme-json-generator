@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\ThemeJsonGenerator\Application\Commands\Composer;
+namespace ItalyStrap\ThemeJsonGenerator\Application\Commands;
 
-use Composer\Command\BaseCommand;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\RootFolderTrait;
+use \ItalyStrap\ThemeJsonGenerator\Application\InfoMessage;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -38,7 +38,7 @@ class InfoCommand extends Command
     {
         $rootFolder = $this->rootFolder();
 
-        $message = new \ItalyStrap\ThemeJsonGenerator\Application\Commands\InfoMessage($rootFolder);
+        $message = new InfoMessage($rootFolder);
 
         try {
             return (int)$this->bus->handle($message);
