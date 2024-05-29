@@ -80,10 +80,10 @@ class Dump
     }
 
     private function generateJsonFile(
-        DumpMessage  $message,
-        string       $fileName,
+        DumpMessage $message,
+        string $fileName,
         \SplFileInfo $file,
-        Blueprint    $blueprint
+        Blueprint $blueprint
     ): void {
         $this->dispatcher->dispatch(new GeneratingFile($fileName . self::JSON_FILE_SUFFIX));
 

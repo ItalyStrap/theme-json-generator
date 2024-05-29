@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Application\Commands;
 
-use ItalyStrap\Config\ConfigInterface;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\RootFolderTrait;
-use \ItalyStrap\ThemeJsonGenerator\Application\DumpMessage;
+use ItalyStrap\ThemeJsonGenerator\Application\DumpMessage;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Dump;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\GeneratedFile;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\GeneratingFile;
@@ -51,18 +50,14 @@ final class DumpCommand extends Command
 
     private Dump $dump;
 
-    private ConfigInterface $config;
-
     private \Symfony\Component\EventDispatcher\EventDispatcher $subscriber;
 
     public function __construct(
         \Symfony\Component\EventDispatcher\EventDispatcher $subscriber,
-        Dump $dump,
-        ConfigInterface $config
+        Dump $dump
     ) {
         $this->subscriber = $subscriber;
         $this->dump = $dump;
-        $this->config = $config;
         parent::__construct();
     }
 
@@ -148,6 +143,7 @@ final class DumpCommand extends Command
 
         $this->subscriber->addListener(
             NoFileFound::class,
+            /** @psalm-suppress UnusedClosureParam */
             static function (NoFileFound $event) use ($output): void {
                 $output->writeln(NoFileFound::M_NO_FILE_FOUND);
             }
