@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Output;
 
-use ItalyStrap\ThemeJsonGenerator\Application\Commands\InfoMessage;
+use ItalyStrap\ThemeJsonGenerator\Application\InfoMessage;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FilesFinder;
 
 /**

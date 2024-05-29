@@ -4,3 +4,4 @@ modules:
         - Asserts
         - Cli
         - \Helper\Functional
+        - Filesystem

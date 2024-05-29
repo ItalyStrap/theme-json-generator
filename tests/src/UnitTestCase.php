@@ -5,14 +5,6 @@ declare(strict_types=1);
 namespace ItalyStrap\Tests;
 
 use Codeception\Test\Unit;
-use Composer\Composer;
-use Composer\Config;
-use Composer\IO\IOInterface;
-use Composer\Json\JsonFile;
-use Composer\Package\Link;
-use Composer\Package\PackageInterface;
-use Composer\Package\RootPackageInterface;
-use Composer\Repository\RepositoryManager;
 use ItalyStrap\Config\ConfigInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Palette;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\BoxShadow;
@@ -57,62 +49,6 @@ class UnitTestCase extends Unit
     public function makeConfig(): ConfigInterface
     {
         return $this->config->reveal();
-    }
-
-    protected ObjectProphecy $jsonFile;
-
-    protected function makeJsonFile(): JsonFile
-    {
-        return $this->jsonFile->reveal();
-    }
-
-    protected ObjectProphecy $composer;
-
-    protected function makeComposer(): Composer
-    {
-        return $this->composer->reveal();
-    }
-
-    protected ObjectProphecy $composerConfig;
-
-    protected function makeComposerConfig(): Config
-    {
-        return $this->composerConfig->reveal();
-    }
-
-    protected ObjectProphecy $io;
-
-    protected function makeIo(): IOInterface
-    {
-        return $this->io->reveal();
-    }
-
-    protected ObjectProphecy $rootPackage;
-
-    protected function makeRootPackage(): RootPackageInterface
-    {
-        return $this->rootPackage->reveal();
-    }
-
-    protected ObjectProphecy $link;
-
-    protected function makeLink(): Link
-    {
-        return $this->link->reveal();
-    }
-
-    protected ObjectProphecy $repositoryManager;
-
-    protected function makeRepositoryManager(): RepositoryManager
-    {
-        return $this->repositoryManager->reveal();
-    }
-
-    protected ObjectProphecy $package;
-
-    protected function makePackage(): PackageInterface
-    {
-        return $this->package->reveal();
     }
 
     protected ObjectProphecy $colorInfo;
@@ -188,22 +124,11 @@ class UnitTestCase extends Unit
         $this->palette = $this->prophesize(Palette::class);
 
         $this->config = $this->prophesize(ConfigInterface::class);
-        $this->jsonFile = $this->prophesize(JsonFile::class);
-        $this->composer = $this->prophesize(Composer::class);
-        $this->composerConfig = $this->prophesize(Config::class);
-        $this->io = $this->prophesize(IOInterface::class);
-        $this->rootPackage = $this->prophesize(RootPackageInterface::class);
-        $this->link = $this->prophesize(Link::class);
-        $this->repositoryManager = $this->prophesize(RepositoryManager::class);
-        $this->package = $this->prophesize(PackageInterface::class);
         $this->dispatcher = $this->prophesize(EventDispatcherInterface::class);
         $this->filesFinder = $this->prophesize(FilesFinder::class);
         $this->validator = $this->prophesize(Validator::class);
         $this->compiler = $this->prophesize(Compiler::class);
         $this->presets = $this->prophesize(PresetsInterface::class);
-
-        $this->composer->getConfig()->willReturn($this->makeComposerConfig());
-        $this->composer->getPackage()->willReturn($this->makeRootPackage());
 
         $this->input_data = require \codecept_data_dir('fixtures/input-data.php');
         $this->color = '#000000';

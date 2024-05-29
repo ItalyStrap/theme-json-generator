@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Output;
 
 use Brick\VarExporter\VarExporter;
-use ItalyStrap\ThemeJsonGenerator\Application\Commands\InitMessage;
+use ItalyStrap\ThemeJsonGenerator\Application\InitMessage;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\DataFromJsonTrait;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\EntryPointCanNotBeCreated;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\EntryPointCreated;

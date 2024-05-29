@@ -6,12 +6,8 @@ namespace ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils;
 
 trait RootFolderTrait
 {
-    private function rootFolder(): string
+    private function rootFolder(string $path = ''): string
     {
-        $composer = $this->requireComposer();
-
-        /** @var string $vendorPath */
-        $vendorPath = $composer->getConfig()->get('vendor-dir');
-        return \dirname($vendorPath);
+        return $path !== '' ? $path : (string)\getcwd();
     }
 }

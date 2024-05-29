@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem;
 
-use Composer\Json\JsonFile;
 use ItalyStrap\Config\ConfigInterface;
 
 class JsonFileWriter implements FileWriter
@@ -12,7 +11,6 @@ class JsonFileWriter implements FileWriter
     private string $path;
 
     /**
-     * ThemeJsonGenerator constructor.
      * @param string $path
      */
     public function __construct(string $path)
@@ -29,7 +27,20 @@ class JsonFileWriter implements FileWriter
             throw new \RuntimeException('No data to write');
         }
 
-        $json_file = new ComposerJsonFileAdapter(new JsonFile($this->path));
-        $json_file->write($data->toArray());
+        // This part is borrowed from \Composer\Json\JsonFile
+        $json_data = \json_encode($data->toArray(), \JSON_PRETTY_PRINT);
+        if (false === $json_data) {
+            throw new \RuntimeException('Error encoding JSON data');
+        }
+
+        $dir = \dirname($this->path);
+        if (!\is_dir($dir)) {
+            \mkdir($dir, 0777, true);
+        }
+
+        $result = \file_put_contents($this->path, $json_data);
+        if (false === $result) {
+            throw new \RuntimeException('Error writing JSON data to file');
+        }
     }
 }
