@@ -28,7 +28,7 @@ class JsonFileWriter implements FileWriter
         }
 
         // This part is borrowed from \Composer\Json\JsonFile
-        $json_data = \json_encode($data->toArray(), \JSON_PRETTY_PRINT);
+        $json_data = \json_encode($data->toArray(), \JSON_UNESCAPED_SLASHES | \JSON_PRETTY_PRINT | \JSON_UNESCAPED_UNICODE);
         if (false === $json_data) {
             throw new \RuntimeException('Error encoding JSON data');
         }
@@ -38,7 +38,7 @@ class JsonFileWriter implements FileWriter
             \mkdir($dir, 0777, true);
         }
 
-        $result = \file_put_contents($this->path, $json_data);
+        $result = \file_put_contents($this->path, $json_data . \PHP_EOL);
         if (false === $result) {
             throw new \RuntimeException('Error writing JSON data to file');
         }
