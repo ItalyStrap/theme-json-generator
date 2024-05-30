@@ -28,7 +28,10 @@ class JsonFileWriter implements FileWriter
         }
 
         // This part is borrowed from \Composer\Json\JsonFile
-        $json_data = \json_encode($data->toArray(), \JSON_UNESCAPED_SLASHES | \JSON_PRETTY_PRINT | \JSON_UNESCAPED_UNICODE);
+        $json_data = \json_encode(
+            $data->toArray(),
+            \JSON_UNESCAPED_SLASHES | \JSON_PRETTY_PRINT | \JSON_UNESCAPED_UNICODE
+        );
         if (false === $json_data) {
             throw new \RuntimeException('Error encoding JSON data');
         }
