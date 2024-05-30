@@ -40,6 +40,7 @@ up: files/permission	### Start the containers inside the ./docker folder
 	@echo "Starting the containers..."
 	@$(DOCKER_DIR) docker-compose up -d --remove-orphans
 	@echo "Containers started"
+	@$(DOCKER_DIR) docker-compose exec wordpress php -v
 
 .PHONY: down
 down:	### Stop the containers inside the ./docker folder
