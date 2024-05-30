@@ -39,7 +39,7 @@
         "webmozart/assert": "^1.11"
     },
     "require-dev": {
-        "lucatume/wp-browser": "^3.1",
+        "lucatume/wp-browser": "<3.5",
         "phpspec/prophecy-phpunit": "^2.0",
 
         "codeception/module-asserts": "^1.0",
