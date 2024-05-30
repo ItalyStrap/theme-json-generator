@@ -2,7 +2,7 @@ name: CI
 
 env:
   PROJECT_KIND: plugins
-  DB_HOST: localhost
+  DB_HOST: 127.0.0.1
   DB_NAME: test
   DB_USER: root
   DB_PASSWORD: root
