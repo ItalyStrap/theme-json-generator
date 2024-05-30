@@ -33,7 +33,7 @@
         "webimpress/safe-writer": "^2.2",
 
         "symfony/console": "^v5.4",
-        "symfony/process": "^6.0",
+        "symfony/process": "^v5.4",
         "symfony/polyfill-php80": "^1.22",
         "symfony/event-dispatcher": "^5.4",
         "webmozart/assert": "^1.11"
