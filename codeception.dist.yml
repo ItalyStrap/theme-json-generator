@@ -17,7 +17,7 @@ extensions:
         - Codeception\Command\GenerateWPCanonical
         - Codeception\Command\GenerateWPXMLRPC
 params:
-    - .docker/.env
+    - tests/.env
 coverage:
     enabled: true
     include:

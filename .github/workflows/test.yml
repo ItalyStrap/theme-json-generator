@@ -2,7 +2,7 @@ name: CI
 
 env:
   PROJECT_KIND: plugins
-  DB_HOST: 127.0.0.1
+  DB_HOST: localhost
   DB_NAME: test
   DB_USER: root
   DB_PASSWORD: root
@@ -88,6 +88,9 @@ jobs:
           chmod -R 777 ${{env.APP_FOLDER_PATH}}/wp-content/${{env.PROJECT_KIND}}/${{ github.event.repository.name }}
           ls -la ${{env.APP_FOLDER_PATH}}/wp-content/${{env.PROJECT_KIND}}/${{ github.event.repository.name }}
           wp db export ${{env.APP_FOLDER_PATH}}/wp-content/${{env.PROJECT_KIND}}/${{ github.event.repository.name }}/tests/_data/dump.sql
+
+      - name: Verify MySQL is Running
+        run: sudo systemctl status mysql.service
 
       - name: Build codeception
         working-directory: ${{env.APP_FOLDER_PATH}}/wp-content/${{env.PROJECT_KIND}}/${{ github.event.repository.name }}
