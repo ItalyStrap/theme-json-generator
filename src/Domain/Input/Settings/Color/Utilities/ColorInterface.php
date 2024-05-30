@@ -54,7 +54,10 @@ interface ColorInterface extends \Stringable
 
     public function lightness(): int;
 
-    public function alpha(): float;
+    /**
+     * @return string|float
+     */
+    public function alpha();
 
     public function type(): string;
 }

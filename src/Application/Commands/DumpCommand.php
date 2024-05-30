@@ -2,15 +2,14 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\ThemeJsonGenerator\Application\Commands\Composer;
+namespace ItalyStrap\ThemeJsonGenerator\Application\Commands;
 
-use Composer\Command\BaseCommand;
-use ItalyStrap\Config\ConfigInterface;
-use ItalyStrap\ThemeJsonGenerator\Application\Commands\DumpMessage;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\RootFolderTrait;
+use ItalyStrap\ThemeJsonGenerator\Application\DumpMessage;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Dump;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\GeneratedFile;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\GeneratingFile;
+use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\NoFileFound;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -20,7 +19,7 @@ use Symfony\Component\Process\Process;
 /**
  * @psalm-api
  */
-final class DumpCommand extends BaseCommand
+final class DumpCommand extends Command
 {
     use RootFolderTrait;
 
@@ -44,20 +43,21 @@ final class DumpCommand extends BaseCommand
      */
     public const PATH_FOR_THEME_SASS = 'path-for-theme-sass';
 
-    private Dump $dump;
+    /**
+     * @var string
+     */
+    public const FILE = 'file';
 
-    private ConfigInterface $config;
+    private Dump $dump;
 
     private \Symfony\Component\EventDispatcher\EventDispatcher $subscriber;
 
     public function __construct(
         \Symfony\Component\EventDispatcher\EventDispatcher $subscriber,
-        Dump $dump,
-        ConfigInterface $config
+        Dump $dump
     ) {
         $this->subscriber = $subscriber;
         $this->dump = $dump;
-        $this->config = $config;
         parent::__construct();
     }
 
@@ -87,6 +87,26 @@ final class DumpCommand extends BaseCommand
             )
         );
 
+        $this->addOption(
+            'path',
+            'p',
+            InputOption::VALUE_OPTIONAL,
+            \sprintf(
+                'If set, %s will generate the json file in the specified path.',
+                self::NAME
+            )
+        );
+
+        $this->addOption(
+            self::FILE,
+            null,
+            InputOption::VALUE_OPTIONAL,
+            \sprintf(
+                'If set, %s will generate only the specified file.',
+                self::NAME
+            )
+        );
+
         /**
          * @todo other options:
          *       --no-pretty-print
@@ -99,18 +119,6 @@ final class DumpCommand extends BaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $composer = $this->requireComposer();
-        $rootFolder = $this->rootFolder();
-
-        $package = $composer->getPackage();
-        /** @psalm-suppress MixedArgument */
-        $this->config->merge($package->getExtra()[self::COMPOSER_EXTRA_THEME_JSON_KEY] ?? []);
-
-        /**
-         * @todo The callback is temporary until the new files generation are in place.
-         * @psalm-suppress MixedAssignment
-         */
-        $callback = $this->config->get(self::CALLBACK);
 
         $this->subscriber->addListener(
             GeneratingFile::class,
@@ -133,22 +141,22 @@ final class DumpCommand extends BaseCommand
             }
         );
 
-        $message = new DumpMessage(
-            $rootFolder,
-            (string)$this->config->get(self::PATH_FOR_THEME_SASS, ''),
-            (bool)$input->getOption('dry-run')
+        $this->subscriber->addListener(
+            NoFileFound::class,
+            /** @psalm-suppress UnusedClosureParam */
+            static function (NoFileFound $event) use ($output): void {
+                $output->writeln(NoFileFound::M_NO_FILE_FOUND);
+            }
         );
 
-        try {
-            if (\is_callable($callback)) {
-                $output->writeln('<info>Generating theme.json file</info>');
-                $this->dump->processBlueprint($message, 'theme', $callback);
-                $output->writeln('<info>Generated theme.json file</info>');
-                $output->writeln('========================');
-            }
-        } catch (\Exception $exception) {
-            $output->writeln($exception->getMessage());
-        }
+        $rootFolder = $this->rootFolder((string)$input->getOption('path'));
+
+        $message = new DumpMessage(
+            $rootFolder,
+            '',
+            (bool)$input->getOption('dry-run'),
+            (string)$input->getOption(self::FILE)
+        );
 
         $this->dump->handle($message);
 

@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Application\Commands\Middleware;
 
-use ItalyStrap\ThemeJsonGenerator\Application\Commands\ValidateMessage;
-use ItalyStrap\ThemeJsonGenerator\Domain\Output\Validate;
+use ItalyStrap\ThemeJsonGenerator\Application\ValidateMessage;
 
 class SchemaJsonMiddleware implements \ItalyStrap\Bus\MiddlewareInterface
 {

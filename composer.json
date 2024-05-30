@@ -17,8 +17,6 @@
     "require": {
         "php" : ">=7.4",
         "ext-json": "*",
-        "composer/composer": "^2.1",
-        "composer-plugin-api": "^2.0",
 
         "italystrap/config": "^2.4",
         "italystrap/empress": "^2.0",
@@ -30,10 +28,15 @@
 
         "justinrainbow/json-schema": "^5.2",
         "scssphp/scssphp": "^1.12.1",
+        "sabberworm/php-css-parser": "^8.5",
         "brick/varexporter": "^0.3.8",
         "webimpress/safe-writer": "^2.2",
 
-        "symfony/polyfill-php80": "^1.22"
+        "symfony/console": "^v5.4",
+        "symfony/process": "^v5.4",
+        "symfony/polyfill-php80": "^1.22",
+        "symfony/event-dispatcher": "^5.4",
+        "webmozart/assert": "^1.11"
     },
     "require-dev": {
         "lucatume/wp-browser": "~3.2.3",
@@ -61,11 +64,7 @@
         "rector/rector": "^0.19.0",
         "symplify/easy-coding-standard": "^12.0",
 
-        "italystrap/debug": "dev-master",
-        "wp-cli/wp-cli": "^2.7",
-
-        "psr/event-dispatcher": "^1.0",
-        "sabberworm/php-css-parser": "^8.0"
+        "italystrap/debug": "dev-master"
     },
     "autoload": {
         "psr-4": {
@@ -86,7 +85,6 @@
         }
     },
     "suggest": {
-        "spatie/color": "Allows to convert CSS color"
     },
     "bin": [
         "bin/theme-json"

@@ -5,19 +5,13 @@ declare(strict_types=1);
 namespace ItalyStrap\Tests;
 
 use Codeception\Test\Unit;
-use Composer\Composer;
-use Composer\Config;
-use Composer\IO\IOInterface;
-use Composer\Json\JsonFile;
-use Composer\Package\Link;
-use Composer\Package\PackageInterface;
-use Composer\Package\RootPackageInterface;
-use Composer\Repository\RepositoryManager;
 use ItalyStrap\Config\ConfigInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Palette;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\BoxShadow;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\GradientInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetInterface;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetsInterface;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FilesFinder;
 use JsonSchema\Validator;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -57,62 +51,6 @@ class UnitTestCase extends Unit
         return $this->config->reveal();
     }
 
-    protected ObjectProphecy $jsonFile;
-
-    protected function makeJsonFile(): JsonFile
-    {
-        return $this->jsonFile->reveal();
-    }
-
-    protected ObjectProphecy $composer;
-
-    protected function makeComposer(): Composer
-    {
-        return $this->composer->reveal();
-    }
-
-    protected ObjectProphecy $composerConfig;
-
-    protected function makeComposerConfig(): Config
-    {
-        return $this->composerConfig->reveal();
-    }
-
-    protected ObjectProphecy $io;
-
-    protected function makeIo(): IOInterface
-    {
-        return $this->io->reveal();
-    }
-
-    protected ObjectProphecy $rootPackage;
-
-    protected function makeRootPackage(): RootPackageInterface
-    {
-        return $this->rootPackage->reveal();
-    }
-
-    protected ObjectProphecy $link;
-
-    protected function makeLink(): Link
-    {
-        return $this->link->reveal();
-    }
-
-    protected ObjectProphecy $repositoryManager;
-
-    protected function makeRepositoryManager(): RepositoryManager
-    {
-        return $this->repositoryManager->reveal();
-    }
-
-    protected ObjectProphecy $package;
-
-    protected function makePackage(): PackageInterface
-    {
-        return $this->package->reveal();
-    }
-
     protected ObjectProphecy $colorInfo;
 
     protected function makeColorInfo(): ColorInterface
@@ -125,6 +63,13 @@ class UnitTestCase extends Unit
     protected function makeGradient(): GradientInterface
     {
         return $this->gradient->reveal();
+    }
+
+    protected ObjectProphecy $boxShadow;
+
+    protected function makeBoxShadow(): BoxShadow
+    {
+        return $this->boxShadow->reveal();
     }
 
     protected ObjectProphecy $palette;
@@ -162,30 +107,28 @@ class UnitTestCase extends Unit
         return $this->compiler->reveal();
     }
 
+    protected ObjectProphecy $presets;
+
+    protected function makePresets(): PresetsInterface
+    {
+        return $this->presets->reveal();
+    }
+
     // phpcs:ignore -- Method from Codeception
     protected function _before()
     {
         $this->item = $this->prophesize(PresetInterface::class);
         $this->colorInfo = $this->prophesize(ColorInterface::class);
         $this->gradient = $this->prophesize(GradientInterface::class);
+        $this->boxShadow = $this->prophesize(BoxShadow::class);
         $this->palette = $this->prophesize(Palette::class);
 
         $this->config = $this->prophesize(ConfigInterface::class);
-        $this->jsonFile = $this->prophesize(JsonFile::class);
-        $this->composer = $this->prophesize(Composer::class);
-        $this->composerConfig = $this->prophesize(Config::class);
-        $this->io = $this->prophesize(IOInterface::class);
-        $this->rootPackage = $this->prophesize(RootPackageInterface::class);
-        $this->link = $this->prophesize(Link::class);
-        $this->repositoryManager = $this->prophesize(RepositoryManager::class);
-        $this->package = $this->prophesize(PackageInterface::class);
         $this->dispatcher = $this->prophesize(EventDispatcherInterface::class);
         $this->filesFinder = $this->prophesize(FilesFinder::class);
         $this->validator = $this->prophesize(Validator::class);
         $this->compiler = $this->prophesize(Compiler::class);
-
-        $this->composer->getConfig()->willReturn($this->makeComposerConfig());
-        $this->composer->getPackage()->willReturn($this->makeRootPackage());
+        $this->presets = $this->prophesize(PresetsInterface::class);
 
         $this->input_data = require \codecept_data_dir('fixtures/input-data.php');
         $this->color = '#000000';

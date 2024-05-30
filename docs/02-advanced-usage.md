@@ -222,11 +222,15 @@ Once you've added the various Preset instances to the `Presets` collection, the 
 
 ## Styles
 
-The `Styles` directory offers builder classes implementing the `Fluent Interface` pattern, enabling intuitive and chainable configuration of your theme's styles. Importantly, each class is immutable, ensuring robustness by returning new instances for every method call. This design allows for clear and concise style definitions within your entrypoint file.
+The `Styles` directory offers builder classes implementing the `Fluent Interface` pattern, enabling intuitive and chainable configuration of your theme's styles. Importantly, each class is immutable, ensuring robustness by returning new instance on every method call. This design allows for clear and concise style definitions within your entrypoint file.
+
+In this directory, you'll find classes tailored to different aspects of theme styling, aligned with the `theme.json` structure. These classes, such as `Border`, `Color`, `Css`, `Outline`, `Spacing`, `Typography`, and more, offer specific methods for configuring corresponding style properties, all method declared in each class follows the `theme.json` schema and each class has its own methods following the properties they represent.
 
 These classes support three primary methods of utilization, each offering a unique approach to styling:
 
-Directly create an instance of a style class, such as `Color`, and chain methods to define properties. This approach is straightforward and effective for setting styles directly:
+We will take the `Color` class as an example, but all the other classes follow the same pattern.
+
+Directly create an instance of a `Color::class`, and chain methods to define properties. This approach is straightforward and effective for setting styles directly:
 
 ```php
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Color;
@@ -263,13 +267,13 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Color;
 [
     SectionNames::STYLES => [
         'color' => (new Color($presets))
-            ->background(Palette::CATEGORY . '.base')
-            ->text(Palette::CATEGORY . '.bodyColor'),
+            ->background(Palette::TYPE . '.base')
+            ->text(Palette::TYPE . '.bodyColor'),
     ],
 ];
 ```
 
-In this case the key passed to the method will be used as a key in the `$presets` collection.
+In this case the key passed to the method will be used as a key in the `$presets` collection, the `key` has the format `type.slug` where `type` is the type of the preset and `slug` is the slug of the preset.
 
 In JSON format:
 
@@ -309,19 +313,113 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Color;
 [
     SectionNames::STYLES => [
         'color' => $container->get(Color::class)
-            ->background(Palette::CATEGORY . '.base')
-            ->text(Palette::CATEGORY . '.bodyColor'),
+            ->background(Palette::TYPE . '.base')
+            ->text(Palette::TYPE . '.bodyColor'),
     ],
 ];
 ```
 
-As you can see with the `$container` object you can use a `Color` class without the need to pass the `$presets` object to the constructor because all the dependencies of the `Color` are already registered in the container.
+As you can see with the `$container` object you can use a `Color` class without the need to pass the `$presets` object to the constructor because all the dependencies of the `Color` (and all other classes in the `Styles` directory) are already registered in the container.
 
-### Available Style Classes
+You can find an implementation example in the [tests/_data/fixtures/advanced-example.json.php](../tests/_data/fixtures/advanced-example.json.php) file.
 
-The `Styles` directory includes various classes tailored to different aspects of theme styling, aligned with the `theme.json` structure. These classes, such as `Border`, `Color`, `Css`, `Outline`, `Spacing`, `Typography`, offer specific methods for configuring corresponding style properties, all method declared in each class follows the `theme.json` schema and each class has its own methods following the properties they represent.
+### Custom CSS for Global Styles and per Block
 
-You can see more examples in the [tests/_data/fixtures/advanced-example.json.php](../tests/_data/fixtures/advanced-example.json.php) file.
+More information about the `css` field can be found in:
+
+* [WordPress 6.2 release notes](https://wordpress.org/news/2023/03/dolphy/).
+* [Custom CSS for Global Styles and per Block](https://make.wordpress.org/core/2023/03/06/custom-css-for-global-styles-and-per-block/).
+* [Per Block CSS with theme.json](https://developer.wordpress.org/news/2023/04/21/per-block-css-with-theme-json/).
+* [Global Settings and Styles](https://developer.wordpress.org/themes/global-settings-and-styles/).
+* [How to use custom CSS in theme.json - fullsiteediting.com](https://fullsiteediting.com/lessons/how-to-use-custom-css-in-theme-json/).
+
+The introduction of the `css` field in [WordPress 6.2](https://wordpress.org/news/2023/03/dolphy/) enables the addition of [custom CSS](https://make.wordpress.org/core/2023/03/06/custom-css-for-global-styles-and-per-block/) directly within the `theme.json` file, both globally under `styles.css` and per block within `styles.blocks.[block-name].css`. Utilizing the {`\ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Css`|`\ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Scss`} classes and theirs `parse(string $css, string $selector = ''): string` method, developers can now seamlessly integrate custom styles without the need to remember the format to use with `&` separator, just write your CSS (or Scss) as you would in a regular CSS|SCSS file and let the `Css`|`Scss` class handle the rest.
+
+This method accepts two parameters: the CSS to parse and an optional selector to scope the CSS rules accordingly.
+
+How It Works
+
+The `Css`|`Scss` class efficiently parses the provided CSS, extracting and formatting rules based on the specified selector. This functionality ensures that the output is fully compatible with the `theme.json` structure, enhancing the flexibility and customization of theme development.
+
+So, let's see some examples:
+
+```php
+// Result: 'height: 100%;'
+echo (new Css($presets))->parse('.test-selector{height: 100%;}', '.test-selector');
+```
+
+```php
+// Result: 'height: 100%;width: 100%;color: red;&:hover {color: red;}&::placeholder {color: red;}'
+echo (new Css($presets))->parse('.test-selector{height: 100%;width: 100%;color: red;}.test-selector:hover {color: red;}.test-selector::placeholder {color: red;}', '.test-selector');
+```
+
+Like the other classes in the `Styles` directory, you can use the `Css` class directly or pass the `$presets` collection to the constructor or use the `$container` object to get the instance you need, the only exception is for the `Scss` class that need an instance of `Css` class and an instance of `ScssPhp\ScssPhp\Compiler` class to work, but if you use the `$container` object you don't need to worry about it because all the dependencies are already registered in the container.
+
+As the name suggests, the `Scss` class is used to parse SCSS styles, so you are free to write your styles in SCSS format and let the class handle the conversion for you.
+
+Let's see it in action:
+
+```php
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Css;
+
+[
+    SectionNames::STYLES => [
+        'css' => $container->get(Css::class) // Or (new Css($presets)) or (new Scss(new Css($presets), $scssCompiler, $presets))
+            ->parse('.test-selector{height: 100%;width: 100%;color: red;}.test-selector:hover {color: red;}.test-selector::placeholder {color: red;}', '.test-selector'),
+    ],
+];
+```
+
+For block style:
+
+```php
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Css;
+
+[
+    SectionNames::STYLES => [
+        'blocks' => [
+            'my-namespace/test-block' => [
+                'css' => $container->get(Css::class) // Or (new Css($presets)) or (new Scss(new Css($presets), $scssCompiler, $presets))
+                    ->parse('.test-selector{height: 100%;width: 100%;color: red;}.test-selector:hover {color: red;}.test-selector::placeholder {color: red;}', '.test-selector'),
+            ],
+        ],
+    ],
+];
+```
+
+All methods also support a special syntax to resolve value in the `$presets` collection, `{{type.slug}}`, this syntax will be used internally to find the value in the `$presets` collection registered before.
+
+
+```php
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Css;
+
+[
+    SectionNames::STYLES => [
+        'css' => $container->get(Css::class) // Or (new Css($presets))
+            ->parse('.test-selector{color: {{color.base}};}', '.test-selector'),
+    ],
+];
+```
+
+The `{{color.base}}` will be replaced with the value of the `color.base` previously set in the `$presets` collection.
+
+```json
+{
+  "styles": {
+    "css": ".test-selector{color: var(--wp--preset--color--base);}"
+  }
+}
+```
+
+More examples can be found in the [tests/_data/fixtures/advanced-example.json.php](../tests/_data/fixtures/advanced-example.json.php) file.
+
+To know more about `css` field:
+
+* https://make.wordpress.org/core/2023/03/06/custom-css-for-global-styles-and-per-block/
+* https://developer.wordpress.org/news/2023/04/21/per-block-css-with-theme-json/
+* https://developer.wordpress.org/themes/global-settings-and-styles/
+* https://fullsiteediting.com/lessons/how-to-use-custom-css-in-theme-json/
+* https://make.wordpress.org/core/2022/12/22/whats-new-in-gutenberg-14-8-21-december/#Add-custom-CSS-rules-for-your-site
 
 ### Advanced Service Injection with Empress and PSR-11 Container
 
