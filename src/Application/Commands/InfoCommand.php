@@ -19,12 +19,12 @@ class InfoCommand extends Command
 
     public const NAME = 'info';
 
-    private \ItalyStrap\Bus\Bus $bus;
+    private \ItalyStrap\Bus\HandlerInterface $handler;
 
     public function __construct(
-        \ItalyStrap\Bus\Bus $bus
+        \ItalyStrap\Bus\HandlerInterface $handler
     ) {
-        $this->bus = $bus;
+        $this->handler = $handler;
         parent::__construct();
     }
 
@@ -41,7 +41,7 @@ class InfoCommand extends Command
         $message = new InfoMessage($rootFolder);
 
         try {
-            return (int)$this->bus->handle($message);
+            return (int)$this->handler->handle($message);
         } catch (\Exception $exception) {
             $output->writeln('<error>Error: ' . $exception->getMessage() . '</error>');
             return Command::FAILURE;

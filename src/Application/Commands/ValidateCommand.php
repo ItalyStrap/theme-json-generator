@@ -27,14 +27,14 @@ class ValidateCommand extends Command
 
     private \Symfony\Component\EventDispatcher\EventDispatcher $subscriber;
 
-    private \ItalyStrap\Bus\Bus $bus;
+    private \ItalyStrap\Bus\HandlerInterface $handler;
 
     public function __construct(
         \Symfony\Component\EventDispatcher\EventDispatcher $subscriber,
-        \ItalyStrap\Bus\Bus $bus
+        \ItalyStrap\Bus\HandlerInterface $handler
     ) {
         $this->subscriber = $subscriber;
-        $this->bus = $bus;
+        $this->handler = $handler;
         parent::__construct();
     }
 
@@ -100,7 +100,7 @@ class ValidateCommand extends Command
         $message = new ValidateMessage($rootFolder, $schemaPath, (bool)$input->getOption('force'));
 
         try {
-            return (int)$this->bus->handle($message);
+            return (int)$this->handler->handle($message);
         } catch (\Exception $exception) {
             $output->writeln('<error>Error: ' . $exception->getMessage() . '</error>');
             return Command::FAILURE;

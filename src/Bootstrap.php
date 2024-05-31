@@ -50,7 +50,7 @@ final class Bootstrap
         $application->add($injector->make(DumpCommand::class));
         /** @psalm-suppress InvalidArgument */
         $application->add($injector->make(ValidateCommand::class, [
-            '+bus' => static function (string $named_param, Injector $injector): Bus {
+            '+handler' => static function (string $named_param, Injector $injector): Bus {
                 $bus = new Bus(
                     $injector->make(Validate::class)
                 );
@@ -62,7 +62,7 @@ final class Bootstrap
             },
         ]));
         $application->add($injector->make(InfoCommand::class, [
-            '+bus' => static fn(string $named_param, Injector $injector): Bus => new Bus(
+            '+handler' => static fn(string $named_param, Injector $injector): Bus => new Bus(
                 $injector->make(Info::class)
             ),
         ]));
