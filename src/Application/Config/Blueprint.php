@@ -6,6 +6,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Application\Config;
 
 use ItalyStrap\Config\Config;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\SectionNames;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Shadow;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetsInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Duotone;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Gradient;
@@ -26,6 +27,12 @@ final class Blueprint extends Config implements \JsonSerializable
     public function setGlobalCss(string $css): bool
     {
         return $this->set(SectionNames::STYLES . '.css', $css);
+    }
+
+    public function appendGlobalCss(string $css): bool
+    {
+        $currentCss = (string)$this->get(SectionNames::STYLES . '.css');
+        return $this->set(SectionNames::STYLES . '.css', $currentCss . $css);
     }
 
     public function setElementStyle(string $elementName, array $config): bool
@@ -54,6 +61,7 @@ final class Blueprint extends Config implements \JsonSerializable
             'settings.color.palette' => Palette::TYPE,
             'settings.color.gradients' => Gradient::TYPE,
             'settings.color.duotone' => Duotone::TYPE,
+            'settings.shadow.presets' => Shadow::TYPE,
             'settings.typography.fontSizes' => FontSize::TYPE,
             'settings.typography.fontFamilies' => FontFamily::TYPE,
             'settings.custom' => Custom::TYPE,

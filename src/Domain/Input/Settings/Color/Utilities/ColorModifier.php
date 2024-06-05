@@ -148,11 +148,11 @@ final class ColorModifier implements ColorModifierInterface
         string $alpha
     ): ColorInterface {
         $newColor = $this->color_factory->fromColorString(\sprintf(
-            'hsla(%s, %s%%, %s%%, %s)',
+            'hsla(%s, %s%%, %s%%, %d)',
             $hue,
             $saturation,
             $lightness,
-            $alpha
+            \ctype_digit($alpha) ? $alpha : \hexdec($alpha) / 255
         ));
 
         return $this->callMethodOnColorObject($newColor);

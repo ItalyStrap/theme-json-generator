@@ -24,4 +24,20 @@ final class ColorFactory implements ColorFactoryInterface
     {
         return new Color($color);
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function hsla(int $hue, float $saturation, float $lightness, float $alpha = 1): ColorInterface
+    {
+        return new Color("hsla($hue, $saturation%, $lightness%, $alpha)");
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function rgba(int $red, int $green, int $blue, float $alpha = 1): ColorInterface
+    {
+        return new Color("rgba($red, $green, $blue, $alpha)");
+    }
 }

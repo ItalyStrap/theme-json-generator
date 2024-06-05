@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\ThemeJsonGenerator\Application\Commands\Composer;
+namespace ItalyStrap\ThemeJsonGenerator\Application\Commands;
 
-use Composer\Command\BaseCommand;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\DataFromJsonTrait;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\RootFolderTrait;
-use ItalyStrap\ThemeJsonGenerator\Application\Commands\ValidateMessage;
+use ItalyStrap\ThemeJsonGenerator\Application\ValidateMessage;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\ValidatedFails;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\ValidatingFile;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\ValidFile;
@@ -19,7 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * @psalm-api
  */
-class ValidateCommand extends BaseCommand
+class ValidateCommand extends Command
 {
     use RootFolderTrait;
     use DataFromJsonTrait;
@@ -28,14 +27,14 @@ class ValidateCommand extends BaseCommand
 
     private \Symfony\Component\EventDispatcher\EventDispatcher $subscriber;
 
-    private \ItalyStrap\Bus\Bus $bus;
+    private \ItalyStrap\Bus\HandlerInterface $handler;
 
     public function __construct(
         \Symfony\Component\EventDispatcher\EventDispatcher $subscriber,
-        \ItalyStrap\Bus\Bus $bus
+        \ItalyStrap\Bus\HandlerInterface $handler
     ) {
         $this->subscriber = $subscriber;
-        $this->bus = $bus;
+        $this->handler = $handler;
         parent::__construct();
     }
 
@@ -101,7 +100,7 @@ class ValidateCommand extends BaseCommand
         $message = new ValidateMessage($rootFolder, $schemaPath, (bool)$input->getOption('force'));
 
         try {
-            return (int)$this->bus->handle($message);
+            return (int)$this->handler->handle($message);
         } catch (\Exception $exception) {
             $output->writeln('<error>Error: ' . $exception->getMessage() . '</error>');
             return Command::FAILURE;

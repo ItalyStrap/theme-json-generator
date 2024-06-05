@@ -6,7 +6,7 @@ namespace ItalyStrap\Tests\Unit\Domain\Output;
 
 use ItalyStrap\Config\Config;
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Application\Commands\DumpMessage;
+use ItalyStrap\ThemeJsonGenerator\Application\DumpMessage;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Dump;
 use Prophecy\Argument;
 
@@ -29,7 +29,7 @@ class DumpTest extends UnitTestCase
             ->willReturn([])
             ->shouldBeCalledOnce();
 
-        $this->makeInstance()->handle(new DumpMessage('', '', false));
+        $this->makeInstance()->handle(new DumpMessage('', '', false, ''));
     }
 
     public function testItShouldBasicExample(): void
@@ -41,7 +41,11 @@ class DumpTest extends UnitTestCase
                 $basicExample->getBasename('.json.php') => $basicExample,
             ]);
 
-        $this->makeInstance()->handle(new DumpMessage('', '', false));
+        $this->filesFinder
+            ->resolveJsonFile($basicExample)
+            ->willReturn(\codecept_data_dir('fixtures/basic-example.json'));
+
+        $this->makeInstance()->handle(new DumpMessage('', '', false, ''));
 
         $generatedFile = new \SplFileInfo(\codecept_data_dir('fixtures/basic-example.json'));
         $this->assertFileExists($generatedFile->getPathname(), 'The file was not generated');
@@ -58,7 +62,11 @@ class DumpTest extends UnitTestCase
                 $advancedExample->getBasename('.json.php') => $advancedExample,
             ]);
 
-        $this->makeInstance()->handle(new DumpMessage('', '', false));
+        $this->filesFinder
+            ->resolveJsonFile($advancedExample)
+            ->willReturn(\codecept_data_dir('fixtures/advanced-example.json'));
+
+        $this->makeInstance()->handle(new DumpMessage('', '', false, ''));
 
         $generatedFile = new \SplFileInfo(\codecept_data_dir('fixtures/advanced-example.json'));
         $this->assertFileExists($generatedFile->getPathname(), 'The file was not generated');

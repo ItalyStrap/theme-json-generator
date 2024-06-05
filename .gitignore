@@ -15,3 +15,6 @@ codeception.yml
 *.bak
 infection.json.dist
 c3.php
+
+# Theme JSON Schema
+theme.schema.json

@@ -15,7 +15,14 @@ final class Color implements ColorInterface
 {
     private SpatieColor $spatieColor;
 
+    private string $type;
+
     private Hsla $hsla;
+
+    /**
+     * @var string|float
+     */
+    private $alpha = 1.0;
 
     /**
      * Luminance of #808080 or rgb(128,128,128) or hsl(0,0%,50%)
@@ -26,7 +33,21 @@ final class Color implements ColorInterface
     public function __construct(string $color)
     {
         $this->spatieColor = ColorFactory::fromString($color);
-        $this->hsla = $this->spatieColor->toHsla();
+
+        $reflected = new \ReflectionObject($this->spatieColor);
+        $this->type = $reflected->getShortName();
+        if ($reflected->hasProperty('alpha')) {
+            $reflectionProperty = $reflected->getProperty('alpha');
+            $reflectionProperty->setAccessible(true);
+            /**
+             * @psalm-suppress MixedAssignment
+             */
+            $this->alpha = $reflectionProperty->getValue($this->spatieColor);
+            $reflectionProperty->setAccessible(false);
+        }
+
+        $alpha = $this->fromHexToFloat($this->alpha);
+        $this->hsla = $this->spatieColor->toHsla($alpha);
     }
 
     public function isDark(): bool
@@ -129,14 +150,14 @@ final class Color implements ColorInterface
         return (int)\round($this->hsla->lightness());
     }
 
-    public function alpha(): float
+    public function alpha()
     {
-        return $this->hsla->alpha();
+        return $this->alpha;
     }
 
     public function type(): string
     {
-        return (new \ReflectionClass($this->spatieColor))->getShortName();
+        return $this->type;
     }
 
     public function toHex(): self
@@ -149,8 +170,9 @@ final class Color implements ColorInterface
         return new self((string) $this->spatieColor->toHsl());
     }
 
-    public function toHsla(float $alpha = 1): self
+    public function toHsla(float $alpha = null): self
     {
+        $alpha = $alpha ?? $this->fromHexToFloat($this->alpha);
         return new self((string) $this->spatieColor->toHsla($alpha));
     }
 
@@ -159,13 +181,22 @@ final class Color implements ColorInterface
         return new self((string) $this->spatieColor->toRgb());
     }
 
-    public function toRgba(float $alpha = 1): self
+    public function toRgba(float $alpha = null): self
     {
+        $alpha = $alpha ?? $this->fromHexToFloat($this->alpha);
         return new self((string) $this->spatieColor->toRgba($alpha));
     }
 
     public function __toString(): string
     {
-        return (string) $this->spatieColor;
+        return (string)$this->spatieColor;
+    }
+
+    /**
+     * @param mixed $alpha
+     */
+    private function fromHexToFloat($alpha): float
+    {
+        return \is_string($alpha) ? \hexdec($alpha) / 255 : (float)$alpha;
     }
 }

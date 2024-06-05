@@ -35,6 +35,7 @@ class JsonFileWriterIntegrationTest extends UnitTestCase
     protected function makeInstance(): JsonFileWriter
     {
         $this->theme_json_path = \codecept_output_dir(random_int(0, mt_getrandmax()) . '/theme.json');
+        \mkdir(\dirname($this->theme_json_path), 0777, true);
         $this->blueprint = new Blueprint();
         $collection = new Presets();
 

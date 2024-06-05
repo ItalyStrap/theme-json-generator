@@ -15,7 +15,6 @@
         <directory name="functions" />
         <directory name="src" />
         <ignoreFiles>
-            <directory name="src/Application/Commands/WPCLI" />
             <directory name="vendor" />
             <file name="src/**/*Experimental*" />
         </ignoreFiles>

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem;
 
-use ItalyStrap\Config\Config;
 use ItalyStrap\Config\ConfigInterface;
 use ItalyStrap\ThemeJsonGenerator\Helper\ConvertCase;
+use Webimpress\SafeWriter;
 
 class ScssFileWriter implements FileWriter
 {
@@ -32,14 +32,7 @@ class ScssFileWriter implements FileWriter
             \unlink($this->path);
         }
 
-        $_file = new \SplFileObject($this->path, 'a');
-
-        if (!$_file->isWritable()) {
-            throw new \RuntimeException('The file is not writable');
-        }
-
-        $_file->fwrite($this->generateScssContent($data));
-        $_file = null;
+        SafeWriter\FileWriter::writeFile($this->path, $this->generateScssContent($data));
     }
 
     /**

@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem;
 
-use Composer\Json\JsonFile;
 use ItalyStrap\Config\ConfigInterface;
+use Webimpress\SafeWriter;
 
 class JsonFileWriter implements FileWriter
 {
     private string $path;
 
     /**
-     * ThemeJsonGenerator constructor.
      * @param string $path
      */
     public function __construct(string $path)
@@ -29,7 +28,15 @@ class JsonFileWriter implements FileWriter
             throw new \RuntimeException('No data to write');
         }
 
-        $json_file = new ComposerJsonFileAdapter(new JsonFile($this->path));
-        $json_file->write($data->toArray());
+        // This part is borrowed from \Composer\Json\JsonFile
+        $json_data = \json_encode(
+            $data->toArray(),
+            \JSON_UNESCAPED_SLASHES | \JSON_PRETTY_PRINT | \JSON_UNESCAPED_UNICODE
+        );
+        if (false === $json_data) {
+            throw new \RuntimeException('Error encoding JSON data');
+        }
+
+        SafeWriter\FileWriter::writeFile($this->path, $json_data . \PHP_EOL);
     }
 }

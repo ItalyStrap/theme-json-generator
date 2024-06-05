@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Application\Commands\Middleware;
 
-use ItalyStrap\ThemeJsonGenerator\Application\Commands\ValidateMessage;
-use ItalyStrap\ThemeJsonGenerator\Domain\Output\Validate;
+use ItalyStrap\ThemeJsonGenerator\Application\ValidateMessage;
+use Webimpress\SafeWriter\FileWriter;
 
 class SchemaJsonMiddleware implements \ItalyStrap\Bus\MiddlewareInterface
 {
@@ -37,9 +37,6 @@ class SchemaJsonMiddleware implements \ItalyStrap\Bus\MiddlewareInterface
             throw new \RuntimeException("Impossible to download the schema");
         }
 
-        $bytesWritten = (int)\file_put_contents($schemaPath, $schemaContent);
-        if ($bytesWritten === 0) {
-            throw new \RuntimeException("Impossible to write the schema");
-        }
+        FileWriter::writeFile($schemaPath, $schemaContent);
     }
 }

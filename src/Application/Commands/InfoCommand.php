@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\ThemeJsonGenerator\Application\Commands\Composer;
+namespace ItalyStrap\ThemeJsonGenerator\Application\Commands;
 
-use Composer\Command\BaseCommand;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\RootFolderTrait;
+use ItalyStrap\ThemeJsonGenerator\Application\InfoMessage;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -13,18 +13,18 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * @psalm-api
  */
-class InfoCommand extends BaseCommand
+class InfoCommand extends Command
 {
     use RootFolderTrait;
 
     public const NAME = 'info';
 
-    private \ItalyStrap\Bus\Bus $bus;
+    private \ItalyStrap\Bus\HandlerInterface $handler;
 
     public function __construct(
-        \ItalyStrap\Bus\Bus $bus
+        \ItalyStrap\Bus\HandlerInterface $handler
     ) {
-        $this->bus = $bus;
+        $this->handler = $handler;
         parent::__construct();
     }
 
@@ -38,10 +38,10 @@ class InfoCommand extends BaseCommand
     {
         $rootFolder = $this->rootFolder();
 
-        $message = new \ItalyStrap\ThemeJsonGenerator\Application\Commands\InfoMessage($rootFolder);
+        $message = new InfoMessage($rootFolder);
 
         try {
-            return (int)$this->bus->handle($message);
+            return (int)$this->handler->handle($message);
         } catch (\Exception $exception) {
             $output->writeln('<error>Error: ' . $exception->getMessage() . '</error>');
             return Command::FAILURE;

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\ThemeJsonGenerator\Infrastructure\Cli\Composer;
+namespace ItalyStrap\ThemeJsonGenerator;
 
-use Composer\Console\Application;
+use Symfony\Component\Console\Application;
 use ItalyStrap\Bus\Bus;
 use ItalyStrap\Config\Config;
 use ItalyStrap\Config\ConfigInterface;
@@ -12,10 +12,10 @@ use ItalyStrap\Empress\Injector;
 use ItalyStrap\Finder\Finder;
 use ItalyStrap\Finder\FinderFactory;
 use ItalyStrap\Finder\FinderInterface;
-use ItalyStrap\ThemeJsonGenerator\Application\Commands\Composer\DumpCommand;
-use ItalyStrap\ThemeJsonGenerator\Application\Commands\Composer\InfoCommand;
-use ItalyStrap\ThemeJsonGenerator\Application\Commands\Composer\InitCommand;
-use ItalyStrap\ThemeJsonGenerator\Application\Commands\Composer\ValidateCommand;
+use ItalyStrap\ThemeJsonGenerator\Application\Commands\DumpCommand;
+use ItalyStrap\ThemeJsonGenerator\Application\Commands\InfoCommand;
+use ItalyStrap\ThemeJsonGenerator\Application\Commands\InitCommand;
+use ItalyStrap\ThemeJsonGenerator\Application\Commands\ValidateCommand;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Middleware\DeleteSchemaJsonMiddleware;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Middleware\SchemaJsonMiddleware;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Info;
@@ -50,7 +50,7 @@ final class Bootstrap
         $application->add($injector->make(DumpCommand::class));
         /** @psalm-suppress InvalidArgument */
         $application->add($injector->make(ValidateCommand::class, [
-            '+bus' => static function (string $named_param, Injector $injector): Bus {
+            '+handler' => static function (string $named_param, Injector $injector): Bus {
                 $bus = new Bus(
                     $injector->make(Validate::class)
                 );
@@ -62,7 +62,7 @@ final class Bootstrap
             },
         ]));
         $application->add($injector->make(InfoCommand::class, [
-            '+bus' => static fn(string $named_param, Injector $injector): Bus => new Bus(
+            '+handler' => static fn(string $named_param, Injector $injector): Bus => new Bus(
                 $injector->make(Info::class)
             ),
         ]));

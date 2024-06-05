@@ -40,6 +40,7 @@ up: files/permission	### Start the containers inside the ./docker folder
 	@echo "Starting the containers..."
 	@$(DOCKER_DIR) docker-compose up -d --remove-orphans
 	@echo "Containers started"
+	@$(DOCKER_DIR) docker-compose exec wordpress php -v
 
 .PHONY: down
 down:	### Stop the containers inside the ./docker folder
@@ -65,10 +66,20 @@ composer/update: up	### Update the composer dependencies
 	@echo "Updating the composer dependencies"
 	@$(DOCKER_DIR) ./composer update
 
+.PHONY: composer/update/nodev
+composer/update/nodev: up	### Update the composer dependencies
+	@echo "Updating the composer dependencies"
+	@$(DOCKER_DIR) ./composer update --no-dev
+
 .PHONY: composer/dump
 composer/dump: up	### Dump the composer autoload
 	@echo "Dumping the composer autoload"
 	@$(DOCKER_DIR) ./composer dump-autoload
+
+.PHONY: composer/validate
+composer/validate: up	### Validate the composer.json file
+	@echo "Validating the composer.json file"
+	@$(DOCKER_DIR) ./composer validate
 
 # Codestyle commands
 

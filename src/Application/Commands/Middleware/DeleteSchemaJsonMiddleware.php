@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator\Application\Commands\Middleware;
 
 use ItalyStrap\Bus\HandlerInterface;
-use ItalyStrap\ThemeJsonGenerator\Application\Commands\ValidateMessage;
-use ItalyStrap\ThemeJsonGenerator\Domain\Output\Validate;
+use ItalyStrap\ThemeJsonGenerator\Application\ValidateMessage;
 
 class DeleteSchemaJsonMiddleware implements \ItalyStrap\Bus\MiddlewareInterface
 {
