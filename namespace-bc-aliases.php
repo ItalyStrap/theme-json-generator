@@ -16,3 +16,8 @@ declare(strict_types=1);
         require_once $file;
     }
 });
+
+\class_alias(
+    '\ItalyStrap\ThemeJsonGenerator\Application\Config\ThemeJson',
+    '\ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint'
+);
