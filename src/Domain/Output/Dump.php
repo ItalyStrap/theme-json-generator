@@ -6,7 +6,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Output;
 
 use ItalyStrap\Config\ConfigInterface;
 use ItalyStrap\ThemeJsonGenerator\Application\DumpMessage;
-use ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint;
+use ItalyStrap\ThemeJsonGenerator\Application\Config\ThemeJson;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetsInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\DryRunMode;
@@ -55,23 +55,23 @@ class Dump
             /** @psalm-suppress UnresolvableInclude */
             $injector->execute(require $file);
             $presets = $injector->make(PresetsInterface::class);
-            $blueprint = $injector->make(Blueprint::class);
-            $blueprint->setPresets($presets);
+            $themeJson = $injector->make(ThemeJson::class);
+            $themeJson->setPresets($presets);
             $count++;
 
             /**
              * @todo Add subscription configuration.
              */
 //            $dispatcher = $injector->make(EventDispatcherInterface::class);
-//            $dispatcher->dispatch($blueprint);
+//            $dispatcher->dispatch($themeJson);
 
             if ($message->isDryRun()) {
                 $this->dispatcher->dispatch(new DryRunMode());
                 continue;
             }
 
-            $this->generateJsonFile($message, $fileName, $file, $blueprint);
-            $this->generateScssFile($message, $fileName, $blueprint);
+            $this->generateJsonFile($message, $fileName, $file, $themeJson);
+            $this->generateScssFile($message, $fileName, $themeJson);
         }
 
         if ($count === 0) {
@@ -83,23 +83,23 @@ class Dump
         DumpMessage $message,
         string $fileName,
         \SplFileInfo $file,
-        Blueprint $blueprint
+        ThemeJson $themeJson
     ): void {
         $this->dispatcher->dispatch(new GeneratingFile($fileName . self::JSON_FILE_SUFFIX));
 
         (new JsonFileWriter($this->filesFinder->resolveJsonFile($file)))
-            ->write($blueprint);
+            ->write($themeJson);
 
         $this->dispatcher->dispatch(new GeneratedFile($fileName . self::JSON_FILE_SUFFIX));
     }
 
-    private function generateScssFile(DumpMessage $message, string $fileName, Blueprint $blueprint): void
+    private function generateScssFile(DumpMessage $message, string $fileName, ThemeJson $themeJson): void
     {
         $path_for_theme_sass = $message->getRootFolder() . DIRECTORY_SEPARATOR . $message->getSassFolder();
         if ($message->getSassFolder() !== '' && \is_writable($path_for_theme_sass)) {
             $this->dispatcher->dispatch(new GeneratingFile($fileName . '.scss'));
             (new ScssFileWriter($path_for_theme_sass . DIRECTORY_SEPARATOR . $fileName . '.scss'))
-                ->write($blueprint);
+                ->write($themeJson);
             $this->dispatcher->dispatch(new GeneratedFile($fileName . '.scss'));
         }
     }
@@ -125,7 +125,7 @@ class Dump
          */
         $injector->defineParam('presets', $injector->make(PresetsInterface::class));
 
-        $injector->share(Blueprint::class);
+        $injector->share(ThemeJson::class);
 
         return $injector;
     }

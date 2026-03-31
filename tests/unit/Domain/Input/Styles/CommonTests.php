@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\Tests\Unit\Domain\Input\Styles;
 
-use ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint;
+use ItalyStrap\ThemeJsonGenerator\Application\Config\ThemeJson;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\SectionNames;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\CommonTrait;
 
@@ -68,7 +68,7 @@ trait CommonTests
             ],
         ];
 
-        $data = new Blueprint($data);
+        $data = new ThemeJson($data);
 
         $this->assertStringMatchesFormat(
             // phpcs:disable

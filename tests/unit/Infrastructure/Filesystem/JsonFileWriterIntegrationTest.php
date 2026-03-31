@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace ItalyStrap\Tests\Unit\Infrastructure\Filesystem;
 
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint;
+use ItalyStrap\ThemeJsonGenerator\Application\Config\ThemeJson;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Palette;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\Color;
@@ -26,7 +26,7 @@ class JsonFileWriterIntegrationTest extends UnitTestCase
 
     private string $theme_json_path;
 
-    private Blueprint $blueprint;
+    private ThemeJson $themeJson;
 
     private ?\ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Color $colorIntegration = null;
 
@@ -36,7 +36,7 @@ class JsonFileWriterIntegrationTest extends UnitTestCase
     {
         $this->theme_json_path = \codecept_output_dir(random_int(0, mt_getrandmax()) . '/theme.json');
         \mkdir(\dirname($this->theme_json_path), 0777, true);
-        $this->blueprint = new Blueprint();
+        $this->themeJson = new ThemeJson();
         $collection = new Presets();
 
         $bodyText = (new Color('#000000'))->toHsla();
@@ -94,7 +94,7 @@ class JsonFileWriterIntegrationTest extends UnitTestCase
       }
   }';
 
-        $this->blueprint->setBlockStyle('core/site-title', [
+        $this->themeJson->setBlockStyle('core/site-title', [
             'color' => $this->colorIntegration
                 ->text(self::COLOR_HEADING_TEXT),
             'typography' => $this->typographyIntegration
@@ -102,7 +102,7 @@ class JsonFileWriterIntegrationTest extends UnitTestCase
                 ->fontWeight('600'),
         ]);
 
-        $this->blueprint->setBlockStyle('core/post-title', [ // .wp-block-post-title
+        $this->themeJson->setBlockStyle('core/post-title', [ // .wp-block-post-title
             'color' => $this->colorIntegration
                 ->text(self::COLOR_HEADING_TEXT),
             'typography' => $this->typographyIntegration
@@ -116,7 +116,7 @@ class JsonFileWriterIntegrationTest extends UnitTestCase
             ],
         ]);
 
-        $this->blueprint->setBlockStyle('core/query-title', [
+        $this->themeJson->setBlockStyle('core/query-title', [
             'color' => $this->colorIntegration
                 ->text(self::COLOR_GRAY_400),
             'typography' => $this->typographyIntegration
@@ -124,7 +124,7 @@ class JsonFileWriterIntegrationTest extends UnitTestCase
                 ->fontWeight('700'),
         ]);
 
-        $sut->write($this->blueprint);
+        $sut->write($this->themeJson);
 
         $this->assertJsonStringEqualsJsonFile($this->theme_json_path, $expected, '');
 

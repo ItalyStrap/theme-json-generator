@@ -213,9 +213,9 @@ declare(strict_types=1);
 
 namespace YourVendor\YourProject;
 
-use ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint;
+use ItalyStrap\ThemeJsonGenerator\Application\Config\ThemeJson;
 
-return static function (Blueprint $blueprint): void {
+return static function (ThemeJson $themeJson): void {
     // Your configuration code goes here
 };
 ```
@@ -229,18 +229,18 @@ declare(strict_types=1);
 
 namespace YourVendor\YourProject;
 
-use ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint;
+use ItalyStrap\ThemeJsonGenerator\Application\Config\ThemeJson;
 
-return static function (Blueprint $blueprint): void {
-    $blueprint->merge([
+return static function (ThemeJson $themeJson): void {
+    $themeJson->merge([
         // Your merged configuration details go here
     ]);
 };
 ```
 
-The first method you can use is the `merge()` method, this method is used to initial add the configuration to the blueprint.
+The first method you can use is the `merge()` method, this method is used to initially add the configuration to the ThemeJson object.
 
-So, to get started quickly see the example below:
+So, to get started quickly, see the example below:
 
 ```php
 
@@ -248,12 +248,12 @@ declare(strict_types=1);
 
 namespace YourVendor\YourProject;
 
-use ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint;
+use ItalyStrap\ThemeJsonGenerator\Application\Config\ThemeJson;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\SectionNames;
 use Psr\Container\ContainerInterface;
 
-return static function (Blueprint $blueprint): void {
-    $blueprint->merge([
+return static function (ThemeJson $themeJson): void {
+    $themeJson->merge([
         SectionNames::SCHEMA => 'https://schemas.wp.org/trunk/theme.json',
         SectionNames::VERSION => 2,
         SectionNames::TITLE => 'Experimental Theme',
@@ -328,11 +328,11 @@ return static function (Blueprint $blueprint): void {
 }
 ```
 
-In this example we provided soma basic configuration to the blueprint, the `SectionNames` class is used to avoid typos and to keep the code clean and maintainable.
+In this example we provided soma basic configuration to the ThemeJson object, the `SectionNames` class is used to avoid typos and to keep the code clean and maintainable.
 
-Later in this documentation we'll see more methods you can use from the `Blueprint` class to simplify the process of adding the configuration.
+Later in this documentation we'll see more methods you can use from the `ThemeJson` class to simplify the process of adding the configuration.
 
-Now to generate your JSON file simply use the command:
+Now, to generate your JSON file, use the command:
 
 ```shell
 ./vendor/bin/theme-json dump

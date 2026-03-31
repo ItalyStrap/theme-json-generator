@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace ItalyStrap\Tests\Unit\Application\Config;
 
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint;
+use ItalyStrap\ThemeJsonGenerator\Application\Config\ThemeJson;
 
-class BlueprintTest extends UnitTestCase
+class ThemeJsonTest extends UnitTestCase
 {
-    private function makeInstance(): Blueprint
+    private function makeInstance(): ThemeJson
     {
-        return new Blueprint();
+        return new ThemeJson();
     }
 
     public function testItShouldImplementsJsonSerializable(): void

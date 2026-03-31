@@ -22,7 +22,7 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\FontSize;
  * @template-extends Config<TKey,TValue>
  * @psalm-suppress DeprecatedInterface
  */
-final class Blueprint extends Config implements \JsonSerializable
+final class ThemeJson extends Config implements \JsonSerializable
 {
     public function setGlobalCss(string $css): bool
     {

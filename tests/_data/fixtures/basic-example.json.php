@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace ItalyStrap\Tests;
 
-use ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint;
+use ItalyStrap\ThemeJsonGenerator\Application\Config\ThemeJson;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\SectionNames;
 
-return static function (Blueprint $blueprint): void {
-    $blueprint->merge([
+return static function (ThemeJson $themeJson): void {
+    $themeJson->merge([
         SectionNames::VERSION => 1,
         SectionNames::TEMPLATE_PARTS => [
             [

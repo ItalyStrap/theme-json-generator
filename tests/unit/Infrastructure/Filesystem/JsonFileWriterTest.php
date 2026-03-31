@@ -6,7 +6,7 @@ namespace ItalyStrap\Tests\Unit\Infrastructure\Filesystem;
 
 use ItalyStrap\Config\Config;
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint;
+use ItalyStrap\ThemeJsonGenerator\Application\Config\ThemeJson;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\JsonFileWriter;
 
 class JsonFileWriterTest extends UnitTestCase
@@ -25,7 +25,7 @@ class JsonFileWriterTest extends UnitTestCase
         $sut = $this->makeInstance();
         $expected = '{"key": "value"}';
 
-        $data = new Blueprint([
+        $data = new ThemeJson([
             'key' => 'value',
         ]);
 

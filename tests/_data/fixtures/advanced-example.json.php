@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\Tests;
 
-use ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint;
+use ItalyStrap\ThemeJsonGenerator\Application\Config\ThemeJson;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\SectionNames;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Duotone;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Gradient;
@@ -21,7 +21,7 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\FontSize;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles;
 use Psr\Container\ContainerInterface;
 
-return static function (Blueprint $blueprint, Presets $presets, ContainerInterface $container): void {
+return static function (ThemeJson $themeJson, Presets $presets, ContainerInterface $container): void {
     $baseClr = (new Color('#3986E0'))->toHsla();
     $bodyText = (new Color('#000000'))->toHsla();
     $headingText = (new ColorModifier($bodyText))->lighten(20);
@@ -105,7 +105,7 @@ return static function (Blueprint $blueprint, Presets $presets, ContainerInterfa
             $collectionAdapter->toArray()
         );
 
-    $blueprint->merge([
+    $themeJson->merge([
         SectionNames::SCHEMA => 'https://schemas.wp.org/trunk/theme.json',
         SectionNames::VERSION => 2,
         SectionNames::TITLE => 'Experimental Theme',

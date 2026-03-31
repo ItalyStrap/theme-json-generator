@@ -37,14 +37,14 @@ class Init
 
 declare(strict_types=1);
 
-use ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint;
+use ItalyStrap\ThemeJsonGenerator\Application\Config\ThemeJson;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\SectionNames;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetsInterface;
 use Psr\Container\ContainerInterface;
 
-return static function (ContainerInterface $container, PresetsInterface $presets, Blueprint $blueprint) {
+return static function (ContainerInterface $container, PresetsInterface $presets, ThemeJson $themeJson) {
 
-	$blueprint->merge(%s);
+	$themeJson->merge(%s);
 };
 
 TEMPLATE;
