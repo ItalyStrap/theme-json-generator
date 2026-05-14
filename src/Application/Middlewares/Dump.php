@@ -2,11 +2,14 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\ThemeJsonGenerator\Domain\Output;
+namespace ItalyStrap\ThemeJsonGenerator\Application\Middlewares;
 
+use ItalyStrap\Config\Config;
 use ItalyStrap\Config\ConfigInterface;
-use ItalyStrap\ThemeJsonGenerator\Application\DumpMessage;
+use ItalyStrap\Pipeline\HandlerInterface;
+use ItalyStrap\Pipeline\MiddlewareInterface;
 use ItalyStrap\ThemeJsonGenerator\Application\Config\ThemeJson;
+use ItalyStrap\ThemeJsonGenerator\Application\DumpMessage;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetsInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\DryRunMode;
@@ -22,11 +25,9 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 /**
  * @psalm-api
  */
-class Dump
+class Dump implements MiddlewareInterface
 {
     public const JSON_FILE_SUFFIX = '.json';
-
-    private ConfigInterface $config;
 
     private FilesFinder $filesFinder;
 
@@ -34,16 +35,16 @@ class Dump
 
     public function __construct(
         EventDispatcherInterface $dispatcher,
-        ConfigInterface $config,
         FilesFinder $filesFinder
     ) {
-        $this->config = $config;
         $this->filesFinder = $filesFinder;
         $this->dispatcher = $dispatcher;
     }
 
-    public function handle(DumpMessage $message): void
+    public function process(object $message, HandlerInterface $handler): int
     {
+        $this->needsRefactoringAddSubscriber($this->dispatcher);
+
         $count = 0;
         /**
          * Let's test the new workflow
@@ -77,6 +78,8 @@ class Dump
         if ($count === 0) {
             $this->dispatcher->dispatch(new NoFileFound());
         }
+
+        return (int)$handler->handle($message);
     }
 
     private function generateJsonFile(
@@ -104,12 +107,12 @@ class Dump
         }
     }
 
-    private function configureContainer(): \ItalyStrap\Empress\Injector
+    private function configureContainer(): \Auryn\Injector
     {
-        $injector = new \ItalyStrap\Empress\Injector();
+        $injector = new \Auryn\Injector();
         $injector->share($injector);
 
-        $container = $this->createContainer($injector, clone $this->config);
+        $container = $this->createContainer($injector, new Config());
         $injector->alias(ContainerInterface::class, \get_class($container));
         $injector->share($container);
 
@@ -131,7 +134,7 @@ class Dump
     }
 
     private function createContainer(
-        \ItalyStrap\Empress\Injector $injector,
+        \Auryn\Injector $injector,
         \ItalyStrap\Config\ConfigInterface $config
     ): ContainerInterface {
         return new class ($injector, $config) implements ContainerInterface {
@@ -139,7 +142,7 @@ class Dump
 
             private ConfigInterface $config;
 
-            public function __construct(\ItalyStrap\Empress\Injector $injector, ConfigInterface $config)
+            public function __construct(\Auryn\Injector $injector, ConfigInterface $config)
             {
                 $this->injector = $injector;
                 $this->config = $config;
@@ -177,5 +180,42 @@ class Dump
                 return (bool) \array_filter($details);
             }
         };
+    }
+
+    private function needsRefactoringAddSubscriber($subscriber): void
+    {
+        /**
+         * OutputInterface $output
+         */
+        $output = new \Symfony\Component\Console\Output\ConsoleOutput();
+
+        $subscriber->addListener(
+            GeneratingFile::class,
+            static function (GeneratingFile $event) use ($output): void {
+                $output->writeln(\sprintf(
+                    '<info>Generating %s file</info>',
+                    $event->getFileName()
+                ));
+            }
+        );
+
+        $subscriber->addListener(
+            GeneratedFile ::class,
+            static function (GeneratedFile $event) use ($output): void {
+                $output->writeln(\sprintf(
+                    '<info>Generated %s file</info>',
+                    $event->getFileName()
+                ));
+                $output->writeln('========================');
+            }
+        );
+
+        $subscriber->addListener(
+            NoFileFound::class,
+            /** @psalm-suppress UnusedClosureParam */
+            static function (NoFileFound $event) use ($output): void {
+                $output->writeln(NoFileFound::M_NO_FILE_FOUND);
+            }
+        );
     }
 }

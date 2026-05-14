@@ -2,22 +2,23 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\ThemeJsonGenerator\Domain\Output;
+namespace ItalyStrap\ThemeJsonGenerator\Application\Middlewares;
 
 use Brick\VarExporter\VarExporter;
-use ItalyStrap\ThemeJsonGenerator\Application\InitMessage;
-use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\DataFromJsonTrait;
+use ItalyStrap\Pipeline\HandlerInterface;
+use ItalyStrap\Pipeline\MiddlewareInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\EntryPointCanNotBeCreated;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\EntryPointCreated;
 use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\EntryPointDoesNotExist;
+use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\DataFromJsonTrait;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FilesFinder;
 use PhpParser\Error;
-use PhpParser\Node;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\NodeFinder;
 use PhpParser\ParserFactory;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Console\Command\Command;
 use Webimpress\SafeWriter\Exception\ExceptionInterface as FileWriterException;
 use Webimpress\SafeWriter\FileWriter;
 use Webmozart\Assert\Assert;
@@ -25,7 +26,7 @@ use Webmozart\Assert\Assert;
 /**
  * @psalm-api
  */
-class Init
+class Init implements MiddlewareInterface
 {
     use DataFromJsonTrait;
 
@@ -63,11 +64,16 @@ TEMPLATE;
         $this->dispatcher = $dispatcher;
     }
 
-    public function handle(InitMessage $command): void
+    public function process(object $message, HandlerInterface $handler): int
     {
-        foreach ($this->filesFinder->find($command->getRootFolder(), 'json') as $file) {
+        // TODO: This should be refactored
+        $this->needsRefactoringAddSubscriber($this->dispatcher);
+
+        foreach ($this->filesFinder->find($message->getRootFolder(), 'json') as $file) {
             $this->generateEntryPointDataFile($file);
         }
+
+        return Command::SUCCESS;
     }
 
     private function generateEntryPointDataFile(
@@ -145,5 +151,44 @@ TEMPLATE;
         }
 
         return \str_replace($search, $replace, $dataExported);
+    }
+
+    private function needsRefactoringAddSubscriber($subscriber): void
+    {
+        /**
+         * OutputInterface $output
+         */
+        $output = new \Symfony\Component\Console\Output\ConsoleOutput();
+
+        $subscriber->addListener(
+            EntryPointDoesNotExist::class,
+            static function (EntryPointDoesNotExist $event) use ($output): void {
+                $output->writeln(\sprintf(
+                    'Entry file does not exist, creating %s file',
+                    $event->getFile()
+                ));
+            }
+        );
+
+        $subscriber->addListener(
+            EntryPointCreated::class,
+            static function (EntryPointCreated $event) use ($output): void {
+                $output->writeln(\sprintf(
+                    'Entry file %s created',
+                    $event->getFile()
+                ));
+            }
+        );
+
+        $subscriber->addListener(
+            EntryPointCanNotBeCreated::class,
+            static function (EntryPointCanNotBeCreated $event) use ($output): void {
+                $output->writeln(\sprintf(
+                    'Entry file %s cannot be created because of %s',
+                    $event->getFile(),
+                    $event->getException()->getMessage()
+                ));
+            }
+        );
     }
 }

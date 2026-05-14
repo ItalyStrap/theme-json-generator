@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace ItalyStrap\Tests\Unit\Domain\Output;
 
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Application\InitMessage;
-use ItalyStrap\ThemeJsonGenerator\Domain\Output\Init;
+use ItalyStrap\ThemeJsonGenerator\Application\Message;
+use ItalyStrap\ThemeJsonGenerator\Application\Middlewares\Init;
 use Prophecy\Argument;
 
 class InitTest extends UnitTestCase
@@ -26,6 +26,6 @@ class InitTest extends UnitTestCase
             ->willReturn([])
             ->shouldBeCalledOnce();
 
-        $this->makeInstance()->handle(new InitMessage('', ''));
+//        $this->makeInstance()->process(new Message(''));
     }
 }

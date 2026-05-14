@@ -2,14 +2,16 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\ThemeJsonGenerator\Application\Commands\Middleware;
+namespace ItalyStrap\ThemeJsonGenerator\Application\Middlewares;
 
+use ItalyStrap\Pipeline\HandlerInterface;
+use ItalyStrap\Pipeline\MiddlewareInterface;
 use ItalyStrap\ThemeJsonGenerator\Application\ValidateMessage;
 use Webimpress\SafeWriter\FileWriter;
 
-class SchemaJsonMiddleware implements \ItalyStrap\Bus\MiddlewareInterface
+class SchemaJson implements MiddlewareInterface
 {
-    public function process(object $message, \ItalyStrap\Bus\HandlerInterface $handler): int
+    public function process(object $message, HandlerInterface $handler): int
     {
         /** @var ValidateMessage $message */
         $schemaPath = $message->getSchemaPath();

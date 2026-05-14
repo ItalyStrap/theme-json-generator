@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Application;
 
-/**
- * @psalm-api
- */
-class InfoMessage
+class Message
 {
     private string $rootFolder = '';
 

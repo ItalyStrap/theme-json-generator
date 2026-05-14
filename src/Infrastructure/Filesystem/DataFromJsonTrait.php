@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils;
+namespace ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem;
 
 trait DataFromJsonTrait
 {

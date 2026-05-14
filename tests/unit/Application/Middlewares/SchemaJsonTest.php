@@ -2,22 +2,17 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\Tests\Unit\Application\Commands\Middleware;
+namespace ItalyStrap\Tests\Unit\Application\Middlewares;
 
+use ItalyStrap\Pipeline\HandlerInterface;
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Application\Commands\Middleware\SchemaJsonMiddleware;
+use ItalyStrap\ThemeJsonGenerator\Application\Middlewares\SchemaJson;
 
-class SchemaJsonMiddlewareTest extends UnitTestCase
+final class SchemaJsonTest extends UnitTestCase
 {
-    private function makeInstance(): SchemaJsonMiddleware
+    private function makeInstance(): SchemaJson
     {
-        return new SchemaJsonMiddleware();
-    }
-
-    public function testInstance()
-    {
-        $actual = $this->makeInstance();
-        $this->assertInstanceOf(SchemaJsonMiddleware::class, $actual);
+        return new SchemaJson();
     }
 
     public function testProcess()
@@ -29,7 +24,7 @@ class SchemaJsonMiddlewareTest extends UnitTestCase
             }
         };
 
-        $handler = new class implements \ItalyStrap\Bus\HandlerInterface {
+        $handler = new class implements HandlerInterface {
             public function handle(object $message): int
             {
                 return 1;

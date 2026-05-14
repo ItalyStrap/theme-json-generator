@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Application\Commands;
 
+use ItalyStrap\Pipeline\HandlerInterface;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\RootFolderTrait;
 use ItalyStrap\ThemeJsonGenerator\Application\DumpMessage;
-use ItalyStrap\ThemeJsonGenerator\Domain\Output\Dump;
-use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\GeneratedFile;
-use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\GeneratingFile;
-use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\NoFileFound;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -19,6 +17,7 @@ use Symfony\Component\Process\Process;
 /**
  * @psalm-api
  */
+#[AsCommand(name: DumpCommand::NAME, description: DumpCommand::DESCRIPTION)]
 final class DumpCommand extends Command
 {
     use RootFolderTrait;
@@ -27,6 +26,8 @@ final class DumpCommand extends Command
      * @var string
      */
     public const NAME = 'dump';
+
+    public const DESCRIPTION = 'Generate theme.json file';
 
     /**
      * @var string
@@ -48,23 +49,19 @@ final class DumpCommand extends Command
      */
     public const FILE = 'file';
 
-    private Dump $dump;
-
-    private \Symfony\Component\EventDispatcher\EventDispatcher $subscriber;
+    private HandlerInterface $handler;
 
     public function __construct(
-        \Symfony\Component\EventDispatcher\EventDispatcher $subscriber,
-        Dump $dump
+        HandlerInterface $handler
     ) {
-        $this->subscriber = $subscriber;
-        $this->dump = $dump;
+        $this->handler = $handler;
         parent::__construct();
     }
 
     protected function configure(): void
     {
         $this->setName(self::NAME);
-        $this->setDescription('Generate theme.json file');
+        $this->setDescription(self::DESCRIPTION);
         $this->setHelp('This command generate theme.json file');
 
         $this->addOption(
@@ -119,36 +116,6 @@ final class DumpCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-
-        $this->subscriber->addListener(
-            GeneratingFile::class,
-            static function (GeneratingFile $event) use ($output): void {
-                $output->writeln(\sprintf(
-                    '<info>Generating %s file</info>',
-                    $event->getFileName()
-                ));
-            }
-        );
-
-        $this->subscriber->addListener(
-            GeneratedFile ::class,
-            static function (GeneratedFile $event) use ($output): void {
-                $output->writeln(\sprintf(
-                    '<info>Generated %s file</info>',
-                    $event->getFileName()
-                ));
-                $output->writeln('========================');
-            }
-        );
-
-        $this->subscriber->addListener(
-            NoFileFound::class,
-            /** @psalm-suppress UnusedClosureParam */
-            static function (NoFileFound $event) use ($output): void {
-                $output->writeln(NoFileFound::M_NO_FILE_FOUND);
-            }
-        );
-
         $rootFolder = $this->rootFolder((string)$input->getOption('path'));
 
         $message = new DumpMessage(
@@ -158,17 +125,22 @@ final class DumpCommand extends Command
             (string)$input->getOption(self::FILE)
         );
 
-        $this->dump->handle($message);
-
-        if ($input->getOption(ValidateCommand::NAME)) {
-            $process = new Process(['php', 'vendor/bin/theme-json', ValidateCommand::NAME]);
-            $process->run();
-
-            $output->write($process->getOutput());
-
-            return (int)$process->getExitCode();
+        try {
+            return (int)$this->handler->handle($message);
+        } catch (\Exception $exception) {
+            $output->writeln('<error>Error: ' . $exception->getMessage() . '</error>');
+            return Command::FAILURE;
         }
 
-        return Command::SUCCESS;
+//        if ($input->getOption(ValidateCommand::NAME)) {
+//            $process = new Process(['php', 'vendor/bin/theme-json', ValidateCommand::NAME]);
+//            $process->run();
+//
+//            $output->write($process->getOutput());
+//
+//            return (int)$process->getExitCode();
+//        }
+
+//        return Command::SUCCESS;
     }
 }

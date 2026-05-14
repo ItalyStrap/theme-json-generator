@@ -7,7 +7,7 @@ namespace ItalyStrap\Tests\Unit\Domain\Output;
 use ItalyStrap\Config\Config;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Application\DumpMessage;
-use ItalyStrap\ThemeJsonGenerator\Domain\Output\Dump;
+use ItalyStrap\ThemeJsonGenerator\Application\Middlewares\Dump;
 use Prophecy\Argument;
 
 class DumpTest extends UnitTestCase

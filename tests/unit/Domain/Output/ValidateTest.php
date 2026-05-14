@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace ItalyStrap\Tests\Unit\Domain\Output;
 
 use ItalyStrap\Tests\UnitTestCase;
+use ItalyStrap\ThemeJsonGenerator\Application\Middlewares\Validate;
 use ItalyStrap\ThemeJsonGenerator\Application\ValidateMessage;
-use ItalyStrap\ThemeJsonGenerator\Domain\Output\Validate;
 use Prophecy\Argument;
 
 class ValidateTest extends UnitTestCase

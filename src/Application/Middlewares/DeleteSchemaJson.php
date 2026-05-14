@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\ThemeJsonGenerator\Application\Commands\Middleware;
+namespace ItalyStrap\ThemeJsonGenerator\Application\Middlewares;
 
-use ItalyStrap\Bus\HandlerInterface;
+use ItalyStrap\Pipeline\HandlerInterface;
+use ItalyStrap\Pipeline\MiddlewareInterface;
 use ItalyStrap\ThemeJsonGenerator\Application\ValidateMessage;
 
-class DeleteSchemaJsonMiddleware implements \ItalyStrap\Bus\MiddlewareInterface
+class DeleteSchemaJson implements MiddlewareInterface
 {
     public function process(object $message, HandlerInterface $handler): int
     {

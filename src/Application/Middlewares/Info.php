@@ -2,16 +2,19 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\ThemeJsonGenerator\Domain\Output;
+namespace ItalyStrap\ThemeJsonGenerator\Application\Middlewares;
 
-use ItalyStrap\ThemeJsonGenerator\Application\InfoMessage;
+use ItalyStrap\Pipeline\HandlerInterface;
+use ItalyStrap\Pipeline\MiddlewareInterface;
+use ItalyStrap\ThemeJsonGenerator\Application\Message;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FilesFinder;
+use Symfony\Component\Console\Command\Command;
 
 /**
  * @psalm-api
  * @todo Implement the logic
  */
-class Info implements \ItalyStrap\Bus\HandlerInterface
+class Info implements MiddlewareInterface
 {
     private FilesFinder $filesFinder;
 
@@ -21,13 +24,13 @@ class Info implements \ItalyStrap\Bus\HandlerInterface
         $this->filesFinder = $filesFinder;
     }
 
-    public function handle(object $message): int
+    public function process(object $message, HandlerInterface $handler): int
     {
-        /** @var InfoMessage $message */
+        /** @var Message $message */
         foreach ($this->filesFinder->find($message->getRootFolder(), 'json') as $file) {
             echo $file->getBasename() . PHP_EOL;
         }
 
-        return 0;
+        return Command::SUCCESS;
     }
 }
