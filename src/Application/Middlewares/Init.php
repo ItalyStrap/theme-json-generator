@@ -7,9 +7,6 @@ namespace ItalyStrap\ThemeJsonGenerator\Application\Middlewares;
 use Brick\VarExporter\VarExporter;
 use ItalyStrap\Pipeline\HandlerInterface;
 use ItalyStrap\Pipeline\MiddlewareInterface;
-use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\EntryPointCanNotBeCreated;
-use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\EntryPointCreated;
-use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\EntryPointDoesNotExist;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\DataFromJsonTrait;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FilesFinder;
 use PhpParser\Error;
@@ -19,6 +16,7 @@ use PhpParser\NodeFinder;
 use PhpParser\ParserFactory;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Output\OutputInterface;
 use Webimpress\SafeWriter\Exception\ExceptionInterface as FileWriterException;
 use Webimpress\SafeWriter\FileWriter;
 use Webmozart\Assert\Assert;
@@ -54,35 +52,38 @@ TEMPLATE;
 
     private FilesFinder $filesFinder;
 
-    private EventDispatcherInterface $dispatcher;
-
     public function __construct(
         EventDispatcherInterface $dispatcher,
         FilesFinder $filesFinder
     ) {
         $this->filesFinder = $filesFinder;
-        $this->dispatcher = $dispatcher;
     }
 
     public function process(object $message, HandlerInterface $handler): int
     {
-        // TODO: This should be refactored
-        $this->needsRefactoringAddSubscriber($this->dispatcher);
+        /**
+         * OutputInterface $output
+         */
+        $output = new \Symfony\Component\Console\Output\ConsoleOutput();
 
         foreach ($this->filesFinder->find($message->getRootFolder(), 'json') as $file) {
-            $this->generateEntryPointDataFile($file);
+            $this->generateEntryPointDataFile($output, $file);
         }
 
         return Command::SUCCESS;
     }
 
     private function generateEntryPointDataFile(
+        OutputInterface $output,
         \SplFileInfo $file
     ): void {
         $entryPointFileName = $file->getFilename() . self::ENTRY_POINT_EXTENSION;
         $entryPointRealPath = $file->getPath() . DIRECTORY_SEPARATOR . $entryPointFileName;
         if (!\file_exists($entryPointRealPath)) {
-            $this->dispatcher->dispatch(new EntryPointDoesNotExist($entryPointRealPath));
+            $output->writeln(\sprintf(
+                'Entry file does not exist, creating %s file',
+                $entryPointRealPath
+            ));
 
             $dataExported = $this->exportFromThemeJsonIfExists($file);
             $content = \sprintf(
@@ -93,14 +94,18 @@ TEMPLATE;
             try {
                 FileWriter::writeFile($entryPointRealPath, $content, 0666);
             } catch (FileWriterException $fileWriterException) {
-                $this->dispatcher->dispatch(new EntryPointCanNotBeCreated(
+                $output->writeln(\sprintf(
+                    'Entry file %s cannot be created because of %s',
                     $entryPointRealPath,
-                    $fileWriterException
+                    $fileWriterException->getMessage()
                 ));
                 return;
             }
 
-            $this->dispatcher->dispatch(new EntryPointCreated($entryPointRealPath));
+            $output->writeln(\sprintf(
+                'Entry file %s created',
+                $entryPointRealPath
+            ));
         }
     }
 
@@ -151,44 +156,5 @@ TEMPLATE;
         }
 
         return \str_replace($search, $replace, $dataExported);
-    }
-
-    private function needsRefactoringAddSubscriber($subscriber): void
-    {
-        /**
-         * OutputInterface $output
-         */
-        $output = new \Symfony\Component\Console\Output\ConsoleOutput();
-
-        $subscriber->addListener(
-            EntryPointDoesNotExist::class,
-            static function (EntryPointDoesNotExist $event) use ($output): void {
-                $output->writeln(\sprintf(
-                    'Entry file does not exist, creating %s file',
-                    $event->getFile()
-                ));
-            }
-        );
-
-        $subscriber->addListener(
-            EntryPointCreated::class,
-            static function (EntryPointCreated $event) use ($output): void {
-                $output->writeln(\sprintf(
-                    'Entry file %s created',
-                    $event->getFile()
-                ));
-            }
-        );
-
-        $subscriber->addListener(
-            EntryPointCanNotBeCreated::class,
-            static function (EntryPointCanNotBeCreated $event) use ($output): void {
-                $output->writeln(\sprintf(
-                    'Entry file %s cannot be created because of %s',
-                    $event->getFile(),
-                    $event->getException()->getMessage()
-                ));
-            }
-        );
     }
 }

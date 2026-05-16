@@ -6,7 +6,7 @@ namespace ItalyStrap\Tests\Functional;
 
 use FunctionalTester;
 use ItalyStrap\Tests\FunctionalTestCase;
-use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\NoFileFound;
+use ItalyStrap\ThemeJsonGenerator\Application\Middlewares\Dump;
 
 class CommandsCest extends FunctionalTestCase
 {
@@ -20,7 +20,7 @@ class CommandsCest extends FunctionalTestCase
 //        $i->runShellCommand('bin/theme-json dump --file="theme.json"');
 //        $i->runShellCommand('bin/theme-json dump --path="tests"');
 //        $i->runShellCommand('bin/theme-json dump --path="tests/_data/fixtures/themes/theme-flat/"');
-        $i->dontSeeInShellOutput(NoFileFound::M_NO_FILE_FOUND);
+        $i->dontSeeInShellOutput(Dump::M_NO_FILE_FOUND);
         $i->seeResultCodeIs(0);
     }
 

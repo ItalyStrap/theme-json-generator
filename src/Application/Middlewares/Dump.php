@@ -12,38 +12,38 @@ use ItalyStrap\ThemeJsonGenerator\Application\Config\ThemeJson;
 use ItalyStrap\ThemeJsonGenerator\Application\DumpMessage;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetsInterface;
-use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\DryRunMode;
-use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\GeneratedFile;
-use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\GeneratingFile;
-use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\NoFileFound;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FilesFinder;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\JsonFileWriter;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\ScssFileWriter;
 use Psr\Container\ContainerInterface;
-use Psr\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @psalm-api
  */
 class Dump implements MiddlewareInterface
 {
+    /**
+     * @var string
+     */
+    public const M_NO_FILE_FOUND = 'No file found';
+
     public const JSON_FILE_SUFFIX = '.json';
 
     private FilesFinder $filesFinder;
 
-    private EventDispatcherInterface $dispatcher;
-
     public function __construct(
-        EventDispatcherInterface $dispatcher,
         FilesFinder $filesFinder
     ) {
         $this->filesFinder = $filesFinder;
-        $this->dispatcher = $dispatcher;
     }
 
     public function process(object $message, HandlerInterface $handler): int
     {
-        $this->needsRefactoringAddSubscriber($this->dispatcher);
+        /**
+         * OutputInterface $output
+         */
+        $output = new \Symfony\Component\Console\Output\ConsoleOutput();
 
         $count = 0;
         /**
@@ -67,43 +67,70 @@ class Dump implements MiddlewareInterface
 //            $dispatcher->dispatch($themeJson);
 
             if ($message->isDryRun()) {
-                $this->dispatcher->dispatch(new DryRunMode());
+                $output->writeln(\sprintf(
+                    '<comment>Dry run mode enabled, skipping file generation for %s</comment>',
+                    $fileName
+                ));
                 continue;
             }
 
-            $this->generateJsonFile($message, $fileName, $file, $themeJson);
-            $this->generateScssFile($message, $fileName, $themeJson);
+            $this->generateJsonFile($output, $message, $fileName, $file, $themeJson);
+            $this->generateScssFile($output, $message, $fileName, $themeJson);
         }
 
         if ($count === 0) {
-            $this->dispatcher->dispatch(new NoFileFound());
+            $output->writeln(self::M_NO_FILE_FOUND);
         }
 
         return (int)$handler->handle($message);
     }
 
     private function generateJsonFile(
+        OutputInterface $output,
         DumpMessage $message,
         string $fileName,
         \SplFileInfo $file,
         ThemeJson $themeJson
     ): void {
-        $this->dispatcher->dispatch(new GeneratingFile($fileName . self::JSON_FILE_SUFFIX));
+
+        $output->writeln(\sprintf(
+            '<info>Generating %s file</info>',
+            $fileName . self::JSON_FILE_SUFFIX
+        ));
 
         (new JsonFileWriter($this->filesFinder->resolveJsonFile($file)))
             ->write($themeJson);
 
-        $this->dispatcher->dispatch(new GeneratedFile($fileName . self::JSON_FILE_SUFFIX));
+        $output->writeln(\sprintf(
+            '<info>Generated %s file</info>',
+            $fileName . self::JSON_FILE_SUFFIX
+        ));
+        $output->writeln('========================');
     }
 
-    private function generateScssFile(DumpMessage $message, string $fileName, ThemeJson $themeJson): void
+    private function generateScssFile(
+        OutputInterface $output,
+        DumpMessage $message,
+        string $fileName,
+        ThemeJson $themeJson
+    ): void
     {
         $path_for_theme_sass = $message->getRootFolder() . DIRECTORY_SEPARATOR . $message->getSassFolder();
         if ($message->getSassFolder() !== '' && \is_writable($path_for_theme_sass)) {
-            $this->dispatcher->dispatch(new GeneratingFile($fileName . '.scss'));
+
+            $output->writeln(\sprintf(
+                '<info>Generating %s file</info>',
+                $fileName . '.scss'
+            ));
+
             (new ScssFileWriter($path_for_theme_sass . DIRECTORY_SEPARATOR . $fileName . '.scss'))
                 ->write($themeJson);
-            $this->dispatcher->dispatch(new GeneratedFile($fileName . '.scss'));
+
+            $output->writeln(\sprintf(
+                '<info>Generated %s file</info>',
+                $fileName . '.scss'
+            ));
+            $output->writeln('========================');
         }
     }
 
@@ -118,9 +145,6 @@ class Dump implements MiddlewareInterface
 
         $injector->alias(PresetsInterface::class, Presets::class);
         $injector->share(PresetsInterface::class);
-
-        $injector->alias(EventDispatcherInterface::class, \get_class($this->dispatcher));
-        $injector->share(EventDispatcherInterface::class);
 
         /**
          * Injector resolve to null if a param is nullable, so we need to be explicit and declare the param
@@ -180,42 +204,5 @@ class Dump implements MiddlewareInterface
                 return (bool) \array_filter($details);
             }
         };
-    }
-
-    private function needsRefactoringAddSubscriber($subscriber): void
-    {
-        /**
-         * OutputInterface $output
-         */
-        $output = new \Symfony\Component\Console\Output\ConsoleOutput();
-
-        $subscriber->addListener(
-            GeneratingFile::class,
-            static function (GeneratingFile $event) use ($output): void {
-                $output->writeln(\sprintf(
-                    '<info>Generating %s file</info>',
-                    $event->getFileName()
-                ));
-            }
-        );
-
-        $subscriber->addListener(
-            GeneratedFile ::class,
-            static function (GeneratedFile $event) use ($output): void {
-                $output->writeln(\sprintf(
-                    '<info>Generated %s file</info>',
-                    $event->getFileName()
-                ));
-                $output->writeln('========================');
-            }
-        );
-
-        $subscriber->addListener(
-            NoFileFound::class,
-            /** @psalm-suppress UnusedClosureParam */
-            static function (NoFileFound $event) use ($output): void {
-                $output->writeln(NoFileFound::M_NO_FILE_FOUND);
-            }
-        );
     }
 }
