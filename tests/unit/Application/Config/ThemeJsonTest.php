@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace ItalyStrap\Tests\Unit\Application\Config;
 
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Application\Config\ThemeJson;
+use ItalyStrap\ThemeJsonGenerator\Domain\ThemeJson\ThemeJson;
 
 class ThemeJsonTest extends UnitTestCase
 {

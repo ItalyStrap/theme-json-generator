@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace ItalyStrap\Tests\Unit\Infrastructure\Filesystem;
 
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Application\Config\ThemeJson;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Palette;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\Color;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorModifier;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Color as StylesColor;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Typography;
+use ItalyStrap\ThemeJsonGenerator\Domain\ThemeJson\ThemeJson;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\JsonFileWriter;
 
 class JsonFileWriterIntegrationTest extends UnitTestCase

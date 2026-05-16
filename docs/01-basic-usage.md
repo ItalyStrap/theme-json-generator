@@ -213,7 +213,7 @@ declare(strict_types=1);
 
 namespace YourVendor\YourProject;
 
-use ItalyStrap\ThemeJsonGenerator\Application\Config\ThemeJson;
+use ItalyStrap\ThemeJsonGenerator\Domain\ThemeJson\ThemeJson;
 
 return static function (ThemeJson $themeJson): void {
     // Your configuration code goes here
@@ -229,7 +229,7 @@ declare(strict_types=1);
 
 namespace YourVendor\YourProject;
 
-use ItalyStrap\ThemeJsonGenerator\Application\Config\ThemeJson;
+use ItalyStrap\ThemeJsonGenerator\Domain\ThemeJson\ThemeJson;
 
 return static function (ThemeJson $themeJson): void {
     $themeJson->merge([
@@ -248,9 +248,7 @@ declare(strict_types=1);
 
 namespace YourVendor\YourProject;
 
-use ItalyStrap\ThemeJsonGenerator\Application\Config\ThemeJson;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\SectionNames;
-use Psr\Container\ContainerInterface;
+use ItalyStrap\ThemeJsonGenerator\Domain\ThemeJson\SectionNames;use ItalyStrap\ThemeJsonGenerator\Domain\ThemeJson\ThemeJson;
 
 return static function (ThemeJson $themeJson): void {
     $themeJson->merge([

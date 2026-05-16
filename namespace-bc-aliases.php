@@ -18,6 +18,6 @@ declare(strict_types=1);
 });
 
 \class_alias(
-    '\ItalyStrap\ThemeJsonGenerator\Application\Config\ThemeJson',
+    '\ItalyStrap\ThemeJsonGenerator\Domain\ThemeJson\ThemeJson',
     '\ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint'
 );

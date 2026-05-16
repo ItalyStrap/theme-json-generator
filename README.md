@@ -63,6 +63,8 @@ This package adheres to the [SemVer](http://semver.org/) specification and will 
 
 Until the first stable version is released, BC breaks may occur.
 
+`ItalyStrap\ThemeJsonGenerator\Application\Config\ThemeJson` to `\ItalyStrap\ThemeJsonGenerator\Domain\ThemeJson\ThemeJson`
+
 [🆙](#table-of-contents)
 
 ## Contributing

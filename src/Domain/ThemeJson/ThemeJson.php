@@ -2,16 +2,15 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\ThemeJsonGenerator\Application\Config;
+namespace ItalyStrap\ThemeJsonGenerator\Domain\ThemeJson;
 
 use ItalyStrap\Config\Config;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\SectionNames;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Shadow;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetsInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Duotone;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Gradient;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Palette;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Shadow;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Custom\Custom;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetsInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\FontFamily;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\FontSize;
 

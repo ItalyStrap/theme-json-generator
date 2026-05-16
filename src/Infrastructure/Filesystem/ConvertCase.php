@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\ThemeJsonGenerator\Helper;
+namespace ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem;
 
 use function preg_replace;
 use function strtolower;
