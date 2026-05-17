@@ -21,7 +21,7 @@ trait CommonTrait
      * @param array<string, string> $properties
      */
     public function __construct(
-        PresetsInterface $presets = null,
+        ?PresetsInterface $presets = null,
         array $properties = []
     ) {
         $this->presets = $presets ?? new NullPresets();

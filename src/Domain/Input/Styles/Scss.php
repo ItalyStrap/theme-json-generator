@@ -28,7 +28,7 @@ class Scss implements CssInterface
     public function __construct(
         Css $css,
         Compiler $compiler,
-        PresetsInterface $presets = null
+        ?PresetsInterface $presets = null
     ) {
         $this->css = $css;
         $this->compiler = $compiler;

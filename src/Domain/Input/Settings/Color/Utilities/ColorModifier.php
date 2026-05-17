@@ -20,7 +20,7 @@ final class ColorModifier implements ColorModifierInterface
     /**
      * @throws Exception
      */
-    public function __construct(ColorInterface $color, ColorFactoryInterface $factory = null)
+    public function __construct(ColorInterface $color, ?ColorFactoryInterface $factory = null)
     {
         $this->color = $color;
         $this->color_factory = $factory ?? new ColorFactory();

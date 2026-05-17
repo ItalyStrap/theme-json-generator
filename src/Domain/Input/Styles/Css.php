@@ -27,7 +27,7 @@ class Css implements CssInterface
     private bool $shouldResolveVariables = true;
 
     public function __construct(
-        PresetsInterface $presets = null
+        ?PresetsInterface $presets = null
     ) {
         $this->presets = $presets ?? new NullPresets();
     }

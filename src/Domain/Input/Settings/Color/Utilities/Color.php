@@ -170,7 +170,7 @@ final class Color implements ColorInterface
         return new self((string) $this->spatieColor->toHsl());
     }
 
-    public function toHsla(float $alpha = null): self
+    public function toHsla(?float $alpha = null): self
     {
         $alpha = $alpha ?? $this->fromHexToFloat($this->alpha);
         return new self((string) $this->spatieColor->toHsla($alpha));
@@ -181,7 +181,7 @@ final class Color implements ColorInterface
         return new self((string) $this->spatieColor->toRgb());
     }
 
-    public function toRgba(float $alpha = null): self
+    public function toRgba(?float $alpha = null): self
     {
         $alpha = $alpha ?? $this->fromHexToFloat($this->alpha);
         return new self((string) $this->spatieColor->toRgba($alpha));
