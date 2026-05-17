@@ -33,7 +33,7 @@ jobs:
     strategy:
       matrix:
         php_versions: ['8.2']
-        app_versions: ['6']
+        app_versions: ['6.9']
 
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '--skip ci') && !github.event.pull_request.draft"
