@@ -41,14 +41,14 @@
         "overclokk/auryn": "dev-master"
     },
     "require-dev": {
-        "lucatume/wp-browser": "<3.5",
+        "lucatume/wp-browser": "^4.5",
         "phpspec/prophecy-phpunit": "^2.0",
 
-        "codeception/module-asserts": "^1.0",
-        "codeception/module-phpbrowser": "^1.0",
-        "codeception/module-db": "^1.0",
-        "codeception/module-filesystem": "^1.0",
-        "codeception/module-cli": "^1.0",
+        "codeception/module-asserts": "^3.0",
+        "codeception/module-phpbrowser": "^3.0",
+        "codeception/module-db": "^3.0",
+        "codeception/module-filesystem": "^3.0",
+        "codeception/module-cli": "^2.0",
         "codeception/util-universalframework": "^1.0",
 
         "squizlabs/php_codesniffer": "*",

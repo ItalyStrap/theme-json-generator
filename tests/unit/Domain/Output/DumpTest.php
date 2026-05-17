@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\Tests\Unit\Domain\Output;
 
-use ItalyStrap\Config\Config;
+use ItalyStrap\Pipeline\CallbackHandler;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Application\DumpMessage;
 use ItalyStrap\ThemeJsonGenerator\Application\Middlewares\Dump;
@@ -15,11 +15,13 @@ class DumpTest extends UnitTestCase
     private function makeInstance(): Dump
     {
         return new Dump(
-            $this->makeDispatcher(),
-            //            $this->makeConfig(),
-            new Config(),
             $this->makeFilesFinder(),
         );
+    }
+
+    private function makeHandler(): CallbackHandler
+    {
+        return new CallbackHandler(static fn (object $message): int => 0);
     }
 
     public function testItShouldHandleButDoNothing(): void
@@ -29,7 +31,7 @@ class DumpTest extends UnitTestCase
             ->willReturn([])
             ->shouldBeCalledOnce();
 
-        $this->makeInstance()->handle(new DumpMessage('', '', false, ''));
+        $this->makeInstance()->process(new DumpMessage('', '', false, ''), $this->makeHandler());
     }
 
     public function testItShouldBasicExample(): void
@@ -45,7 +47,7 @@ class DumpTest extends UnitTestCase
             ->resolveJsonFile($basicExample)
             ->willReturn(\codecept_data_dir('fixtures/basic-example.json'));
 
-        $this->makeInstance()->handle(new DumpMessage('', '', false, ''));
+        $this->makeInstance()->process(new DumpMessage('', '', false, ''), $this->makeHandler());
 
         $generatedFile = new \SplFileInfo(\codecept_data_dir('fixtures/basic-example.json'));
         $this->assertFileExists($generatedFile->getPathname(), 'The file was not generated');
@@ -66,7 +68,7 @@ class DumpTest extends UnitTestCase
             ->resolveJsonFile($advancedExample)
             ->willReturn(\codecept_data_dir('fixtures/advanced-example.json'));
 
-        $this->makeInstance()->handle(new DumpMessage('', '', false, ''));
+        $this->makeInstance()->process(new DumpMessage('', '', false, ''), $this->makeHandler());
 
         $generatedFile = new \SplFileInfo(\codecept_data_dir('fixtures/advanced-example.json'));
         $this->assertFileExists($generatedFile->getPathname(), 'The file was not generated');

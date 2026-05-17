@@ -21,7 +21,7 @@ final readonly class ConsoleHandler implements HandlerInterface
     {
         $this->pipeline = new Pipeline(
             new CallbackHandler(
-                static fn (object $message): int => 1
+                static fn (object $message): int => self::SUCCESS
             ),
             ...$middleware,
         );
