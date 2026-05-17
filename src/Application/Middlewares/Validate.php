@@ -42,7 +42,6 @@ class Validate implements MiddlewareInterface
 
         /** @var ValidateMessage $message */
         foreach ($this->filesFinder->find($message->getRootFolder(), 'json') as $file) {
-
             $output->writeln('========================');
             $output->writeln(\sprintf(
                 'Validating <info>%s</info>',

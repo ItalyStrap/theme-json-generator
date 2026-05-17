@@ -113,11 +113,9 @@ class Dump implements MiddlewareInterface
         DumpMessage $message,
         string $fileName,
         ThemeJson $themeJson
-    ): void
-    {
+    ): void {
         $path_for_theme_sass = $message->getRootFolder() . DIRECTORY_SEPARATOR . $message->getSassFolder();
         if ($message->getSassFolder() !== '' && \is_writable($path_for_theme_sass)) {
-
             $output->writeln(\sprintf(
                 '<info>Generating %s file</info>',
                 $fileName . '.scss'
