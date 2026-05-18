@@ -6,7 +6,6 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings;
 
 /**
  * @infection-ignore-all
- * @psalm-api
  */
 class NullPresets implements PresetsInterface
 {
@@ -28,5 +27,10 @@ class NullPresets implements PresetsInterface
     public function parse(string $content): string
     {
         return $content;
+    }
+
+    public function toArrayByCategory(string $category): array
+    {
+        return [];
     }
 }

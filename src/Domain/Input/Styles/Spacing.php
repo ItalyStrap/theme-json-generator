@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles;
 
-/**
- * @psalm-api
- */
 final class Spacing implements ArrayableInterface, \JsonSerializable
 {
     use CommonTrait;
@@ -59,6 +56,9 @@ final class Spacing implements ArrayableInterface, \JsonSerializable
      * Two values => 5px 0px => 5px 0px 5px 0px
      * Three values => 10px auto 0px => 10px auto 0px auto
      * Four values => 1px 2px 3px 4px => 1px 2px 3px 4px
+     */
+    /**
+     * @param string[] $values
      */
     public function shorthand(array $values): self
     {

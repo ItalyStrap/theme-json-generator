@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace ItalyStrap\Tests;
 
-use Codeception\TestCase\WPTestCase;
+use lucatume\WPBrowser\TestCase\WPTestCase;
 
 class IntegrationTestCase extends WPTestCase
 {
-    protected \IntegrationTester $tester;
+    protected $tester;
 
     protected function setUp(): void
     {

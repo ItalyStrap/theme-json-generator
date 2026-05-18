@@ -21,7 +21,7 @@ trait CommonTrait
      * @param array<string, string> $properties
      */
     public function __construct(
-        PresetsInterface $presets = null,
+        ?PresetsInterface $presets = null,
         array $properties = []
     ) {
         $this->presets = $presets ?? new NullPresets();
@@ -66,17 +66,21 @@ trait CommonTrait
      */
     private function setProperty(string $key, string $value): self
     {
-        /**
-         * @var PresetInterface|mixed $value
-         */
         $value = $this->presets->get($value, $value);
 
         if ($value instanceof PresetInterface) {
             $value = $value->var();
         }
 
+        if (!\is_scalar($value) && !$value instanceof \Stringable) {
+            throw new \RuntimeException(\sprintf(
+                'Expected style value to be stringable, got %s.',
+                \get_debug_type($value)
+            ));
+        }
+
         /**
-         * This prevents to return a string with the placeholder like this:
+         * This prevents returning a string with the placeholder like this:
          * {{color.base}}
          * instead we want to return the value of the placeholder like this:
          * var(--wp--preset--color--base)
@@ -102,6 +106,9 @@ trait CommonTrait
         return $result;
     }
 
+    /**
+     * @return array<array-key, string>
+     */
     public function jsonSerialize(): array
     {
         return $this->toArray();

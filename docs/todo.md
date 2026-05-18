@@ -160,9 +160,7 @@ declare(strict_types=1);
 
 namespace YourVendor\YourProject;
 
-use ItalyStrap\ThemeJsonGenerator\Application\Config\ThemeJson;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\SectionNames;
-use Psr\Container\ContainerInterface;
+use ItalyStrap\ThemeJsonGenerator\Api\ThemeJson;
 
 return static function (ThemeJson $themeJson, PresetsInterface $presets): void {
 

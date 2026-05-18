@@ -7,9 +7,6 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Custom;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetTrait;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetInterface;
 
-/**
- * @psalm-api
- */
 class Custom implements PresetInterface
 {
     use PresetTrait;

@@ -11,7 +11,6 @@ use ScssPhp\ScssPhp\Compiler;
 use ScssPhp\ScssPhp\OutputStyle;
 
 /**
- * @psalm-api
  * @see ScssTest
  */
 class Scss implements CssInterface
@@ -28,7 +27,7 @@ class Scss implements CssInterface
     public function __construct(
         Css $css,
         Compiler $compiler,
-        PresetsInterface $presets = null
+        ?PresetsInterface $presets = null
     ) {
         $this->css = $css;
         $this->compiler = $compiler;

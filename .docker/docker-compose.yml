@@ -21,7 +21,8 @@ services:
       - ../tests/_output/:/var/www/html/wp-content/plugins/${PROJECT_NAME:-wordpress}/tests/_output/
       - ./mu-plugins/:/var/www/html/wp-content/mu-plugins/
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     networks:
       integration_test_networks:
 
@@ -37,12 +38,18 @@ services:
       MYSQL_PASSWORD: ${DB_PASSWORD:-root}
       #MYSQL_RANDOM_ROOT_PASSWORD: '1'
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${DB_PASSWORD:-root}"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
     networks:
       - integration_test_networks
 
   phpmyadmin:
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     image: phpmyadmin/phpmyadmin:${PMA_VERSION:-latest}
     container_name: ${PROJECT_NAME}_phpmyadmin_test
     restart: always

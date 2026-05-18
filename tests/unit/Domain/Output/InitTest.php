@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace ItalyStrap\Tests\Unit\Domain\Output;
 
+use ItalyStrap\Pipeline\CallbackHandler;
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Application\InitMessage;
-use ItalyStrap\ThemeJsonGenerator\Domain\Output\Init;
+use ItalyStrap\ThemeJsonGenerator\Application\Message;
+use ItalyStrap\ThemeJsonGenerator\Application\Middlewares\Init;
 use Prophecy\Argument;
 
 class InitTest extends UnitTestCase
@@ -14,9 +15,13 @@ class InitTest extends UnitTestCase
     private function makeInstance(): Init
     {
         return new Init(
-            $this->makeDispatcher(),
             $this->makeFilesFinder(),
         );
+    }
+
+    private function makeHandler(): CallbackHandler
+    {
+        return new CallbackHandler(static fn (object $message): int => 0);
     }
 
     public function testItShouldHandleButDoNothing(): void
@@ -26,6 +31,6 @@ class InitTest extends UnitTestCase
             ->willReturn([])
             ->shouldBeCalledOnce();
 
-        $this->makeInstance()->handle(new InitMessage('', ''));
+        $this->makeInstance()->process(new Message(''), $this->makeHandler());
     }
 }

@@ -6,7 +6,7 @@ on:
     paths:
       - '**workflows/static-analysis.yml'
       - '**.php'
-      - '**psalm.xml'
+      - '**phpstan.neon'
       - '**composer.json'
 
 jobs:
@@ -18,14 +18,14 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 7.4
+          php-version: '8.2'
 
-      - uses: ramsey/composer-install@v2
+      - uses: ramsey/composer-install@v3
 
-      - name: Psalm
-        run: vendor/bin/psalm
+      - name: PHPStan
+        run: composer stan

@@ -1,8 +1,8 @@
-name: CI
+name: Test
 
 env:
   PROJECT_KIND: plugins
-  DB_HOST: localhost
+  DB_HOST: 127.0.0.1
   DB_NAME: test
   DB_USER: root
   DB_PASSWORD: root
@@ -28,19 +28,18 @@ on:
 
 jobs:
   tests:
-    name: 🐘 Tests on PHP ${{matrix.php_versions}} & APP version ${{matrix.app_versions}}
+    name: Tests on PHP ${{ matrix.php_versions }} & WordPress ${{ matrix.app_versions }}
 
     strategy:
       matrix:
-        php_versions: ['7.4', '8.0']
-        app_versions: ['6.0']
+        php_versions: ['8.2']
+        app_versions: ['6.9']
 
     runs-on: ubuntu-latest
-    continue-on-error: ${{ matrix.php_versions == '8.0' }}
     if: "!contains(github.event.head_commit.message, '--skip ci') && !github.event.pull_request.draft"
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -74,7 +73,7 @@ jobs:
           pwd
           ls -la ${{env.APP_FOLDER_PATH}}/wp-includes
 
-      - uses: "ramsey/composer-install@v2"
+      - uses: "ramsey/composer-install@v3"
         with:
           working-directory: "${{env.APP_FOLDER_PATH}}/wp-content/${{env.PROJECT_KIND}}/${{ github.event.repository.name }}"
 
@@ -91,6 +90,10 @@ jobs:
 
       - name: Verify MySQL is Running
         run: sudo systemctl status mysql.service
+
+      - name: Configure Codeception database host
+        working-directory: ${{env.APP_FOLDER_PATH}}/wp-content/${{env.PROJECT_KIND}}/${{ github.event.repository.name }}
+        run: sed -i 's/DB_HOST="mysql"/DB_HOST="${{ env.DB_HOST }}"/' tests/.env
 
       - name: Build codeception
         working-directory: ${{env.APP_FOLDER_PATH}}/wp-content/${{env.PROJECT_KIND}}/${{ github.event.repository.name }}

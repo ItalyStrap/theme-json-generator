@@ -4,20 +4,16 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Application\Commands;
 
-use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\DataFromJsonTrait;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\RootFolderTrait;
-use ItalyStrap\ThemeJsonGenerator\Application\InitMessage;
-use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\EntryPointCanNotBeCreated;
-use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\EntryPointCreated;
-use ItalyStrap\ThemeJsonGenerator\Domain\Output\Events\EntryPointDoesNotExist;
-use ItalyStrap\ThemeJsonGenerator\Domain\Output\Init;
+use ItalyStrap\ThemeJsonGenerator\Application\Message;
+use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\DataFromJsonTrait;
+use ItalyStrap\ThemeJsonGenerator\Infrastructure\Handler\ConsoleHandler;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * @psalm-api
- */
+#[AsCommand(name: InitCommand::NAME, description: InitCommand::DESCRIPTION)]
 class InitCommand extends Command
 {
     use RootFolderTrait;
@@ -25,23 +21,21 @@ class InitCommand extends Command
 
     public const NAME = 'init';
 
-    private Init $init;
+    public const DESCRIPTION = 'Initialize theme.json file';
 
-    private \Symfony\Component\EventDispatcher\EventDispatcher $subscriber;
+    private ConsoleHandler $handler;
 
     public function __construct(
-        \Symfony\Component\EventDispatcher\EventDispatcher $subscriber,
-        Init $init
+        ConsoleHandler $handler,
     ) {
-        $this->subscriber = $subscriber;
-        $this->init = $init;
+        $this->handler = $handler;
         parent::__construct();
     }
 
     protected function configure(): void
     {
         $this->setName(self::NAME);
-        $this->setDescription('Initialize theme.json file');
+        $this->setDescription(self::DESCRIPTION);
 
         $this->addOption(
             'styles',
@@ -55,45 +49,13 @@ class InitCommand extends Command
     {
         $rootFolder = $this->rootFolder();
 
-        $this->subscriber->addListener(
-            EntryPointDoesNotExist::class,
-            static function (EntryPointDoesNotExist $event) use ($output): void {
-                $output->writeln(\sprintf(
-                    'Entry file does not exist, creating %s file',
-                    $event->getFile()
-                ));
-            }
-        );
+        $message = new Message($rootFolder);
 
-        $this->subscriber->addListener(
-            EntryPointCreated::class,
-            static function (EntryPointCreated $event) use ($output): void {
-                $output->writeln(\sprintf(
-                    'Entry file %s created',
-                    $event->getFile()
-                ));
-            }
-        );
-
-        $this->subscriber->addListener(
-            EntryPointCanNotBeCreated::class,
-            static function (EntryPointCanNotBeCreated $event) use ($output): void {
-                $output->writeln(\sprintf(
-                    'Entry file %s cannot be created because of %s',
-                    $event->getFile(),
-                    $event->getException()->getMessage()
-                ));
-            }
-        );
-
-        $message = new InitMessage($rootFolder, (string)$input->getOption('styles'));
-
-        if ($message->getStyleOption() !== '') {
-            throw new \RuntimeException('The option --styles is not yet implemented');
+        try {
+            return $this->handler->handle($message);
+        } catch (\Exception $exception) {
+            $output->writeln('<error>Error: ' . $exception->getMessage() . '</error>');
+            return Command::FAILURE;
         }
-
-        $this->init->handle($message);
-
-        return Command::SUCCESS;
     }
 }

@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace ItalyStrap\Tests\Unit\Infrastructure\Filesystem;
 
-use ItalyStrap\Config\Config;
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Application\Config\ThemeJson;
+use ItalyStrap\ThemeJsonGenerator\Api\ThemeJson;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\JsonFileWriter;
 
 class JsonFileWriterTest extends UnitTestCase

@@ -2,15 +2,12 @@ actor: IntegrationTester
 modules:
     enabled:
         - Asserts
-        - WPLoader
+        - lucatume\WPBrowser\Module\WPLoader
         - \Helper\Integration
     config:
-        WPLoader:
+        lucatume\WPBrowser\Module\WPLoader:
             wpRootFolder: "%ROOT_FOLDER%"
-            dbName: "%DB_NAME%"
-            dbHost: "%DB_HOST%"
-            dbUser: "%DB_USER%"
-            dbPassword: "%DB_PASSWORD%"
+            dbUrl: "mysql://%DB_USER%:%DB_PASSWORD%@%DB_HOST%/%DB_NAME%"
             tablePrefix: "%TABLE_PREFIX%"
             domain: "%DOMAIN%"
             adminEmail: "%ADMIN_EMAIL%"

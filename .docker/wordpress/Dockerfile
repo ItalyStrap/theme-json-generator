@@ -21,7 +21,10 @@ RUN  set -eux; \
      apt-get update && apt-get install -y \
      git \
      nano \
-     less # Needed for the WP-CLI \
+     less \
+     unzip \
+     zip \
+     ; \
      rm -rf /var/lib/apt/lists/*
 
 # Git add safe directory for the working directory
@@ -32,7 +35,9 @@ RUN  set -eux; \
 RUN docker-php-ext-install \
     pdo_mysql
 
-COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+RUN curl -sS https://getcomposer.org/installer -o /tmp/composer-setup.php && \
+    php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer && \
+    rm /tmp/composer-setup.php
 
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
     chmod +x wp-cli.phar && \

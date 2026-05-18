@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem;
 
 use ItalyStrap\Config\ConfigInterface;
-use ItalyStrap\ThemeJsonGenerator\Helper\ConvertCase;
 use Webimpress\SafeWriter;
 
 class ScssFileWriter implements FileWriter
@@ -22,6 +21,9 @@ class ScssFileWriter implements FileWriter
         $this->path = $path;
     }
 
+    /**
+     * @param ConfigInterface<array-key, mixed> $data
+     */
     public function write(ConfigInterface $data): void
     {
         if (\count($data) === 0) {
@@ -36,7 +38,7 @@ class ScssFileWriter implements FileWriter
     }
 
     /**
-     * @param ConfigInterface $data
+     * @param ConfigInterface<array-key, mixed> $data
      * @return string
      */
     private function generateScssContent(ConfigInterface $data): string

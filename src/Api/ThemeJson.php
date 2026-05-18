@@ -1,0 +1,94 @@
+<?php
+
+declare(strict_types=1);
+
+namespace ItalyStrap\ThemeJsonGenerator\Api;
+
+use ItalyStrap\Config\Config;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Duotone;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Gradient;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Palette;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Shadow;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Custom\Custom;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetsInterface;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\FontFamily;
+use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\FontSize;
+
+/**
+ * @template TKey as array-key
+ * @template TValue
+ * @template-extends Config<TKey,TValue>
+ */
+final class ThemeJson extends Config implements \JsonSerializable
+{
+    public function setGlobalCss(string $css): bool
+    {
+        return $this->set(SectionNames::STYLES . '.css', $css);
+    }
+
+    public function appendGlobalCss(string $css): bool
+    {
+        $currentCss = (string)$this->get(SectionNames::STYLES . '.css');
+        return $this->set(SectionNames::STYLES . '.css', $currentCss . $css);
+    }
+
+    /**
+     * @param array<string, mixed> $config
+     */
+    public function setElementStyle(string $elementName, array $config): bool
+    {
+        return $this->set(SectionNames::STYLES . '.elements.' . $elementName, $config);
+    }
+
+    /**
+     * @param array<string, mixed> $config
+     */
+    public function setBlockSettings(string $blockName, array $config): bool
+    {
+        return $this->set(SectionNames::SETTINGS . '.blocks.' . $blockName, $config);
+    }
+
+    /**
+     * @param array<string, mixed> $config
+     */
+    public function setBlockStyle(string $blockName, array $config): bool
+    {
+        return $this->set(SectionNames::STYLES . '.blocks.' . $blockName, $config);
+    }
+
+    public function setPerBLockCss(string $blockName, string $css): bool
+    {
+        return $this->set(SectionNames::STYLES . '.blocks.' . $blockName . '.css', $css);
+    }
+
+    public function setPresets(PresetsInterface $presets): bool
+    {
+        $keys = [
+            'settings.color.palette' => Palette::TYPE,
+            'settings.color.gradients' => Gradient::TYPE,
+            'settings.color.duotone' => Duotone::TYPE,
+            'settings.shadow.presets' => Shadow::TYPE,
+            'settings.typography.fontSizes' => FontSize::TYPE,
+            'settings.typography.fontFamilies' => FontFamily::TYPE,
+            'settings.custom' => Custom::TYPE,
+        ];
+
+        foreach ($keys as $key => $value) {
+            try {
+                $this->set($key, $presets->toArrayByCategory($value));
+            } catch (\Exception $e) {
+                continue;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @return array<array-key, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->getArrayCopy();
+    }
+}

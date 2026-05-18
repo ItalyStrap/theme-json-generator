@@ -15,12 +15,13 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php" : ">=7.4",
+        "php" : ">=8.2",
         "ext-json": "*",
 
         "italystrap/config": "^2.4",
-        "italystrap/empress": "^2.0",
+        "italystrap/empress": "dev-modularized as 2.0.x-dev",
         "italystrap/finder": "dev-master",
+        "italystrap/pipeline": "dev-main",
 
         "mexitek/phpcolors": "^1.0",
         "spatie/color": "~1.5.0",
@@ -36,24 +37,25 @@
         "symfony/process": "^v5.4",
         "symfony/polyfill-php80": "^1.22",
         "symfony/event-dispatcher": "^5.4",
-        "webmozart/assert": "^1.11"
+        "webmozart/assert": "^1.11",
+        "overclokk/auryn": "dev-master"
     },
     "require-dev": {
-        "lucatume/wp-browser": "<3.5",
+        "lucatume/wp-browser": "^4.5",
         "phpspec/prophecy-phpunit": "^2.0",
 
-        "codeception/module-asserts": "^1.0",
-        "codeception/module-phpbrowser": "^1.0",
-        "codeception/module-db": "^1.0",
-        "codeception/module-filesystem": "^1.0",
-        "codeception/module-cli": "^1.0",
+        "codeception/module-asserts": "^3.0",
+        "codeception/module-phpbrowser": "^3.0",
+        "codeception/module-db": "^3.0",
+        "codeception/module-filesystem": "^3.0",
+        "codeception/module-cli": "^2.0",
         "codeception/util-universalframework": "^1.0",
 
         "squizlabs/php_codesniffer": "*",
         "phpcompatibility/php-compatibility": "*",
         "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
 
-        "vimeo/psalm": "^5.6",
+        "phpstan/phpstan": "^1.12",
 
         "phpbench/phpbench": "^1.2",
         "phpmetrics/phpmetrics": "^2.8",
@@ -68,7 +70,6 @@
     },
     "autoload": {
         "psr-4": {
-            "ItalyStrap\\Bus\\": "bus/",
             "ItalyStrap\\ThemeJsonGenerator\\": "src/"
         },
         "files": [
@@ -96,8 +97,8 @@
         "cs:fix": [
             "@php ./vendor/bin/phpcbf -p"
         ],
-        "psalm": [
-            "@php ./vendor/bin/psalm --no-cache"
+        "stan": [
+            "@php ./vendor/bin/phpstan analyse --debug --no-progress"
         ],
         "unit": [
             "@php ./vendor/bin/codecept run unit"
@@ -124,7 +125,7 @@
         ],
         "qa": [
             "@cs",
-            "@psalm",
+            "@stan",
             "@rector",
             "@unit"
         ],
@@ -144,7 +145,7 @@
     "scripts-descriptions": {
         "cs": "Run Code Sniffer",
         "cs:fix": "Run Code Sniffer and fix errors",
-        "psalm": "Run Psalm",
+        "stan": "Run PHPStan",
         "unit": "Run Unit tests",
         "integration": "Run Integration tests",
         "infection": "Run Infection",
