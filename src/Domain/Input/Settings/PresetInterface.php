@@ -20,7 +20,7 @@ interface PresetInterface extends \Stringable
     public function __toString(): string;
 
     /**
-     * @return array<string, string|array|object>
+     * @return array<string, string|array<array-key, mixed>|object>
      */
     public function toArray(): array;
 }

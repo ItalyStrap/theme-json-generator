@@ -32,16 +32,25 @@ final class ThemeJson extends Config implements \JsonSerializable
         return $this->set(SectionNames::STYLES . '.css', $currentCss . $css);
     }
 
+    /**
+     * @param array<string, mixed> $config
+     */
     public function setElementStyle(string $elementName, array $config): bool
     {
         return $this->set(SectionNames::STYLES . '.elements.' . $elementName, $config);
     }
 
+    /**
+     * @param array<string, mixed> $config
+     */
     public function setBlockSettings(string $blockName, array $config): bool
     {
         return $this->set(SectionNames::SETTINGS . '.blocks.' . $blockName, $config);
     }
 
+    /**
+     * @param array<string, mixed> $config
+     */
     public function setBlockStyle(string $blockName, array $config): bool
     {
         return $this->set(SectionNames::STYLES . '.blocks.' . $blockName, $config);
@@ -75,6 +84,9 @@ final class ThemeJson extends Config implements \JsonSerializable
         return true;
     }
 
+    /**
+     * @return array<array-key, mixed>
+     */
     public function jsonSerialize(): array
     {
         return $this->getArrayCopy();

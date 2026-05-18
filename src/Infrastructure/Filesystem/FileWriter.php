@@ -9,6 +9,7 @@ use ItalyStrap\Config\ConfigInterface;
 interface FileWriter
 {
     /**
+     * @param ConfigInterface<array-key, mixed> $data
      * @throws \Exception
      */
     public function write(ConfigInterface $data): void;

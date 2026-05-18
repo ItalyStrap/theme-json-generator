@@ -20,17 +20,24 @@ class CustomToPresets
         $this->customs = $customs;
     }
 
+    /**
+     * @return Custom[]
+     */
     public function toArray(): array
     {
         return $this->presetsToFlat($this->customs);
     }
 
+    /**
+     * @param array<string, mixed> $presets
+     * @return Custom[]
+     */
     private function presetsToFlat(array $presets, string $prefix = ''): array
     {
         $processed = [];
 
         /**
-         * @var string|array|\Stringable $value
+         * @var string|array<string, mixed>|\Stringable $value
          */
         foreach ($presets as $key => $value) {
             $fullKey = (string)($prefix === '' ? $key : $prefix . '.' . $key);

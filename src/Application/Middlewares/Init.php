@@ -7,6 +7,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Application\Middlewares;
 use Brick\VarExporter\VarExporter;
 use ItalyStrap\Pipeline\HandlerInterface;
 use ItalyStrap\Pipeline\MiddlewareInterface;
+use ItalyStrap\ThemeJsonGenerator\Application\Message;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\DataFromJsonTrait;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FilesFinder;
 use PhpParser\Error;
@@ -53,6 +54,9 @@ TEMPLATE;
         $this->filesFinder = $filesFinder;
     }
 
+    /**
+     * @phpstan-param Message $message
+     */
     public function process(object $message, HandlerInterface $handler): int
     {
         /**

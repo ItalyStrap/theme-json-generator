@@ -68,7 +68,7 @@ class FilesFinder
     public function resolveJsonFile(\SplFileInfo $file): string
     {
         $fileName = $this->extractFileName($file);
-        $themeRoot = \getcwd();
+        $themeRoot = (string)\getcwd();
         $stylesFolder = '';
         if ($fileName !== self::ROOT_FILE_NAME) {
             $stylesFolder = self::STYLES_FOLDER;
@@ -84,6 +84,10 @@ class FilesFinder
         }
 
         $styleCssContent = \file_get_contents($styleCss);
+        if ($styleCssContent === false) {
+            throw new \RuntimeException('Unable to read the style.css file');
+        }
+
         if (\strpos($styleCssContent, 'Theme Name:') === false) {
             throw new \RuntimeException('The style.css file is not a valid WordPress theme');
         }

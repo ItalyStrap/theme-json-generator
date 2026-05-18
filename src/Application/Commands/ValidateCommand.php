@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Application\Commands;
 
-use ItalyStrap\Pipeline\HandlerInterface;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\RootFolderTrait;
 use ItalyStrap\ThemeJsonGenerator\Application\ValidateMessage;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\DataFromJsonTrait;
+use ItalyStrap\ThemeJsonGenerator\Infrastructure\Handler\ConsoleHandler;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -22,10 +22,10 @@ class ValidateCommand extends Command
 
     public const NAME = 'validate';
     public const DESCRIPTION = 'Validate theme.json file';
-    private HandlerInterface $handler;
+    private ConsoleHandler $handler;
 
     public function __construct(
-        HandlerInterface $handler
+        ConsoleHandler $handler
     ) {
         $this->handler = $handler;
         parent::__construct();
@@ -52,10 +52,10 @@ class ValidateCommand extends Command
         $rootFolder = $this->rootFolder();
         $schemaPath = $rootFolder . '/theme.schema.json';
 
-        $message = new ValidateMessage($rootFolder, $schemaPath, (bool)$input->getOption('force'));
+        $message = new ValidateMessage($rootFolder, $schemaPath, $input->getOption('force') === true);
 
         try {
-            return (int)$this->handler->handle($message);
+            return $this->handler->handle($message);
         } catch (\Exception $exception) {
             $output->writeln('<error>Error: ' . $exception->getMessage() . '</error>');
             return Command::FAILURE;

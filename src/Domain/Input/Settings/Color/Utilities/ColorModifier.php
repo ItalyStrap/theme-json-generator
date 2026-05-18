@@ -202,7 +202,7 @@ final class ColorModifier implements ColorModifierInterface
 
     /**
      * @param ColorInterface $newColor
-     * @return mixed
+     * @return ColorInterface
      * @throws Exception
      */
     private function callMethodOnColorObject(ColorInterface $newColor): ColorInterface

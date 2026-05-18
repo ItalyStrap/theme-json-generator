@@ -1,0 +1,18 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Auryn;
+
+class Injector
+{
+    /**
+     * @template T of object
+     * @param string $name
+     * @param array<string, mixed> $args
+     * @return ($name is class-string<T> ? T : mixed)
+     */
+    public function make($name, array $args = array())
+    {
+    }
+}

@@ -157,7 +157,7 @@ class Css implements CssInterface
         $pattern = '/\{(.*)}/s';
         \preg_match($pattern, $css, $matches);
 
-        if (!isset($matches[1])) {
+        if (!isset($matches[0], $matches[1])) {
             return $css;
         }
 

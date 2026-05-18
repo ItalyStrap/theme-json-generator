@@ -57,6 +57,9 @@ final class Spacing implements ArrayableInterface, \JsonSerializable
      * Three values => 10px auto 0px => 10px auto 0px auto
      * Four values => 1px 2px 3px 4px => 1px 2px 3px 4px
      */
+    /**
+     * @param string[] $values
+     */
     public function shorthand(array $values): self
     {
         switch (\count($values)) {

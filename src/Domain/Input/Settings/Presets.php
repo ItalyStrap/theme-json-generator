@@ -112,6 +112,9 @@ class Presets implements PresetsInterface, \JsonSerializable
         return $this;
     }
 
+    /**
+     * @return array<array-key, mixed>
+     */
     public function toArray(): array
     {
         $field = $this->field;
@@ -127,7 +130,8 @@ class Presets implements PresetsInterface, \JsonSerializable
             return $this->processCustomCollection($fetched);
         }
 
-        return $this->processPresetCollection($fetched);
+        /** @var PresetInterface[] $fetched */
+        return $this->processPresetCollection(...$fetched);
     }
 
     /**
@@ -139,7 +143,11 @@ class Presets implements PresetsInterface, \JsonSerializable
         return $this->toArray();
     }
 
-    private function processPresetCollection(array $collection): array
+    /**
+     * @param PresetInterface ...$collection
+     * @return array<int, array<string, mixed>>
+     */
+    private function processPresetCollection(PresetInterface ...$collection): array
     {
         return \array_values(\array_map(
             function (PresetInterface $item): array {
@@ -160,7 +168,7 @@ class Presets implements PresetsInterface, \JsonSerializable
 
     /**
      * @param array<array-key, mixed> $collection
-     * @param array-key|string $prefix
+     * @param string $prefix
      * @return array<array-key, mixed>
      */
     private function processCustomCollection(array $collection, string $prefix = ''): array
@@ -194,6 +202,9 @@ class Presets implements PresetsInterface, \JsonSerializable
         }
     }
 
+    /**
+     * @return array<array-key, mixed>
+     */
     public function jsonSerialize(): array
     {
         return $this->toArray();

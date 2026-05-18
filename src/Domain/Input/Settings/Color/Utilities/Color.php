@@ -36,7 +36,15 @@ final class Color implements ColorInterface
         if ($reflected->hasProperty('alpha')) {
             $reflectionProperty = $reflected->getProperty('alpha');
             $reflectionProperty->setAccessible(true);
-            $this->alpha = $reflectionProperty->getValue($this->spatieColor);
+            $alpha = $reflectionProperty->getValue($this->spatieColor);
+            if (!\is_string($alpha) && !\is_float($alpha) && !\is_int($alpha)) {
+                throw new \RuntimeException(\sprintf(
+                    'Expected alpha to be string, float, or int, got %s.',
+                    \get_debug_type($alpha)
+                ));
+            }
+
+            $this->alpha = \is_int($alpha) ? (float)$alpha : $alpha;
             $reflectionProperty->setAccessible(false);
         }
 
@@ -186,10 +194,7 @@ final class Color implements ColorInterface
         return (string)$this->spatieColor;
     }
 
-    /**
-     * @param mixed $alpha
-     */
-    private function fromHexToFloat($alpha): float
+    private function fromHexToFloat(string|int|float $alpha): float
     {
         return \is_string($alpha) ? \hexdec($alpha) / 255 : (float)$alpha;
     }

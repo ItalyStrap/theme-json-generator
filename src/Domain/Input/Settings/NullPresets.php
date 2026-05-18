@@ -28,4 +28,9 @@ class NullPresets implements PresetsInterface
     {
         return $content;
     }
+
+    public function toArrayByCategory(string $category): array
+    {
+        return [];
+    }
 }

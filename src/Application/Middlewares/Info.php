@@ -23,9 +23,11 @@ class Info implements MiddlewareInterface
         $this->filesFinder = $filesFinder;
     }
 
+    /**
+     * @phpstan-param Message $message
+     */
     public function process(object $message, HandlerInterface $handler): int
     {
-        /** @var Message $message */
         foreach ($this->filesFinder->find($message->getRootFolder(), 'json') as $file) {
             echo $file->getBasename() . PHP_EOL;
         }

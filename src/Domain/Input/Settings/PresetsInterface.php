@@ -20,4 +20,9 @@ interface PresetsInterface
     public function get(string $key, $default = null);
 
     public function parse(string $content): string;
+
+    /**
+     * @return array<array-key, mixed>
+     */
+    public function toArrayByCategory(string $category): array;
 }

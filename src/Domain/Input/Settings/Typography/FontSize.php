@@ -33,6 +33,9 @@ class FontSize implements PresetInterface
         $this->fluid = $fluid;
     }
 
+    /**
+     * @return array{slug: string, name: string, size: string, fluid?: Fluid}
+     */
     public function toArray(): array
     {
         return \array_filter([

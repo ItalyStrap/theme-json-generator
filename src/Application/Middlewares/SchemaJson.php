@@ -7,19 +7,23 @@ namespace ItalyStrap\ThemeJsonGenerator\Application\Middlewares;
 use ItalyStrap\Pipeline\HandlerInterface;
 use ItalyStrap\Pipeline\MiddlewareInterface;
 use ItalyStrap\ThemeJsonGenerator\Application\ValidateMessage;
+use ItalyStrap\ThemeJsonGenerator\Infrastructure\Handler\ConsoleHandler;
 use Webimpress\SafeWriter\FileWriter;
 
 class SchemaJson implements MiddlewareInterface
 {
+    /**
+     * @phpstan-param ValidateMessage $message
+     * @phpstan-param ConsoleHandler $handler
+     */
     public function process(object $message, HandlerInterface $handler): int
     {
-        /** @var ValidateMessage $message */
         $schemaPath = $message->getSchemaPath();
         if (!\file_exists($schemaPath) || $this->isFileSchemaOlderThanOneWeek($schemaPath)) {
             $this->createFileSchema($schemaPath);
         }
 
-        return (int)$handler->handle($message);
+        return $handler->handle($message);
     }
 
     private function isFileSchemaOlderThanOneWeek(string $schemaPath): bool

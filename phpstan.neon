@@ -1,9 +1,11 @@
 parameters:
-    level: 1
+    level: 9
     paths:
         - bin
         - functions
         - src
+    stubFiles:
+        - stubs/auryn-injector.stub
     excludePaths:
         analyse:
             - src/**/*Experimental*.php

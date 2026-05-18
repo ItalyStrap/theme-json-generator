@@ -7,17 +7,21 @@ namespace ItalyStrap\ThemeJsonGenerator\Application\Middlewares;
 use ItalyStrap\Pipeline\HandlerInterface;
 use ItalyStrap\Pipeline\MiddlewareInterface;
 use ItalyStrap\ThemeJsonGenerator\Application\ValidateMessage;
+use ItalyStrap\ThemeJsonGenerator\Infrastructure\Handler\ConsoleHandler;
 
 class DeleteSchemaJson implements MiddlewareInterface
 {
+    /**
+     * @phpstan-param ValidateMessage $message
+     * @phpstan-param ConsoleHandler $handler
+     */
     public function process(object $message, HandlerInterface $handler): int
     {
-        /** @var ValidateMessage $message */
         $schemaPath = $message->getSchemaPath();
         if ($message->shouldRecreate() && \file_exists($schemaPath)) {
             \unlink($schemaPath);
         }
 
-        return (int)$handler->handle($message);
+        return $handler->handle($message);
     }
 }

@@ -15,6 +15,7 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetsInterface;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FilesFinder;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\JsonFileWriter;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\ScssFileWriter;
+use ItalyStrap\ThemeJsonGenerator\Infrastructure\Handler\ConsoleHandler;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -35,6 +36,10 @@ class Dump implements MiddlewareInterface
         $this->filesFinder = $filesFinder;
     }
 
+    /**
+     * @phpstan-param DumpMessage $message
+     * @phpstan-param ConsoleHandler $handler
+     */
     public function process(object $message, HandlerInterface $handler): int
     {
         /**
@@ -53,6 +58,7 @@ class Dump implements MiddlewareInterface
             $injector->execute(require $file);
             $presets = $injector->make(PresetsInterface::class);
             $themeJson = $injector->make(ThemeJson::class);
+
             $themeJson->setPresets($presets);
             $count++;
 
@@ -78,9 +84,12 @@ class Dump implements MiddlewareInterface
             $output->writeln(self::M_NO_FILE_FOUND);
         }
 
-        return (int)$handler->handle($message);
+        return $handler->handle($message);
     }
 
+    /**
+     * @param ThemeJson<array-key, mixed> $themeJson
+     */
     private function generateJsonFile(
         OutputInterface $output,
         DumpMessage $message,
@@ -104,6 +113,9 @@ class Dump implements MiddlewareInterface
         $output->writeln('========================');
     }
 
+    /**
+     * @param ThemeJson<array-key, mixed> $themeJson
+     */
     private function generateScssFile(
         OutputInterface $output,
         DumpMessage $message,
@@ -151,15 +163,24 @@ class Dump implements MiddlewareInterface
         return $injector;
     }
 
+    /**
+     * @param ConfigInterface<array-key, mixed> $config
+     */
     private function createContainer(
         \Auryn\Injector $injector,
-        \ItalyStrap\Config\ConfigInterface $config
+        ConfigInterface $config
     ): ContainerInterface {
         return new class ($injector, $config) implements ContainerInterface {
             private \Auryn\Injector $injector;
 
+            /**
+             * @var ConfigInterface<array-key, mixed>
+             */
             private ConfigInterface $config;
 
+            /**
+             * @param ConfigInterface<array-key, mixed> $config
+             */
             public function __construct(\Auryn\Injector $injector, ConfigInterface $config)
             {
                 $this->injector = $injector;
