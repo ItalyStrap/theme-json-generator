@@ -97,7 +97,7 @@
         "cs:fix": [
             "@php ./vendor/bin/phpcbf -p"
         ],
-        "phpstan": [
+        "stan": [
             "@php ./vendor/bin/phpstan analyse --debug --no-progress"
         ],
         "unit": [
@@ -125,7 +125,7 @@
         ],
         "qa": [
             "@cs",
-            "@phpstan",
+            "@stan",
             "@rector",
             "@unit"
         ],
@@ -145,7 +145,7 @@
     "scripts-descriptions": {
         "cs": "Run Code Sniffer",
         "cs:fix": "Run Code Sniffer and fix errors",
-        "phpstan": "Run PHPStan",
+        "stan": "Run PHPStan",
         "unit": "Run Unit tests",
         "integration": "Run Integration tests",
         "infection": "Run Infection",

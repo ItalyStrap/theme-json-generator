@@ -96,10 +96,10 @@ cs/fix: up	### Run the code sniffer and fix the errors
 
 # PHPStan commands
 
-.PHONY: phpstan
-phpstan: up	### Run PHPStan
+.PHONY: stan
+stan: up	### Run PHPStan
 	@echo "Running PHPStan"
-	@$(DOCKER_DIR) ./composer phpstan
+	@$(DOCKER_DIR) ./composer stan
 
 # Codeception commands
 
@@ -138,7 +138,7 @@ acceptance: up	### Run the acceptance tests
 tests: unit	integration functional ### Run unit and integration tests
 
 .PHONY: qa
-qa: cs phpstan unit integration functional ### Run all the tests
+qa: cs stan unit integration functional ### Run all the tests
 
 # Infection commands
 
