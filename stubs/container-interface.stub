@@ -1,0 +1,15 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Psr\Container;
+
+interface ContainerInterface
+{
+    /**
+     * @template T of object
+     * @param string $id
+     * @return ($id is class-string<T> ? T : mixed)
+     */
+    public function get(string $id);
+}
