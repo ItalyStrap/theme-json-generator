@@ -15,7 +15,6 @@ class InitTest extends UnitTestCase
     private function makeInstance(): Init
     {
         return new Init(
-            $this->makeDispatcher(),
             $this->makeFilesFinder(),
         );
     }

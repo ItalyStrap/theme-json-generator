@@ -21,6 +21,9 @@ class ScssFileWriter implements FileWriter
         $this->path = $path;
     }
 
+    /**
+     * @param ConfigInterface<array-key, mixed> $data
+     */
     public function write(ConfigInterface $data): void
     {
         if (\count($data) === 0) {
@@ -35,7 +38,7 @@ class ScssFileWriter implements FileWriter
     }
 
     /**
-     * @param ConfigInterface $data
+     * @param ConfigInterface<array-key, mixed> $data
      * @return string
      */
     private function generateScssContent(ConfigInterface $data): string

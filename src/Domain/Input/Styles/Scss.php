@@ -11,7 +11,6 @@ use ScssPhp\ScssPhp\Compiler;
 use ScssPhp\ScssPhp\OutputStyle;
 
 /**
- * @psalm-api
  * @see ScssTest
  */
 class Scss implements CssInterface

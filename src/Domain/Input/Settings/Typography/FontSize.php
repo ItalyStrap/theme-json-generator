@@ -8,9 +8,6 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetTrait;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\Utilities\Fluid;
 
-/**
- * @psalm-api
- */
 class FontSize implements PresetInterface
 {
     use PresetTrait;
@@ -36,6 +33,9 @@ class FontSize implements PresetInterface
         $this->fluid = $fluid;
     }
 
+    /**
+     * @return array{slug: string, name: string, size: string, fluid?: Fluid}
+     */
     public function toArray(): array
     {
         return \array_filter([

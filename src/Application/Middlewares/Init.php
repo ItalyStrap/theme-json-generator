@@ -7,6 +7,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Application\Middlewares;
 use Brick\VarExporter\VarExporter;
 use ItalyStrap\Pipeline\HandlerInterface;
 use ItalyStrap\Pipeline\MiddlewareInterface;
+use ItalyStrap\ThemeJsonGenerator\Application\Message;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\DataFromJsonTrait;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FilesFinder;
 use PhpParser\Error;
@@ -14,16 +15,12 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\NodeFinder;
 use PhpParser\ParserFactory;
-use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\OutputInterface;
 use Webimpress\SafeWriter\Exception\ExceptionInterface as FileWriterException;
 use Webimpress\SafeWriter\FileWriter;
 use Webmozart\Assert\Assert;
 
-/**
- * @psalm-api
- */
 class Init implements MiddlewareInterface
 {
     use DataFromJsonTrait;
@@ -52,12 +49,14 @@ TEMPLATE;
     private FilesFinder $filesFinder;
 
     public function __construct(
-        EventDispatcherInterface $dispatcher,
         FilesFinder $filesFinder
     ) {
         $this->filesFinder = $filesFinder;
     }
 
+    /**
+     * @phpstan-param Message $message
+     */
     public function process(object $message, HandlerInterface $handler): int
     {
         /**

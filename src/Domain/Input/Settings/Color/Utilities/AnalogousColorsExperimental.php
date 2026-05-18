@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities;
 
-/**
- * @psalm-api
- */
 class AnalogousColorsExperimental implements ColorsGenerator
 {
     private ColorModifierInterface $colorModifier;

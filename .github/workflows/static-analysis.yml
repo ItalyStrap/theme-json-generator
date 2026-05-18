@@ -6,7 +6,7 @@ on:
     paths:
       - '**workflows/static-analysis.yml'
       - '**.php'
-      - '**psalm.xml'
+      - '**phpstan.neon'
       - '**composer.json'
 
 jobs:
@@ -27,5 +27,5 @@ jobs:
 
       - uses: ramsey/composer-install@v3
 
-      - name: Psalm
-        run: vendor/bin/psalm
+      - name: PHPStan
+        run: composer stan

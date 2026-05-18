@@ -6,9 +6,6 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities;
 
 use Exception;
 
-/**
- * @psalm-api
- */
 final class ColorModifier implements ColorModifierInterface
 {
     private ColorInterface $color;
@@ -137,10 +134,6 @@ final class ColorModifier implements ColorModifierInterface
         );
     }
 
-    /**
-     * @psalm-suppress MixedInferredReturnType
-     * @psalm-suppress MixedReturnStatement
-     */
     private function createNewColorFrom(
         string $hue,
         string $saturation,
@@ -161,8 +154,6 @@ final class ColorModifier implements ColorModifierInterface
     /**
      * @todo Is it a good idea to make it public?
      *       Evaluate possible side effects.
-     * @psalm-suppress MixedInferredReturnType
-     * @psalm-suppress MixedReturnStatement
      */
     private function mixWith(string $color_string, float $weight = 0): ColorInterface
     {
@@ -211,7 +202,7 @@ final class ColorModifier implements ColorModifierInterface
 
     /**
      * @param ColorInterface $newColor
-     * @return mixed
+     * @return ColorInterface
      * @throws Exception
      */
     private function callMethodOnColorObject(ColorInterface $newColor): ColorInterface

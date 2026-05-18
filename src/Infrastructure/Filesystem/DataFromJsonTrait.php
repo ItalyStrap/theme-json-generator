@@ -6,6 +6,9 @@ namespace ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem;
 
 trait DataFromJsonTrait
 {
+    /**
+     * @return array<array-key, mixed>
+     */
     private function associativeFromPath(string $path): array
     {
         return (array)$this->fromPath($path, true);

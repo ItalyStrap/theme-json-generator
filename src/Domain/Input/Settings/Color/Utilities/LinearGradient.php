@@ -6,9 +6,6 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities;
 
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Palette;
 
-/**
- * @psalm-api
- */
 class LinearGradient implements GradientInterface
 {
     private string $direction = '';

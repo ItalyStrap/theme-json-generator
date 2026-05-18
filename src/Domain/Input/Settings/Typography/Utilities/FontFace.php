@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\Utilities;
 
-/**
- * @psalm-api
- */
 class FontFace
 {
     private string $fontFamily;
@@ -17,8 +14,14 @@ class FontFace
 
     private string $fontStretch;
 
+    /**
+     * @var string[]
+     */
     private array $src;
 
+    /**
+     * @param string[] $src
+     */
     public function __construct(
         string $fontFamily,
         string $fontWeight,
@@ -34,7 +37,7 @@ class FontFace
     }
 
     /**
-     * @return array{fontFamily: string, fontWeight: string, fontStyle: string, fontStretch: string, src: mixed[]}
+     * @return array{fontFamily: string, fontWeight: string, fontStyle: string, fontStretch: string, src: string[]}
      */
     public function toArray(): array
     {

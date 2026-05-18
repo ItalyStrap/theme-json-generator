@@ -4,18 +4,15 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Application\Commands;
 
-use ItalyStrap\Pipeline\HandlerInterface;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\RootFolderTrait;
 use ItalyStrap\ThemeJsonGenerator\Application\Message;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\DataFromJsonTrait;
+use ItalyStrap\ThemeJsonGenerator\Infrastructure\Handler\ConsoleHandler;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * @psalm-api
- */
 #[AsCommand(name: InitCommand::NAME, description: InitCommand::DESCRIPTION)]
 class InitCommand extends Command
 {
@@ -26,10 +23,10 @@ class InitCommand extends Command
 
     public const DESCRIPTION = 'Initialize theme.json file';
 
-    private HandlerInterface $handler;
+    private ConsoleHandler $handler;
 
     public function __construct(
-        HandlerInterface $handler,
+        ConsoleHandler $handler,
     ) {
         $this->handler = $handler;
         parent::__construct();
@@ -55,7 +52,7 @@ class InitCommand extends Command
         $message = new Message($rootFolder);
 
         try {
-            return (int)$this->handler->handle($message);
+            return $this->handler->handle($message);
         } catch (\Exception $exception) {
             $output->writeln('<error>Error: ' . $exception->getMessage() . '</error>');
             return Command::FAILURE;

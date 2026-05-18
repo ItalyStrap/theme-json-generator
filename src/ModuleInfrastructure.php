@@ -12,6 +12,9 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 
 class ModuleInfrastructure implements \ItalyStrap\Empress\ModuleInterface
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function __invoke(): array
     {
         return [

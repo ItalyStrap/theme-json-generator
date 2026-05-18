@@ -17,7 +17,6 @@ use Sabberworm\CSS\Property\Selector;
  * @link https://www.google.it/search?q=php+inline+css+content&sca_esv=596560865&ei=mAicZaTCGp3Axc8Pq7yT8AQ&ved=0ahUKEwik7p-Rgs6DAxUdYPEDHSveBE4Q4dUDCBA&uact=5&oq=php+inline+css+content&gs_lp=Egxnd3Mtd2l6LXNlcnAiFnBocCBpbmxpbmUgY3NzIGNvbnRlbnQyBRAhGKABMgUQIRigATIIECEYFhgeGB0yCBAhGBYYHhgdMggQIRgWGB4YHUjvogFQmgdYwJcBcAF4AZABAJgBsQGgAZkSqgEEMC4xOLgBA8gBAPgBAcICChAAGEcY1gQYsAPCAgoQABiABBiKBRhDwgIFEAAYgATCAgYQABgWGB7CAgcQABiABBgTwgIIEAAYFhgeGBPiAwQYACBBiAYBkAYI&sclient=gws-wiz-serp#ip=1
  * @link https://github.com/topics/inline-css?l=php
  *
- * @psalm-api
  * @see CssTest
  */
 class Css implements CssInterface
@@ -158,7 +157,7 @@ class Css implements CssInterface
         $pattern = '/\{(.*)}/s';
         \preg_match($pattern, $css, $matches);
 
-        if (!isset($matches[1])) {
+        if (!isset($matches[0], $matches[1])) {
             return $css;
         }
 

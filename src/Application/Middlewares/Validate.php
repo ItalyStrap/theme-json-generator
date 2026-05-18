@@ -9,6 +9,7 @@ use ItalyStrap\Pipeline\MiddlewareInterface;
 use ItalyStrap\ThemeJsonGenerator\Application\ValidateMessage;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\DataFromJsonTrait;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FilesFinder;
+use ItalyStrap\ThemeJsonGenerator\Infrastructure\Handler\ConsoleHandler;
 use JsonSchema\Validator;
 use ScssPhp\ScssPhp\Compiler;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -33,6 +34,10 @@ class Validate implements MiddlewareInterface
         $this->compiler = $compiler;
     }
 
+    /**
+     * @phpstan-param ValidateMessage $message
+     * @phpstan-param ConsoleHandler $handler
+     */
     public function process(object $message, HandlerInterface $handler): mixed
     {
         /**
@@ -40,7 +45,6 @@ class Validate implements MiddlewareInterface
          */
         $output = new \Symfony\Component\Console\Output\ConsoleOutput();
 
-        /** @var ValidateMessage $message */
         foreach ($this->filesFinder->find($message->getRootFolder(), 'json') as $file) {
             $output->writeln('========================');
             $output->writeln(\sprintf(
@@ -56,7 +60,7 @@ class Validate implements MiddlewareInterface
             $this->compiler->compileString('');
         }
 
-        return (int)$handler->handle($message);
+        return $handler->handle($message);
     }
 
     private function validateJsonFile(

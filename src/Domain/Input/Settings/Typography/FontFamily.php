@@ -7,9 +7,6 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetTrait;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetInterface;
 
-/**
- * @psalm-api
- */
 class FontFamily implements PresetInterface
 {
     use PresetTrait;

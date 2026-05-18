@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings;
 
-/**
- * @psalm-api
- */
 interface PresetsInterface
 {
     public function add(PresetInterface $item): self;
@@ -23,4 +20,9 @@ interface PresetsInterface
     public function get(string $key, $default = null);
 
     public function parse(string $content): string;
+
+    /**
+     * @return array<array-key, mixed>
+     */
+    public function toArrayByCategory(string $category): array;
 }

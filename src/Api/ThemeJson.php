@@ -15,11 +15,9 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\FontFamily;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\FontSize;
 
 /**
- * @psalm-api
  * @template TKey as array-key
  * @template TValue
  * @template-extends Config<TKey,TValue>
- * @psalm-suppress DeprecatedInterface
  */
 final class ThemeJson extends Config implements \JsonSerializable
 {
@@ -34,16 +32,25 @@ final class ThemeJson extends Config implements \JsonSerializable
         return $this->set(SectionNames::STYLES . '.css', $currentCss . $css);
     }
 
+    /**
+     * @param array<string, mixed> $config
+     */
     public function setElementStyle(string $elementName, array $config): bool
     {
         return $this->set(SectionNames::STYLES . '.elements.' . $elementName, $config);
     }
 
+    /**
+     * @param array<string, mixed> $config
+     */
     public function setBlockSettings(string $blockName, array $config): bool
     {
         return $this->set(SectionNames::SETTINGS . '.blocks.' . $blockName, $config);
     }
 
+    /**
+     * @param array<string, mixed> $config
+     */
     public function setBlockStyle(string $blockName, array $config): bool
     {
         return $this->set(SectionNames::STYLES . '.blocks.' . $blockName, $config);
@@ -68,7 +75,6 @@ final class ThemeJson extends Config implements \JsonSerializable
 
         foreach ($keys as $key => $value) {
             try {
-                /**  @psalm-suppress UndefinedInterfaceMethod */
                 $this->set($key, $presets->toArrayByCategory($value));
             } catch (\Exception $e) {
                 continue;
@@ -78,6 +84,9 @@ final class ThemeJson extends Config implements \JsonSerializable
         return true;
     }
 
+    /**
+     * @return array<array-key, mixed>
+     */
     public function jsonSerialize(): array
     {
         return $this->getArrayCopy();

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Application\Commands;
 
-use ItalyStrap\Pipeline\HandlerInterface;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\RootFolderTrait;
 use ItalyStrap\ThemeJsonGenerator\Application\DumpMessage;
+use ItalyStrap\ThemeJsonGenerator\Infrastructure\Handler\ConsoleHandler;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -14,9 +14,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
-/**
- * @psalm-api
- */
 #[AsCommand(name: DumpCommand::NAME, description: DumpCommand::DESCRIPTION)]
 final class DumpCommand extends Command
 {
@@ -49,10 +46,10 @@ final class DumpCommand extends Command
      */
     public const FILE = 'file';
 
-    private HandlerInterface $handler;
+    private ConsoleHandler $handler;
 
     public function __construct(
-        HandlerInterface $handler
+        ConsoleHandler $handler
     ) {
         $this->handler = $handler;
         parent::__construct();
@@ -116,17 +113,20 @@ final class DumpCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $rootFolder = $this->rootFolder((string)$input->getOption('path'));
+        $path = $input->getOption('path');
+        $file = $input->getOption(self::FILE);
+
+        $rootFolder = $this->rootFolder(\is_string($path) ? $path : '');
 
         $message = new DumpMessage(
             $rootFolder,
             '',
-            (bool)$input->getOption('dry-run'),
-            (string)$input->getOption(self::FILE)
+            $input->getOption('dry-run') === true,
+            \is_string($file) ? $file : ''
         );
 
         try {
-            return (int)$this->handler->handle($message);
+            return $this->handler->handle($message);
         } catch (\Exception $exception) {
             $output->writeln('<error>Error: ' . $exception->getMessage() . '</error>');
             return Command::FAILURE;
