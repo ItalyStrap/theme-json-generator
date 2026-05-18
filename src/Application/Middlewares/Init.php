@@ -36,8 +36,8 @@ class Init implements MiddlewareInterface
 
 declare(strict_types=1);
 
+use ItalyStrap\ThemeJsonGenerator\Api\ThemeJson;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetsInterface;
-use ItalyStrap\ThemeJsonGenerator\Domain\ThemeJson\ThemeJson;
 use Psr\Container\ContainerInterface;
 
 return static function (ContainerInterface $container, PresetsInterface $presets, ThemeJson $themeJson) {

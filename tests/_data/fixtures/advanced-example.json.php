@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace ItalyStrap\Tests;
 
+use ItalyStrap\ThemeJsonGenerator\Api\SectionNames;
+use ItalyStrap\ThemeJsonGenerator\Api\ThemeJson;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Duotone;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Gradient;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Palette;
@@ -17,8 +19,6 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\FontFamily;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\FontSize;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles;
-use ItalyStrap\ThemeJsonGenerator\Domain\ThemeJson\SectionNames;
-use ItalyStrap\ThemeJsonGenerator\Domain\ThemeJson\ThemeJson;
 use Psr\Container\ContainerInterface;
 
 return static function (ThemeJson $themeJson, Presets $presets, ContainerInterface $container): void {

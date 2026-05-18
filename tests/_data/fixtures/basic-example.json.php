@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace ItalyStrap\Tests;
 
-use ItalyStrap\ThemeJsonGenerator\Domain\ThemeJson\SectionNames;
-use ItalyStrap\ThemeJsonGenerator\Domain\ThemeJson\ThemeJson;
+use ItalyStrap\ThemeJsonGenerator\Api\SectionNames;
+use ItalyStrap\ThemeJsonGenerator\Api\ThemeJson;
 
 return static function (ThemeJson $themeJson): void {
     $themeJson->merge([

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace ItalyStrap\Tests\Unit\Domain\Input\Styles;
 
+use ItalyStrap\ThemeJsonGenerator\Api\SectionNames;
+use ItalyStrap\ThemeJsonGenerator\Api\ThemeJson;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\CommonTrait;
-use ItalyStrap\ThemeJsonGenerator\Domain\ThemeJson\SectionNames;
-use ItalyStrap\ThemeJsonGenerator\Domain\ThemeJson\ThemeJson;
 
 trait CommonTests
 {

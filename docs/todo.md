@@ -160,7 +160,7 @@ declare(strict_types=1);
 
 namespace YourVendor\YourProject;
 
-use ItalyStrap\ThemeJsonGenerator\Domain\ThemeJson\ThemeJson;
+use ItalyStrap\ThemeJsonGenerator\Api\ThemeJson;
 
 return static function (ThemeJson $themeJson, PresetsInterface $presets): void {
 

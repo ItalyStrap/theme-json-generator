@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\ThemeJsonGenerator\Domain\ThemeJson;
+namespace ItalyStrap\ThemeJsonGenerator\Api;
 
 /**
  * @psalm-api

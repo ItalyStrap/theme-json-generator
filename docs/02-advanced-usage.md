@@ -43,8 +43,7 @@ declare(strict_types=1);
 
 namespace YourVendor\YourProject;
 
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Presets;
-use ItalyStrap\ThemeJsonGenerator\Domain\ThemeJson\ThemeJson;
+use ItalyStrap\ThemeJsonGenerator\Api\ThemeJson;use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Presets;
 
 return static function (ThemeJson $themeJson, Presets $presets): void {
     // ...
@@ -297,7 +296,7 @@ declare(strict_types=1);
 
 namespace YourVendor\YourProject;
 
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Presets;use ItalyStrap\ThemeJsonGenerator\Domain\ThemeJson\ThemeJson;use Psr\Container\ContainerInterface;
+use ItalyStrap\ThemeJsonGenerator\Api\ThemeJson;use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Presets;use Psr\Container\ContainerInterface;
 
 return static function (ThemeJson $themeJson, Presets $presets, ContainerInterface $container): void {
     // ...
@@ -442,7 +441,7 @@ declare(strict_types=1);
 
 namespace YourVendor\YourProject;
 
-use ItalyStrap\ThemeJsonGenerator\Domain\ThemeJson\ThemeJson;use Psr\Container\ContainerInterface;
+use ItalyStrap\ThemeJsonGenerator\Api\ThemeJson;use Psr\Container\ContainerInterface;
 
 return static function (ThemeJson $themeJson, ContainerInterface $container): void {
 // Utilize the $themeJson and $container for your configuration
@@ -462,7 +461,7 @@ declare(strict_types=1);
 
 namespace YourVendor\YourProject;
 
-use ItalyStrap\ThemeJsonGenerator\Domain\ThemeJson\ThemeJson;use Psr\Container\ContainerInterface;
+use ItalyStrap\ThemeJsonGenerator\Api\ThemeJson;use Psr\Container\ContainerInterface;
 
 return static function (ThemeJson $themeJson, ContainerInterface $container): void {
     /** @var SomeService $someService */
