@@ -13,9 +13,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * @psalm-api
- */
 #[AsCommand(name: InitCommand::NAME, description: InitCommand::DESCRIPTION)]
 class InitCommand extends Command
 {

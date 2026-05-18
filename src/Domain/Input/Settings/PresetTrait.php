@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings;
 
-/**
- * @psalm-api
- */
 trait PresetTrait
 {
     public function type(): string

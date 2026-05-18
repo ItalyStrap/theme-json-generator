@@ -18,9 +18,6 @@ use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\ScssFileWriter;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * @psalm-api
- */
 class Dump implements MiddlewareInterface
 {
     /**
@@ -53,7 +50,6 @@ class Dump implements MiddlewareInterface
          */
         foreach ($this->filesFinder->find($message->getRootFolder(), 'php') as $fileName => $file) {
             $injector = $this->configureContainer();
-            /** @psalm-suppress UnresolvableInclude */
             $injector->execute(require $file);
             $presets = $injector->make(PresetsInterface::class);
             $themeJson = $injector->make(ThemeJson::class);

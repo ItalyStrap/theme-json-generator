@@ -14,16 +14,12 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\NodeFinder;
 use PhpParser\ParserFactory;
-use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\OutputInterface;
 use Webimpress\SafeWriter\Exception\ExceptionInterface as FileWriterException;
 use Webimpress\SafeWriter\FileWriter;
 use Webmozart\Assert\Assert;
 
-/**
- * @psalm-api
- */
 class Init implements MiddlewareInterface
 {
     use DataFromJsonTrait;
@@ -52,7 +48,6 @@ TEMPLATE;
     private FilesFinder $filesFinder;
 
     public function __construct(
-        EventDispatcherInterface $dispatcher,
         FilesFinder $filesFinder
     ) {
         $this->filesFinder = $filesFinder;

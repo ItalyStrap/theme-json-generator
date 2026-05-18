@@ -13,9 +13,6 @@ use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\CommandLoader\ContainerCommandLoader;
 
-/**
- * @psalm-api
- */
 final class Bootstrap
 {
     public function container(): ContainerInterface

@@ -8,9 +8,6 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\Gradient
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetTrait;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetInterface;
 
-/**
- * @psalm-api
- */
 class Gradient implements PresetInterface
 {
     use PresetTrait;

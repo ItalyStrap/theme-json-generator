@@ -11,7 +11,6 @@ use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FilesFinder;
 use Symfony\Component\Console\Command\Command;
 
 /**
- * @psalm-api
  * @todo Implement the logic
  */
 class Info implements MiddlewareInterface

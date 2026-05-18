@@ -8,9 +8,6 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetTrait;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\Utilities\Fluid;
 
-/**
- * @psalm-api
- */
 class FontSize implements PresetInterface
 {
     use PresetTrait;

@@ -94,12 +94,12 @@ cs/fix: up	### Run the code sniffer and fix the errors
 	@$(DOCKER_DIR) ./composer cs:fix
 	@$(FILES_OWNERSHIP)
 
-# Psalm commands
+# PHPStan commands
 
-.PHONY: psalm
-psalm: up	### Run the psalm
-	@echo "Running the psalm"
-	@$(DOCKER_DIR) ./composer psalm
+.PHONY: phpstan
+phpstan: up	### Run PHPStan
+	@echo "Running PHPStan"
+	@$(DOCKER_DIR) ./composer phpstan
 
 # Codeception commands
 
@@ -138,7 +138,7 @@ acceptance: up	### Run the acceptance tests
 tests: unit	integration functional ### Run unit and integration tests
 
 .PHONY: qa
-qa: cs psalm unit integration functional ### Run all the tests
+qa: cs phpstan unit integration functional ### Run all the tests
 
 # Infection commands
 
@@ -181,7 +181,7 @@ docker/metrics:	### Run the phpmetrics
 
 .PHONY: metrics
 metrics: up	### Run the composer/metrics
-	@echo "Running the psalm"
+	@echo "Running phpmetrics"
 	@$(DOCKER_DIR) ./composer metrics
 
 # Generate commands

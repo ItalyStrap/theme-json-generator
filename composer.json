@@ -55,7 +55,7 @@
         "phpcompatibility/php-compatibility": "*",
         "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
 
-        "vimeo/psalm": "^5.6",
+        "phpstan/phpstan": "^1.12",
 
         "phpbench/phpbench": "^1.2",
         "phpmetrics/phpmetrics": "^2.8",
@@ -97,8 +97,8 @@
         "cs:fix": [
             "@php ./vendor/bin/phpcbf -p"
         ],
-        "psalm": [
-            "@php ./vendor/bin/psalm --no-cache"
+        "phpstan": [
+            "@php ./vendor/bin/phpstan analyse --debug --no-progress"
         ],
         "unit": [
             "@php ./vendor/bin/codecept run unit"
@@ -125,7 +125,7 @@
         ],
         "qa": [
             "@cs",
-            "@psalm",
+            "@phpstan",
             "@rector",
             "@unit"
         ],
@@ -145,7 +145,7 @@
     "scripts-descriptions": {
         "cs": "Run Code Sniffer",
         "cs:fix": "Run Code Sniffer and fix errors",
-        "psalm": "Run Psalm",
+        "phpstan": "Run PHPStan",
         "unit": "Run Unit tests",
         "integration": "Run Integration tests",
         "infection": "Run Infection",

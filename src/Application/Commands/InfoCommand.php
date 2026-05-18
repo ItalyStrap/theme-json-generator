@@ -12,9 +12,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * @psalm-api
- */
 #[AsCommand(name: InfoCommand::NAME, description: InfoCommand::DESCRIPTION)]
 class InfoCommand extends Command
 {

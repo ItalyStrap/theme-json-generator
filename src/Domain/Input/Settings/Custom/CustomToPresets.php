@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Custom;
 
-/**
- * @psalm-api
- */
 class CustomToPresets
 {
     /**

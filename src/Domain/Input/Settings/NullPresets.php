@@ -6,7 +6,6 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings;
 
 /**
  * @infection-ignore-all
- * @psalm-api
  */
 class NullPresets implements PresetsInterface
 {

@@ -9,7 +9,6 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Utilities;
  * https://github.com/pimlie/php-unit-conversion
  * https://github.com/PhpUnitsOfMeasure/php-units-of-measure
  * https://wiki.php.net/rfc/clamp
- * @psalm-api
  */
 final class DimensionExperimental
 {

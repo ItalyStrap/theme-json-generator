@@ -10,7 +10,6 @@ use ItalyStrap\Tests\Unit\Domain\Input\Settings\PresetsTest;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Custom\Custom;
 
 /**
- * @psalm-api
  * @see PresetsTest
  * @see PresetsIntegrationTest
  */
@@ -35,7 +34,6 @@ class Presets implements PresetsInterface, \JsonSerializable
 
         $this->assertIsUnique($key, $item);
 
-        /** @psalm-suppress MixedPropertyTypeCoercion */
         $this->insertValue(
             $this->collection,
             \explode('.', $key),

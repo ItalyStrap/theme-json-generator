@@ -6,9 +6,6 @@ namespace ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem;
 
 use ItalyStrap\Finder\FinderInterface;
 
-/**
- * @psalm-api
- */
 class FilesFinder
 {
     public const ROOT_FILE_NAME = 'theme';

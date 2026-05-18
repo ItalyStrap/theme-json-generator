@@ -8,9 +8,6 @@ use Spatie\Color\Color as SpatieColor;
 use Spatie\Color\Factory as ColorFactory;
 use Spatie\Color\Hsla;
 
-/**
- * @psalm-api
- */
 final class Color implements ColorInterface
 {
     private SpatieColor $spatieColor;
@@ -39,9 +36,6 @@ final class Color implements ColorInterface
         if ($reflected->hasProperty('alpha')) {
             $reflectionProperty = $reflected->getProperty('alpha');
             $reflectionProperty->setAccessible(true);
-            /**
-             * @psalm-suppress MixedAssignment
-             */
             $this->alpha = $reflectionProperty->getValue($this->spatieColor);
             $reflectionProperty->setAccessible(false);
         }

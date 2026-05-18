@@ -14,9 +14,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
-/**
- * @psalm-api
- */
 #[AsCommand(name: DumpCommand::NAME, description: DumpCommand::DESCRIPTION)]
 final class DumpCommand extends Command
 {
