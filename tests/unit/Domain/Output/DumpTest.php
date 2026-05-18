@@ -8,6 +8,7 @@ use ItalyStrap\Pipeline\CallbackHandler;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Application\DumpMessage;
 use ItalyStrap\ThemeJsonGenerator\Application\Middlewares\Dump;
+use ItalyStrap\ThemeJsonGenerator\Infrastructure\Container\ThemeJsonContainerFactory;
 use Prophecy\Argument;
 
 class DumpTest extends UnitTestCase
@@ -16,6 +17,7 @@ class DumpTest extends UnitTestCase
     {
         return new Dump(
             $this->makeFilesFinder(),
+            new ThemeJsonContainerFactory(),
         );
     }
 

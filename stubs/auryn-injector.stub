@@ -7,6 +7,22 @@ namespace Auryn;
 class Injector
 {
     /**
+     * @param mixed $value
+     */
+    public function defineParam(string $paramName, $value): void
+    {
+    }
+
+    /**
+     * @param callable $executable
+     * @param array<string, mixed> $args
+     * @return mixed
+     */
+    public function execute(callable $executable, array $args = array())
+    {
+    }
+
+    /**
      * @template T of object
      * @param string $name
      * @param array<string, mixed> $args

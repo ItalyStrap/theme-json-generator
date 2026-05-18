@@ -4,19 +4,15 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Application\Middlewares;
 
-use ItalyStrap\Config\Config;
-use ItalyStrap\Config\ConfigInterface;
 use ItalyStrap\Pipeline\HandlerInterface;
 use ItalyStrap\Pipeline\MiddlewareInterface;
 use ItalyStrap\ThemeJsonGenerator\Api\ThemeJson;
 use ItalyStrap\ThemeJsonGenerator\Application\DumpMessage;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Presets;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetsInterface;
+use ItalyStrap\ThemeJsonGenerator\Application\ThemeJsonContainerFactoryInterface;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FilesFinder;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\JsonFileWriter;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\ScssFileWriter;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Handler\ConsoleHandler;
-use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Dump implements MiddlewareInterface
@@ -30,10 +26,14 @@ class Dump implements MiddlewareInterface
 
     private FilesFinder $filesFinder;
 
+    private ThemeJsonContainerFactoryInterface $containerFactory;
+
     public function __construct(
-        FilesFinder $filesFinder
+        FilesFinder $filesFinder,
+        ThemeJsonContainerFactoryInterface $containerFactory
     ) {
         $this->filesFinder = $filesFinder;
+        $this->containerFactory = $containerFactory;
     }
 
     /**
@@ -48,25 +48,15 @@ class Dump implements MiddlewareInterface
         $output = new \Symfony\Component\Console\Output\ConsoleOutput();
 
         $count = 0;
+
         /**
          * Let's test the new workflow
          * @example $name => $file
          *         'theme' => 'theme.json'
          */
         foreach ($this->filesFinder->find($message->getRootFolder(), 'php') as $fileName => $file) {
-            $injector = $this->configureContainer();
-            $injector->execute(require $file);
-            $presets = $injector->make(PresetsInterface::class);
-            $themeJson = $injector->make(ThemeJson::class);
-
-            $themeJson->setPresets($presets);
+            $themeJson = $this->containerFactory->execute(require $file);
             $count++;
-
-            /**
-             * @todo Add subscription configuration.
-             */
-//            $dispatcher = $injector->make(EventDispatcherInterface::class);
-//            $dispatcher->dispatch($themeJson);
 
             if ($message->isDryRun()) {
                 $output->writeln(\sprintf(
@@ -138,86 +128,5 @@ class Dump implements MiddlewareInterface
             ));
             $output->writeln('========================');
         }
-    }
-
-    private function configureContainer(): \Auryn\Injector
-    {
-        $injector = new \Auryn\Injector();
-        $injector->share($injector);
-
-        $container = $this->createContainer($injector, new Config());
-        $injector->alias(ContainerInterface::class, \get_class($container));
-        $injector->share($container);
-
-        $injector->alias(PresetsInterface::class, Presets::class);
-        $injector->share(PresetsInterface::class);
-
-        /**
-         * Injector resolve to null if a param is nullable, so we need to be explicit and declare the param
-         * I need this for all the classes under the Styles namespace
-         */
-        $injector->defineParam('presets', $injector->make(PresetsInterface::class));
-
-        $injector->share(ThemeJson::class);
-
-        return $injector;
-    }
-
-    /**
-     * @param ConfigInterface<array-key, mixed> $config
-     */
-    private function createContainer(
-        \Auryn\Injector $injector,
-        ConfigInterface $config
-    ): ContainerInterface {
-        return new class ($injector, $config) implements ContainerInterface {
-            private \Auryn\Injector $injector;
-
-            /**
-             * @var ConfigInterface<array-key, mixed>
-             */
-            private ConfigInterface $config;
-
-            /**
-             * @param ConfigInterface<array-key, mixed> $config
-             */
-            public function __construct(\Auryn\Injector $injector, ConfigInterface $config)
-            {
-                $this->injector = $injector;
-                $this->config = $config;
-            }
-
-            public function get(string $id)
-            {
-                if (!$this->has($id)) {
-                    throw new class (\sprintf(
-                        'Service with ID %s not found.',
-                        $id
-                    )) extends \Exception implements \Psr\Container\NotFoundExceptionInterface {
-                    };
-                }
-
-                return $this->config->get($id, $this->injector->make($id));
-            }
-
-            public function has(string $id): bool
-            {
-                if ($this->config->has($id)) {
-                    return true;
-                }
-
-                if (\class_exists($id)) {
-                    return true;
-                }
-
-                return $this->injectorHas($id);
-            }
-
-            private function injectorHas(string $id): bool
-            {
-                $details = $this->injector->inspect($id, 31);
-                return (bool) \array_filter($details);
-            }
-        };
     }
 }

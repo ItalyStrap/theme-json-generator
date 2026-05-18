@@ -16,60 +16,46 @@ use ItalyStrap\ThemeJsonGenerator\Application\Middlewares\Info;
 use ItalyStrap\ThemeJsonGenerator\Application\Middlewares\Init;
 use ItalyStrap\ThemeJsonGenerator\Application\Middlewares\SchemaJson;
 use ItalyStrap\ThemeJsonGenerator\Application\Middlewares\Validate;
+use ItalyStrap\ThemeJsonGenerator\Application\ThemeJsonContainerFactoryInterface;
+use ItalyStrap\ThemeJsonGenerator\Infrastructure\Container\ThemeJsonContainerFactory;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Handler\ConsoleHandler;
-use ItalyStrap\Pipeline\MiddlewareInterface;
 use Psr\Container\ContainerInterface;
 
 class ModuleApplication implements ModuleInterface
 {
     /**
-     * @return array<string, array<class-string, callable(ContainerInterface): object>>
+     * @return array<string, mixed>
      */
     public function __invoke(): array
     {
         return [
+            AurynConfig::ALIASES => [
+                ThemeJsonContainerFactoryInterface::class => ThemeJsonContainerFactory::class,
+            ],
             AurynConfig::FACTORIES => [
                 InitCommand::class => function (ContainerInterface $container): InitCommand {
                     return new InitCommand(new ConsoleHandler(
-                        $this->middleware($container, Init::class)
+                        $container->get(Init::class)
                     ));
                 },
                 DumpCommand::class => function (ContainerInterface $container): DumpCommand {
                     return new DumpCommand(new ConsoleHandler(
-                        $this->middleware($container, Dump::class),
+                        $container->get(Dump::class),
                     ));
                 },
                 ValidateCommand::class => function (ContainerInterface $container): ValidateCommand {
                     return new ValidateCommand(new ConsoleHandler(
                         new DeleteSchemaJson(),
                         new SchemaJson(),
-                        $this->middleware($container, Validate::class)
+                        $container->get(Validate::class)
                     ));
                 },
                 InfoCommand::class => function (ContainerInterface $container): InfoCommand {
                     return new InfoCommand(new ConsoleHandler(
-                        $this->middleware($container, Info::class)
+                        $container->get(Info::class)
                     ));
                 },
             ],
         ];
-    }
-
-    /**
-     * @param class-string $id
-     */
-    private function middleware(ContainerInterface $container, string $id): MiddlewareInterface
-    {
-        $middleware = $container->get($id);
-        if (!$middleware instanceof MiddlewareInterface) {
-            throw new \RuntimeException(\sprintf(
-                'Expected container entry %s to be an instance of %s, got %s.',
-                $id,
-                MiddlewareInterface::class,
-                \get_debug_type($middleware)
-            ));
-        }
-
-        return $middleware;
     }
 }

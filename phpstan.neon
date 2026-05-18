@@ -6,6 +6,7 @@ parameters:
         - src
     stubFiles:
         - stubs/auryn-injector.stub
+        - stubs/container-interface.stub
     excludePaths:
         analyse:
             - src/**/*Experimental*.php
