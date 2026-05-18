@@ -18,7 +18,7 @@ class Presets implements PresetsInterface, \JsonSerializable
     use AccessValueInArrayWithNotationTrait;
 
     /**
-     * @var PresetInterface[]
+     * @var array<array-key, mixed>
      */
     private array $collection = [];
 

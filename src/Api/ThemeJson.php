@@ -15,11 +15,9 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\FontFamily;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\FontSize;
 
 /**
- * @template TKey as array-key
- * @template TValue
- * @template-extends Config<TKey,TValue>
+ * @extends Config<array-key, mixed>
  */
-final class ThemeJson extends Config implements \JsonSerializable
+final class ThemeJson extends Config
 {
     public function setGlobalCss(string $css): bool
     {
@@ -28,7 +26,9 @@ final class ThemeJson extends Config implements \JsonSerializable
 
     public function appendGlobalCss(string $css): bool
     {
-        $currentCss = (string)$this->get(SectionNames::STYLES . '.css');
+        $currentCss = $this->get(SectionNames::STYLES . '.css');
+        $currentCss = \is_string($currentCss) ? $currentCss : '';
+
         return $this->set(SectionNames::STYLES . '.css', $currentCss . $css);
     }
 
@@ -82,13 +82,5 @@ final class ThemeJson extends Config implements \JsonSerializable
         }
 
         return true;
-    }
-
-    /**
-     * @return array<array-key, mixed>
-     */
-    public function jsonSerialize(): array
-    {
-        return $this->getArrayCopy();
     }
 }
