@@ -9,7 +9,7 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Palette;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetInterface;
 
-class PresetsTest extends UnitTestCase
+final class PresetsTest extends UnitTestCase
 {
     private function makeInstance(): Presets
     {

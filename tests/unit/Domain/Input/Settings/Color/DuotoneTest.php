@@ -8,7 +8,7 @@ use ItalyStrap\Tests\Unit\Domain\Input\Settings\PresetCommonTrait;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Duotone;
 
-class DuotoneTest extends UnitTestCase
+final class DuotoneTest extends UnitTestCase
 {
     use PresetCommonTrait;
 

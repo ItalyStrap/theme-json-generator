@@ -13,7 +13,7 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Scss;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Spacing;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Typography;
 
-class OnlyCtorPresetsParamTest extends UnitTestCase
+final class OnlyCtorPresetsParamTest extends UnitTestCase
 {
     public static function classNameDataProvider(): iterable
     {

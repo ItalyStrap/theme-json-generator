@@ -7,7 +7,7 @@ namespace ItalyStrap\Tests\Unit\Domain\Input\Settings\Color\Utilities;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\BoxShadow;
 
-class BoxShadowTest extends UnitTestCase
+final class BoxShadowTest extends UnitTestCase
 {
     private function makeInstance(): BoxShadow
     {

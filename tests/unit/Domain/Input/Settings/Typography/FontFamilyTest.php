@@ -8,7 +8,7 @@ use ItalyStrap\Tests\Unit\Domain\Input\Settings\PresetCommonTrait;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\FontFamily;
 
-class FontFamilyTest extends UnitTestCase
+final class FontFamilyTest extends UnitTestCase
 {
     use PresetCommonTrait;
 

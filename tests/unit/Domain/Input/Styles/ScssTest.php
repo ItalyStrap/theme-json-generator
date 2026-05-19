@@ -10,7 +10,7 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Css;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Scss;
 use ScssPhp\ScssPhp\Compiler;
 
-class ScssTest extends UnitTestCase
+final class ScssTest extends UnitTestCase
 {
     use CssStyleStringProviderTrait {
         CssStyleStringProviderTrait::newStyleProvider as newStyleProviderTrait;

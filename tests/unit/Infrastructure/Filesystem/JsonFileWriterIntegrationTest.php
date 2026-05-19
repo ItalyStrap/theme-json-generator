@@ -14,7 +14,7 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Color as StylesColor;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Typography;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\JsonFileWriter;
 
-class JsonFileWriterIntegrationTest extends UnitTestCase
+final class JsonFileWriterIntegrationTest extends UnitTestCase
 {
     public const COLOR_HEADING_TEXT = Palette::TYPE . '.headingColor';
 

@@ -7,7 +7,7 @@ namespace ItalyStrap\Tests\Unit\Domain\Input\Styles;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Border;
 
-class BorderTest extends UnitTestCase
+final class BorderTest extends UnitTestCase
 {
     use CommonTests;
 

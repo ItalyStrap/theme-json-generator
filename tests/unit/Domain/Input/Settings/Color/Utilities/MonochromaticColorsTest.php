@@ -10,7 +10,7 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorInt
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorModifier;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\MonochromaticColorsExperimental;
 
-class MonochromaticColorsTest extends UnitTestCase
+final class MonochromaticColorsTest extends UnitTestCase
 {
     protected function makeInstance(ColorInterface $color, array $steps): MonochromaticColorsExperimental
     {

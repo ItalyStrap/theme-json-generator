@@ -7,7 +7,7 @@ namespace ItalyStrap\Tests\Unit\Domain\Input\Styles;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Outline;
 
-class OutlineTest extends UnitTestCase
+final class OutlineTest extends UnitTestCase
 {
     use CommonTests;
 

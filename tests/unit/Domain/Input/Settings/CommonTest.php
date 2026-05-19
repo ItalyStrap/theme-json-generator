@@ -7,7 +7,7 @@ namespace ItalyStrap\Tests\Unit\Domain\Input\Settings;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetTrait;
 
-class CommonTest extends UnitTestCase
+final class CommonTest extends UnitTestCase
 {
     use PresetTrait;
 

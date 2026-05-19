@@ -17,7 +17,7 @@ declare(strict_types=1);
  *
  * @SuppressWarnings(PHPMD)
 */
-class IntegrationTester extends \Codeception\Actor
+final class IntegrationTester extends \Codeception\Actor
 {
     use _generated\IntegrationTesterActions;
 

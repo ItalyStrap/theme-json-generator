@@ -7,7 +7,7 @@ namespace ItalyStrap\Tests\Unit\Domain\Input\Styles;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Spacing;
 
-class SpacingTest extends UnitTestCase
+final class SpacingTest extends UnitTestCase
 {
     use CommonTests;
 

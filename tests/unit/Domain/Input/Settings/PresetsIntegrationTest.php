@@ -13,7 +13,7 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Custom\CustomToPresets;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\FontSize;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Typography;
 
-class PresetsIntegrationTest extends UnitTestCase
+final class PresetsIntegrationTest extends UnitTestCase
 {
     private function makeInstance(): Presets
     {

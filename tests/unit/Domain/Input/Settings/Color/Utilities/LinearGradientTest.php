@@ -7,7 +7,7 @@ namespace ItalyStrap\Tests\Unit\Domain\Input\Settings\Color\Utilities;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\LinearGradient;
 
-class LinearGradientTest extends UnitTestCase
+final class LinearGradientTest extends UnitTestCase
 {
     private function makeInstance(): LinearGradient
     {

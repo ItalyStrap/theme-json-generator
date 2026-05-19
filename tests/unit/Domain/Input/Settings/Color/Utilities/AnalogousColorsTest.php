@@ -10,7 +10,7 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\Color;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorModifier;
 
-class AnalogousColorsTest extends UnitTestCase
+final class AnalogousColorsTest extends UnitTestCase
 {
     protected function makeInstance(string $color): AnalogousColorsExperimental
     {

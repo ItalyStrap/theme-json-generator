@@ -10,7 +10,7 @@ use ItalyStrap\ThemeJsonGenerator\Application\Message;
 use ItalyStrap\ThemeJsonGenerator\Application\Middlewares\Init;
 use Prophecy\Argument;
 
-class InitTest extends UnitTestCase
+final class InitTest extends UnitTestCase
 {
     private function makeInstance(): Init
     {

@@ -18,7 +18,7 @@ declare(strict_types=1);
  *
  * @SuppressWarnings(PHPMD)
 */
-class UnitTester extends \Codeception\Actor
+final class UnitTester extends \Codeception\Actor
 {
     use _generated\UnitTesterActions;
 

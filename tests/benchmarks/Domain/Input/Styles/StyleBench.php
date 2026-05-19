@@ -6,7 +6,7 @@ namespace ItalyStrap\Tests\Benchmarks\Domain\Input\Styles;
 
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\CommonTrait;
 
-class StyleBench
+final class StyleBench
 {
     private object $styles;
 

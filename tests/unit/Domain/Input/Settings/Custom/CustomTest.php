@@ -8,7 +8,7 @@ use ItalyStrap\Tests\Unit\Domain\Input\Settings\PresetCommonTrait;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Custom\Custom;
 
-class CustomTest extends UnitTestCase
+final class CustomTest extends UnitTestCase
 {
     use PresetCommonTrait;
 

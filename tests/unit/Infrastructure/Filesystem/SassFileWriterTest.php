@@ -8,7 +8,7 @@ use ItalyStrap\Config\Config;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\ScssFileWriter;
 
-class SassFileWriterTest extends UnitTestCase
+final class SassFileWriterTest extends UnitTestCase
 {
     /**
      * @var string

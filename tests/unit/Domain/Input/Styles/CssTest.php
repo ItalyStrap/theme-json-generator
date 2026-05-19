@@ -11,7 +11,7 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\CssInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Scss;
 use ScssPhp\ScssPhp\Compiler;
 
-class CssTest extends UnitTestCase
+final class CssTest extends UnitTestCase
 {
     use CssStyleStringProviderTrait {
         CssStyleStringProviderTrait::styleProvider as styleProviderTrait;

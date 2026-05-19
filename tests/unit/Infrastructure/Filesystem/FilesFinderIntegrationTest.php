@@ -8,7 +8,7 @@ use ItalyStrap\Finder\FinderFactory;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FilesFinder;
 
-class FilesFinderIntegrationTest extends UnitTestCase
+final class FilesFinderIntegrationTest extends UnitTestCase
 {
     private function makeInstance(): FilesFinder
     {

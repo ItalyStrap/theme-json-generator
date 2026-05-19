@@ -8,7 +8,7 @@ use ItalyStrap\Tests\Unit\Domain\Input\Settings\PresetCommonTrait;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Shadow;
 
-class ShadowTest extends UnitTestCase
+final class ShadowTest extends UnitTestCase
 {
     use PresetCommonTrait;
 
