@@ -265,30 +265,30 @@ final class ColorTest extends UnitTestCase
     {
         $sut = $this->makeInstance('#ff0000');
 
-        $this->assertSame(0.2126, $sut->luminance(), '');
+        $this->assertEqualsWithDelta(0.2126, $sut->luminance(), PHP_FLOAT_EPSILON, '');
     }
 
     public function testItShouldReturnRelativeLuminanceValue(): void
     {
         $sut = $this->makeInstance('#000000');
         $color = $this->makeInstance('#ffffff');
-        $this->assertSame(21.0, $sut->relativeLuminance($color), '');
+        $this->assertEqualsWithDelta(21.0, $sut->relativeLuminance($color), PHP_FLOAT_EPSILON, '');
 
         $sut = $this->makeInstance('#000000');
         $color = $this->makeInstance('#bada55');
-        $this->assertTrue($sut->relativeLuminance($color) >= 4.5, '');
+        $this->assertGreaterThanOrEqual(4.5, $sut->relativeLuminance($color), '');
     }
 
     public function testConversionToDifferentFormat(): void
     {
         $sut = $this->makeInstance('rgba(0,0,0,0.25)');
-        $this->assertSame(0.25, $sut->alpha(), '');
+        $this->assertEqualsWithDelta(0.25, $sut->alpha(), PHP_FLOAT_EPSILON, '');
 
         $sut = $this->makeInstance('#000000');
         $this->assertSame('ff', $sut->alpha(), '');
 
         $sut = $this->makeInstance('hsla(0,0,0,0.25)');
-        $this->assertSame(0.25, $sut->alpha(), '');
+        $this->assertEqualsWithDelta(0.25, $sut->alpha(), PHP_FLOAT_EPSILON, '');
 
         $this->assertStringMatchesFormat('#000000', (string)$sut->toHex(), '');
         $this->assertStringMatchesFormat('rgb(0,0,0)', (string)$sut->toRgb(), '');

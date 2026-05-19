@@ -23,12 +23,4 @@ final class CustomTest extends UnitTestCase
             $this->name
         );
     }
-
-    public function testSlug(): void
-    {
-    }
-
-    public function testProp(): void
-    {
-    }
 }

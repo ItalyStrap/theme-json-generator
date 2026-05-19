@@ -140,7 +140,7 @@ final class SpacingTest extends UnitTestCase
             ->bottom('50px')
             ->left('5rem');
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'top' => '25px',
                 'right' => '25px',
