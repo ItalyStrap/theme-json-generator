@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Application;
 
-class Message
+final readonly class Message
 {
-    private string $rootFolder = '';
-
-    public function __construct(string $rootFolder)
-    {
-        $this->rootFolder = $rootFolder;
+    public function __construct(
+        private string $rootFolder
+    ) {
     }
 
     public function getRootFolder(): string

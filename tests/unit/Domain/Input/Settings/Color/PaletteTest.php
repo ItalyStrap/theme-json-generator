@@ -8,7 +8,7 @@ use ItalyStrap\Tests\Unit\Domain\Input\Settings\PresetCommonTrait;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Palette;
 
-class PaletteTest extends UnitTestCase
+final class PaletteTest extends UnitTestCase
 {
     use PresetCommonTrait;
 

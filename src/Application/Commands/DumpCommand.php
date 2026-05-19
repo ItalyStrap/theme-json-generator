@@ -12,7 +12,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Process\Process;
 
 #[AsCommand(name: DumpCommand::NAME, description: DumpCommand::DESCRIPTION)]
 final class DumpCommand extends Command
@@ -46,12 +45,9 @@ final class DumpCommand extends Command
      */
     public const FILE = 'file';
 
-    private ConsoleHandler $handler;
-
     public function __construct(
-        ConsoleHandler $handler
+        private ConsoleHandler $handler
     ) {
-        $this->handler = $handler;
         parent::__construct();
     }
 

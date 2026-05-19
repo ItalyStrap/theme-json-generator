@@ -16,7 +16,7 @@ final class SchemaJsonTest extends UnitTestCase
         return new SchemaJson();
     }
 
-    public function testProcess()
+    public function testProcess(): void
     {
         $schemaPath = \codecept_output_dir('theme.schema.json');
         $message = new ValidateMessage('', $schemaPath);
@@ -31,6 +31,7 @@ final class SchemaJsonTest extends UnitTestCase
         if (\file_exists($schemaPath)) {
             $this->tester->deleteFile($schemaPath);
         }
+
         $this->tester->writeToFile($schemaPath, '{}');
 
         $actual = $this->makeInstance();

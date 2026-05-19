@@ -15,19 +15,19 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(name: ValidateCommand::NAME, description: ValidateCommand::DESCRIPTION)]
-class ValidateCommand extends Command
+final class ValidateCommand extends Command
 {
     use RootFolderTrait;
     use DataFromJsonTrait;
 
     public const NAME = 'validate';
+
     public const DESCRIPTION = 'Validate theme.json file';
-    private ConsoleHandler $handler;
+
 
     public function __construct(
-        ConsoleHandler $handler
+        private readonly ConsoleHandler $handler
     ) {
-        $this->handler = $handler;
         parent::__construct();
     }
 

@@ -62,33 +62,28 @@ final class Spacing implements ArrayableInterface, \JsonSerializable
      */
     public function shorthand(array $values): self
     {
-        switch (\count($values)) {
-            case 1:
-                return $this->setProperty(self::TOP, (string)$values[0])
-                    ->setProperty(self::RIGHT, (string)$values[0])
-                    ->setProperty(self::BOTTOM, (string)$values[0])
-                    ->setProperty(self::LEFT, (string)$values[0]);
-            case 2:
-                return $this->setProperty(self::TOP, (string)$values[0])
-                    ->setProperty(self::RIGHT, (string)$values[1])
-                    ->setProperty(self::BOTTOM, (string)$values[0])
-                    ->setProperty(self::LEFT, (string)$values[1]);
-            case 3:
-                return $this->setProperty(self::TOP, (string)$values[0])
-                    ->setProperty(self::RIGHT, (string)$values[1])
-                    ->setProperty(self::BOTTOM, (string)$values[2])
-                    ->setProperty(self::LEFT, (string)$values[1]);
-            case 4:
-                return $this->setProperty(self::TOP, (string)$values[0])
-                    ->setProperty(self::RIGHT, (string)$values[1])
-                    ->setProperty(self::BOTTOM, (string)$values[2])
-                    ->setProperty(self::LEFT, (string)$values[3]);
-            default:
-                throw new \InvalidArgumentException(\sprintf(
-                    'The shorthand method accept only 1, 2, 3 or 4 values, %d given',
-                    \count($values)
-                ));
-        }
+        return match (\count($values)) {
+            1 => $this->setProperty(self::TOP, (string)$values[0])
+                ->setProperty(self::RIGHT, (string)$values[0])
+                ->setProperty(self::BOTTOM, (string)$values[0])
+                ->setProperty(self::LEFT, (string)$values[0]),
+            2 => $this->setProperty(self::TOP, (string)$values[0])
+                ->setProperty(self::RIGHT, (string)$values[1])
+                ->setProperty(self::BOTTOM, (string)$values[0])
+                ->setProperty(self::LEFT, (string)$values[1]),
+            3 => $this->setProperty(self::TOP, (string)$values[0])
+                ->setProperty(self::RIGHT, (string)$values[1])
+                ->setProperty(self::BOTTOM, (string)$values[2])
+                ->setProperty(self::LEFT, (string)$values[1]),
+            4 => $this->setProperty(self::TOP, (string)$values[0])
+                ->setProperty(self::RIGHT, (string)$values[1])
+                ->setProperty(self::BOTTOM, (string)$values[2])
+                ->setProperty(self::LEFT, (string)$values[3]),
+            default => throw new \InvalidArgumentException(\sprintf(
+                'The shorthand method accept only 1, 2, 3 or 4 values, %d given',
+                \count($values)
+            )),
+        };
     }
 
     public function vertical(string $value): self

@@ -7,7 +7,7 @@ namespace ItalyStrap\Tests\Unit\Api;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Api\ThemeJson;
 
-class ThemeJsonTest extends UnitTestCase
+final class ThemeJsonTest extends UnitTestCase
 {
     private function makeInstance(): ThemeJson
     {

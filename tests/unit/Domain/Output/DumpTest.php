@@ -11,7 +11,7 @@ use ItalyStrap\ThemeJsonGenerator\Application\Middlewares\Dump;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Container\ThemeJsonContainerFactory;
 use Prophecy\Argument;
 
-class DumpTest extends UnitTestCase
+final class DumpTest extends UnitTestCase
 {
     private function makeInstance(): Dump
     {

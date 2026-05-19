@@ -6,7 +6,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem;
 
 use ItalyStrap\Finder\FinderInterface;
 
-class FilesFinder
+final readonly class FilesFinder
 {
     public const ROOT_FILE_NAME = 'theme';
 
@@ -14,12 +14,8 @@ class FilesFinder
 
     public const JSON_FILE_SUFFIX = '.json';
 
-    private FinderInterface $finder;
-
-    public function __construct(
-        FinderInterface $finder
-    ) {
-        $this->finder = $finder;
+    public function __construct(private FinderInterface $finder)
+    {
     }
 
     /**
@@ -88,7 +84,7 @@ class FilesFinder
             throw new \RuntimeException('Unable to read the style.css file');
         }
 
-        if (\strpos($styleCssContent, 'Theme Name:') === false) {
+        if (!str_contains($styleCssContent, 'Theme Name:')) {
             throw new \RuntimeException('The style.css file is not a valid WordPress theme');
         }
 

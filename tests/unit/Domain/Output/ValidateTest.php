@@ -10,7 +10,7 @@ use ItalyStrap\ThemeJsonGenerator\Application\Middlewares\Validate;
 use ItalyStrap\ThemeJsonGenerator\Application\ValidateMessage;
 use Prophecy\Argument;
 
-class ValidateTest extends UnitTestCase
+final class ValidateTest extends UnitTestCase
 {
     private function makeInstance(): Validate
     {

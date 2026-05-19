@@ -7,7 +7,7 @@ namespace ItalyStrap\Tests\Unit\Domain\Input\Styles;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Spacing;
 
-class SpacingTest extends UnitTestCase
+final class SpacingTest extends UnitTestCase
 {
     use CommonTests;
 
@@ -140,7 +140,7 @@ class SpacingTest extends UnitTestCase
             ->bottom('50px')
             ->left('5rem');
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'top' => '25px',
                 'right' => '25px',

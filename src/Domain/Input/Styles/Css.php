@@ -19,10 +19,12 @@ use Sabberworm\CSS\Property\Selector;
  *
  * @see CssTest
  */
-class Css implements CssInterface
+final class Css implements CssInterface
 {
-    private PresetsInterface $presets;
+    private readonly PresetsInterface $presets;
+
     private bool $isCompressed = true;
+
     private bool $shouldResolveVariables = true;
 
     public function __construct(
@@ -101,6 +103,7 @@ class Css implements CssInterface
                     $cssBlock .= $space . $rule->getRule() . ': ' . (string)$rule->getValue() . $important . ';' . $newLine;
                     // phpcs:enable
                 }
+
                 $cssBlock .= '}' . $newLineAfterBlock;
                 $additionalSelectors[] = $cssBlock;
             }
@@ -180,10 +183,10 @@ class Css implements CssInterface
         $rules = $matches[0];
 
         foreach ($selectorArray as $selector) {
-            $cssFinal .= \rtrim($selector) . " $rules\n";
+            $cssFinal .= \rtrim($selector) . sprintf(' %s%s', $rules, PHP_EOL);
         }
 
-        $cssFinal .= \rtrim($lastSelector) . " $rules\n";
+        $cssFinal .= \rtrim($lastSelector) . sprintf(' %s%s', $rules, PHP_EOL);
 
         return $cssFinal;
     }

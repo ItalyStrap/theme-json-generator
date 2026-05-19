@@ -8,7 +8,7 @@ use ItalyStrap\Tests\Unit\Domain\Input\Settings\PresetCommonTrait;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Gradient;
 
-class GradientTest extends UnitTestCase
+final class GradientTest extends UnitTestCase
 {
     use PresetCommonTrait;
 

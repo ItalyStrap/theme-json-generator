@@ -4,36 +4,18 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\Utilities;
 
-class FontFace
+final readonly class FontFace
 {
-    private string $fontFamily;
-
-    private string $fontWeight;
-
-    private string $fontStyle;
-
-    private string $fontStretch;
-
-    /**
-     * @var string[]
-     */
-    private array $src;
-
     /**
      * @param string[] $src
      */
     public function __construct(
-        string $fontFamily,
-        string $fontWeight,
-        string $fontStyle,
-        string $fontStretch,
-        array $src
+        private string $fontFamily,
+        private string $fontWeight,
+        private string $fontStyle,
+        private string $fontStretch,
+        private array $src
     ) {
-        $this->fontFamily = $fontFamily;
-        $this->fontWeight = $fontWeight;
-        $this->fontStyle = $fontStyle;
-        $this->fontStretch = $fontStretch;
-        $this->src = $src;
     }
 
     /**

@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+use Codeception\Actor;
+use _generated\FunctionalTesterActions;
+
 
 /**
  * Inherited Methods
@@ -18,9 +21,9 @@ declare(strict_types=1);
  *
  * @SuppressWarnings(PHPMD)
 */
-class FunctionalTester extends \Codeception\Actor
+final class FunctionalTester extends Actor
 {
-    use _generated\FunctionalTesterActions;
+    use FunctionalTesterActions;
 
     /**
      * Define custom actions here

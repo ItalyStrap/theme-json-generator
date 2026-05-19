@@ -8,7 +8,7 @@ use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\Color;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorModifier;
 
-class ColorModifiertTest extends UnitTestCase
+final class ColorModifiertTest extends UnitTestCase
 {
     protected function makeInstance(string $color): ColorModifier
     {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\Utilities;
 
-class Fluid
+final readonly class Fluid
 {
     /**
      * @var string
@@ -21,14 +21,10 @@ class Fluid
      */
     public const MAX = 'max';
 
-    private string $min;
-
-    private string $max;
-
-    public function __construct(string $min, string $max)
-    {
-        $this->min = $min;
-        $this->max = $max;
+    public function __construct(
+        private string $min,
+        private string $max
+    ) {
     }
 
     /**

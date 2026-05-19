@@ -7,7 +7,7 @@ namespace ItalyStrap\Tests\Unit\Domain\Input\Styles;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Typography;
 
-class TypographyTest extends UnitTestCase
+final class TypographyTest extends UnitTestCase
 {
     use CommonTests;
 

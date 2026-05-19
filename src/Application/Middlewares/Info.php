@@ -13,14 +13,11 @@ use Symfony\Component\Console\Command\Command;
 /**
  * @todo Implement the logic
  */
-class Info implements MiddlewareInterface
+final readonly class Info implements MiddlewareInterface
 {
-    private FilesFinder $filesFinder;
-
     public function __construct(
-        FilesFinder $filesFinder
+        private FilesFinder $filesFinder
     ) {
-        $this->filesFinder = $filesFinder;
     }
 
     /**

@@ -13,12 +13,12 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Custom\Custom;
  * @see PresetsTest
  * @see PresetsIntegrationTest
  */
-class Presets implements PresetsInterface, \JsonSerializable
+final class Presets implements PresetsInterface, \JsonSerializable
 {
     use AccessValueInArrayWithNotationTrait;
 
     /**
-     * @var PresetInterface[]
+     * @var array<array-key, mixed>
      */
     private array $collection = [];
 

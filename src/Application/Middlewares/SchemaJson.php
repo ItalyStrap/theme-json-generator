@@ -10,7 +10,7 @@ use ItalyStrap\ThemeJsonGenerator\Application\ValidateMessage;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Handler\ConsoleHandler;
 use Webimpress\SafeWriter\FileWriter;
 
-class SchemaJson implements MiddlewareInterface
+final class SchemaJson implements MiddlewareInterface
 {
     /**
      * @phpstan-param ValidateMessage $message

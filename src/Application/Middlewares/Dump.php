@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Application\Middlewares;
 
+use Symfony\Component\Console\Output\ConsoleOutput;
 use ItalyStrap\Pipeline\HandlerInterface;
 use ItalyStrap\Pipeline\MiddlewareInterface;
 use ItalyStrap\ThemeJsonGenerator\Api\ThemeJson;
@@ -15,7 +16,7 @@ use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\ScssFileWriter;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Handler\ConsoleHandler;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Dump implements MiddlewareInterface
+final readonly class Dump implements MiddlewareInterface
 {
     /**
      * @var string
@@ -24,16 +25,10 @@ class Dump implements MiddlewareInterface
 
     public const JSON_FILE_SUFFIX = '.json';
 
-    private FilesFinder $filesFinder;
-
-    private ThemeJsonContainerFactoryInterface $containerFactory;
-
     public function __construct(
-        FilesFinder $filesFinder,
-        ThemeJsonContainerFactoryInterface $containerFactory
+        private FilesFinder $filesFinder,
+        private ThemeJsonContainerFactoryInterface $containerFactory
     ) {
-        $this->filesFinder = $filesFinder;
-        $this->containerFactory = $containerFactory;
     }
 
     /**
@@ -45,7 +40,7 @@ class Dump implements MiddlewareInterface
         /**
          * OutputInterface $output
          */
-        $output = new \Symfony\Component\Console\Output\ConsoleOutput();
+        $output = new ConsoleOutput();
 
         $count = 0;
 

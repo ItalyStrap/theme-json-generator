@@ -1,5 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
+use Codeception\Actor;
+use _generated\IntegrationTesterActions;
 
 /**
  * Inherited Methods
@@ -16,9 +20,9 @@
  *
  * @SuppressWarnings(PHPMD)
 */
-class IntegrationTester extends \Codeception\Actor
+final class IntegrationTester extends Actor
 {
-    use _generated\IntegrationTesterActions;
+    use IntegrationTesterActions;
 
     /**
      * Define custom actions here

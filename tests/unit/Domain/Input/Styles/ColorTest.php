@@ -7,7 +7,7 @@ namespace ItalyStrap\Tests\Unit\Domain\Input\Styles;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Color;
 
-class ColorTest extends UnitTestCase
+final class ColorTest extends UnitTestCase
 {
     use CommonTests;
 

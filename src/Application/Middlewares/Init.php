@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Application\Middlewares;
 
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Brick\VarExporter\VarExporter;
 use ItalyStrap\Pipeline\HandlerInterface;
 use ItalyStrap\Pipeline\MiddlewareInterface;
@@ -21,7 +22,7 @@ use Webimpress\SafeWriter\Exception\ExceptionInterface as FileWriterException;
 use Webimpress\SafeWriter\FileWriter;
 use Webmozart\Assert\Assert;
 
-class Init implements MiddlewareInterface
+final class Init implements MiddlewareInterface
 {
     use DataFromJsonTrait;
 
@@ -46,12 +47,8 @@ TEMPLATE;
 
     public const ENTRY_POINT_EXTENSION = '.php';
 
-    private FilesFinder $filesFinder;
-
-    public function __construct(
-        FilesFinder $filesFinder
-    ) {
-        $this->filesFinder = $filesFinder;
+    public function __construct(private FilesFinder $filesFinder)
+    {
     }
 
     /**
@@ -62,7 +59,7 @@ TEMPLATE;
         /**
          * OutputInterface $output
          */
-        $output = new \Symfony\Component\Console\Output\ConsoleOutput();
+        $output = new ConsoleOutput();
 
         foreach ($this->filesFinder->find($message->getRootFolder(), 'json') as $file) {
             $this->generateEntryPointDataFile($output, $file);

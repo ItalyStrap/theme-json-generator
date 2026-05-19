@@ -8,7 +8,7 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\BoxShado
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetTrait;
 
-class Shadow implements PresetInterface
+final class Shadow implements PresetInterface
 {
     use PresetTrait;
 
@@ -17,18 +17,17 @@ class Shadow implements PresetInterface
      */
     public const TYPE = 'shadow';
 
-    private string $slug;
-    private string $name;
 
     /**
      * @var BoxShadow[]
      */
     private array $shadow;
 
-    public function __construct(string $slug, string $name, BoxShadow ...$shadow)
-    {
-        $this->slug = $slug;
-        $this->name = $name;
+    public function __construct(
+        private readonly string $slug,
+        private readonly string $name,
+        BoxShadow ...$shadow
+    ) {
         $this->shadow = $shadow;
     }
 

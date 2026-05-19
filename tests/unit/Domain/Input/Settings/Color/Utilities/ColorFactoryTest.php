@@ -8,7 +8,7 @@ use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\Color;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorFactory;
 
-class ColorFactoryTest extends UnitTestCase
+final class ColorFactoryTest extends UnitTestCase
 {
     protected function makeInstance(): ColorFactory
     {

@@ -8,7 +8,7 @@ use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\AchromaticColorsExperimental;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorInterface;
 
-class AchromaticColorsTest extends UnitTestCase
+final class AchromaticColorsTest extends UnitTestCase
 {
     protected function makeInstance(): AchromaticColorsExperimental
     {

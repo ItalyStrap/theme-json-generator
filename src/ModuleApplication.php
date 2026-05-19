@@ -21,7 +21,7 @@ use ItalyStrap\ThemeJsonGenerator\Infrastructure\Container\ThemeJsonContainerFac
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Handler\ConsoleHandler;
 use Psr\Container\ContainerInterface;
 
-class ModuleApplication implements ModuleInterface
+final class ModuleApplication implements ModuleInterface
 {
     /**
      * @return array<string, mixed>
@@ -33,28 +33,28 @@ class ModuleApplication implements ModuleInterface
                 ThemeJsonContainerFactoryInterface::class => ThemeJsonContainerFactory::class,
             ],
             AurynConfig::FACTORIES => [
-                InitCommand::class => function (ContainerInterface $container): InitCommand {
-                    return new InitCommand(new ConsoleHandler(
-                        $container->get(Init::class)
-                    ));
-                },
-                DumpCommand::class => function (ContainerInterface $container): DumpCommand {
-                    return new DumpCommand(new ConsoleHandler(
-                        $container->get(Dump::class),
-                    ));
-                },
-                ValidateCommand::class => function (ContainerInterface $container): ValidateCommand {
-                    return new ValidateCommand(new ConsoleHandler(
-                        new DeleteSchemaJson(),
-                        new SchemaJson(),
-                        $container->get(Validate::class)
-                    ));
-                },
-                InfoCommand::class => function (ContainerInterface $container): InfoCommand {
-                    return new InfoCommand(new ConsoleHandler(
-                        $container->get(Info::class)
-                    ));
-                },
+                InitCommand::class
+                    => fn(ContainerInterface $container): InitCommand
+                        => new InitCommand(new ConsoleHandler(
+                            $container->get(Init::class)
+                        )),
+                DumpCommand::class
+                    => fn(ContainerInterface $container): DumpCommand
+                        => new DumpCommand(new ConsoleHandler(
+                            $container->get(Dump::class),
+                        )),
+                ValidateCommand::class
+                    => fn(ContainerInterface $container): ValidateCommand
+                        => new ValidateCommand(new ConsoleHandler(
+                            new DeleteSchemaJson(),
+                            new SchemaJson(),
+                            $container->get(Validate::class)
+                        )),
+                InfoCommand::class
+                    => fn(ContainerInterface $container): InfoCommand
+                        => new InfoCommand(new ConsoleHandler(
+                            $container->get(Info::class)
+                        )),
             ],
         ];
     }

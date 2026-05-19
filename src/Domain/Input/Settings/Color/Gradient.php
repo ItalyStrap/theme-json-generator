@@ -8,7 +8,7 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\Gradient
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetTrait;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetInterface;
 
-class Gradient implements PresetInterface
+final readonly class Gradient implements PresetInterface
 {
     use PresetTrait;
 
@@ -17,17 +17,11 @@ class Gradient implements PresetInterface
      */
     public const TYPE = 'gradient';
 
-    private string $slug;
-
-    private string $name;
-
-    private GradientInterface $gradient;
-
-    public function __construct(string $slug, string $name, GradientInterface $gradient)
-    {
-        $this->slug = $slug;
-        $this->name = $name;
-        $this->gradient = $gradient;
+    public function __construct(
+        private string $slug,
+        private string $name,
+        private GradientInterface $gradient
+    ) {
     }
 
     /**

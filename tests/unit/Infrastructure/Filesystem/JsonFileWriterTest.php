@@ -8,7 +8,7 @@ use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Api\ThemeJson;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\JsonFileWriter;
 
-class JsonFileWriterTest extends UnitTestCase
+final class JsonFileWriterTest extends UnitTestCase
 {
     private string $theme_json_path;
 

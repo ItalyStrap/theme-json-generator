@@ -8,7 +8,7 @@ use FunctionalTester;
 use ItalyStrap\Tests\FunctionalTestCase;
 use ItalyStrap\ThemeJsonGenerator\Application\Middlewares\Dump;
 
-class CommandsCest extends FunctionalTestCase
+final class CommandsCest extends FunctionalTestCase
 {
     public function testDump(FunctionalTester $i): void
     {

@@ -13,7 +13,7 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Scss;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Spacing;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Typography;
 
-class OnlyCtorPresetsParamTest extends UnitTestCase
+final class OnlyCtorPresetsParamTest extends UnitTestCase
 {
     public static function classNameDataProvider(): iterable
     {
@@ -50,7 +50,7 @@ class OnlyCtorPresetsParamTest extends UnitTestCase
             \sprintf(
                 "The constructor of %s does not have a parameter named \$preset, found: %s",
                 $class,
-                \implode(', ', \array_map(fn(\ReflectionParameter $p) => '$' . $p->getName(), $parameters))
+                \implode(', ', \array_map(fn(\ReflectionParameter $p): string => '$' . $p->getName(), $parameters))
             )
         );
     }

@@ -13,19 +13,17 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(name: InfoCommand::NAME, description: InfoCommand::DESCRIPTION)]
-class InfoCommand extends Command
+final class InfoCommand extends Command
 {
     use RootFolderTrait;
 
     public const NAME = 'info';
+
     public const DESCRIPTION = 'Show info about JSON theme';
 
-    private ConsoleHandler $handler;
-
     public function __construct(
-        ConsoleHandler $handler
+        private ConsoleHandler $handler
     ) {
-        $this->handler = $handler;
         parent::__construct();
     }
 

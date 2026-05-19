@@ -7,7 +7,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings;
 /**
  * @infection-ignore-all
  */
-class NullPresets implements PresetsInterface
+final class NullPresets implements PresetsInterface
 {
     public function add(PresetInterface $item): PresetsInterface
     {

@@ -29,6 +29,7 @@ final class Bootstrap
 
         return $builder->build();
     }
+
     public function run(): int
     {
         $container = $this->container();

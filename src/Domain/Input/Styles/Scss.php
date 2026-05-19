@@ -13,11 +13,9 @@ use ScssPhp\ScssPhp\OutputStyle;
 /**
  * @see ScssTest
  */
-class Scss implements CssInterface
+final class Scss implements CssInterface
 {
-    private Css $css;
-    private Compiler $compiler;
-    private PresetsInterface $presets;
+    private readonly PresetsInterface $presets;
 
     /**
      * @var 'compressed'|'expanded'
@@ -25,12 +23,10 @@ class Scss implements CssInterface
     private string $outputStyle = OutputStyle::COMPRESSED;
 
     public function __construct(
-        Css $css,
-        Compiler $compiler,
+        private readonly Css $css,
+        private readonly Compiler $compiler,
         ?PresetsInterface $presets = null
     ) {
-        $this->css = $css;
-        $this->compiler = $compiler;
         $this->presets = $presets ?? new NullPresets();
     }
 

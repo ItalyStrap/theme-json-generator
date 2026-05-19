@@ -22,7 +22,7 @@ trait DataFromJsonTrait
     /**
      * @return array<array-key, mixed>|object
      */
-    private function fromPath(string $path, ?bool $isAssociative)
+    private function fromPath(string $path, ?bool $isAssociative): object|array
     {
         $json = \file_get_contents($path);
         if ($json === false) {

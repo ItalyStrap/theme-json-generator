@@ -7,16 +7,14 @@ namespace ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem;
 use ItalyStrap\Config\ConfigInterface;
 use Webimpress\SafeWriter;
 
-class JsonFileWriter implements FileWriter
+final readonly class JsonFileWriter implements FileWriter
 {
-    private string $path;
-
     /**
      * @param string $path
      */
-    public function __construct(string $path)
-    {
-        $this->path = $path;
+    public function __construct(
+        private string $path
+    ) {
     }
 
     /**

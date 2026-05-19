@@ -9,7 +9,7 @@ use ItalyStrap\Pipeline\MiddlewareInterface;
 use ItalyStrap\ThemeJsonGenerator\Application\ValidateMessage;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Handler\ConsoleHandler;
 
-class DeleteSchemaJson implements MiddlewareInterface
+final class DeleteSchemaJson implements MiddlewareInterface
 {
     /**
      * @phpstan-param ValidateMessage $message

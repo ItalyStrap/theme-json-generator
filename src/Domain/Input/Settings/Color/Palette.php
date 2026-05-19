@@ -8,7 +8,7 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorInt
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetTrait;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetInterface;
 
-class Palette implements PresetInterface
+final readonly class Palette implements PresetInterface
 {
     use PresetTrait;
 
@@ -22,17 +22,11 @@ class Palette implements PresetInterface
      */
     public const KEY = 'settings.color.palette';
 
-    private string $slug;
-
-    private string $name;
-
-    private ColorInterface $color;
-
-    public function __construct(string $slug, string $name, ColorInterface $color)
-    {
-        $this->slug = $slug;
-        $this->name = $name;
-        $this->color = $color;
+    public function __construct(
+        private string $slug,
+        private string $name,
+        private ColorInterface $color
+    ) {
     }
 
     /**

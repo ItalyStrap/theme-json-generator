@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Utilities;
 
-class CalcExperimental
+final readonly class CalcExperimental implements \Stringable
 {
     private string $value;
 

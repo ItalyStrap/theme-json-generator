@@ -14,7 +14,7 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Color as StylesColor;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Typography;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\JsonFileWriter;
 
-class JsonFileWriterIntegrationTest extends UnitTestCase
+final class JsonFileWriterIntegrationTest extends UnitTestCase
 {
     public const COLOR_HEADING_TEXT = Palette::TYPE . '.headingColor';
 
@@ -30,7 +30,7 @@ class JsonFileWriterIntegrationTest extends UnitTestCase
 
     private ?\ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Color $colorIntegration = null;
 
-    private ?\ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Typography $typographyIntegration = null;
+    private ?Typography $typographyIntegration = null;
 
     protected function makeInstance(): JsonFileWriter
     {

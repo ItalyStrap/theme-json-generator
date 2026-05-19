@@ -1,7 +1,17 @@
-ARG PHP_VERSION
-ARG WP_VERSION
+ARG PHP_VERSION=8.2
+ARG WP_VERSION=6
+ARG HOST_UID=1000
+ARG HOST_GID=1000
 
 FROM wordpress:${WP_VERSION}-php${PHP_VERSION}
+
+ARG HOST_UID
+ARG HOST_GID
+
+RUN set -eux; \
+    groupmod -o -g "${HOST_GID}" www-data; \
+    usermod -o -u "${HOST_UID}" -g "${HOST_GID}" www-data; \
+    chown -R www-data:www-data /var/www
 
 # Install pcov for code coverage
 RUN set -eux; \

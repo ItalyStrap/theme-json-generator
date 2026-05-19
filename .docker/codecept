@@ -3,4 +3,8 @@
 # Get project name from .env file
 PROJECT_NAME=$(grep PROJECT_NAME .env | cut -d '=' -f2 | tr -d '"')
 
-docker exec -w /var/www/html/wp-content/plugins/"${PROJECT_NAME}" "${PROJECT_NAME}"_test sh -c "vendor/bin/codecept ${*}"
+docker exec \
+    --user www-data \
+    -w /var/www/html/wp-content/plugins/"${PROJECT_NAME}" \
+    "${PROJECT_NAME}"_test \
+    sh -c "vendor/bin/codecept ${*}"

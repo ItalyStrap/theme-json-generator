@@ -405,7 +405,7 @@ CUSTOM_CSS,
          */
         foreach ($subValues as $subValue) {
             $isPseudoClass = (bool)\preg_match('/(?<!\w):(?!:)/', $subValue);
-            if (\strpos($subValue, ":") !== false && !$isPseudoClass) {
+            if (str_contains($subValue, ":") && !$isPseudoClass) {
                 $processedSubValues[] = $subValue;
                 continue;
             }
@@ -428,7 +428,7 @@ CUSTOM_CSS,
          * @var string $processedRule
          */
         foreach (\array_filter($processedRules) as $processedRule) {
-            if (\strpos($processedRule, '&') !== false) {
+            if (str_contains($processedRule, '&')) {
                 return true;
             }
         }

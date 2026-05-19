@@ -8,7 +8,7 @@ use ItalyStrap\Tests\Unit\Domain\Input\Settings\PresetCommonTrait;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\FontSize;
 
-class FontSizeTest extends UnitTestCase
+final class FontSizeTest extends UnitTestCase
 {
     use PresetCommonTrait;
 

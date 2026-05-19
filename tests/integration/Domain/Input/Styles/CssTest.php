@@ -8,7 +8,7 @@ use ItalyStrap\Tests\CssStyleStringProviderTrait;
 use ItalyStrap\Tests\IntegrationTestCase;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Css;
 
-class CssTest extends IntegrationTestCase
+final class CssTest extends IntegrationTestCase
 {
     use ProcessBlocksCustomCssTrait;
     use CssStyleStringProviderTrait {
