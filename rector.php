@@ -22,12 +22,21 @@ return RectorConfig::configure()
     ->withRules([
         StaticDataProviderClassMethodRector::class,
     ])
-    ->withSets([
-        SetList::CODE_QUALITY,
-        SetList::CODING_STYLE,
-        SetList::EARLY_RETURN,
-        SetList::TYPE_DECLARATION,
-        SetList::INSTANCEOF,
-    ])
+    ->withPreparedSets(
+//        deadCode: true, // Not yet, this removes also some commented code that I need to keep.
+        codeQuality: true,
+        codingStyle: true,
+        typeDeclarations: true,
+        privatization: true,
+        instanceOf: true,
+        earlyReturn: true,
+//        carbon: true,
+        phpunitCodeQuality: true,
+    )
+    ->withImportNames(
+        importDocBlockNames: false,
+        importShortClasses: false,
+        removeUnusedImports: true,
+    )
     ->withPhpSets()
     ->withoutParallel();
