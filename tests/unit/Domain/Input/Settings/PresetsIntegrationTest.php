@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace ItalyStrap\Tests\Unit\Domain\Input\Settings;
 
+use FontLib\Font;
+use FontLib\TrueType\File;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Palette;
@@ -266,8 +268,8 @@ EOF
         $files = \glob(\codecept_data_dir($relativePath . '**/*'), GLOB_BRACE);
         foreach ($files as $file) {
             break;
-            $font = \FontLib\Font::load($file);
-            if (!$font instanceof \FontLib\TrueType\File) {
+            $font = Font::load($file);
+            if (!$font instanceof File) {
                 continue;
             }
 

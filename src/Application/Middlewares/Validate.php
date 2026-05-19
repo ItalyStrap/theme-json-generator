@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Application\Middlewares;
 
+use Symfony\Component\Console\Output\ConsoleOutput;
 use ItalyStrap\Pipeline\HandlerInterface;
 use ItalyStrap\Pipeline\MiddlewareInterface;
 use ItalyStrap\ThemeJsonGenerator\Application\ValidateMessage;
@@ -34,7 +35,7 @@ final readonly class Validate implements MiddlewareInterface
         /**
          * OutputInterface $output
          */
-        $output = new \Symfony\Component\Console\Output\ConsoleOutput();
+        $output = new ConsoleOutput();
 
         foreach ($this->filesFinder->find($message->getRootFolder(), 'json') as $file) {
             $output->writeln('========================');

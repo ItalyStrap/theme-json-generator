@@ -30,7 +30,7 @@ final class JsonFileWriterIntegrationTest extends UnitTestCase
 
     private ?\ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Color $colorIntegration = null;
 
-    private ?\ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Typography $typographyIntegration = null;
+    private ?Typography $typographyIntegration = null;
 
     protected function makeInstance(): JsonFileWriter
     {

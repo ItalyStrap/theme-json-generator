@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Application\Middlewares;
 
+use Symfony\Component\Console\Output\ConsoleOutput;
 use ItalyStrap\Pipeline\HandlerInterface;
 use ItalyStrap\Pipeline\MiddlewareInterface;
 use ItalyStrap\ThemeJsonGenerator\Api\ThemeJson;
@@ -39,7 +40,7 @@ final readonly class Dump implements MiddlewareInterface
         /**
          * OutputInterface $output
          */
-        $output = new \Symfony\Component\Console\Output\ConsoleOutput();
+        $output = new ConsoleOutput();
 
         $count = 0;
 

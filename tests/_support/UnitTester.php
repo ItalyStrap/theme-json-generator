@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+use Codeception\Actor;
+use _generated\UnitTesterActions;
+
 
 /**
  * Inherited Methods
@@ -18,9 +21,9 @@ declare(strict_types=1);
  *
  * @SuppressWarnings(PHPMD)
 */
-final class UnitTester extends \Codeception\Actor
+final class UnitTester extends Actor
 {
-    use _generated\UnitTesterActions;
+    use UnitTesterActions;
 
     /**
      * Define custom actions here

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Application\Commands;
 
+use Symfony\Component\Console\Input\InputOption;
 use ItalyStrap\ThemeJsonGenerator\Application\Commands\Utils\RootFolderTrait;
 use ItalyStrap\ThemeJsonGenerator\Application\Message;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\DataFromJsonTrait;
@@ -37,7 +38,7 @@ final class InitCommand extends Command
         $this->addOption(
             'styles',
             's',
-            \Symfony\Component\Console\Input\InputOption::VALUE_OPTIONAL,
+            InputOption::VALUE_OPTIONAL,
             'Init JSON file inside styles folder'
         );
     }

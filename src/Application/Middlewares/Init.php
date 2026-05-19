@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Application\Middlewares;
 
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Brick\VarExporter\VarExporter;
 use ItalyStrap\Pipeline\HandlerInterface;
 use ItalyStrap\Pipeline\MiddlewareInterface;
@@ -58,7 +59,7 @@ TEMPLATE;
         /**
          * OutputInterface $output
          */
-        $output = new \Symfony\Component\Console\Output\ConsoleOutput();
+        $output = new ConsoleOutput();
 
         foreach ($this->filesFinder->find($message->getRootFolder(), 'json') as $file) {
             $this->generateEntryPointDataFile($output, $file);
