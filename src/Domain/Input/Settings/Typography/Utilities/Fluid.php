@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\Utilities;
 
-class Fluid
+final class Fluid
 {
     /**
      * @var string

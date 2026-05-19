@@ -15,7 +15,7 @@ use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\ScssFileWriter;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Handler\ConsoleHandler;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Dump implements MiddlewareInterface
+final class Dump implements MiddlewareInterface
 {
     /**
      * @var string

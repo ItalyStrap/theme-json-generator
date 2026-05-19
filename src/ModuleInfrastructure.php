@@ -10,7 +10,7 @@ use ItalyStrap\Finder\FinderFactory;
 use ItalyStrap\Finder\FinderInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
-class ModuleInfrastructure implements \ItalyStrap\Empress\ModuleInterface
+final class ModuleInfrastructure implements \ItalyStrap\Empress\ModuleInterface
 {
     /**
      * @return array<string, mixed>

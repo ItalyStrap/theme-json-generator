@@ -19,7 +19,7 @@ use Sabberworm\CSS\Property\Selector;
  *
  * @see CssTest
  */
-class Css implements CssInterface
+final class Css implements CssInterface
 {
     private readonly PresetsInterface $presets;
 

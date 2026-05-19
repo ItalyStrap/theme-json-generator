@@ -13,7 +13,7 @@ use ScssPhp\ScssPhp\OutputStyle;
 /**
  * @see ScssTest
  */
-class Scss implements CssInterface
+final class Scss implements CssInterface
 {
     private readonly PresetsInterface $presets;
 

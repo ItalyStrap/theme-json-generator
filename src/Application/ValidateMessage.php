@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Application;
 
-readonly class ValidateMessage
+final readonly class ValidateMessage
 {
     public function __construct(
         private string $rootFolder,

@@ -21,7 +21,7 @@ use Webimpress\SafeWriter\Exception\ExceptionInterface as FileWriterException;
 use Webimpress\SafeWriter\FileWriter;
 use Webmozart\Assert\Assert;
 
-class Init implements MiddlewareInterface
+final class Init implements MiddlewareInterface
 {
     use DataFromJsonTrait;
 

@@ -14,7 +14,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(name: InitCommand::NAME, description: InitCommand::DESCRIPTION)]
-class InitCommand extends Command
+final class InitCommand extends Command
 {
     use RootFolderTrait;
     use DataFromJsonTrait;

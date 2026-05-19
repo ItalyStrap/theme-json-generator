@@ -14,7 +14,7 @@ use JsonSchema\Validator;
 use ScssPhp\ScssPhp\Compiler;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Validate implements MiddlewareInterface
+final class Validate implements MiddlewareInterface
 {
     use DataFromJsonTrait;
 

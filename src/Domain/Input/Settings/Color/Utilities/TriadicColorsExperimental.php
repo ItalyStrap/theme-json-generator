@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities;
 
-readonly class TriadicColorsExperimental implements ColorsGenerator
+final readonly class TriadicColorsExperimental implements ColorsGenerator
 {
     public function __construct(
         private ColorModifierInterface $colorModifier

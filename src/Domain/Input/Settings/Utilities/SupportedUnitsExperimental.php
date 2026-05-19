@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Utilities;
 
-readonly class SupportedUnitsExperimental implements UnitInterfaceExperimental
+final readonly class SupportedUnitsExperimental implements UnitInterfaceExperimental
 {
     private array $units;
 

@@ -8,7 +8,7 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorInt
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetTrait;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetInterface;
 
-class Palette implements PresetInterface
+final class Palette implements PresetInterface
 {
     use PresetTrait;
 

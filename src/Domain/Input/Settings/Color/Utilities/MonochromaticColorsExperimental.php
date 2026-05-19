@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities;
 
-class MonochromaticColorsExperimental implements ColorsGenerator
+final class MonochromaticColorsExperimental implements ColorsGenerator
 {
     /**
      * @param array<array-key, int|float> $steps

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities;
 
-readonly class AnalogousColorsExperimental implements ColorsGenerator
+final readonly class AnalogousColorsExperimental implements ColorsGenerator
 {
     public function __construct(private ColorModifierInterface $colorModifier)
     {

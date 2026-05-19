@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\Utilities;
 
-readonly class FontFace
+final readonly class FontFace
 {
     /**
      * @param string[] $src

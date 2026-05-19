@@ -6,7 +6,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities;
 
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Palette;
 
-class BoxShadow implements \Stringable
+final class BoxShadow implements \Stringable
 {
     private bool $inset = false;
 

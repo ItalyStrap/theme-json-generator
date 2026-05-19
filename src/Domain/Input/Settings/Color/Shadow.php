@@ -8,7 +8,7 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\BoxShado
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetTrait;
 
-class Shadow implements PresetInterface
+final class Shadow implements PresetInterface
 {
     use PresetTrait;
 

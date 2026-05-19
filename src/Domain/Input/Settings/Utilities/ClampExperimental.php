@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Utilities;
 
-readonly class ClampExperimental implements \Stringable
+final readonly class ClampExperimental implements \Stringable
 {
     public function __construct(private string $value, private string $min, private string $max)
     {

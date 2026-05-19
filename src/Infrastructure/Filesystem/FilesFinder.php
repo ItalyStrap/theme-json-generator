@@ -6,7 +6,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem;
 
 use ItalyStrap\Finder\FinderInterface;
 
-class FilesFinder
+final class FilesFinder
 {
     public const ROOT_FILE_NAME = 'theme';
 

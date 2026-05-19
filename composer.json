@@ -43,6 +43,7 @@
     "require-dev": {
         "lucatume/wp-browser": "^4.5",
         "phpspec/prophecy-phpunit": "^2.0",
+        "dg/bypass-finals": "^1.9",
 
         "codeception/module-asserts": "^3.0",
         "codeception/module-phpbrowser": "^3.0",
@@ -64,6 +65,7 @@
         "infection/codeception-adapter": "^0.4.1",
 
         "rector/rector": "^2.4",
+        "rector/swiss-knife": "^2.3",
         "symplify/easy-coding-standard": "^12.0",
 
         "italystrap/debug": "dev-master"

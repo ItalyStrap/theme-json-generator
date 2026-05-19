@@ -21,7 +21,7 @@ use ItalyStrap\ThemeJsonGenerator\Infrastructure\Container\ThemeJsonContainerFac
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Handler\ConsoleHandler;
 use Psr\Container\ContainerInterface;
 
-class ModuleApplication implements ModuleInterface
+final class ModuleApplication implements ModuleInterface
 {
     /**
      * @return array<string, mixed>

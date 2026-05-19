@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Custom;
 
-readonly class CustomToPresets
+final readonly class CustomToPresets
 {
     /**
      * @param array<string, mixed> $customs

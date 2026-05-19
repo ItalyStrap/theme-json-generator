@@ -7,7 +7,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem;
 use ItalyStrap\Config\ConfigInterface;
 use Webimpress\SafeWriter;
 
-class ScssFileWriter implements FileWriter
+final class ScssFileWriter implements FileWriter
 {
     use ConvertCase;
 

@@ -6,7 +6,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities;
 
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Palette;
 
-class LinearGradient implements GradientInterface
+final class LinearGradient implements GradientInterface
 {
     private string $direction = '';
 

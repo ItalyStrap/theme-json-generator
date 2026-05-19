@@ -15,7 +15,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(name: ValidateCommand::NAME, description: ValidateCommand::DESCRIPTION)]
-class ValidateCommand extends Command
+final class ValidateCommand extends Command
 {
     use RootFolderTrait;
     use DataFromJsonTrait;
