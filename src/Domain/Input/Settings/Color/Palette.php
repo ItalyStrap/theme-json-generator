@@ -22,17 +22,11 @@ class Palette implements PresetInterface
      */
     public const KEY = 'settings.color.palette';
 
-    private string $slug;
-
-    private string $name;
-
-    private ColorInterface $color;
-
-    public function __construct(string $slug, string $name, ColorInterface $color)
-    {
-        $this->slug = $slug;
-        $this->name = $name;
-        $this->color = $color;
+    public function __construct(
+        private readonly string $slug,
+        private readonly string $name,
+        private readonly ColorInterface $color
+    ) {
     }
 
     /**

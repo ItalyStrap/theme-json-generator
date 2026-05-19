@@ -46,12 +46,9 @@ final class DumpCommand extends Command
      */
     public const FILE = 'file';
 
-    private ConsoleHandler $handler;
-
     public function __construct(
-        ConsoleHandler $handler
+        private ConsoleHandler $handler
     ) {
-        $this->handler = $handler;
         parent::__construct();
     }
 

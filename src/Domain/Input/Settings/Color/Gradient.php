@@ -17,17 +17,11 @@ class Gradient implements PresetInterface
      */
     public const TYPE = 'gradient';
 
-    private string $slug;
-
-    private string $name;
-
-    private GradientInterface $gradient;
-
-    public function __construct(string $slug, string $name, GradientInterface $gradient)
-    {
-        $this->slug = $slug;
-        $this->name = $name;
-        $this->gradient = $gradient;
+    public function __construct(
+        private readonly string $slug,
+        private readonly string $name,
+        private readonly GradientInterface $gradient
+    ) {
     }
 
     /**

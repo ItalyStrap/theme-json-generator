@@ -76,7 +76,7 @@ final class ThemeJson extends Config
         foreach ($keys as $key => $value) {
             try {
                 $this->set($key, $presets->toArrayByCategory($value));
-            } catch (\Exception $e) {
+            } catch (\Exception) {
                 continue;
             }
         }

@@ -280,7 +280,7 @@ EOF
 //          codecept_debug($font->getFontWeight());
             $fontFace[] = [
                 'fontFamily' => $font->getFontName(),
-                'fontStyle' => \mb_strtolower($font->getFontSubfamily()),
+                'fontStyle' => \mb_strtolower((string) $font->getFontSubfamily()),
                 'fontWeight' => $font->getFontWeight(),
                 'src' => [
                     \sprintf(

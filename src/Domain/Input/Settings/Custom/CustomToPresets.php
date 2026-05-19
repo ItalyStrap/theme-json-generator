@@ -4,20 +4,13 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Custom;
 
-class CustomToPresets
+readonly class CustomToPresets
 {
-    /**
-     * @var array<string, mixed>
-     */
-    private array $customs = [];
-
     /**
      * @param array<string, mixed> $customs
      */
-    public function __construct(
-        array $customs = []
-    ) {
-        $this->customs = $customs;
+    public function __construct(private array $customs = [])
+    {
     }
 
     /**

@@ -18,20 +18,11 @@ class Validate implements MiddlewareInterface
 {
     use DataFromJsonTrait;
 
-    private Validator $validator;
-
-    private FilesFinder $filesFinder;
-
-    private Compiler $compiler;
-
     public function __construct(
-        Validator $validator,
-        Compiler $compiler,
-        FilesFinder $filesFinder
+        private readonly Validator $validator,
+        private readonly Compiler $compiler,
+        private readonly FilesFinder $filesFinder
     ) {
-        $this->validator = $validator;
-        $this->filesFinder = $filesFinder;
-        $this->compiler = $compiler;
     }
 
     /**

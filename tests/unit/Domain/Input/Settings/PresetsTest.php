@@ -81,11 +81,8 @@ class PresetsTest extends UnitTestCase
     private function prepareFakeItem(string $val = ''): PresetInterface
     {
         return new class ($val) implements PresetInterface {
-            private string $val;
-
-            public function __construct(string $val = '')
+            public function __construct(private readonly string $val = '')
             {
-                $this->val = $val;
             }
 
             public function slug(): string

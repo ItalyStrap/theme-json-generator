@@ -21,13 +21,13 @@ class ValidateCommand extends Command
     use DataFromJsonTrait;
 
     public const NAME = 'validate';
+
     public const DESCRIPTION = 'Validate theme.json file';
-    private ConsoleHandler $handler;
+
 
     public function __construct(
-        ConsoleHandler $handler
+        private readonly ConsoleHandler $handler
     ) {
-        $this->handler = $handler;
         parent::__construct();
     }
 

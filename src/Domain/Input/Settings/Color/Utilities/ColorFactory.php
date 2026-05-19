@@ -27,7 +27,7 @@ final class ColorFactory implements ColorFactoryInterface
      */
     public function hsla(int $hue, float $saturation, float $lightness, float $alpha = 1): ColorInterface
     {
-        return new Color("hsla($hue, $saturation%, $lightness%, $alpha)");
+        return new Color(sprintf('hsla(%d, %s%%, %s%%, %s)', $hue, $saturation, $lightness, $alpha));
     }
 
     /**
@@ -35,6 +35,6 @@ final class ColorFactory implements ColorFactoryInterface
      */
     public function rgba(int $red, int $green, int $blue, float $alpha = 1): ColorInterface
     {
-        return new Color("rgba($red, $green, $blue, $alpha)");
+        return new Color(sprintf('rgba(%d, %d, %d, %s)', $red, $green, $blue, $alpha));
     }
 }

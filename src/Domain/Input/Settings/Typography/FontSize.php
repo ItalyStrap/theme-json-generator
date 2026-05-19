@@ -17,20 +17,12 @@ class FontSize implements PresetInterface
      */
     public const TYPE = 'fontSize';
 
-    private string $slug;
-
-    private string $name;
-
-    private string $size;
-
-    private ?Fluid $fluid;
-
-    public function __construct(string $slug, string $name, string $size, ?Fluid $fluid = null)
-    {
-        $this->slug = $slug;
-        $this->name = $name;
-        $this->size = $size;
-        $this->fluid = $fluid;
+    public function __construct(
+        private readonly string $slug,
+        private readonly string $name,
+        private readonly string $size,
+        private readonly ?Fluid $fluid = null
+    ) {
     }
 
     /**
@@ -43,6 +35,6 @@ class FontSize implements PresetInterface
             'name' => $this->name,
             'size' => $this->size,
             'fluid' => $this->fluid,
-        ], static fn ($value): bool => null !== $value);
+        ], static fn (string|Fluid|null $value): bool => null !== $value);
     }
 }

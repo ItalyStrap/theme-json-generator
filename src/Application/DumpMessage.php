@@ -4,25 +4,14 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Application;
 
-class DumpMessage
+readonly class DumpMessage
 {
-    private string $rootFolder = '';
-
-    private bool $dry_run;
-
-    private string $sassFolder;
-    private string $file;
-
     public function __construct(
-        string $rootFolder,
-        string $sassFolder,
-        bool $dry_run,
-        string $file
+        private string $rootFolder,
+        private string $sassFolder,
+        private bool $dry_run,
+        private string $file
     ) {
-        $this->rootFolder = $rootFolder;
-        $this->dry_run = $dry_run;
-        $this->sassFolder = $sassFolder;
-        $this->file = $file;
     }
 
     public function getRootFolder(): string

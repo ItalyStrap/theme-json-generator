@@ -10,7 +10,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Utilities;
  * https://github.com/PhpUnitsOfMeasure/php-units-of-measure
  * https://wiki.php.net/rfc/clamp
  */
-final class DimensionExperimental
+final readonly class DimensionExperimental implements \Stringable
 {
     private string $value;
 

@@ -4,22 +4,13 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Application;
 
-class ValidateMessage
+readonly class ValidateMessage
 {
-    private string $rootFolder;
-
-    private string $schemaPath;
-
-    private bool $forceRecreate;
-
     public function __construct(
-        string $rootFolder,
-        string $schemaPath,
-        bool $forceRecreate = false
+        private string $rootFolder,
+        private string $schemaPath,
+        private bool $forceRecreate = false
     ) {
-        $this->schemaPath = $schemaPath;
-        $this->rootFolder = $rootFolder;
-        $this->forceRecreate = $forceRecreate;
     }
 
     public function getSchemaPath(): string

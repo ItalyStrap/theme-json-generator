@@ -10,16 +10,13 @@ use Spatie\Color\Hsla;
 
 final class Color implements ColorInterface
 {
-    private SpatieColor $spatieColor;
+    private readonly SpatieColor $spatieColor;
 
-    private string $type;
+    private readonly string $type;
 
-    private Hsla $hsla;
+    private readonly Hsla $hsla;
 
-    /**
-     * @var string|float
-     */
-    private $alpha = 1.0;
+    private float|string $alpha = 1.0;
 
     /**
      * Luminance of #808080 or rgb(128,128,128) or hsl(0,0%,50%)
@@ -35,7 +32,6 @@ final class Color implements ColorInterface
         $this->type = $reflected->getShortName();
         if ($reflected->hasProperty('alpha')) {
             $reflectionProperty = $reflected->getProperty('alpha');
-            $reflectionProperty->setAccessible(true);
             $alpha = $reflectionProperty->getValue($this->spatieColor);
             if (!\is_string($alpha) && !\is_float($alpha) && !\is_int($alpha)) {
                 throw new \RuntimeException(\sprintf(
@@ -45,7 +41,6 @@ final class Color implements ColorInterface
             }
 
             $this->alpha = \is_int($alpha) ? (float)$alpha : $alpha;
-            $reflectionProperty->setAccessible(false);
         }
 
         $alpha = $this->fromHexToFloat($this->alpha);
@@ -101,7 +96,7 @@ final class Color implements ColorInterface
     /**
      * @return string|int
      */
-    public function red()
+    public function red(): string|int
     {
         $red = $this->spatieColor->red();
         if (!\is_string($red) && !\is_int($red)) {
@@ -114,7 +109,7 @@ final class Color implements ColorInterface
     /**
      * @return string|int
      */
-    public function green()
+    public function green(): string|int
     {
         $green = $this->spatieColor->green();
         if (!\is_string($green) && !\is_int($green)) {
@@ -127,7 +122,7 @@ final class Color implements ColorInterface
     /**
      * @return string|int
      */
-    public function blue()
+    public function blue(): string|int
     {
         $blue = $this->spatieColor->blue();
         if (!\is_string($blue) && !\is_int($blue)) {
@@ -152,7 +147,7 @@ final class Color implements ColorInterface
         return (int)\round($this->hsla->lightness());
     }
 
-    public function alpha()
+    public function alpha(): float|string
     {
         return $this->alpha;
     }
@@ -174,7 +169,7 @@ final class Color implements ColorInterface
 
     public function toHsla(?float $alpha = null): self
     {
-        $alpha = $alpha ?? $this->fromHexToFloat($this->alpha);
+        $alpha ??= $this->fromHexToFloat($this->alpha);
         return new self((string) $this->spatieColor->toHsla($alpha));
     }
 
@@ -185,7 +180,7 @@ final class Color implements ColorInterface
 
     public function toRgba(?float $alpha = null): self
     {
-        $alpha = $alpha ?? $this->fromHexToFloat($this->alpha);
+        $alpha ??= $this->fromHexToFloat($this->alpha);
         return new self((string) $this->spatieColor->toRgba($alpha));
     }
 

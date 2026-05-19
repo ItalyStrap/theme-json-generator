@@ -17,18 +17,17 @@ class Shadow implements PresetInterface
      */
     public const TYPE = 'shadow';
 
-    private string $slug;
-    private string $name;
 
     /**
      * @var BoxShadow[]
      */
     private array $shadow;
 
-    public function __construct(string $slug, string $name, BoxShadow ...$shadow)
-    {
-        $this->slug = $slug;
-        $this->name = $name;
+    public function __construct(
+        private readonly string $slug,
+        private readonly string $name,
+        BoxShadow ...$shadow
+    ) {
         $this->shadow = $shadow;
     }
 

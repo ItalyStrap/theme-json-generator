@@ -16,17 +16,11 @@ class FontFamily implements PresetInterface
      */
     public const TYPE = 'fontFamily';
 
-    private string $slug;
-
-    private string $name;
-
-    private string $fontFamily;
-
-    public function __construct(string $slug, string $name, string $fontFamily)
-    {
-        $this->slug = $slug;
-        $this->name = $name;
-        $this->fontFamily = $fontFamily;
+    public function __construct(
+        private readonly string $slug,
+        private readonly string $name,
+        private readonly string $fontFamily
+    ) {
     }
 
     /**

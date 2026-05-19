@@ -6,10 +6,8 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities;
 
 use Exception;
 
-final class ColorModifier implements ColorModifierInterface
+final readonly class ColorModifier implements ColorModifierInterface
 {
-    private ColorInterface $color;
-
     private ColorFactoryInterface $color_factory;
 
     private string $initialType;
@@ -17,9 +15,8 @@ final class ColorModifier implements ColorModifierInterface
     /**
      * @throws Exception
      */
-    public function __construct(ColorInterface $color, ?ColorFactoryInterface $factory = null)
+    public function __construct(private ColorInterface $color, ?ColorFactoryInterface $factory = null)
     {
-        $this->color = $color;
         $this->color_factory = $factory ?? new ColorFactory();
         $this->initialType = $this->color->type();
     }

@@ -6,20 +6,13 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities;
 
 class MonochromaticColorsExperimental implements ColorsGenerator
 {
-    private ColorModifierInterface $colorModifier;
-
-    /**
-     * @var array<array-key, int|float>
-     */
-    private array $steps = [];
-
     /**
      * @param array<array-key, int|float> $steps
      */
-    public function __construct(ColorModifierInterface $color, array $steps)
-    {
-        $this->colorModifier = $color;
-        $this->steps = $steps;
+    public function __construct(
+        private readonly ColorModifierInterface $colorModifier,
+        private array $steps
+    ) {
     }
 
     public function generate(): array

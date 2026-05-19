@@ -24,11 +24,11 @@ class CustomTest extends UnitTestCase
         );
     }
 
-    public function testSlug()
+    public function testSlug(): void
     {
     }
 
-    public function testProp()
+    public function testProp(): void
     {
     }
 }

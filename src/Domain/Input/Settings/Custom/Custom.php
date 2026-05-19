@@ -16,19 +16,13 @@ class Custom implements PresetInterface
      */
     public const TYPE = 'custom';
 
-    private string $key;
-
-    private string $value;
-
     private string $name;
 
     public function __construct(
-        string $key,
-        string $value
+        private string $key,
+        private string $value
     ) {
-        $this->key = $key;
         $this->name = \ucfirst(\str_replace('.', ' ', $this->key));
-        $this->value = $value;
     }
 
     public function slug(): string

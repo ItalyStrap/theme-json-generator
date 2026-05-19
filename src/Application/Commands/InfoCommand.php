@@ -18,14 +18,12 @@ class InfoCommand extends Command
     use RootFolderTrait;
 
     public const NAME = 'info';
+
     public const DESCRIPTION = 'Show info about JSON theme';
 
-    private ConsoleHandler $handler;
-
     public function __construct(
-        ConsoleHandler $handler
+        private ConsoleHandler $handler
     ) {
-        $this->handler = $handler;
         parent::__construct();
     }
 

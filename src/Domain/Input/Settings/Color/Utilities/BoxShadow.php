@@ -6,13 +6,18 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities;
 
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Palette;
 
-class BoxShadow
+class BoxShadow implements \Stringable
 {
     private bool $inset = false;
+
     private string $x = '';
+
     private string $y = '';
+
     private string $blur = '';
+
     private string $spread = '';
+
     private string $color = '';
 
     public function inset(bool $inset = true): self
@@ -91,7 +96,7 @@ class BoxShadow
         ];
 
         $this->reset();
-        return \trim(\implode(' ', \array_filter($shadow, static fn($value) => $value !== '')));
+        return \trim(\implode(' ', \array_filter($shadow, static fn(string $value): bool => $value !== '')));
     }
 
     public function __clone()

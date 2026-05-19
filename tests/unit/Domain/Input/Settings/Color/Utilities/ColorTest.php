@@ -137,7 +137,7 @@ class ColorTest extends UnitTestCase
     /**
      * @dataProvider colorProvider
      */
-    public function testItShouldGerRed(string $color, $r, $g, $b): void
+    public function testItShouldGerRed(string $color, string|int $r, string|int $g, string|int $b): void
     {
         $sut = $this->makeInstance($color);
 

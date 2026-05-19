@@ -23,12 +23,9 @@ class InitCommand extends Command
 
     public const DESCRIPTION = 'Initialize theme.json file';
 
-    private ConsoleHandler $handler;
-
     public function __construct(
-        ConsoleHandler $handler,
+        private readonly ConsoleHandler $handler,
     ) {
-        $this->handler = $handler;
         parent::__construct();
     }
 

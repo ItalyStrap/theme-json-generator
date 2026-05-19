@@ -11,14 +11,11 @@ class ScssFileWriter implements FileWriter
 {
     use ConvertCase;
 
-    private string $path;
-
     /**
      * @param string $path
      */
-    public function __construct(string $path)
+    public function __construct(private string $path)
     {
-        $this->path = $path;
     }
 
     /**

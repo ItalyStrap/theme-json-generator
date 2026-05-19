@@ -24,16 +24,10 @@ class Dump implements MiddlewareInterface
 
     public const JSON_FILE_SUFFIX = '.json';
 
-    private FilesFinder $filesFinder;
-
-    private ThemeJsonContainerFactoryInterface $containerFactory;
-
     public function __construct(
-        FilesFinder $filesFinder,
-        ThemeJsonContainerFactoryInterface $containerFactory
+        private readonly FilesFinder $filesFinder,
+        private readonly ThemeJsonContainerFactoryInterface $containerFactory
     ) {
-        $this->filesFinder = $filesFinder;
-        $this->containerFactory = $containerFactory;
     }
 
     /**

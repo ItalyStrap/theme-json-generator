@@ -50,7 +50,7 @@ class OnlyCtorPresetsParamTest extends UnitTestCase
             \sprintf(
                 "The constructor of %s does not have a parameter named \$preset, found: %s",
                 $class,
-                \implode(', ', \array_map(fn(\ReflectionParameter $p) => '$' . $p->getName(), $parameters))
+                \implode(', ', \array_map(fn(\ReflectionParameter $p): string => '$' . $p->getName(), $parameters))
             )
         );
     }

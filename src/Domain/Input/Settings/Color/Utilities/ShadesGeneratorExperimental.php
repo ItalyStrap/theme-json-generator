@@ -23,16 +23,6 @@ class ShadesGeneratorExperimental
      */
     public const INCREMENT_BY = 100;
 
-    private ColorInterface $color;
-
-    private string $slug;
-
-    private int $min;
-
-    private int $max;
-
-    private int $increment_by;
-
     public static function fromPalette(
         Palette $palette,
         int $min = self::MIN,
@@ -65,17 +55,12 @@ class ShadesGeneratorExperimental
     }
 
     public function __construct(
-        ColorInterface $color,
-        string $slug,
-        int $min = self::MIN,
-        int $max = self::MAX,
-        int $increment_by = self::INCREMENT_BY
+        private readonly ColorInterface $color,
+        private readonly string $slug,
+        private readonly int $min = self::MIN,
+        private readonly int $max = self::MAX,
+        private readonly int $increment_by = self::INCREMENT_BY
     ) {
-        $this->color = $color;
-        $this->slug = $slug;
-        $this->min = $min;
-        $this->max = $max;
-        $this->increment_by = $increment_by;
     }
 
     public function toColors(): array
@@ -105,14 +90,14 @@ class ShadesGeneratorExperimental
     }
 
     /**
-     * This functionality create an array of shades of a given color
+     * This functionality creates an array of shades of a given color
      * The created shades are from 10% to 100% of the given color
      * If the color is dark, the shades will be lightened
      * If the color is light, the shades will be darkened
      *
-     * This method create an array of Palette of shades of a color
+     * This method creates an array of Palette of shades of a color
      * If the color generated is #000000 or #ffffff it will be skipped,
-     * and you will get only the shades of the color without duplicates values likes many #000000 or #ffffff
+     * and you will get only the shades of the color without duplicates values like many #000000 or #ffffff
      *
      * @throws \Exception
      */

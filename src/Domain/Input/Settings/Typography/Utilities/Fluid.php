@@ -21,14 +21,10 @@ class Fluid
      */
     public const MAX = 'max';
 
-    private string $min;
-
-    private string $max;
-
-    public function __construct(string $min, string $max)
-    {
-        $this->min = $min;
-        $this->max = $max;
+    public function __construct(
+        private readonly string $min,
+        private readonly string $max
+    ) {
     }
 
     /**

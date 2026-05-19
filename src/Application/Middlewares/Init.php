@@ -46,12 +46,8 @@ TEMPLATE;
 
     public const ENTRY_POINT_EXTENSION = '.php';
 
-    private FilesFinder $filesFinder;
-
-    public function __construct(
-        FilesFinder $filesFinder
-    ) {
-        $this->filesFinder = $filesFinder;
+    public function __construct(private FilesFinder $filesFinder)
+    {
     }
 
     /**
