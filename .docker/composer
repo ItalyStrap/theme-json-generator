@@ -3,4 +3,9 @@
 # Get project name from .env file
 PROJECT_NAME=$(grep PROJECT_NAME .env | cut -d '=' -f2 | tr -d '"')
 
-docker-compose run -w /var/www/html/wp-content/plugins/"${PROJECT_NAME}" --rm wordpress sh -c "composer ${*}"
+docker-compose run \
+    --user www-data \
+    -w /var/www/html/wp-content/plugins/"${PROJECT_NAME}" \
+    --rm \
+    wordpress \
+    sh -c "composer ${*}"

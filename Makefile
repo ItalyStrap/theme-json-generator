@@ -1,10 +1,15 @@
 DOCKER_FOLDER = .docker
 DOCKER_DIR = cd $(DOCKER_FOLDER) &&
-HOST_OWNER = $(shell id -u):$(shell id -g)
+HOST_UID = $(shell id -u)
+HOST_GID = $(shell id -g)
+HOST_OWNER = $(HOST_UID):$(HOST_GID)
 FILES_OWNERSHIP = sudo chown -R $(HOST_OWNER) .
 DB_USER = $(shell cat .docker/.env | grep DB_USER | cut -d '=' -f2)
 DB_PASSWORD = $(shell cat .docker/.env | grep DB_PASSWORD | cut -d '=' -f2)
 DB_NAME = $(shell cat .docker/.env | grep DB_NAME | cut -d '=' -f2)
+
+export HOST_UID
+export HOST_GID
 
 default: help
 
