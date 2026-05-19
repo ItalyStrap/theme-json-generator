@@ -6,7 +6,6 @@ namespace ItalyStrap\Tests\Unit\Domain\Input\Settings;
 
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Presets;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Palette;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetInterface;
 
 final class PresetsTest extends UnitTestCase

@@ -8,8 +8,6 @@ use ItalyStrap\Tests\CssStyleStringProviderTrait;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Css;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\CssInterface;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Scss;
-use ScssPhp\ScssPhp\Compiler;
 
 final class CssTest extends UnitTestCase
 {
