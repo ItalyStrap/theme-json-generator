@@ -15,7 +15,7 @@ use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\ScssFileWriter;
 use ItalyStrap\ThemeJsonGenerator\Infrastructure\Handler\ConsoleHandler;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class Dump implements MiddlewareInterface
+final readonly class Dump implements MiddlewareInterface
 {
     /**
      * @var string
@@ -25,8 +25,8 @@ final class Dump implements MiddlewareInterface
     public const JSON_FILE_SUFFIX = '.json';
 
     public function __construct(
-        private readonly FilesFinder $filesFinder,
-        private readonly ThemeJsonContainerFactoryInterface $containerFactory
+        private FilesFinder $filesFinder,
+        private ThemeJsonContainerFactoryInterface $containerFactory
     ) {
     }
 

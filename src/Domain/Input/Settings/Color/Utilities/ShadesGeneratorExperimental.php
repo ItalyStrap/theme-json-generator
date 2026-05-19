@@ -6,7 +6,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities;
 
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Palette;
 
-final class ShadesGeneratorExperimental
+final readonly class ShadesGeneratorExperimental
 {
     /**
      * @var int
@@ -55,11 +55,11 @@ final class ShadesGeneratorExperimental
     }
 
     public function __construct(
-        private readonly ColorInterface $color,
-        private readonly string $slug,
-        private readonly int $min = self::MIN,
-        private readonly int $max = self::MAX,
-        private readonly int $increment_by = self::INCREMENT_BY
+        private ColorInterface $color,
+        private string $slug,
+        private int $min = self::MIN,
+        private int $max = self::MAX,
+        private int $increment_by = self::INCREMENT_BY
     ) {
     }
 

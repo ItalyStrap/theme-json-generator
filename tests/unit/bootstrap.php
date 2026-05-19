@@ -4,6 +4,6 @@ declare(strict_types=1);
 
 use DG\BypassFinals;
 
-(function () {
+(function (): void {
     BypassFinals::enable();
 })();

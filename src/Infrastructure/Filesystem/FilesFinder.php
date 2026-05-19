@@ -6,7 +6,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem;
 
 use ItalyStrap\Finder\FinderInterface;
 
-final class FilesFinder
+final readonly class FilesFinder
 {
     public const ROOT_FILE_NAME = 'theme';
 
@@ -14,7 +14,7 @@ final class FilesFinder
 
     public const JSON_FILE_SUFFIX = '.json';
 
-    public function __construct(private readonly FinderInterface $finder)
+    public function __construct(private FinderInterface $finder)
     {
     }
 

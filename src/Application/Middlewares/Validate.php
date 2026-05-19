@@ -14,14 +14,14 @@ use JsonSchema\Validator;
 use ScssPhp\ScssPhp\Compiler;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class Validate implements MiddlewareInterface
+final readonly class Validate implements MiddlewareInterface
 {
     use DataFromJsonTrait;
 
     public function __construct(
-        private readonly Validator $validator,
-        private readonly Compiler $compiler,
-        private readonly FilesFinder $filesFinder
+        private Validator $validator,
+        private Compiler $compiler,
+        private FilesFinder $filesFinder
     ) {
     }
 

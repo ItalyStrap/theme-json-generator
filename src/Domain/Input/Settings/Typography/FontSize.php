@@ -8,7 +8,7 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetTrait;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetInterface;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\Utilities\Fluid;
 
-final class FontSize implements PresetInterface
+final readonly class FontSize implements PresetInterface
 {
     use PresetTrait;
 
@@ -18,10 +18,10 @@ final class FontSize implements PresetInterface
     public const TYPE = 'fontSize';
 
     public function __construct(
-        private readonly string $slug,
-        private readonly string $name,
-        private readonly string $size,
-        private readonly ?Fluid $fluid = null
+        private string $slug,
+        private string $name,
+        private string $size,
+        private ?Fluid $fluid = null
     ) {
     }
 

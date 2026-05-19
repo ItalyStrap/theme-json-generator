@@ -7,7 +7,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetTrait;
 use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetInterface;
 
-final class FontFamily implements PresetInterface
+final readonly class FontFamily implements PresetInterface
 {
     use PresetTrait;
 
@@ -17,9 +17,9 @@ final class FontFamily implements PresetInterface
     public const TYPE = 'fontFamily';
 
     public function __construct(
-        private readonly string $slug,
-        private readonly string $name,
-        private readonly string $fontFamily
+        private string $slug,
+        private string $name,
+        private string $fontFamily
     ) {
     }
 
