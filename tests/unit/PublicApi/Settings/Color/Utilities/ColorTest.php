@@ -296,4 +296,57 @@ final class ColorTest extends UnitTestCase
         $this->assertStringMatchesFormat('hsl(0,0%,0%)', (string)$sut->toHsl(), '');
         $this->assertStringMatchesFormat('hsla(0,0%,0%,0.25)', (string)$sut->toHsla(), '');
     }
+
+    public static function hslFullTurnEquivalenceProvider(): \Generator
+    {
+        yield 'red' => [
+            'hsl(0,100%,50%)',
+            'hsl(360,100%,50%)',
+            '#ff0000',
+            'rgb(255,0,0)',
+            'rgba(255,0,0,1.00)',
+            'hsl(0,100%,50%)',
+            'hsla(0,100%,50%,1)',
+        ];
+
+        yield 'dark desaturated red' => [
+            'hsl(0,50%,25%)',
+            'hsl(360,50%,25%)',
+            '#602020',
+            'rgb(96,32,32)',
+            'rgba(96,32,32,1.00)',
+            'hsl(0,50%,25%)',
+            'hsla(0,50%,25%,1)',
+        ];
+    }
+
+    /**
+     * @dataProvider hslFullTurnEquivalenceProvider
+     */
+    public function testHslZeroAndFullTurnHueAreEquivalentInConversions(
+        string $zeroHue,
+        string $fullTurnHue,
+        string $hex,
+        string $rgb,
+        string $rgba,
+        string $hsl,
+        string $hsla
+    ): void {
+        $zero = $this->makeInstance($zeroHue);
+        $fullTurn = $this->makeInstance($fullTurnHue);
+
+        $this->assertSame($hex, (string)$zero->toHex());
+        $this->assertSame($hex, (string)$fullTurn->toHex());
+        $this->assertSame($rgb, (string)$zero->toRgb());
+        $this->assertSame($rgb, (string)$fullTurn->toRgb());
+        $this->assertSame($rgba, (string)$zero->toRgba());
+        $this->assertSame($rgba, (string)$fullTurn->toRgba());
+
+        $this->assertSame($hsl, (string)$zero->toHex()->toHsl());
+        $this->assertSame($hsl, (string)$fullTurn->toHex()->toHsl());
+        $this->assertSame($hsl, (string)$zero->toRgb()->toHsl());
+        $this->assertSame($hsl, (string)$fullTurn->toRgb()->toHsl());
+        $this->assertSame($hsla, (string)$zero->toRgba()->toHsla());
+        $this->assertSame($hsla, (string)$fullTurn->toRgba()->toHsla());
+    }
 }

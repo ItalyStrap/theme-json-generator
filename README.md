@@ -1,4 +1,4 @@
-# ItalyStrap Theme Json Generator
+# ItalyStrap Theme JSON Generator
 
 [![Tests Status](https://github.com/ItalyStrap/theme-json-generator/actions/workflows/test.yml/badge.svg)](https://github.com/ItalyStrap/theme-json-generator/actions/workflows/test.yml)
 [![Latest Stable Version](https://img.shields.io/packagist/v/italystrap/theme-json-generator.svg)](https://packagist.org/packages/italystrap/theme-json-generator)
@@ -7,11 +7,11 @@
 [![License](https://img.shields.io/packagist/l/italystrap/theme-json-generator.svg)](https://packagist.org/packages/italystrap/theme-json-generator)
 ![PHP from Packagist](https://img.shields.io/packagist/php-v/italystrap/theme-json-generator)
 
-WordPress Theme Json Generator: The OOP Way
+WordPress Theme JSON Generator: The OOP Way
 
 **Work in Progress:** This project is experimental and currently in development. As we navigate through the 0.x.x versions, please note that API changes may occur. For understanding versioning, refer to the [SemVer](http://semver.org/) specification.
 
-**Project Vision:** The aim is to revolutionize the way `theme.json` files (and other `*.json` files within the `styles` folder) are generated because json sucks 😁 (just kidding).
+**Project Vision:** The aim is to revolutionize the way `theme.json` files (and other `*.json` files within the `styles` folder) are generated because JSON sucks 😁 (just kidding).
 
 PHP offers the flexibility to divide configurations into multiple files, include comments, and generate dynamic content, overcoming the limitations of JSON.
 
@@ -22,9 +22,9 @@ PHP offers the flexibility to divide configurations into multiple files, include
 **Not Suited For:**
 - Users content with direct JSON file manipulation without the need for PHP generation.
 - Those who believe this approach complicates the JSON generation process.
-- Individuals comfortable managing extensive JSON configurations manually.
+- Individuals are comfortable managing extensive JSON configurations manually.
 
-**Explore With Us:** Join us in exploring this CLI and WP_CLI tool for generating and validating JSON files for Block Themes, and see how it can streamline your development process.
+**Explore With Us:** Join us in exploring this CLI and WP_CLI tool for generating and validating JSON files for Block Themes and see how it can streamline your development process.
 
 **Important Considerations for Developers:**
 

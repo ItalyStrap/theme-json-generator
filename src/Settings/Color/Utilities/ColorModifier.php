@@ -72,7 +72,7 @@ final readonly class ColorModifier implements ColorModifierInterface
             return $this->color;
         }
 
-        return $this->hueRotate($this->color->hue() + 180);
+        return $this->hueRotate(180);
     }
 
     public function invert(): ColorInterface
@@ -92,6 +92,8 @@ final readonly class ColorModifier implements ColorModifierInterface
         if ($sumHue < 0) {
             $sumHue = 360 + $sumHue;
         }
+
+        $sumHue %= 360;
 
         return $this->createNewColorFrom(
             (string) $sumHue,

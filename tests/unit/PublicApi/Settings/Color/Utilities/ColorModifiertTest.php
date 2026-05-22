@@ -173,11 +173,47 @@ final class ColorModifiertTest extends UnitTestCase
         $this->assertStringMatchesFormat('#c04040', (string)$sut->tone(0.5), '');
     }
 
-    public function testItShouldReturnComplementaryColor(): void
+    public static function complementaryColorProvider(): \Generator
     {
-        $sut = $this->makeInstance('#ff0000');
+        yield 'red hex' => [
+            '#ff0000',
+            '#00ffff',
+        ];
 
-        $this->assertSame('#00ffff', (string)$sut->complementary(), '');
+        yield 'non-zero hsl hue' => [
+            'hsl(30,100%,50%)',
+            'hsl(210,100%,50%)',
+        ];
+
+        yield 'hsl hue in first quadrant' => [
+            'hsl(90,100%,50%)',
+            'hsl(270,100%,50%)',
+        ];
+
+        yield 'hsl hue in second quadrant' => [
+            'hsl(180,100%,50%)',
+            'hsl(0,100%,50%)',
+        ];
+
+        yield 'hsl hue in third quadrant' => [
+            'hsl(270,100%,50%)',
+            'hsl(90,100%,50%)',
+        ];
+
+        yield 'hsl hue in fourth quadrant' => [
+            'hsl(330,100%,50%)',
+            'hsl(150,100%,50%)',
+        ];
+    }
+
+    /**
+     * @dataProvider complementaryColorProvider
+     */
+    public function testItShouldReturnComplementaryColor(string $color, string $expected): void
+    {
+        $sut = $this->makeInstance($color);
+
+        $this->assertSame($expected, (string)$sut->complementary(), '');
     }
 
     public static function weightProvider(): \Generator
