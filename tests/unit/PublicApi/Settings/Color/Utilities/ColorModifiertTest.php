@@ -173,6 +173,34 @@ final class ColorModifiertTest extends UnitTestCase
         $this->assertStringMatchesFormat('#c04040', (string)$sut->tone(0.5), '');
     }
 
+    public static function opacityProvider(): \Generator
+    {
+        yield 'rgba with fractional alpha' => [
+            'rgba(255,0,0,1.00)',
+            0.5,
+            'rgba(255,0,0,0.50)',
+        ];
+
+        yield 'hsla with fractional alpha' => [
+            'hsla(30,100%,50%,1)',
+            0.5,
+            'hsla(30,100%,50%,0.5)',
+        ];
+    }
+
+    /**
+     * @dataProvider opacityProvider
+     */
+    public function testItShouldPreserveFractionalAlphaWhenChangingOpacity(
+        string $color,
+        float $alpha,
+        string $expected
+    ): void {
+        $sut = $this->makeInstance($color);
+
+        $this->assertSame($expected, (string)$sut->opacity($alpha));
+    }
+
     public static function complementaryColorProvider(): \Generator
     {
         yield 'red hex' => [
