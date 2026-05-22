@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\Tests\Unit\PublicApi\Styles;
 
-use ItalyStrap\Tests\CssStyleStringProviderTrait;
+use ItalyStrap\Tests\CssParserScenarioProviderTrait;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Styles\Css;
 use ItalyStrap\ThemeJsonGenerator\Styles\Scss;
@@ -12,9 +12,7 @@ use ScssPhp\ScssPhp\Compiler;
 
 final class ScssTest extends UnitTestCase
 {
-    use CssStyleStringProviderTrait {
-        CssStyleStringProviderTrait::newStyleProvider as newStyleProviderTrait;
-    }
+    use CssParserScenarioProviderTrait;
 
     private function makeInstance(): Scss
     {
@@ -30,10 +28,6 @@ final class ScssTest extends UnitTestCase
 
     public static function newStyleProvider(): iterable
     {
-        foreach (self::newStyleProviderTrait() as $key => $value) {
-            yield $key => $value;
-        }
-
         yield 'selector used also as prefix for nested selectors' => [
             'selector' => '.test-selector',
             'actual' => <<<CSS
@@ -88,5 +82,19 @@ CSS,
         $this->presets->parse($actual)->willReturn($actual)->shouldBeCalledTimes(1);
         $parseString = $this->makeInstance()->parse($actual, $selector);
         $this->assertSame($expected, $parseString, 'The parsed string is not the same as expected');
+    }
+
+    /**
+     * @dataProvider cssParserScenarioProvider
+     */
+    public function testItShouldParseCssForWordPressCustomCss(
+        string $selector,
+        string $actual,
+        string $expectedParsedCss,
+        string $expectedWordPressCss
+    ): void {
+        $this->presets->parse($actual)->willReturn($actual)->shouldBeCalledTimes(1);
+        $parseString = $this->makeInstance()->parse($actual, $selector);
+        $this->assertSame($expectedParsedCss, $parseString, 'The parsed string is not the same as expected');
     }
 }

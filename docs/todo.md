@@ -656,7 +656,7 @@ For the root you do not need to add the target selector because in the root you 
     SectionNames::STYLES => [
         // Custom CSS at root level
         'css' => (new \ItalyStrap\ThemeJsonGenerator\Styles\Css($collecton))
-                    ->parseString('body{background:{{color.base}};}', ''), // Use the method here to find the color.base preset
+                    ->parse('body{background:{{color.base}};}', ''), // Use the method here to find the color.base preset
     ],
 ]
 ```
