@@ -1,0 +1,40 @@
+<?php
+
+declare(strict_types=1);
+
+namespace ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities;
+
+final class ColorFactory implements ColorFactoryInterface
+{
+    /**
+     * @throws \Exception
+     */
+    public function fromColorInfo(ColorInterface $colorValue): ColorInterface
+    {
+        return new Color((string) $colorValue);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function fromColorString(string $color): ColorInterface
+    {
+        return new Color($color);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function hsla(int $hue, float $saturation, float $lightness, float $alpha = 1): ColorInterface
+    {
+        return new Color(sprintf('hsla(%d, %s%%, %s%%, %s)', $hue, $saturation, $lightness, $alpha));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function rgba(int $red, int $green, int $blue, float $alpha = 1): ColorInterface
+    {
+        return new Color(sprintf('rgba(%d, %d, %d, %s)', $red, $green, $blue, $alpha));
+    }
+}

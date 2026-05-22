@@ -72,7 +72,8 @@
     },
     "autoload": {
         "psr-4": {
-            "ItalyStrap\\ThemeJsonGenerator\\": "src/"
+            "ItalyStrap\\ThemeJsonGenerator\\": "src/",
+            "ItalyStrap\\ThemeJsonGenerator\\Cli\\": "cli/"
         },
         "files": [
             "functions/autoload.php",

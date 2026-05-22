@@ -4,21 +4,20 @@ declare(strict_types=1);
 
 namespace ItalyStrap\Tests;
 
-use ItalyStrap\ThemeJsonGenerator\Api\SectionNames;
-use ItalyStrap\ThemeJsonGenerator\Api\ThemeJson;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Duotone;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Gradient;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Palette;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Shadow;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\BoxShadow;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\Color;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorModifier;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\LinearGradient;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Custom\CustomToPresets;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Presets;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\FontFamily;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\FontSize;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles;
+use ItalyStrap\ThemeJsonGenerator\SectionNames;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Duotone;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Gradient;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Palette;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Shadow;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\BoxShadow;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\Color;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\ColorModifier;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\LinearGradient;
+use ItalyStrap\ThemeJsonGenerator\Settings\Custom\CustomToPresets;
+use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
+use ItalyStrap\ThemeJsonGenerator\Settings\Typography\FontFamily;
+use ItalyStrap\ThemeJsonGenerator\Settings\Typography\FontSize;
+use ItalyStrap\ThemeJsonGenerator\ThemeJson;
 use Psr\Container\ContainerInterface;
 
 return static function (ThemeJson $themeJson, Presets $presets, ContainerInterface $container): void {
@@ -128,24 +127,24 @@ return static function (ThemeJson $themeJson, Presets $presets, ContainerInterfa
             ],
         ],
         SectionNames::STYLES => [
-            'color' => (new Styles\Color())
+            'color' => (new \ItalyStrap\ThemeJsonGenerator\Styles\Color())
                 ->background('var(--wp--preset--color--body-bg)')
                 ->text('var(--wp--preset--color--body-color)'),
-            'typography' => (new Styles\Typography($presets))
+            'typography' => (new \ItalyStrap\ThemeJsonGenerator\Styles\Typography($presets))
                 ->fontSize(FontSize::TYPE . '.base')
                 ->fontFamily(FontFamily::TYPE . '.base'),
             'elements' => [
                 'link' => [ // .wp-block-file a
-                    'color' => $container->get(Styles\Color::class)
+                    'color' => $container->get(\ItalyStrap\ThemeJsonGenerator\Styles\Color::class)
                         ->text(Palette::TYPE . '.base')
                         ->background('transparent'),
                 ],
             ],
             'blocks' => [
                 'core/paragraph' => [
-                    'color' => (new Styles\Color())
+                    'color' => (new \ItalyStrap\ThemeJsonGenerator\Styles\Color())
                         ->text('var(--wp--preset--color--body-color)'),
-                    'typography' => (new Styles\Typography())
+                    'typography' => (new \ItalyStrap\ThemeJsonGenerator\Styles\Typography())
                         ->fontSize('var(--wp--preset--font-size--base)')
                         ->fontFamily('var(--wp--preset--font-family--base)'),
                 ],

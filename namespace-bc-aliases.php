@@ -3,10 +3,12 @@
 declare(strict_types=1);
 
 $aliases = [
-    'ItalyStrap\ThemeJsonGenerator\Api\ThemeJson' => 'ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint',
+    // Old = New
+    'ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint' => 'ItalyStrap\ThemeJsonGenerator\ThemeJson',
+    'ItalyStrap\ThemeJsonGenerator\Api\ThemeJson' => 'ItalyStrap\ThemeJsonGenerator\ThemeJson',
 ];
 
-foreach ($aliases as $class => $alias) {
+foreach ($aliases as $alias => $class) {
     if (!\class_exists($alias)) {
         \class_alias($class, $alias);
     }

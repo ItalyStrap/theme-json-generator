@@ -43,7 +43,7 @@ declare(strict_types=1);
 
 namespace YourVendor\YourProject;
 
-use ItalyStrap\ThemeJsonGenerator\Api\ThemeJson;use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Presets;
+use ItalyStrap\ThemeJsonGenerator\Api\ThemeJson;use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
 
 return static function (ThemeJson $themeJson, Presets $presets): void {
     // ...
@@ -61,8 +61,7 @@ All `Preset` classes allow for the detailed customization of theme settings, fac
 Define color palettes easily using the `Palette` class:
 
 ```php
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Palette;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\Color;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Palette;use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\Color;
 
 $presets
     // `add` method is used to add the preset instance to the collection
@@ -89,8 +88,7 @@ Create gradients with the `Gradient` class:
 
 ```php
 
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Gradient;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\LinearGradient;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Gradient;use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\LinearGradient;
 
 $presets
     ->add(new Gradient(
@@ -130,7 +128,7 @@ The string used as key has the form `type.slug` where `type` is the type of the 
 Create duotone colors with the `Duotone` class:
 
 ```php
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Duotone;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Duotone;
 
 $presets
     ->add(new Duotone(
@@ -153,8 +151,7 @@ The `Duotone` accepts three parameters:
 Configure typography presets with the `FontFamily` and `FontSize` classes:
 
 ```php
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\FontFamily;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\FontSize;
+use ItalyStrap\ThemeJsonGenerator\Settings\Typography\FontFamily;use ItalyStrap\ThemeJsonGenerator\Settings\Typography\FontSize;
 
 $presets->add(new FontSize('base', 'Base Font Size', '16px'));
 
@@ -166,7 +163,7 @@ $presets->add(new FontFamily('default', 'Default Font Family', 'sans-serif'));
 Custom preset is a little bit different from the others:
 
 ```php
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Custom\Custom;
+use ItalyStrap\ThemeJsonGenerator\Settings\Custom\Custom;
 
 $presets->add(new Custom('contentSize', 'clamp(16rem, 60vw, 60rem)'));
 ```
@@ -179,7 +176,7 @@ The `Custom` class accepts two parameters:
 Customs can be added using a Factory object, `CustomToPresets`:
 
 ```php
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Custom\CustomToPresets;
+use ItalyStrap\ThemeJsonGenerator\Settings\Custom\CustomToPresets;
 
 $collectionAdapter = new CustomToPresets([
     'contentSize'   => 'clamp(16rem, 60vw, 60rem)',
@@ -202,7 +199,7 @@ The `CustomToPresets` class accepts an array of customs values (strings) and ret
 In the example above you see a method called `addMultiple` that accepts an array of `PresetInterface` objects.
 
 ```php
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Custom\Custom;
+use ItalyStrap\ThemeJsonGenerator\Settings\Custom\Custom;
 
 $presets
     ->addMultiple(
@@ -233,7 +230,7 @@ We will take the `Color` class as an example, but all the other classes follow t
 Directly create an instance of a `Color::class`, and chain methods to define properties. This approach is straightforward and effective for setting styles directly:
 
 ```php
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Color;
+use ItalyStrap\ThemeJsonGenerator\Styles\Color;
 
 [
     SectionNames::STYLES => [
@@ -262,7 +259,7 @@ But we made some effort to initialize all `Presets`, how can we use them in the 
 Pass the `$presets` collection to a style class constructor, this way you can access and use `Presets` value within your styles section, enhancing reusability and consistency:
 
 ```php
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Color;
+use ItalyStrap\ThemeJsonGenerator\Styles\Color;
 
 [
     SectionNames::STYLES => [
@@ -296,7 +293,7 @@ declare(strict_types=1);
 
 namespace YourVendor\YourProject;
 
-use ItalyStrap\ThemeJsonGenerator\Api\ThemeJson;use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Presets;use Psr\Container\ContainerInterface;
+use ItalyStrap\ThemeJsonGenerator\Api\ThemeJson;use ItalyStrap\ThemeJsonGenerator\Settings\Presets;use Psr\Container\ContainerInterface;
 
 return static function (ThemeJson $themeJson, Presets $presets, ContainerInterface $container): void {
     // ...
@@ -306,7 +303,7 @@ return static function (ThemeJson $themeJson, Presets $presets, ContainerInterfa
 And this is the example using the `$container` object:
 
 ```php
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Color;
+use ItalyStrap\ThemeJsonGenerator\Styles\Color;
 
 [
     SectionNames::STYLES => [
@@ -358,7 +355,7 @@ As the name suggests, the `Scss` class is used to parse SCSS styles, so you are 
 Let's see it in action:
 
 ```php
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Css;
+use ItalyStrap\ThemeJsonGenerator\Styles\Css;
 
 [
     SectionNames::STYLES => [
@@ -371,7 +368,7 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Css;
 For block style:
 
 ```php
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Css;
+use ItalyStrap\ThemeJsonGenerator\Styles\Css;
 
 [
     SectionNames::STYLES => [
@@ -387,9 +384,8 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Css;
 
 All methods also support a special syntax to resolve value in the `$presets` collection, `{{type.slug}}`, this syntax will be used internally to find the value in the `$presets` collection registered before.
 
-
 ```php
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Css;
+use ItalyStrap\ThemeJsonGenerator\Styles\Css;
 
 [
     SectionNames::STYLES => [

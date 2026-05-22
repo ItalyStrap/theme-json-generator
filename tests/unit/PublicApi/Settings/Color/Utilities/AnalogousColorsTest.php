@@ -1,0 +1,29 @@
+<?php
+
+declare(strict_types=1);
+
+namespace ItalyStrap\Tests\Unit\PublicApi\Settings\Color\Utilities;
+
+use ItalyStrap\Tests\UnitTestCase;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\AnalogousColorsExperimental;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\Color;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\ColorInterface;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\ColorModifier;
+
+final class AnalogousColorsTest extends UnitTestCase
+{
+    protected function makeInstance(string $color): AnalogousColorsExperimental
+    {
+        return new AnalogousColorsExperimental(new ColorModifier(new Color($color)));
+    }
+
+    public function testItShouldReturnArrayWithColorInfoInterface(): void
+    {
+        $sut = $this->makeInstance('#ffffff');
+
+        $this->assertContainsOnlyInstancesOf(
+            ColorInterface::class,
+            $sut->generate()
+        );
+    }
+}

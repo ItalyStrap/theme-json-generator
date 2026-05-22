@@ -18,6 +18,7 @@
     <file>./bin/</file>
     <file>./functions/</file>
     <file>./src/</file>
+    <file>./cli/</file>
     <file>./tests/</file>
     <file>.phpstorm.meta.php</file>
     <file>ecs.php</file>

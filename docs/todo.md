@@ -128,7 +128,7 @@ To handle data inside those sections I created some value objects, but first let
 The `Presets` object is used to collect all the value objects used to build the settings, it is used to store all the value objects and then add them to the `Blueprint` object.
 
 ```php
-use \ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Presets;
+use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
 
 $presets = new Presets();
 ```
@@ -220,7 +220,7 @@ First we need to handle the colors, so we need to create a `Color` object with t
 
 ```php
 
-use \ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\Color;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\Color;
 
 $baseClr = new Color('#3986E0');
 ```
@@ -252,7 +252,7 @@ If you need to modify the color the is also a class `\ItalyStrap\ThemeJsonGenera
 
 ```php
 
-use \ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorModifier;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\ColorModifier;
 
 $baseClr = new Color('#3986E0');
 
@@ -273,9 +273,7 @@ Now that we have a color object we can use it to create a palette color:
 
 ```php
 
-use \ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\Color;
-use \ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorModifier;
-use \ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Palette;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Palette;
 
 $baseClrPalette = new Palette('base', 'Brand base color', $baseClr);
 ```
@@ -294,7 +292,7 @@ A presets is another object used to collect those value object (till now I've on
 
 ```php
 
-use \ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Presets;
+use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
 
 $presets = new Presets();
 
@@ -317,17 +315,17 @@ Let's take a look an implementation for Gradient with the use of the `\ItalyStra
 
 ```php
 
-$lightToDark = new \ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Gradient(
+$lightToDark = new \ItalyStrap\ThemeJsonGenerator\Settings\Color\Gradient(
     'light-to-dark',
     'Black to white',
     new LinearGradient(
         '160deg',
         /**
-         * @var \ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetInterface $lightClrPalette
+         * @var \ItalyStrap\ThemeJsonGenerator\Settings\PresetInterface $lightClrPalette
          */
         $lightClrPalette,
         /**
-         * @var \ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetInterface $darkClrPalette
+         * @var \ItalyStrap\ThemeJsonGenerator\Settings\PresetInterface $darkClrPalette
          */
         $darkClrPalette
     )
@@ -350,7 +348,7 @@ The linear gradient above will be converted to:
 We can also handle the power of the `PresetsInterface::class` like this snippet:
 
 ```php
-$lightToDark = new \ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Gradient(
+$lightToDark = new \ItalyStrap\ThemeJsonGenerator\Settings\Color\Gradient(
     'light-to-dark',
     'Black to white',
     new LinearGradient(
@@ -379,7 +377,7 @@ $presets->add($lightToDark);
 The `duotone` section is similar to the `gradients` section.
 
 ```php
-$blackToWhite = new \ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Duotone(
+$blackToWhite = new \ItalyStrap\ThemeJsonGenerator\Settings\Color\Duotone(
     "black-to-white",
     "Black to White",
     $this->presets->get(JsonData::COLOR_BODY_COLOR),
@@ -406,7 +404,7 @@ $presets->add($blackToWhite);
 The `fontSizes` section is used to define the font sizes, it uses `\ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\FontSize::class` class.
 
 ```php
-$fontSizeBase = new \ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\FontSize(
+$fontSizeBase = new \ItalyStrap\ThemeJsonGenerator\Settings\Typography\FontSize(
     'base',
     'Base font size 16px',
     'clamp(1rem, 2vw, 1.5rem)'
@@ -432,7 +430,7 @@ $presets->add($fontSizeBase);
 The `fontFamilies` section is used to define the font families, it uses `\ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\FontFamily::class` class.
 
 ```php
-$fontFamilyBase = new \ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\FontFamily(
+$fontFamilyBase = new \ItalyStrap\ThemeJsonGenerator\Settings\Typography\FontFamily(
     'base',
     'Default font family',
     'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"'
@@ -575,7 +573,7 @@ So, now let's see how to build the same structure using the builder object:
 ```php
 [
     SectionNames::STYLES => [
-        'color' => (new \ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Color($presets))
+        'color' => (new \ItalyStrap\ThemeJsonGenerator\Styles\Color($presets))
             ->text(Palette::CATEGORY . '.bodyColor')
             ->background(Palette::CATEGORY . '.bodyBg'),
 ]
@@ -596,7 +594,7 @@ All builder object have a `property(string $property, string $value)` method in 
 ```php
 [
     SectionNames::STYLES => [
-        'color' => (new \ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Color($presets))
+        'color' => (new \ItalyStrap\ThemeJsonGenerator\Styles\Color($presets))
             ->text(Palette::CATEGORY . '.bodyColor')
             ->background(Palette::CATEGORY . '.bodyBg')
             ->property('customProperty', 'customValue'),
@@ -657,7 +655,7 @@ For the root you do not need to add the target selector because in the root you 
 [
     SectionNames::STYLES => [
         // Custom CSS at root level
-        'css' => (new \ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Css($collecton))
+        'css' => (new \ItalyStrap\ThemeJsonGenerator\Styles\Css($collecton))
                     ->parseString('body{background:{{color.base}};}', ''), // Use the method here to find the color.base preset
     ],
 ]

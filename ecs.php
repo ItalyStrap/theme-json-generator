@@ -13,6 +13,7 @@ use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 return function (ECSConfig $ecsConfig): void {
     $ecsConfig->paths([
         __DIR__ . '/src',
+        __DIR__ . '/cli',
         __DIR__ . '/tests',
         __DIR__ . '/functions',
         __DIR__ . '/bin',

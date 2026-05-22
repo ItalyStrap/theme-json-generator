@@ -1,0 +1,29 @@
+<?php
+
+declare(strict_types=1);
+
+namespace ItalyStrap\Tests\Unit\PublicApi\Settings\Typography;
+
+use ItalyStrap\Tests\Unit\PublicApi\Settings\PresetCommonTrait;
+use ItalyStrap\Tests\UnitTestCase;
+use ItalyStrap\ThemeJsonGenerator\Settings\Typography\FontFamily;
+
+final class FontFamilyTest extends UnitTestCase
+{
+    use PresetCommonTrait;
+
+    private string $slug = 'base';
+
+    private string $name = 'Font Family';
+
+    private string $fontFamily = 'The font family';
+
+    private function makeInstance(): FontFamily
+    {
+        return new FontFamily(
+            $this->slug,
+            $this->name,
+            $this->fontFamily
+        );
+    }
+}

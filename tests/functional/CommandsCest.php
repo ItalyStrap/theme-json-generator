@@ -6,7 +6,7 @@ namespace ItalyStrap\Tests\Functional;
 
 use FunctionalTester;
 use ItalyStrap\Tests\FunctionalTestCase;
-use ItalyStrap\ThemeJsonGenerator\Application\Middlewares\Dump;
+use ItalyStrap\ThemeJsonGenerator\Cli\Application\Middlewares\Dump;
 
 final class CommandsCest extends FunctionalTestCase
 {

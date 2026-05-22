@@ -4,6 +4,7 @@ parameters:
         - bin
         - functions
         - src
+        - cli
     stubFiles:
         - stubs/auryn-injector.stub
         - stubs/container-interface.stub
