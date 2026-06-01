@@ -23,7 +23,7 @@ final class Css implements CssInterface
 {
     private readonly PresetsInterface $presets;
 
-    private bool $isCompressed = true;
+    private bool $isCompressed = false;
 
     private bool $shouldResolveVariables = true;
 
@@ -36,6 +36,12 @@ final class Css implements CssInterface
     public function expanded(): self
     {
         $this->isCompressed = false;
+        return $this;
+    }
+
+    public function compressed(): self
+    {
+        $this->isCompressed = true;
         return $this;
     }
 
