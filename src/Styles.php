@@ -98,11 +98,7 @@ final readonly class Styles
      */
     public function elements(array|string $path): self
     {
-        if (\is_string($path)) {
-            $path = \explode('.', $path);
-        }
-
-        return new self($this->themeJson, $this->presets, $this->context->at('elements', ...$path), $this->css);
+        return new self($this->themeJson, $this->presets, $this->context->elements($path), $this->css);
     }
 
     /**
@@ -110,23 +106,12 @@ final readonly class Styles
      */
     public function blocks(array|string $path): self
     {
-        if (\is_string($path)) {
-            $path = \explode('.', $path);
-        }
-
-        return new self($this->themeJson, $this->presets, $this->context->at('blocks', ...$path), $this->css);
+        return new self($this->themeJson, $this->presets, $this->context->blocks($path), $this->css);
     }
 
     public function variations(string $variation): self
     {
-        if (\preg_match('/^[a-z][a-z0-9-]*$/', $variation) !== 1) {
-            throw new \InvalidArgumentException(\sprintf(
-                'Expected a valid variation slug, got "%s".',
-                $variation
-            ));
-        }
-
-        return new self($this->themeJson, $this->presets, $this->context->at('variations', $variation), $this->css);
+        return new self($this->themeJson, $this->presets, $this->context->variations($variation), $this->css);
     }
 
     /**

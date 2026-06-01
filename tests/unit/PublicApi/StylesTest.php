@@ -54,6 +54,49 @@ final class StylesTest extends UnitTestCase
         yield 'contains dot' => ['outline.color'];
     }
 
+    /**
+     * @dataProvider invalidStructuralTransitionProvider
+     * @param \Closure(ThemeJson): void $transition
+     */
+    public function testItShouldRejectInvalidStructuralTransitions(\Closure $transition, string $message): void
+    {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage($message);
+
+        $transition($this->makeThemeJson());
+    }
+
+    public static function invalidStructuralTransitionProvider(): iterable
+    {
+        yield 'elements from elements' => [
+            static function (ThemeJson $themeJson): void {
+                $themeJson->styles()->elements('button')->elements('button');
+            },
+            'Cannot chain "elements()" after "elements()": this style structure is not supported.',
+        ];
+
+        yield 'blocks from blocks' => [
+            static function (ThemeJson $themeJson): void {
+                $themeJson->styles()->blocks('core/group')->blocks('core/button');
+            },
+            'Cannot chain "blocks()" after "blocks()": this style structure is not supported.',
+        ];
+
+        yield 'blocks from elements' => [
+            static function (ThemeJson $themeJson): void {
+                $themeJson->styles()->elements('button')->blocks('core/button');
+            },
+            'Cannot chain "blocks()" after "elements()": this style structure is not supported.',
+        ];
+
+        yield 'variations from variations' => [
+            static function (ThemeJson $themeJson): void {
+                $themeJson->styles()->variations('outline')->variations('filled');
+            },
+            'Cannot chain "variations()" after "variations()": this style structure is not supported.',
+        ];
+    }
+
     private function makeThemeJson(): ThemeJson
     {
         return new ThemeJson(new Config(), $this->makeStylePresets());
