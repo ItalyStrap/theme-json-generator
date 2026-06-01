@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\Tests\Unit\PublicApi\Styles;
 
+use ItalyStrap\Config\Config;
 use ItalyStrap\ThemeJsonGenerator\SectionNames;
 use ItalyStrap\ThemeJsonGenerator\Styles\CommonTrait;
 use ItalyStrap\ThemeJsonGenerator\ThemeJson;
@@ -68,13 +69,17 @@ trait CommonTests
             ],
         ];
 
-        $data = new ThemeJson($data);
+        $config = new Config($data);
+        new ThemeJson(
+            $config,
+            $this->makePresets(),
+        );
 
         $this->assertStringMatchesFormat(
             // phpcs:disable
             '{"styles":{"blocks":{"core/site-title":{"color":{"property":"core/site-title"},"typography":{"property":"core/site-title"}},"core/post-title":{"color":{"property":"core/post-title"},"typography":{"property":"core/post-title"}}}}}',
             // phpcs:enable
-            \json_encode($data, \JSON_UNESCAPED_SLASHES),
+            \json_encode($config, \JSON_UNESCAPED_SLASHES),
             ''
         );
 

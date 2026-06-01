@@ -41,7 +41,27 @@ final class Typography implements ArrayableInterface, \JsonSerializable
     /**
      * @var string
      */
+    public const TEXT_INDENT = 'textIndent';
+
+    /**
+     * @var string
+     */
+    public const TEXT_ALIGN = 'textAlign';
+
+    /**
+     * @var string
+     */
+    public const TEXT_COLUMNS = 'textColumns';
+
+    /**
+     * @var string
+     */
     public const TEXT_DECORATION = 'textDecoration';
+
+    /**
+     * @var string
+     */
+    public const WRITING_MODE = 'writingMode';
 
     /**
      * @var string
@@ -78,9 +98,29 @@ final class Typography implements ArrayableInterface, \JsonSerializable
         return $this->setProperty(self::LINE_HEIGHT, $value);
     }
 
+    public function textIndent(string $value): self
+    {
+        return $this->setProperty(self::TEXT_INDENT, $value);
+    }
+
+    public function textAlign(string $value): self
+    {
+        return $this->setProperty(self::TEXT_ALIGN, $value);
+    }
+
+    public function textColumns(string $value): self
+    {
+        return $this->setProperty(self::TEXT_COLUMNS, $value);
+    }
+
     public function textDecoration(string $value): self
     {
         return $this->setProperty(self::TEXT_DECORATION, $value);
+    }
+
+    public function writingMode(string $value): self
+    {
+        return $this->setProperty(self::WRITING_MODE, $value);
     }
 
     public function textTransform(string $value): self

@@ -7,6 +7,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Styles;
 use ItalyStrap\ThemeJsonGenerator\Settings\NullPresets;
 use ItalyStrap\ThemeJsonGenerator\Settings\PresetInterface;
 use ItalyStrap\ThemeJsonGenerator\Settings\PresetsInterface;
+use ItalyStrap\ThemeJsonGenerator\StyleContext;
 
 trait CommonTrait
 {
@@ -17,15 +18,19 @@ trait CommonTrait
 
     private PresetsInterface $presets;
 
+    private ?StyleContext $context;
+
     /**
      * @param array<string, string> $properties
      */
     public function __construct(
         ?PresetsInterface $presets = null,
-        array $properties = []
+        array $properties = [],
+        ?StyleContext $context = null,
     ) {
         $this->presets = $presets ?? new NullPresets();
         $this->properties = $properties;
+        $this->context = $context;
     }
 
     /**
@@ -63,6 +68,9 @@ trait CommonTrait
      * If you pass a CSS value you will get the same value (because all CSS value are not keys of the collection)
      * Example:
      * Collection::get('nonExistentKey', 'inherit') === 'inherit'
+     *
+     * @duplicated snippet
+     * @see \ItalyStrap\ThemeJsonGenerator\Styles::parseStyleValue
      */
     private function setProperty(string $key, string $value): self
     {
@@ -85,10 +93,20 @@ trait CommonTrait
          * instead we want to return the value of the placeholder like this:
          * var(--wp--preset--color--base)
          */
-        $this->properties[$key] =  $this->presets->parse((string)$value);
+        $value = $this->presets->parse((string)$value);
+        $this->properties[$key] =  $value;
+
+        $this->context?->set($key, $value);
 
         $class = self::class;
-        return new $class($this->presets, $this->properties);
+        return new $class($this->presets, $this->properties, $this->context);
+    }
+
+    protected function at(string|int $segment): self
+    {
+        $class = self::class;
+
+        return new $class($this->presets, [], $this->context?->at($segment));
     }
 
     final public function __clone()

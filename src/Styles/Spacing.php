@@ -28,6 +28,36 @@ final class Spacing implements ArrayableInterface, \JsonSerializable
      */
     public const LEFT = 'left';
 
+    /**
+     * @var string
+     */
+    public const BLOCK_GAP = 'blockGap';
+
+    /**
+     * @var string
+     */
+    public const MARGIN = 'margin';
+
+    /**
+     * @var string
+     */
+    public const PADDING = 'padding';
+
+    public function blockGap(string $value): self
+    {
+        return $this->setProperty(self::BLOCK_GAP, $value);
+    }
+
+    public function margin(): BoxSpacing
+    {
+        return new BoxSpacing($this, $this->at(self::MARGIN));
+    }
+
+    public function padding(): BoxSpacing
+    {
+        return new BoxSpacing($this, $this->at(self::PADDING));
+    }
+
     public function top(string $value): self
     {
         return $this->setProperty(self::TOP, $value);
@@ -48,15 +78,6 @@ final class Spacing implements ArrayableInterface, \JsonSerializable
         return $this->setProperty(self::LEFT, $value);
     }
 
-    /**
-     * @todo maybe https://3v4l.org/4ia5Dt#v7.4.24
-     *
-     * This is not a ["t-o-d-o"] but only a reference https://3v4l.org/EtCFE
-     * One value => 0px => 0px 0px 0px 0px
-     * Two values => 5px 0px => 5px 0px 5px 0px
-     * Three values => 10px auto 0px => 10px auto 0px auto
-     * Four values => 1px 2px 3px 4px => 1px 2px 3px 4px
-     */
     /**
      * @param string[] $values
      */
