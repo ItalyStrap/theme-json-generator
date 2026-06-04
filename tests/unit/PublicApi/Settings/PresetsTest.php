@@ -5,8 +5,12 @@ declare(strict_types=1);
 namespace ItalyStrap\Tests\Unit\PublicApi\Settings;
 
 use ItalyStrap\Tests\UnitTestCase;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Palette;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\Color;
+use ItalyStrap\ThemeJsonGenerator\Settings\Custom\Custom;
 use ItalyStrap\ThemeJsonGenerator\Settings\PresetInterface;
 use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
+use ItalyStrap\ThemeJsonGenerator\Settings\Typography\FontSize;
 
 final class PresetsTest extends UnitTestCase
 {
@@ -74,6 +78,45 @@ final class PresetsTest extends UnitTestCase
             '[{"slug":"slug1","ref":"ref1","prop":"prop1","var":"var1"}]',
             \json_encode($sut),
             ''
+        );
+    }
+
+    public function testItShouldCreatePresetHelpers(): void
+    {
+        $sut = $this->makeInstance();
+
+        $sut->addMultiple([
+            new Palette('base', 'Base', new Color('#ffffff')),
+            new FontSize('base', 'Base', '1rem'),
+            new Custom('spacing.base', '1rem'),
+        ]);
+
+        $this->assertSame('#ffffff', $sut->get('color.base')->toArray()['color']);
+        $this->assertSame('var(--wp--preset--font-size--base)', $sut->get('fontSize.base')->var());
+        $this->assertSame('1rem', (string)$sut->get('custom.spacing.base'));
+    }
+
+    public function testItShouldSerializeBlockScopedPresetsWithoutOverwritingRootPresets(): void
+    {
+        $sut = $this->makeInstance();
+        $sut->add(new Palette('base', 'Base', new Color('#ffffff')));
+        $sut->addAt(
+            ['settings', 'blocks', 'core/group', 'color', 'palette'],
+            new Palette('base', 'Block Base', new Color('#000000'))
+        );
+
+        $this->assertSame('#ffffff', $sut->get('color.base')->toArray()['color']);
+        $this->assertSame(
+            [
+                'settings.blocks.core/group.color.palette' => [
+                    [
+                        'slug' => 'base',
+                        'name' => 'Block Base',
+                        'color' => '#000000',
+                    ],
+                ],
+            ],
+            $sut->toArraysByPath()
         );
     }
 

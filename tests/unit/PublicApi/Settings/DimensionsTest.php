@@ -1,0 +1,58 @@
+<?php
+
+declare(strict_types=1);
+
+namespace ItalyStrap\Tests\Unit\PublicApi\Settings;
+
+use ItalyStrap\Config\Config;
+use ItalyStrap\Tests\UnitTestCase;
+use ItalyStrap\ThemeJsonGenerator\Settings\Dimensions;
+use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
+use ItalyStrap\ThemeJsonGenerator\ThemeJson;
+
+final class DimensionsTest extends UnitTestCase
+{
+    public function testItShouldWriteDimensionsSettingsInsideBlockContext(): void
+    {
+        $presets = new Presets();
+        $sut = new ThemeJson(new Config(), $presets);
+
+        $result = $sut->settings()->blocks('core/group')->dimensions()
+            ->enableAspectRatio()
+            ->disableDefaultAspectRatios()
+            ->enableHeight()
+            ->disableMinHeight()
+            ->enableMinWidth()
+            ->disableWidth()
+            ->addAspectRatio('square', 'Square', '1/1')
+            ->addDimensionSize('content', 'Content', '42rem');
+
+        $this->assertInstanceOf(Dimensions::class, $result);
+        $this->assertTrue($sut->get('settings.blocks.core/group.dimensions.aspectRatio'));
+        $this->assertFalse($sut->get('settings.blocks.core/group.dimensions.defaultAspectRatios'));
+        $this->assertTrue($sut->get('settings.blocks.core/group.dimensions.height'));
+        $this->assertFalse($sut->get('settings.blocks.core/group.dimensions.minHeight'));
+        $this->assertTrue($sut->get('settings.blocks.core/group.dimensions.minWidth'));
+        $this->assertFalse($sut->get('settings.blocks.core/group.dimensions.width'));
+        $this->assertSame(
+            [
+                [
+                    'slug' => 'square',
+                    'name' => 'Square',
+                    'ratio' => '1/1',
+                ],
+            ],
+            $presets->toArraysByPath()['settings.blocks.core/group.dimensions.aspectRatios']
+        );
+        $this->assertSame(
+            [
+                [
+                    'slug' => 'content',
+                    'name' => 'Content',
+                    'size' => '42rem',
+                ],
+            ],
+            $presets->toArraysByPath()['settings.blocks.core/group.dimensions.dimensionSizes']
+        );
+    }
+}

@@ -23,6 +23,11 @@ final readonly class FontSize implements PresetInterface
         private string $size,
         private ?Fluid $fluid = null
     ) {
+        if ($this->fluid !== null && \stripos($this->size, 'clamp(') !== false) {
+            throw new \InvalidArgumentException(
+                'Fluid typography cannot be applied to a font size that already uses clamp().'
+            );
+        }
     }
 
     /**

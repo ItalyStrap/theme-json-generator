@@ -14,6 +14,11 @@ final class NullPresets implements PresetsInterface
         return $this;
     }
 
+    public function addAt(array|string $path, PresetInterface $item): PresetsInterface
+    {
+        return $this;
+    }
+
     public function addMultiple(array $items): PresetsInterface
     {
         return $this;
@@ -30,6 +35,11 @@ final class NullPresets implements PresetsInterface
     }
 
     public function toArrayByCategory(string $category): array
+    {
+        return [];
+    }
+
+    public function toArraysByPath(): array
     {
         return [];
     }

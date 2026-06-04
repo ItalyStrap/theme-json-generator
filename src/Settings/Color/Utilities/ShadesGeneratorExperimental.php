@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities;
 
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Palette;
+use Traversable;
 
-final readonly class ShadesGeneratorExperimental
+final readonly class ShadesGeneratorExperimental implements \IteratorAggregate
 {
     /**
      * @var int
@@ -139,5 +140,10 @@ final readonly class ShadesGeneratorExperimental
         }
 
         return $colors;
+    }
+
+    public function getIterator(): Traversable
+    {
+        return new \ArrayIterator($this->toArray());
     }
 }

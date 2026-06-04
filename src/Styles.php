@@ -42,6 +42,7 @@ final readonly class Styles
     {
         $currentCss = $this->get('css');
         $currentCss = \is_string($currentCss) ? $currentCss : '';
+
         $parsedCss = $this->css->parse($css, $selector);
         $separator = $currentCss !== '' && \preg_match('/^(?:\s|[&.:#\[>+~*])/', $parsedCss) === 1 ? '&' : '';
 

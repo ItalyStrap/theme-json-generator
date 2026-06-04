@@ -20,6 +20,11 @@ final class Presets implements PresetsInterface, \JsonSerializable
      */
     private array $collection = [];
 
+    /**
+     * @var array<string, array{category: string, collection: array<array-key, mixed>}>
+     */
+    private array $scopedCollections = [];
+
     private string $field = '';
 
     public function add(PresetInterface $item): self
@@ -27,6 +32,7 @@ final class Presets implements PresetsInterface, \JsonSerializable
         /**
          * The slug method can return a value like this "navbar.min.height"
          * So the key needs to be built before all the insert value in the correct position
+         * @TODO convert the $key into an array
          */
         $key = $item->type() . '.' . $item->slug();
 
@@ -37,6 +43,48 @@ final class Presets implements PresetsInterface, \JsonSerializable
             \explode('.', $key),
             $item
         );
+
+        return $this;
+    }
+
+    /**
+     * @TODO Explore if we can move the logic of this method inside the slef::add() method
+     *       Eventually the add() method will have this signature add(PresetInterface $item, array|string $path)
+     */
+    public function addAt(array|string $path, PresetInterface $item): self
+    {
+        $path = $this->normalizePath($path);
+
+        if (!\str_contains($path, '.blocks.')) {
+            return $this->add($item);
+        }
+
+        $scope = $this->scopedCollections[$path] ?? [
+            'category' => $item->type(),
+            'collection' => [],
+        ];
+
+        if ($scope['category'] !== $item->type()) {
+            throw new \LogicException(\sprintf(
+                'Cannot register preset type "%s" at "%s": preset type "%s" is already registered there.',
+                $item->type(),
+                $path,
+                $scope['category'],
+            ));
+        }
+
+        $key = $item->slug();
+        if ($this->findValue($scope['collection'], \explode('.', $key)) !== null) {
+            throw new \RuntimeException(\sprintf(
+                '%s already registered in %s category at %s',
+                $key,
+                $item->type(),
+                $path,
+            ));
+        }
+
+        $this->insertValue($scope['collection'], \explode('.', $key), $item);
+        $this->scopedCollections[$path] = $scope;
 
         return $this;
     }
@@ -142,6 +190,23 @@ final class Presets implements PresetsInterface, \JsonSerializable
         return $this->toArray();
     }
 
+    public function toArraysByPath(): array
+    {
+        $collections = [];
+        foreach ($this->scopedCollections as $path => $scope) {
+            if ($scope['category'] === Custom::TYPE) {
+                $collections[$path] = $this->processCustomCollection($scope['collection']);
+                continue;
+            }
+
+            /** @var PresetInterface[] $collection */
+            $collection = $scope['collection'];
+            $collections[$path] = $this->processPresetCollection(...$collection);
+        }
+
+        return $collections;
+    }
+
     /**
      * @param PresetInterface ...$collection
      * @return array<int, array<string, mixed>>
@@ -199,6 +264,18 @@ final class Presets implements PresetsInterface, \JsonSerializable
                 )
             );
         }
+    }
+
+    /**
+     * @param array<array-key, string|int>|string $path
+     */
+    private function normalizePath(array|string $path): string
+    {
+        if (\is_string($path)) {
+            return $path;
+        }
+
+        return \implode('.', \array_map(strval(...), $path));
     }
 
     /**

@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Settings\Typography\Utilities;
 
-final readonly class Fluid
+/**
+ * @todo Evaluate if it makes sense to check that min and max are valid CSS units, and that min is less than max
+ */
+final readonly class Fluid implements \JsonSerializable
 {
     /**
      * @var string
@@ -36,5 +39,13 @@ final readonly class Fluid
             self::MIN => $this->min,
             self::MAX => $this->max,
         ];
+    }
+
+    /**
+     * @return array{min: string, max: string}
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
     }
 }

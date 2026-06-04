@@ -124,8 +124,13 @@ final readonly class StyleContext
         foreach (\debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS) as $frame) {
             $file = $frame['file'] ?? null;
             $line = $frame['line'] ?? null;
-
-            if (!\is_string($file) || !\is_int($line) || \str_starts_with($file, __DIR__ . DIRECTORY_SEPARATOR)) {
+            if (!\is_string($file)) {
+                continue;
+            }
+            if (!\is_int($line)) {
+                continue;
+            }
+            if (\str_starts_with((string) $file, __DIR__ . DIRECTORY_SEPARATOR)) {
                 continue;
             }
 

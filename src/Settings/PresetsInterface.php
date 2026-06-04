@@ -9,6 +9,11 @@ interface PresetsInterface
     public function add(PresetInterface $item): self;
 
     /**
+     * @param array<array-key, string|int>|string $path
+     */
+    public function addAt(array|string $path, PresetInterface $item): self;
+
+    /**
      * @param PresetInterface[] $items
      */
     public function addMultiple(array $items): self;
@@ -25,4 +30,9 @@ interface PresetsInterface
      * @return array<array-key, mixed>
      */
     public function toArrayByCategory(string $category): array;
+
+    /**
+     * @return array<string, array<array-key, mixed>>
+     */
+    public function toArraysByPath(): array;
 }
