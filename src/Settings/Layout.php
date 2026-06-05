@@ -18,17 +18,36 @@ final readonly class Layout
 
     public function __construct(
         private Settings $settings,
+        private PresetsInterface $presets,
     ) {
     }
 
-    public function contentSize(string $size): self
+    public function contentSize(string $keyOrValue): self
     {
+        $size = $this->presets->get($keyOrValue);
+        if ($size instanceof PresetInterface) {
+            $size = $size->var();
+        }
+
+        if (\is_null($size)) {
+            $size = $keyOrValue;
+        }
+
         $this->set(self::CONTENT_SIZE, $size);
         return $this;
     }
 
-    public function wideSize(string $size): self
+    public function wideSize(string $keyOrValue): self
     {
+        $size = $this->presets->get($keyOrValue);
+        if ($size instanceof PresetInterface) {
+            $size = $size->var();
+        }
+
+        if (\is_null($size)) {
+            $size = $keyOrValue;
+        }
+
         $this->set(self::WIDE_SIZE, $size);
         return $this;
     }
