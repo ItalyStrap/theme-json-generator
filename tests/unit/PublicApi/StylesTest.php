@@ -31,7 +31,58 @@ final class StylesTest extends UnitTestCase
         );
         $this->assertSame('italic', $sut->get('styles.blocks.core/pullquote.elements.cite.typography.fontStyle'));
         $this->assertSame('#333333', $sut->get('styles.blocks.core/button.variations.outline.border.color'));
-        $this->assertSame(' a{color: red;}', $sut->get('styles.blocks.core/paragraph.css'));
+        $this->assertSame(
+            <<<CSS
+ a {
+    color: red;
+}
+CSS,
+            $sut->get('styles.blocks.core/paragraph.css')
+        );
+    }
+
+    public function testItShouldParseScssInStyleContexts(): void
+    {
+        $sut = new ThemeJson(new Config(), $this->makeStylePresets());
+
+        $this->assertTrue($sut->styles()->blocks('core/paragraph')->scss(
+            '.wp-block-paragraph { a { color: red; } }',
+            '.wp-block-paragraph'
+        ));
+
+        $this->assertSame(
+            <<<CSS
+ a {
+    color: red;
+}
+CSS,
+            $sut->get('styles.blocks.core/paragraph.css')
+        );
+    }
+
+    public function testItShouldAppendScssInStyleContexts(): void
+    {
+        $sut = new ThemeJson(new Config(), $this->makeStylePresets());
+
+        $sut->styles()->blocks('core/paragraph')->scss(
+            '.wp-block-paragraph { a { color: red; } }',
+            '.wp-block-paragraph'
+        );
+        $this->assertTrue($sut->styles()->blocks('core/paragraph')->appendScss(
+            '.wp-block-paragraph { strong { font-weight: 700; } }',
+            '.wp-block-paragraph'
+        ));
+
+        $this->assertSame(
+            <<<CSS
+ a {
+    color: red;
+}& strong {
+    font-weight: 700;
+}
+CSS,
+            $sut->get('styles.blocks.core/paragraph.css')
+        );
     }
 
     /**

@@ -15,12 +15,16 @@ use ItalyStrap\ThemeJsonGenerator\Styles\CssInterface;
 use ItalyStrap\ThemeJsonGenerator\Styles\Dimensions;
 use ItalyStrap\ThemeJsonGenerator\Styles\Filter;
 use ItalyStrap\ThemeJsonGenerator\Styles\Outline;
+use ItalyStrap\ThemeJsonGenerator\Styles\Scss;
 use ItalyStrap\ThemeJsonGenerator\Styles\Spacing;
 use ItalyStrap\ThemeJsonGenerator\Styles\Typography;
+use ScssPhp\ScssPhp\Compiler;
 
 final readonly class Styles
 {
     private CssInterface $css;
+
+    private Scss $scss;
 
     private StyleContext $context;
 
@@ -29,8 +33,10 @@ final readonly class Styles
         private PresetsInterface $presets,
         ?StyleContext $context = null,
         ?CssInterface $css = null,
+        ?Scss $scss = null,
     ) {
         $this->css = $css ?? new Css($this->presets);
+        $this->scss = $scss ?? new Scss(new Css($this->presets), new Compiler(), $this->presets);
         $this->context = $context ?? new StyleContext($this->themeJson, [SectionNames::STYLES]);
     }
 
@@ -43,13 +49,36 @@ final readonly class Styles
     #[ThemeSchemaCoverage(['styles', 'css'])]
     public function appendCss(string $css, string $selector = ''): bool
     {
+        return $this->appendParsedCss($this->css->parse($css, $selector));
+    }
+
+    #[ThemeSchemaCoverage(['styles', 'css'])]
+    public function scss(string $scss, string $selector = ''): bool
+    {
+        return $this->set('css', $this->scss->parse($scss, $selector));
+    }
+
+    #[ThemeSchemaCoverage(['styles', 'css'])]
+    public function appendScss(string $scss, string $selector = ''): bool
+    {
+        return $this->appendParsedCss($this->scss->parse($scss, $selector));
+    }
+
+    private function appendParsedCss(string $parsedCss): bool
+    {
         $currentCss = $this->get('css');
         $currentCss = \is_string($currentCss) ? $currentCss : '';
 
-        $parsedCss = $this->css->parse($css, $selector);
-        $separator = $currentCss !== '' && \preg_match('/^(?:\s|[&.:#\[>+~*])/', $parsedCss) === 1 ? '&' : '';
+        return $this->set('css', $currentCss . $this->cssAppendSeparator($currentCss, $parsedCss) . $parsedCss);
+    }
 
-        return $this->set('css', $currentCss . $separator . $parsedCss);
+    private function cssAppendSeparator(string $currentCss, string $parsedCss): string
+    {
+        if ($currentCss === '') {
+            return '';
+        }
+
+        return \preg_match('/^(?:\s|[&.:#\[>+~*])/', $parsedCss) === 1 ? '&' : '';
     }
 
     #[ThemeSchemaCoverage(['styles', 'background'])]
@@ -113,7 +142,7 @@ final readonly class Styles
     #[ThemeSchemaCoverage(['styles', 'elements', '*'])]
     public function elements(array|string $path): self
     {
-        return new self($this->themeJson, $this->presets, $this->context->elements($path), $this->css);
+        return new self($this->themeJson, $this->presets, $this->context->elements($path), $this->css, $this->scss);
     }
 
     /**
@@ -123,13 +152,19 @@ final readonly class Styles
     #[ThemeSchemaCoverage(['styles', 'blockTargets', '*'])]
     public function blocks(array|string $path): self
     {
-        return new self($this->themeJson, $this->presets, $this->context->blocks($path), $this->css);
+        return new self($this->themeJson, $this->presets, $this->context->blocks($path), $this->css, $this->scss);
     }
 
     #[ThemeSchemaCoverage(['styles', 'variations'])]
     public function variations(string $variation): self
     {
-        return new self($this->themeJson, $this->presets, $this->context->variations($variation), $this->css);
+        return new self(
+            $this->themeJson,
+            $this->presets,
+            $this->context->variations($variation),
+            $this->css,
+            $this->scss
+        );
     }
 
     /**

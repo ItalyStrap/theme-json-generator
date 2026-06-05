@@ -19,7 +19,7 @@ final class Scss implements CssInterface
     /**
      * @var 'compressed'|'expanded'
      */
-    private string $outputStyle = OutputStyle::COMPRESSED;
+    private string $outputStyle = OutputStyle::EXPANDED;
 
     public function __construct(
         private readonly Css $css,
@@ -27,6 +27,13 @@ final class Scss implements CssInterface
         ?PresetsInterface $presets = null
     ) {
         $this->presets = $presets ?? new NullPresets();
+    }
+
+    public function compress(): self
+    {
+        $this->css->compressed();
+        $this->outputStyle = OutputStyle::COMPRESSED;
+        return $this;
     }
 
     public function expanded(): self

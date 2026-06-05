@@ -26,7 +26,7 @@ final class CssTest extends IntegrationTestCase
         string $expectedParsedCss,
         string $expectedWordPressCss
     ): void {
-        $parseString = $this->makeInstance()->parse($actual, $selector);
+        $parseString = $this->makeInstance()->compressed()->parse($actual, $selector);
         $this->assertSame($expectedParsedCss, $parseString, 'The parsed string is not the same as expected');
 
         $result = $this->processBlocksCustomCssWithWordPress($parseString, $selector);

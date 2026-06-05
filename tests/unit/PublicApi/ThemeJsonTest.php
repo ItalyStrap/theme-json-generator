@@ -307,7 +307,13 @@ final class ThemeJsonTest extends UnitTestCase
         $this->assertFalse($sut->get('settings.blocks.core/image.color.text'));
         $this->assertSame(['text' => 'red'], $sut->get('styles.blocks.core/paragraph.color'));
         $this->assertSame(
-            ' a{color: red;}& strong{font-weight: 700;}',
+            <<<CSS
+ a {
+    color: red;
+}& strong {
+    font-weight: 700;
+}
+CSS,
             $sut->get('styles.blocks.core/paragraph.css')
         );
         $this->assertSame('#333333', $sut->get('styles.blocks.core/image.color.text'));

@@ -80,7 +80,7 @@ CSS,
     public function testItShouldParseWithNewMethod(string $selector, string $actual, string $expected): void
     {
         $this->presets->parse($actual)->willReturn($actual)->shouldBeCalledTimes(1);
-        $parseString = $this->makeInstance()->parse($actual, $selector);
+        $parseString = $this->makeInstance()->compress()->parse($actual, $selector);
         $this->assertSame($expected, $parseString, 'The parsed string is not the same as expected');
     }
 
@@ -94,7 +94,7 @@ CSS,
         string $expectedWordPressCss
     ): void {
         $this->presets->parse($actual)->willReturn($actual)->shouldBeCalledTimes(1);
-        $parseString = $this->makeInstance()->parse($actual, $selector);
+        $parseString = $this->makeInstance()->compress()->parse($actual, $selector);
         $this->assertSame($expectedParsedCss, $parseString, 'The parsed string is not the same as expected');
     }
 }

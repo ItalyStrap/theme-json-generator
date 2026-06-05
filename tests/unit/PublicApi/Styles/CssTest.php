@@ -26,6 +26,23 @@ final class CssTest extends UnitTestCase
         $this->makeInstance()->parse('& .foo{color: red;}');
     }
 
+    public function testItShouldParseExpandedCssByDefault(): void
+    {
+        $actual = '.test-selector{height: 100%;width: 100%;color: red;}.test-selector:hover {color: red;}';
+        $expected = <<<CSS
+    height: 100%;
+    width: 100%;
+    color: red;
+
+&:hover {
+    color: red;
+}
+CSS;
+
+        $parseString = $this->makeInstance()->parse($actual, '.test-selector');
+        $this->assertSame($expected, $parseString, 'The parsed string is not the same as expected');
+    }
+
     /**
      * @dataProvider cssParserScenarioProvider
      */
@@ -35,7 +52,7 @@ final class CssTest extends UnitTestCase
         string $expectedParsedCss,
         string $expectedWordPressCss
     ): void {
-        $parseString = $this->makeInstance()->parse($actual, $selector);
+        $parseString = $this->makeInstance()->compressed()->parse($actual, $selector);
         $this->assertSame($expectedParsedCss, $parseString, 'The parsed string is not the same as expected');
     }
 }
