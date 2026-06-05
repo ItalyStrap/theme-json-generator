@@ -6,7 +6,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Cli\Application\Middlewares;
 
 use ItalyStrap\Pipeline\HandlerInterface;
 use ItalyStrap\Pipeline\MiddlewareInterface;
-use ItalyStrap\ThemeJsonGenerator\Api\ThemeJson;
+use ItalyStrap\ThemeJsonGenerator\ThemeJson;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\DumpMessage;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\ThemeJsonContainerFactoryInterface;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Filesystem\FilesFinder;
@@ -72,9 +72,6 @@ final readonly class Dump implements MiddlewareInterface
         return $handler->handle($message);
     }
 
-    /**
-     * @param ThemeJson<array-key, mixed> $themeJson
-     */
     private function generateJsonFile(
         OutputInterface $output,
         DumpMessage $message,
@@ -89,7 +86,7 @@ final readonly class Dump implements MiddlewareInterface
         ));
 
         (new JsonFileWriter($this->filesFinder->resolveJsonFile($file)))
-            ->write($themeJson);
+            ->write($themeJson->getConfig());
 
         $output->writeln(\sprintf(
             '<info>Generated %s file</info>',
@@ -98,9 +95,6 @@ final readonly class Dump implements MiddlewareInterface
         $output->writeln('========================');
     }
 
-    /**
-     * @param ThemeJson<array-key, mixed> $themeJson
-     */
     private function generateScssFile(
         OutputInterface $output,
         DumpMessage $message,
@@ -115,7 +109,7 @@ final readonly class Dump implements MiddlewareInterface
             ));
 
             (new ScssFileWriter($path_for_theme_sass . DIRECTORY_SEPARATOR . $fileName . '.scss'))
-                ->write($themeJson);
+                ->write($themeJson->getConfig());
 
             $output->writeln(\sprintf(
                 '<info>Generated %s file</info>',

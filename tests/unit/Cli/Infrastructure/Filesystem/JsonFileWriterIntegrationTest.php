@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace ItalyStrap\Tests\Unit\Cli\Infrastructure\Filesystem;
 
+use ItalyStrap\Config\Config;
+use ItalyStrap\Config\ConfigInterface;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Filesystem\JsonFileWriter;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Palette;
@@ -28,6 +30,8 @@ final class JsonFileWriterIntegrationTest extends UnitTestCase
 
     private ThemeJson $themeJson;
 
+    private ConfigInterface $originalConfig;
+
     private ?\ItalyStrap\ThemeJsonGenerator\Styles\Color $colorIntegration = null;
 
     private ?Typography $typographyIntegration = null;
@@ -36,8 +40,13 @@ final class JsonFileWriterIntegrationTest extends UnitTestCase
     {
         $this->theme_json_path = \codecept_output_dir(random_int(0, mt_getrandmax()) . '/theme.json');
         \mkdir(\dirname($this->theme_json_path), 0777, true);
-        $this->themeJson = new ThemeJson();
+
         $collection = new Presets();
+        $this->originalConfig = new Config();
+        $this->themeJson = new ThemeJson(
+            $this->originalConfig,
+            $collection,
+        );
 
         $bodyText = (new Color('#000000'))->toHsla();
         $headingText = (new ColorModifier($bodyText))->lighten(20);
@@ -124,7 +133,7 @@ final class JsonFileWriterIntegrationTest extends UnitTestCase
                 ->fontWeight('700'),
         ]);
 
-        $sut->write($this->themeJson);
+        $sut->write($this->originalConfig);
 
         $this->assertJsonStringEqualsJsonFile($this->theme_json_path, $expected, '');
 

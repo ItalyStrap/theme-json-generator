@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Container;
 
+use ItalyStrap\Config\Config;
+use ItalyStrap\Config\ConfigInterface;
 use ItalyStrap\Empress\AurynConfig;
 use ItalyStrap\Empress\ModuleInterface;
 use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
@@ -19,6 +21,7 @@ final class ThemeJsonModule implements ModuleInterface
     {
         return [
             AurynConfig::ALIASES => [
+                ConfigInterface::class => Config::class,
                 PresetsInterface::class => Presets::class,
             ],
             AurynConfig::SHARING => [

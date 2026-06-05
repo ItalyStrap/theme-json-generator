@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\Tests\Unit\Cli\Infrastructure\Filesystem;
 
+use ItalyStrap\Config\Config;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Filesystem\JsonFileWriter;
 use ItalyStrap\ThemeJsonGenerator\ThemeJson;
@@ -24,11 +25,12 @@ final class JsonFileWriterTest extends UnitTestCase
         $sut = $this->makeInstance();
         $expected = '{"key": "value"}';
 
-        $data = new ThemeJson([
+        $config = new Config([
             'key' => 'value',
         ]);
+        $data = new ThemeJson($config, $this->makePresets());
 
-        $sut->write($data);
+        $sut->write($config);
 
         $this->assertJsonStringEqualsJsonFile($this->theme_json_path, $expected, '');
 
