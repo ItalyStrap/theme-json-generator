@@ -64,7 +64,7 @@ final readonly class Settings
 
     public function layout(): Layout
     {
-        return new Layout($this);
+        return new Layout($this, $this->presets);
     }
 
     public function lightbox(): Lightbox
