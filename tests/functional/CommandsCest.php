@@ -24,6 +24,20 @@ final class CommandsCest extends FunctionalTestCase
         $i->seeResultCodeIs(0);
     }
 
+    public function testDumpDisplaysExceptionLocation(FunctionalTester $i): void
+    {
+        $data = \codecept_data_dir('fixtures-invalid-style-chain');
+        $i->runShellCommand(\sprintf(
+            'bin/theme-json dump --path="%s" --dry-run 2>&1',
+            $data
+        ), false);
+
+        $i->seeResultCodeIs(1);
+        $i->seeInShellOutput('In StyleContext.php line');
+        $i->seeInShellOutput('Cannot chain "elements()" after "elements()"');
+        $i->seeShellOutputMatches('/fixtures-invalid-style-chain\/theme\.jso\s+n\.php:8/');
+    }
+
     public function testInit(FunctionalTester $i): void
     {
         $i->runShellCommand('bin/theme-json init');
