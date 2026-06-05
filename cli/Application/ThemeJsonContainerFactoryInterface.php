@@ -8,8 +8,5 @@ use ItalyStrap\ThemeJsonGenerator\ThemeJson;
 
 interface ThemeJsonContainerFactoryInterface
 {
-    /**
-     * @return ThemeJson<array-key, mixed>
-     */
     public function execute(callable $entrypoint): ThemeJson;
 }
