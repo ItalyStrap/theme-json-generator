@@ -28,6 +28,16 @@ final class ThemeJsonModule implements ModuleInterface
                 Presets::class,
                 ThemeJson::class,
             ],
+            AurynConfig::FACTORIES => [
+                Config::class => static fn (): ConfigInterface => new Config([
+                    '$schema' => '',
+                    'version' => 0,
+                    'title' => '',
+                    'description' => '',
+                    'settings' => [],
+                    'styles' => [],
+                ]),
+            ],
         ];
     }
 }
