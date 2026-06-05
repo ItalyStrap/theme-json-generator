@@ -12,8 +12,6 @@ final readonly class ThemeSchemaCoverage
      */
     public function __construct(
         public string|array $path,
-        public ThemeSchemaCoverageStatus $status = ThemeSchemaCoverageStatus::IMPLEMENTED,
-        public ?string $note = null,
     ) {
     }
 }

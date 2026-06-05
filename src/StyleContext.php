@@ -127,9 +127,11 @@ final readonly class StyleContext
             if (!\is_string($file)) {
                 continue;
             }
+
             if (!\is_int($line)) {
                 continue;
             }
+
             if (\str_starts_with((string) $file, __DIR__ . DIRECTORY_SEPARATOR)) {
                 continue;
             }

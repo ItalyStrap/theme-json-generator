@@ -55,10 +55,12 @@ final readonly class FontFaceLoaderExperimental
         );
 
         foreach ($iterator as $file) {
-            if (!$file instanceof \SplFileInfo || !$file->isFile()) {
+            if (!$file instanceof \SplFileInfo) {
                 continue;
             }
-
+            if (!$file->isFile()) {
+                continue;
+            }
             if (!$this->isSupportedFontFile($file->getPathname())) {
                 continue;
             }

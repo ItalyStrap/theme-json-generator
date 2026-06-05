@@ -45,6 +45,20 @@ final readonly class Settings
         return $this;
     }
 
+    #[ThemeSchemaCoverage(['settings', 'useRootPaddingAwareAlignments'])]
+    public function enableUseRootPaddingAwareAlignments(): self
+    {
+        $this->set('useRootPaddingAwareAlignments', true);
+        return $this;
+    }
+
+    #[ThemeSchemaCoverage(['settings', 'useRootPaddingAwareAlignments'])]
+    public function disableUseRootPaddingAwareAlignments(): self
+    {
+        $this->set('useRootPaddingAwareAlignments', false);
+        return $this;
+    }
+
     #[ThemeSchemaCoverage(['settings', 'color'])]
     public function color(): Color
     {
@@ -111,7 +125,7 @@ final readonly class Settings
         return new Custom($this);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'extraRoots', 'blocks'])]
+    #[ThemeSchemaCoverage(['settings', 'blocks'])]
     #[ThemeSchemaCoverage(['settings', 'blockTargets', '*'])]
     public function blocks(string $block): self
     {

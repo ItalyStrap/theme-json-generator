@@ -114,7 +114,7 @@ final readonly class ThemeJson implements \JsonSerializable
 
     /**
      * @param array<string, mixed> $config
-     * @deprecated Use styles()->set(['blocks', $blockName], $config) instead.
+     * @deprecated Use styles()->blocks($blockName) instead.
      */
     public function setBlockStyle(string $blockName, array $config): bool
     {

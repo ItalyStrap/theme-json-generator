@@ -6,6 +6,7 @@ namespace ItalyStrap\Tests\Unit\PublicApi;
 
 use ItalyStrap\Config\Config;
 use ItalyStrap\Tests\UnitTestCase;
+use ItalyStrap\ThemeJsonGenerator\Settings;
 use ItalyStrap\ThemeJsonGenerator\Settings\Border\RadiusSize;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color as SettingsColor;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Duotone;
@@ -151,6 +152,11 @@ final class ThemeJsonTest extends UnitTestCase
         $sut = new ThemeJson(new Config(), $presets);
         $settings = $sut->settings();
 
+        $this->assertInstanceOf(
+            Settings::class,
+            $settings->enableUseRootPaddingAwareAlignments()
+        );
+        $settings->disableUseRootPaddingAwareAlignments();
         $settings->background()->enableBackgroundImage()->enableBackgroundSize()->disableGradient();
         $settings->border()
             ->enableColor()
@@ -177,6 +183,7 @@ final class ThemeJsonTest extends UnitTestCase
         $this->assertTrue($sut->get('settings.background.backgroundImage'));
         $this->assertTrue($sut->get('settings.background.backgroundSize'));
         $this->assertFalse($sut->get('settings.background.gradient'));
+        $this->assertFalse($sut->get('settings.useRootPaddingAwareAlignments'));
         $this->assertTrue($sut->get('settings.border.color'));
         $this->assertTrue($sut->get('settings.border.radius'));
         $this->assertFalse($sut->get('settings.border.style'));

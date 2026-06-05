@@ -109,7 +109,7 @@ final readonly class Styles
     /**
      * @param array<array-key, string|int>|string $path
      */
-    #[ThemeSchemaCoverage(['styles', 'extraRoots', 'elements'])]
+    #[ThemeSchemaCoverage(['styles', 'elements'])]
     #[ThemeSchemaCoverage(['styles', 'elements', '*'])]
     public function elements(array|string $path): self
     {
@@ -119,14 +119,14 @@ final readonly class Styles
     /**
      * @param array<array-key, string|int>|string $path
      */
-    #[ThemeSchemaCoverage(['styles', 'extraRoots', 'blocks'])]
+    #[ThemeSchemaCoverage(['styles', 'blocks'])]
     #[ThemeSchemaCoverage(['styles', 'blockTargets', '*'])]
     public function blocks(array|string $path): self
     {
         return new self($this->themeJson, $this->presets, $this->context->blocks($path), $this->css);
     }
 
-    #[ThemeSchemaCoverage(['styles', 'extraRoots', 'variations'])]
+    #[ThemeSchemaCoverage(['styles', 'variations'])]
     public function variations(string $variation): self
     {
         return new self($this->themeJson, $this->presets, $this->context->variations($variation), $this->css);

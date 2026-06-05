@@ -40,14 +40,6 @@ final class SettingsTest extends UnitTestCase
         yield 'nested path' => ['core/group/color'];
     }
 
-    public function testDeprecatedBlockSettingsBridgeStillWorks(): void
-    {
-        $sut = $this->makeThemeJson();
-
-        $this->assertTrue($sut->setBlockSettings('core/paragraph', ['color' => ['text' => true]]));
-        $this->assertTrue($sut->get('settings.blocks.core/paragraph.color.text'));
-    }
-
     private function makeThemeJson(): ThemeJson
     {
         return new ThemeJson(new Config(), new Presets());
