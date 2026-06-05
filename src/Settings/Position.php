@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator\Settings;
 
 use ItalyStrap\ThemeJsonGenerator\Settings;
+use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
 
 final readonly class Position
 {
@@ -15,12 +16,14 @@ final readonly class Position
     ) {
     }
 
+    #[ThemeSchemaCoverage(['settings', 'position', 'sticky'])]
     public function enableSticky(): self
     {
         $this->set(self::STICKY, true);
         return $this;
     }
 
+    #[ThemeSchemaCoverage(['settings', 'position', 'sticky'])]
     public function disableSticky(): self
     {
         $this->set(self::STICKY, false);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Settings;
 
+use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
 use ItalyStrap\ThemeJsonGenerator\Settings;
 use ItalyStrap\ThemeJsonGenerator\Settings\Spacing\Scale;
 use ItalyStrap\ThemeJsonGenerator\Settings\Spacing\SpacingSize;
@@ -31,48 +32,56 @@ final readonly class Spacing
     ) {
     }
 
+    #[ThemeSchemaCoverage(['settings', 'spacing', 'blockGap'])]
     public function enableBlockGap(): self
     {
         $this->set(self::BLOCK_GAP, true);
         return $this;
     }
 
+    #[ThemeSchemaCoverage(['settings', 'spacing', 'blockGap'])]
     public function disableBlockGap(): self
     {
         $this->set(self::BLOCK_GAP, false);
         return $this;
     }
 
+    #[ThemeSchemaCoverage(['settings', 'spacing', 'blockGap'])]
     public function disableBlockGapAndLayoutStyles(): self
     {
         $this->set(self::BLOCK_GAP, null);
         return $this;
     }
 
+    #[ThemeSchemaCoverage(['settings', 'spacing', 'margin'])]
     public function enableMargin(): self
     {
         $this->set(self::MARGIN, true);
         return $this;
     }
 
+    #[ThemeSchemaCoverage(['settings', 'spacing', 'margin'])]
     public function disableMargin(): self
     {
         $this->set(self::MARGIN, false);
         return $this;
     }
 
+    #[ThemeSchemaCoverage(['settings', 'spacing', 'padding'])]
     public function enablePadding(): self
     {
         $this->set(self::PADDING, true);
         return $this;
     }
 
+    #[ThemeSchemaCoverage(['settings', 'spacing', 'padding'])]
     public function disablePadding(): self
     {
         $this->set(self::PADDING, false);
         return $this;
     }
 
+    #[ThemeSchemaCoverage(['settings', 'spacing', 'units'])]
     public function units(string ...$units): self
     {
         if ($units === []) {
@@ -83,30 +92,35 @@ final readonly class Spacing
         return $this;
     }
 
+    #[ThemeSchemaCoverage(['settings', 'spacing', 'customSpacingSize'])]
     public function enableCustomSpacingSize(): self
     {
         $this->set(self::CUSTOM_SPACING_SIZE, true);
         return $this;
     }
 
+    #[ThemeSchemaCoverage(['settings', 'spacing', 'customSpacingSize'])]
     public function disableCustomSpacingSize(): self
     {
         $this->set(self::CUSTOM_SPACING_SIZE, false);
         return $this;
     }
 
+    #[ThemeSchemaCoverage(['settings', 'spacing', 'defaultSpacingSizes'])]
     public function enableDefaultSpacingSizes(): self
     {
         $this->set(self::DEFAULT_SPACING_SIZES, true);
         return $this;
     }
 
+    #[ThemeSchemaCoverage(['settings', 'spacing', 'defaultSpacingSizes'])]
     public function disableDefaultSpacingSizes(): self
     {
         $this->set(self::DEFAULT_SPACING_SIZES, false);
         return $this;
     }
 
+    #[ThemeSchemaCoverage(['settings', 'spacing', 'spacingSizes'])]
     public function addSpacingSize(string $slug, string $name, string $size): self
     {
         $this->settings->addPreset(
@@ -117,6 +131,7 @@ final readonly class Spacing
         return $this;
     }
 
+    #[ThemeSchemaCoverage(['settings', 'spacing', 'spacingScale'])]
     public function scale(): Scale
     {
         return new Scale($this);

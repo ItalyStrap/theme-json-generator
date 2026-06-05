@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Settings\Spacing;
 
+use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
 use ItalyStrap\ThemeJsonGenerator\Settings\Spacing;
 
 final readonly class Scale
@@ -12,6 +13,7 @@ final readonly class Scale
     {
     }
 
+    #[ThemeSchemaCoverage(['settings', 'spacing', 'spacingScale'])]
     public function operator(string $operator): self
     {
         if (!\in_array($operator, ['+', '*'], true)) {
@@ -21,11 +23,13 @@ final readonly class Scale
         return $this->set('operator', $operator);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'spacing', 'spacingScale'])]
     public function increment(float $increment): self
     {
         return $this->set('increment', $this->positive($increment, 'increment'));
     }
 
+    #[ThemeSchemaCoverage(['settings', 'spacing', 'spacingScale'])]
     public function steps(int $steps): self
     {
         if ($steps < 1 || $steps > 10) {
@@ -35,11 +39,13 @@ final readonly class Scale
         return $this->set('steps', $steps);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'spacing', 'spacingScale'])]
     public function mediumStep(float $mediumStep): self
     {
         return $this->set('mediumStep', $this->positive($mediumStep, 'medium step'));
     }
 
+    #[ThemeSchemaCoverage(['settings', 'spacing', 'spacingScale'])]
     public function unit(string $unit): self
     {
         return $this->set('unit', $unit);

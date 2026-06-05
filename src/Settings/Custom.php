@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Settings;
 
+use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
 use ItalyStrap\ThemeJsonGenerator\Settings;
 use ItalyStrap\ThemeJsonGenerator\Settings\Custom\Custom as CustomPreset;
 
@@ -14,6 +15,7 @@ final readonly class Custom
     ) {
     }
 
+    #[ThemeSchemaCoverage(['settings', 'custom'])]
     public function add(string $key, string $value): self
     {
         $this->settings->addPreset('custom', new CustomPreset($key, $value));
@@ -24,6 +26,7 @@ final readonly class Custom
     /**
      * @param array<string, mixed> $customs
      */
+    #[ThemeSchemaCoverage(['settings', 'custom'])]
     public function addMultiple(array $customs): self
     {
         $this->presetsToFlat($customs);

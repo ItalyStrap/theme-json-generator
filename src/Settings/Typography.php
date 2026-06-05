@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Settings;
 
+use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
 use ItalyStrap\ThemeJsonGenerator\Settings;
 use ItalyStrap\ThemeJsonGenerator\Settings\Typography\Fluid;
 use ItalyStrap\ThemeJsonGenerator\Settings\Typography\FontFamily;
@@ -50,81 +51,97 @@ final readonly class Typography
     ) {
     }
 
+    #[ThemeSchemaCoverage(['settings', 'typography', 'defaultFontSizes'])]
     public function enableDefaultFontSizes(): self
     {
         return $this->setBoolean(self::DEFAULT_FONT_SIZES, true);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'typography', 'defaultFontSizes'])]
     public function disableDefaultFontSizes(): self
     {
         return $this->setBoolean(self::DEFAULT_FONT_SIZES, false);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'typography', 'customFontSize'])]
     public function enableCustomFontSize(): self
     {
         return $this->setBoolean(self::CUSTOM_FONT_SIZE, true);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'typography', 'customFontSize'])]
     public function disableCustomFontSize(): self
     {
         return $this->setBoolean(self::CUSTOM_FONT_SIZE, false);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'typography', 'fontStyle'])]
     public function enableFontStyle(): self
     {
         return $this->setBoolean(self::FONT_STYLE, true);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'typography', 'fontStyle'])]
     public function disableFontStyle(): self
     {
         return $this->setBoolean(self::FONT_STYLE, false);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'typography', 'fontWeight'])]
     public function enableFontWeight(): self
     {
         return $this->setBoolean(self::FONT_WEIGHT, true);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'typography', 'fontWeight'])]
     public function disableFontWeight(): self
     {
         return $this->setBoolean(self::FONT_WEIGHT, false);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'typography', 'fluid'])]
     public function enableFluid(): self
     {
         return $this->setBoolean(self::FLUID, true);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'typography', 'fluid'])]
     public function disableFluid(): self
     {
         return $this->setBoolean(self::FLUID, false);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'typography', 'fluid'])]
     public function fluid(): Fluid
     {
         return new Fluid($this);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'typography', 'letterSpacing'])]
     public function enableLetterSpacing(): self
     {
         return $this->setBoolean(self::LETTER_SPACING, true);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'typography', 'letterSpacing'])]
     public function disableLetterSpacing(): self
     {
         return $this->setBoolean(self::LETTER_SPACING, false);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'typography', 'lineHeight'])]
     public function enableLineHeight(): self
     {
         return $this->setBoolean(self::LINE_HEIGHT, true);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'typography', 'lineHeight'])]
     public function disableLineHeight(): self
     {
         return $this->setBoolean(self::LINE_HEIGHT, false);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'typography', 'textIndent'])]
     public function textIndent(string $textIndent): self
     {
         if (!\in_array($textIndent, ['subsequent', 'all'], true)) {
@@ -137,71 +154,85 @@ final readonly class Typography
         return $this;
     }
 
+    #[ThemeSchemaCoverage(['settings', 'typography', 'textIndent'])]
     public function disableTextIndent(): self
     {
         return $this->setBoolean(self::TEXT_INDENT, false);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'typography', 'textAlign'])]
     public function enableTextAlign(): self
     {
         return $this->setBoolean(self::TEXT_ALIGN, true);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'typography', 'textAlign'])]
     public function disableTextAlign(): self
     {
         return $this->setBoolean(self::TEXT_ALIGN, false);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'typography', 'textColumns'])]
     public function enableTextColumns(): self
     {
         return $this->setBoolean(self::TEXT_COLUMNS, true);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'typography', 'textColumns'])]
     public function disableTextColumns(): self
     {
         return $this->setBoolean(self::TEXT_COLUMNS, false);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'typography', 'textDecoration'])]
     public function enableTextDecoration(): self
     {
         return $this->setBoolean(self::TEXT_DECORATION, true);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'typography', 'textDecoration'])]
     public function disableTextDecoration(): self
     {
         return $this->setBoolean(self::TEXT_DECORATION, false);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'typography', 'writingMode'])]
     public function enableWritingMode(): self
     {
         return $this->setBoolean(self::WRITING_MODE, true);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'typography', 'writingMode'])]
     public function disableWritingMode(): self
     {
         return $this->setBoolean(self::WRITING_MODE, false);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'typography', 'textTransform'])]
     public function enableTextTransform(): self
     {
         return $this->setBoolean(self::TEXT_TRANSFORM, true);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'typography', 'textTransform'])]
     public function disableTextTransform(): self
     {
         return $this->setBoolean(self::TEXT_TRANSFORM, false);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'typography', 'dropCap'])]
     public function enableDropCap(): self
     {
         return $this->setBoolean(self::DROP_CAP, true);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'typography', 'dropCap'])]
     public function disableDropCap(): self
     {
         return $this->setBoolean(self::DROP_CAP, false);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'typography', 'fontSizes'])]
     public function addFontSize(string $slug, string $name, string $size, ?FontSizeFluid $fluid = null): self
     {
         $this->guardAgainstFluidClampConflict($size);
@@ -210,6 +241,7 @@ final readonly class Typography
         return $this;
     }
 
+    #[ThemeSchemaCoverage(['settings', 'typography', 'fontFamilies'])]
     public function addFontFamily(string $slug, string $name, string $fontFamily, FontFace ...$fontFace): self
     {
         $this->settings->addPreset(

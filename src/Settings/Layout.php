@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Settings;
 
+use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
 use ItalyStrap\ThemeJsonGenerator\Settings;
 
 final readonly class Layout
@@ -22,6 +23,7 @@ final readonly class Layout
     ) {
     }
 
+    #[ThemeSchemaCoverage(['settings', 'layout', 'contentSize'])]
     public function contentSize(string $keyOrValue): self
     {
         $size = $this->presets->get($keyOrValue);
@@ -37,6 +39,7 @@ final readonly class Layout
         return $this;
     }
 
+    #[ThemeSchemaCoverage(['settings', 'layout', 'wideSize'])]
     public function wideSize(string $keyOrValue): self
     {
         $size = $this->presets->get($keyOrValue);
@@ -52,24 +55,28 @@ final readonly class Layout
         return $this;
     }
 
+    #[ThemeSchemaCoverage(['settings', 'layout', 'allowEditing'])]
     public function enableEditing(): self
     {
         $this->set(self::ALLOW_EDITING, true);
         return $this;
     }
 
+    #[ThemeSchemaCoverage(['settings', 'layout', 'allowEditing'])]
     public function disableEditing(): self
     {
         $this->set(self::ALLOW_EDITING, false);
         return $this;
     }
 
+    #[ThemeSchemaCoverage(['settings', 'layout', 'allowCustomContentAndWideSize'])]
     public function enableCustomContentAndWideSize(): self
     {
         $this->set(self::ALLOW_CUSTOM_CONTENT_AND_WIDE_SIZE, true);
         return $this;
     }
 
+    #[ThemeSchemaCoverage(['settings', 'layout', 'allowCustomContentAndWideSize'])]
     public function disableCustomContentAndWideSize(): self
     {
         $this->set(self::ALLOW_CUSTOM_CONTENT_AND_WIDE_SIZE, false);

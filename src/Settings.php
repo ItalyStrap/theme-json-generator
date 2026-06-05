@@ -17,6 +17,7 @@ use ItalyStrap\ThemeJsonGenerator\Settings\PresetsInterface;
 use ItalyStrap\ThemeJsonGenerator\Settings\Shadow;
 use ItalyStrap\ThemeJsonGenerator\Settings\Spacing;
 use ItalyStrap\ThemeJsonGenerator\Settings\Typography;
+use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
 
 final readonly class Settings
 {
@@ -30,73 +31,88 @@ final readonly class Settings
         $this->context = $context ?? new SettingsContext($this->themeJson, [SectionNames::SETTINGS]);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'appearanceTools'])]
     public function enableAppearanceTools(): self
     {
         $this->set('appearanceTools', true);
         return $this;
     }
 
+    #[ThemeSchemaCoverage(['settings', 'appearanceTools'])]
     public function disableAppearanceTools(): self
     {
         $this->set('appearanceTools', false);
         return $this;
     }
 
+    #[ThemeSchemaCoverage(['settings', 'color'])]
     public function color(): Color
     {
         return new Color($this);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'background'])]
     public function background(): Background
     {
         return new Background($this);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'border'])]
     public function border(): Border
     {
         return new Border($this);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'dimensions'])]
     public function dimensions(): Dimensions
     {
         return new Dimensions($this);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'layout'])]
     public function layout(): Layout
     {
         return new Layout($this, $this->presets);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'lightbox'])]
     public function lightbox(): Lightbox
     {
         return new Lightbox($this);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'position'])]
     public function position(): Position
     {
         return new Position($this);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'shadow'])]
     public function shadow(): Shadow
     {
         return new Shadow($this);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'spacing'])]
     public function spacing(): Spacing
     {
         return new Spacing($this);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'typography'])]
     public function typography(): Typography
     {
         return new Typography($this);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'custom'])]
     public function custom(): Custom
     {
         return new Custom($this);
     }
 
+    #[ThemeSchemaCoverage(['settings', 'extraRoots', 'blocks'])]
+    #[ThemeSchemaCoverage(['settings', 'blockTargets', '*'])]
     public function blocks(string $block): self
     {
         return new self($this->themeJson, $this->presets, $this->context->blocks($block));

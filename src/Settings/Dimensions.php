@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Settings;
 
+use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
 use ItalyStrap\ThemeJsonGenerator\Settings;
 use ItalyStrap\ThemeJsonGenerator\Settings\Dimensions\AspectRatio;
 use ItalyStrap\ThemeJsonGenerator\Settings\Dimensions\DimensionSize;
@@ -31,78 +32,91 @@ final readonly class Dimensions
     ) {
     }
 
+    #[ThemeSchemaCoverage(['settings', 'dimensions', 'aspectRatio'])]
     public function enableAspectRatio(): self
     {
         $this->set(self::ASPECT_RATIO, true);
         return $this;
     }
 
+    #[ThemeSchemaCoverage(['settings', 'dimensions', 'aspectRatio'])]
     public function disableAspectRatio(): self
     {
         $this->set(self::ASPECT_RATIO, false);
         return $this;
     }
 
+    #[ThemeSchemaCoverage(['settings', 'dimensions', 'defaultAspectRatios'])]
     public function enableDefaultAspectRatios(): self
     {
         $this->set(self::DEFAULT_ASPECT_RATIOS, true);
         return $this;
     }
 
+    #[ThemeSchemaCoverage(['settings', 'dimensions', 'defaultAspectRatios'])]
     public function disableDefaultAspectRatios(): self
     {
         $this->set(self::DEFAULT_ASPECT_RATIOS, false);
         return $this;
     }
 
+    #[ThemeSchemaCoverage(['settings', 'dimensions', 'height'])]
     public function enableHeight(): self
     {
         $this->set(self::HEIGHT, true);
         return $this;
     }
 
+    #[ThemeSchemaCoverage(['settings', 'dimensions', 'height'])]
     public function disableHeight(): self
     {
         $this->set(self::HEIGHT, false);
         return $this;
     }
 
+    #[ThemeSchemaCoverage(['settings', 'dimensions', 'minHeight'])]
     public function enableMinHeight(): self
     {
         $this->set(self::MIN_HEIGHT, true);
         return $this;
     }
 
+    #[ThemeSchemaCoverage(['settings', 'dimensions', 'minHeight'])]
     public function disableMinHeight(): self
     {
         $this->set(self::MIN_HEIGHT, false);
         return $this;
     }
 
+    #[ThemeSchemaCoverage(['settings', 'dimensions', 'minWidth'])]
     public function enableMinWidth(): self
     {
         $this->set(self::MIN_WIDTH, true);
         return $this;
     }
 
+    #[ThemeSchemaCoverage(['settings', 'dimensions', 'minWidth'])]
     public function disableMinWidth(): self
     {
         $this->set(self::MIN_WIDTH, false);
         return $this;
     }
 
+    #[ThemeSchemaCoverage(['settings', 'dimensions', 'width'])]
     public function enableWidth(): self
     {
         $this->set(self::WIDTH, true);
         return $this;
     }
 
+    #[ThemeSchemaCoverage(['settings', 'dimensions', 'width'])]
     public function disableWidth(): self
     {
         $this->set(self::WIDTH, false);
         return $this;
     }
 
+    #[ThemeSchemaCoverage(['settings', 'dimensions', 'aspectRatios'])]
     public function addAspectRatio(string $slug, string $name, string $ratio): self
     {
         $this->settings->addPreset(
@@ -113,6 +127,7 @@ final readonly class Dimensions
         return $this;
     }
 
+    #[ThemeSchemaCoverage(['settings', 'dimensions', 'dimensionSizes'])]
     public function addDimensionSize(string $slug, string $name, string $size): self
     {
         $this->settings->addPreset(
