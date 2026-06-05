@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator;
 
+use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
+
 final readonly class BlockTypes
 {
     public function __construct(
@@ -11,6 +13,7 @@ final readonly class BlockTypes
     ) {
     }
 
+    #[ThemeSchemaCoverage(['topLevel', 'blockTypes'])]
     public function add(string $blockType): self
     {
         if (!$this->themeJson->appendTo('blockTypes', $blockType)) {

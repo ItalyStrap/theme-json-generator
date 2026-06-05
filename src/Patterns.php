@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator;
 
+use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
+
 final readonly class Patterns
 {
     public function __construct(
@@ -11,6 +13,7 @@ final readonly class Patterns
     ) {
     }
 
+    #[ThemeSchemaCoverage(['topLevel', 'patterns'])]
     public function add(string $pattern): self
     {
         if (!$this->themeJson->appendTo('patterns', $pattern)) {

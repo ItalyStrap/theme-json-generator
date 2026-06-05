@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator;
 
+use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
+
 final readonly class CustomTemplates
 {
     public function __construct(
@@ -14,6 +16,7 @@ final readonly class CustomTemplates
     /**
      * @param list<string> $postTypes
      */
+    #[ThemeSchemaCoverage(['topLevel', 'customTemplates'])]
     public function addTemplate(string $name, string $title, array $postTypes = []): self
     {
         if ($name === '') {

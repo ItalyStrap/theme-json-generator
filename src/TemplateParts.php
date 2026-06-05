@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator;
 
+use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
+
 final readonly class TemplateParts
 {
     public function __construct(
@@ -11,6 +13,7 @@ final readonly class TemplateParts
     ) {
     }
 
+    #[ThemeSchemaCoverage(['topLevel', 'templateParts'])]
     public function addPart(string $name, string $area = 'uncategorized', ?string $title = null): self
     {
         if ($name === '') {

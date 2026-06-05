@@ -6,6 +6,7 @@ namespace ItalyStrap\ThemeJsonGenerator;
 
 use ItalyStrap\Config\ConfigInterface;
 use ItalyStrap\Config\NodeManipulationInterface;
+use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
 use ItalyStrap\ThemeJsonGenerator\Settings\PresetsInterface;
 
 final readonly class ThemeJson implements \JsonSerializable
@@ -19,56 +20,67 @@ final readonly class ThemeJson implements \JsonSerializable
     ) {
     }
 
+    #[ThemeSchemaCoverage(['topLevel', '$schema'])]
     public function schema(string $schema): self
     {
         return $this->setRoot('$schema', $schema);
     }
 
+    #[ThemeSchemaCoverage(['topLevel', 'version'])]
     public function version(int $version): self
     {
         return $this->setRoot('version', $version);
     }
 
+    #[ThemeSchemaCoverage(['topLevel', 'title'])]
     public function title(string $title): self
     {
         return $this->setRoot('title', $title);
     }
 
+    #[ThemeSchemaCoverage(['topLevel', 'slug'])]
     public function slug(string $slug): self
     {
         return $this->setRoot('slug', $slug);
     }
 
+    #[ThemeSchemaCoverage(['topLevel', 'description'])]
     public function description(string $description): self
     {
         return $this->setRoot('description', $description);
     }
 
+    #[ThemeSchemaCoverage(['topLevel', 'settings'])]
     public function settings(): Settings
     {
         return new Settings($this, $this->presets);
     }
 
+    #[ThemeSchemaCoverage(['topLevel', 'styles'])]
     public function styles(): Styles
     {
         return new Styles($this, $this->presets);
     }
 
+    #[ThemeSchemaCoverage(['topLevel', 'blockTypes'])]
     public function blockTypes(): BlockTypes
     {
         return new BlockTypes($this);
     }
 
+    #[ThemeSchemaCoverage(['topLevel', 'customTemplates'])]
     public function customTemplates(): CustomTemplates
     {
         return new CustomTemplates($this);
     }
 
+    #[ThemeSchemaCoverage(['topLevel', 'templateParts'])]
     public function templateParts(): TemplateParts
     {
         return new TemplateParts($this);
     }
 
+    #[ThemeSchemaCoverage(['topLevel', 'patterns'])]
     public function patterns(): Patterns
     {
         return new Patterns($this);
