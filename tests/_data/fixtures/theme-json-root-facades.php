@@ -1,0 +1,38 @@
+<?php
+
+declare(strict_types=1);
+
+require dirname(__DIR__, 3) . '/vendor/autoload.php';
+
+use ItalyStrap\Config\Config;
+use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
+use ItalyStrap\ThemeJsonGenerator\ThemeJson;
+
+$themeJson = new ThemeJson(new Config(), new Presets());
+
+$themeJson
+    ->schema('https://schemas.wp.org/trunk/theme.json')
+    ->version(3)
+    ->title('Moduli')
+    ->slug('moduli')
+    ->description('Theme metadata');
+
+$themeJson->blockTypes()->add('core/paragraph');
+$themeJson->blockTypes()->add('core/heading');
+$themeJson->customTemplates()->addTemplate('landing', 'Landing');
+$themeJson->templateParts()->addPart('header', 'header', 'Header');
+$themeJson->patterns()->add('moduli/hero');
+
+//$themeJson->settings()->background()->set('backgroundImage', 'url(hero.jpg)');
+$themeJson->settings()->layout()->set('contentSize', '960px');
+$themeJson->settings()->typography()->set('fontStyle', true);
+$themeJson->settings()->custom()->set('brand.primary', '#111111');
+
+//$themeJson->styles()->background()->backgroundImage('url(hero.jpg)');
+$themeJson->styles()->border()->color('red');
+$themeJson->styles()->color()->text('#111111');
+//$themeJson->styles()->spacing()->set('padding.top', '1rem');
+$themeJson->styles()->typography()->lineHeight('1.5');
+$themeJson->styles()->blocks('core/button')->variations('outline')->color()->text('#333333');
+
+echo json_encode($themeJson, JSON_THROW_ON_ERROR);
