@@ -49,11 +49,6 @@ final class InitCommand extends Command
 
         $message = new Message($rootFolder);
 
-        try {
-            return $this->handler->handle($message);
-        } catch (\Exception $exception) {
-            $output->writeln('<error>Error: ' . $exception->getMessage() . '</error>');
-            return Command::FAILURE;
-        }
+        return $this->handler->handle($message);
     }
 }

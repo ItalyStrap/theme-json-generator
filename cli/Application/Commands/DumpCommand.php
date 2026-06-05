@@ -121,12 +121,7 @@ final class DumpCommand extends Command
             \is_string($file) ? $file : ''
         );
 
-        try {
-            return $this->handler->handle($message);
-        } catch (\Exception $exception) {
-            $output->writeln('<error>Error: ' . $exception->getMessage() . '</error>');
-            return Command::FAILURE;
-        }
+        return $this->handler->handle($message);
 
 //        if ($input->getOption(ValidateCommand::NAME)) {
 //            $process = new Process(['php', 'vendor/bin/theme-json', ValidateCommand::NAME]);
