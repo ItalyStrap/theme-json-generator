@@ -117,12 +117,9 @@ final class ThemeJsonTest extends UnitTestCase
         $sut->styles()->spacing()->blockGap('1rem');
         $sut->styles()->spacing()->margin()->top('2rem');
         $sut->styles()->spacing()->padding()->horizontal('3rem');
-        $sut->styles()->spacing()
-            ->blockGap('4rem')
-            ->margin()
-            ->shorthand(['0px'])
-            ->padding()
-            ->shorthand(['0px']);
+        $sut->styles()->spacing()->blockGap('4rem');
+        $sut->styles()->spacing()->margin()->shorthand(['0px']);
+        $sut->styles()->spacing()->padding()->shorthand(['0px']);
         $sut->styles()->typography()->lineHeight('1.5');
 
         $this->assertSame('body{color:red;}a{color:blue;}', $sut->get('styles.css'));

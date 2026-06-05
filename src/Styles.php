@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator;
 
+use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
 use ItalyStrap\ThemeJsonGenerator\Settings\PresetInterface;
 use ItalyStrap\ThemeJsonGenerator\Settings\PresetsInterface;
 use ItalyStrap\ThemeJsonGenerator\Styles\Background;
@@ -33,11 +34,13 @@ final readonly class Styles
         $this->context = $context ?? new StyleContext($this->themeJson, [SectionNames::STYLES]);
     }
 
+    #[ThemeSchemaCoverage(['styles', 'css'])]
     public function css(string $css, string $selector = ''): bool
     {
         return $this->set('css', $this->css->parse($css, $selector));
     }
 
+    #[ThemeSchemaCoverage(['styles', 'css'])]
     public function appendCss(string $css, string $selector = ''): bool
     {
         $currentCss = $this->get('css');
@@ -49,46 +52,55 @@ final readonly class Styles
         return $this->set('css', $currentCss . $separator . $parsedCss);
     }
 
+    #[ThemeSchemaCoverage(['styles', 'background'])]
     public function background(): Background
     {
         return new Background($this->presets, [], $this->context->at('background'));
     }
 
+    #[ThemeSchemaCoverage(['styles', 'border'])]
     public function border(): Border
     {
         return new Border($this->presets, [], $this->context->at('border'));
     }
 
+    #[ThemeSchemaCoverage(['styles', 'color'])]
     public function color(): Color
     {
         return new Color($this->presets, [], $this->context->at('color'));
     }
 
+    #[ThemeSchemaCoverage(['styles', 'dimensions'])]
     public function dimensions(): Dimensions
     {
         return new Dimensions($this->presets, [], $this->context->at('dimensions'));
     }
 
+    #[ThemeSchemaCoverage(['styles', 'filter'])]
     public function filter(): Filter
     {
         return new Filter($this->presets, [], $this->context->at('filter'));
     }
 
+    #[ThemeSchemaCoverage(['styles', 'outline'])]
     public function outline(): Outline
     {
         return new Outline($this->presets, [], $this->context->at('outline'));
     }
 
+    #[ThemeSchemaCoverage(['styles', 'shadow'])]
     public function shadow(string $value): bool
     {
         return $this->context->set('shadow', $this->parseStyleValue($value));
     }
 
+    #[ThemeSchemaCoverage(['styles', 'spacing'])]
     public function spacing(): Spacing
     {
         return new Spacing($this->presets, [], $this->context->at('spacing'));
     }
 
+    #[ThemeSchemaCoverage(['styles', 'typography'])]
     public function typography(): Typography
     {
         return new Typography($this->presets, [], $this->context->at('typography'));
@@ -97,6 +109,8 @@ final readonly class Styles
     /**
      * @param array<array-key, string|int>|string $path
      */
+    #[ThemeSchemaCoverage(['styles', 'extraRoots', 'elements'])]
+    #[ThemeSchemaCoverage(['styles', 'elements', '*'])]
     public function elements(array|string $path): self
     {
         return new self($this->themeJson, $this->presets, $this->context->elements($path), $this->css);
@@ -105,11 +119,14 @@ final readonly class Styles
     /**
      * @param array<array-key, string|int>|string $path
      */
+    #[ThemeSchemaCoverage(['styles', 'extraRoots', 'blocks'])]
+    #[ThemeSchemaCoverage(['styles', 'blockTargets', '*'])]
     public function blocks(array|string $path): self
     {
         return new self($this->themeJson, $this->presets, $this->context->blocks($path), $this->css);
     }
 
+    #[ThemeSchemaCoverage(['styles', 'extraRoots', 'variations'])]
     public function variations(string $variation): self
     {
         return new self($this->themeJson, $this->presets, $this->context->variations($variation), $this->css);

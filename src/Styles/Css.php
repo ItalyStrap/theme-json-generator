@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Styles;
 
+use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
 use ItalyStrap\ThemeJsonGenerator\Settings\NullPresets;
 use ItalyStrap\ThemeJsonGenerator\Settings\PresetsInterface;
 use Sabberworm\CSS\Parser;
@@ -54,6 +55,7 @@ final class Css implements CssInterface
     /**
      * @throws SourceException
      */
+    #[ThemeSchemaCoverage(['styles', 'css'])]
     public function parse(string $css, string $selector = ''): string
     {
         if (\str_starts_with(\trim($css), '&')) {
