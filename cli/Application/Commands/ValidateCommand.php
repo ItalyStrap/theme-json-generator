@@ -54,11 +54,6 @@ final class ValidateCommand extends Command
 
         $message = new ValidateMessage($rootFolder, $schemaPath, $input->getOption('force') === true);
 
-        try {
-            return $this->handler->handle($message);
-        } catch (\Exception $exception) {
-            $output->writeln('<error>Error: ' . $exception->getMessage() . '</error>');
-            return Command::FAILURE;
-        }
+        return $this->handler->handle($message);
     }
 }
