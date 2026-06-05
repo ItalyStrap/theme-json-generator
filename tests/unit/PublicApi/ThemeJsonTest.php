@@ -81,13 +81,13 @@ final class ThemeJsonTest extends UnitTestCase
         $sut->blockTypes()
             ->add('core/paragraph')
             ->add('core/heading');
-        $sut->customTemplates()->add(['name' => 'Landing', 'slug' => 'landing']);
-        $sut->templateParts()->add(['name' => 'Header', 'area' => 'header']);
+        $sut->customTemplates()->addTemplate('landing', 'Landing');
+        $sut->templateParts()->addPart('header', 'header', 'Header');
         $sut->patterns()->add('moduli/hero');
 
         $this->assertSame(['core/paragraph', 'core/heading'], $sut->get('blockTypes'));
-        $this->assertSame([['name' => 'Landing', 'slug' => 'landing']], $sut->get('customTemplates'));
-        $this->assertSame([['name' => 'Header', 'area' => 'header']], $sut->get('templateParts'));
+        $this->assertSame([['name' => 'landing', 'title' => 'Landing']], $sut->get('customTemplates'));
+        $this->assertSame([['name' => 'header', 'title' => 'Header', 'area' => 'header']], $sut->get('templateParts'));
         $this->assertSame(['moduli/hero'], $sut->get('patterns'));
     }
 
