@@ -102,6 +102,10 @@ final class Css implements CssInterface
                 }
 
                 $actualSelector = $cssSelector->getSelector();
+                if (!$this->selectorBelongsToScope($actualSelector, $selector)) {
+                    continue;
+                }
+
                 $newSelector = \substr($actualSelector, \strlen($selector));
 
                 $cssBlock = $newSelector . $spaceAfterSelector . '{' . $newLine;
@@ -119,5 +123,15 @@ final class Css implements CssInterface
 
         \array_unshift($additionalSelectors, $rootRules . $newLine);
         return \trim(\implode('&', $additionalSelectors), "\t\n\r\0\x0B&");
+    }
+
+    private function selectorBelongsToScope(string $actualSelector, string $selector): bool
+    {
+        if (!\str_starts_with($actualSelector, $selector)) {
+            return false;
+        }
+
+        $nextCharacter = \substr($actualSelector, \strlen($selector), 1);
+        return $nextCharacter === '' || \str_contains(' .:#[>+~*_', $nextCharacter);
     }
 }

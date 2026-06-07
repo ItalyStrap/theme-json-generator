@@ -43,6 +43,16 @@ CSS;
         $this->assertSame($expected, $parseString, 'The parsed string is not the same as expected');
     }
 
+    public function testItShouldIgnoreUnrelatedSelectorsWhenParsingScopedCss(): void
+    {
+        $parseString = $this->makeInstance()->compressed()->parse(
+            '.other-selector{color: red;}.test-selector-one{color: blue;}',
+            '.test-selector'
+        );
+
+        $this->assertSame('', $parseString);
+    }
+
     /**
      * @dataProvider cssParserScenarioProvider
      */

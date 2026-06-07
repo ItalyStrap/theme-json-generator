@@ -34,6 +34,21 @@ final class CssTest extends IntegrationTestCase
         $this->assertSame($expectedWordPressCss, $result, 'The WordPress processed CSS is not the same as expected');
     }
 
+    public function testItCharacterizesUnrelatedSelectorProcessingWithWordPressThemeJson(): void
+    {
+        $selector = '.test-selector';
+        $actual = '.other-selector{color: red;}';
+
+        $parsed = $this->makeInstance()->compressed()->parse($actual, $selector);
+        $processedParsedCss = $this->processBlocksCustomCssWithWordPress($parsed, $selector);
+        $processedActualCss = $this->processBlocksCustomCssWithWordPress($actual, $selector);
+
+        $this->assertSame('', $parsed);
+        $this->assertSame('', $processedParsedCss);
+        $this->assertSame(':root :where(.test-selector.other-selector){color: red;}', $processedActualCss);
+        $this->assertNotSame($processedActualCss, $processedParsedCss);
+    }
+
     private function processBlocksCustomCssWithWordPress(string $css, string $selector): string
     {
         $wpThemeJson = new \WP_Theme_JSON();
