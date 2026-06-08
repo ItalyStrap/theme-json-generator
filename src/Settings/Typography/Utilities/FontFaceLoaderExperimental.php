@@ -58,9 +58,11 @@ final readonly class FontFaceLoaderExperimental
             if (!$file instanceof \SplFileInfo) {
                 continue;
             }
+
             if (!$file->isFile()) {
                 continue;
             }
+
             if (!$this->isSupportedFontFile($file->getPathname())) {
                 continue;
             }
