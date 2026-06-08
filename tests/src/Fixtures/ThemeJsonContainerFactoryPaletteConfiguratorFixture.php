@@ -6,8 +6,8 @@ namespace ItalyStrap\Tests\Fixtures;
 
 use ItalyStrap\ThemeJsonGenerator\ConfiguratorInterface;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Palette;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\Color;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\BoxShadow;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\Color;
 use ItalyStrap\ThemeJsonGenerator\Settings\PresetsInterface;
 use ItalyStrap\ThemeJsonGenerator\ThemeJson;
 

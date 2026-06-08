@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Settings;
 
-use ItalyStrap\ThemeJsonGenerator\Settings;
 use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
+use ItalyStrap\ThemeJsonGenerator\Settings;
 
 final readonly class Position
 {

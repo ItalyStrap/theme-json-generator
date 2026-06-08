@@ -7,12 +7,12 @@ namespace ItalyStrap\Tests\Unit\PublicApi\Styles;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Styles\Background;
 use ItalyStrap\ThemeJsonGenerator\Styles\Border;
+use ItalyStrap\ThemeJsonGenerator\Styles\Color;
 use ItalyStrap\ThemeJsonGenerator\Styles\Css;
 use ItalyStrap\ThemeJsonGenerator\Styles\Dimensions;
 use ItalyStrap\ThemeJsonGenerator\Styles\Filter;
 use ItalyStrap\ThemeJsonGenerator\Styles\Outline;
 use ItalyStrap\ThemeJsonGenerator\Styles\Scss;
-use ItalyStrap\ThemeJsonGenerator\Styles\Color;
 use ItalyStrap\ThemeJsonGenerator\Styles\Spacing;
 use ItalyStrap\ThemeJsonGenerator\Styles\Typography;
 

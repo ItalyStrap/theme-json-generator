@@ -6,13 +6,13 @@ namespace ItalyStrap\ThemeJsonGenerator\Cli\Application\Middlewares;
 
 use ItalyStrap\Pipeline\HandlerInterface;
 use ItalyStrap\Pipeline\MiddlewareInterface;
-use ItalyStrap\ThemeJsonGenerator\ThemeJson;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\DumpMessage;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\ThemeJsonContainerFactoryInterface;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Filesystem\FilesFinder;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Filesystem\JsonFileWriter;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Filesystem\ScssFileWriter;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Handler\ConsoleHandler;
+use ItalyStrap\ThemeJsonGenerator\ThemeJson;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 

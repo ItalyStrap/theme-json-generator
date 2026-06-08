@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator\Settings;
 
 use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\GradientInterface;
 use ItalyStrap\ThemeJsonGenerator\Settings;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Duotone;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Gradient;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Palette;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\ColorInterface;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\GradientInterface;
 
 final readonly class Color
 {

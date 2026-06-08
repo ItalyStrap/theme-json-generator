@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator;
 
+use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
 use ItalyStrap\ThemeJsonGenerator\Settings\Background;
 use ItalyStrap\ThemeJsonGenerator\Settings\Border;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color;
@@ -17,7 +18,6 @@ use ItalyStrap\ThemeJsonGenerator\Settings\PresetsInterface;
 use ItalyStrap\ThemeJsonGenerator\Settings\Shadow;
 use ItalyStrap\ThemeJsonGenerator\Settings\Spacing;
 use ItalyStrap\ThemeJsonGenerator\Settings\Typography;
-use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
 
 final readonly class Settings
 {

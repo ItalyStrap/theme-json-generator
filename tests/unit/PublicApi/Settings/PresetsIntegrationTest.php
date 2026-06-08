@@ -13,8 +13,8 @@ use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\ShadesGeneratorExperi
 use ItalyStrap\ThemeJsonGenerator\Settings\Custom\CustomToPresets;
 use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\Settings\Typography\FontSize;
-use ItalyStrap\ThemeJsonGenerator\ThemeJson;
 use ItalyStrap\ThemeJsonGenerator\Styles\Typography;
+use ItalyStrap\ThemeJsonGenerator\ThemeJson;
 
 final class PresetsIntegrationTest extends UnitTestCase
 {
