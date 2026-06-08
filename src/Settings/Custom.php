@@ -10,6 +10,10 @@ use ItalyStrap\ThemeJsonGenerator\Settings\Custom\Custom as CustomPreset;
 
 final readonly class Custom
 {
+    use ScopedSettingsWriterTrait;
+
+    private const SECTION = 'custom';
+
     public function __construct(
         private Settings $settings,
     ) {
@@ -18,7 +22,7 @@ final readonly class Custom
     #[ThemeSchemaCoverage(['settings', 'custom'])]
     public function add(string $key, string $value): self
     {
-        $this->settings->addPreset('custom', new CustomPreset($key, $value));
+        $this->settings->addPreset(new CustomPreset($key, $value));
 
         return $this;
     }
@@ -43,7 +47,7 @@ final readonly class Custom
          */
         foreach ($customs as $key => $value) {
             if ($value instanceof CustomPreset) {
-                $this->settings->addPreset('custom', $value);
+                $this->settings->addPreset($value);
                 continue;
             }
 
@@ -55,17 +59,5 @@ final readonly class Custom
 
             $this->add($fullKey, (string)$value);
         }
-    }
-
-    /**
-     * @param array<array-key, string|int>|string $path
-     */
-    public function set(array|string $path, mixed $value): bool
-    {
-        if (\is_string($path)) {
-            $path = \explode('.', $path);
-        }
-
-        return $this->settings->set(['custom', ...$path], $value);
     }
 }

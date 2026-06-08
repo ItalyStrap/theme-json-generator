@@ -6,6 +6,7 @@ namespace ItalyStrap\Tests\Unit\PublicApi\Settings;
 
 use ItalyStrap\Config\Config;
 use ItalyStrap\Tests\UnitTestCase;
+use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Container\PresetsToThemeJson;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\BoxShadow;
 use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\Settings\Shadow;
@@ -28,6 +29,9 @@ final class ShadowTest extends UnitTestCase
 
         $this->assertInstanceOf(Shadow::class, $result);
         $this->assertFalse($sut->get('settings.blocks.core/group.shadow.defaultPresets'));
+
+        (new PresetsToThemeJson())($sut, $presets);
+
         $this->assertSame(
             [
                 [
@@ -36,7 +40,7 @@ final class ShadowTest extends UnitTestCase
                     'shadow' => '0 2px 4px #000000',
                 ],
             ],
-            $presets->toArraysByPath()['settings.blocks.core/group.shadow.presets']
+            $sut->get('settings.blocks.core/group.shadow.presets')
         );
     }
 }

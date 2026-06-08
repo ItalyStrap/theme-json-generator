@@ -6,6 +6,7 @@ namespace ItalyStrap\Tests\Unit\PublicApi\Settings;
 
 use ItalyStrap\Config\Config;
 use ItalyStrap\Tests\UnitTestCase;
+use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Container\PresetsToThemeJson;
 use ItalyStrap\ThemeJsonGenerator\Settings\Dimensions;
 use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\ThemeJson;
@@ -34,6 +35,9 @@ final class DimensionsTest extends UnitTestCase
         $this->assertFalse($sut->get('settings.blocks.core/group.dimensions.minHeight'));
         $this->assertTrue($sut->get('settings.blocks.core/group.dimensions.minWidth'));
         $this->assertFalse($sut->get('settings.blocks.core/group.dimensions.width'));
+
+        (new PresetsToThemeJson())($sut, $presets);
+
         $this->assertSame(
             [
                 [
@@ -42,7 +46,7 @@ final class DimensionsTest extends UnitTestCase
                     'ratio' => '1/1',
                 ],
             ],
-            $presets->toArraysByPath()['settings.blocks.core/group.dimensions.aspectRatios']
+            $sut->get('settings.blocks.core/group.dimensions.aspectRatios')
         );
         $this->assertSame(
             [
@@ -52,7 +56,7 @@ final class DimensionsTest extends UnitTestCase
                     'size' => '42rem',
                 ],
             ],
-            $presets->toArraysByPath()['settings.blocks.core/group.dimensions.dimensionSizes']
+            $sut->get('settings.blocks.core/group.dimensions.dimensionSizes')
         );
     }
 }

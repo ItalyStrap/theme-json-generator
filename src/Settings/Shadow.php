@@ -11,6 +11,10 @@ use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\BoxShadow;
 
 final readonly class Shadow
 {
+    use ScopedSettingsWriterTrait;
+
+    private const SECTION = 'shadow';
+
     public const DEFAULT_PRESETS = 'defaultPresets';
 
     public const PRESETS = 'presets';
@@ -37,20 +41,8 @@ final readonly class Shadow
     #[ThemeSchemaCoverage(['settings', 'shadow', 'presets'])]
     public function addShadow(string $slug, string $name, BoxShadow ...$shadow): self
     {
-        $this->settings->addPreset(['shadow', self::PRESETS], new ShadowPreset($slug, $name, ...$shadow));
+        $this->settings->addPreset(new ShadowPreset($slug, $name, ...$shadow));
 
         return $this;
-    }
-
-    /**
-     * @param array<array-key, string|int>|string $path
-     */
-    public function set(array|string $path, mixed $value): bool
-    {
-        if (\is_string($path)) {
-            $path = \explode('.', $path);
-        }
-
-        return $this->settings->set(['shadow', ...$path], $value);
     }
 }

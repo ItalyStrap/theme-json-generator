@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace ItalyStrap\Tests\Unit\PublicApi\Settings;
 
+use ItalyStrap\Config\Config;
 use ItalyStrap\Tests\UnitTestCase;
+use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Container\PresetsToThemeJson;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Palette;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\Color;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\ShadesGeneratorExperimental;
 use ItalyStrap\ThemeJsonGenerator\Settings\Custom\CustomToPresets;
 use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\Settings\Typography\FontSize;
+use ItalyStrap\ThemeJsonGenerator\ThemeJson;
 use ItalyStrap\ThemeJsonGenerator\Styles\Typography;
 
 final class PresetsIntegrationTest extends UnitTestCase
@@ -42,6 +45,15 @@ final class PresetsIntegrationTest extends UnitTestCase
         ]))->toArray());
 
         return $sut;
+    }
+
+    private function themeJsonFrom(Presets $presets): ThemeJson
+    {
+        $themeJson = new ThemeJson(new Config(), $presets);
+
+        (new PresetsToThemeJson())($themeJson, $presets);
+
+        return $themeJson;
     }
 
     public static function placeholdersProvider(): iterable
@@ -112,7 +124,6 @@ EOF
 //        $this->assertSame('var(--wp--preset--font-size--h-1)', $sut->get('fontSize.h1')->var());
 //        $this->assertSame('var(--wp--preset--font-size--h-2)', $sut->get('fontSize.h2')->var());
 
-        $fontSizesCollection = $sut->toArrayByCategory(FontSize::TYPE);
         $this->assertSame(
             [
                 [
@@ -131,7 +142,7 @@ EOF
                     'size' => 'calc( var(--wp--preset--font-size--base) * 2.1875)',
                 ],
             ],
-            $fontSizesCollection
+            $this->themeJsonFrom($sut)->get('settings.typography.fontSizes')
         );
 
         $sut->addMultiple((new CustomToPresets([
@@ -154,7 +165,6 @@ EOF
             ],
         ]))->toArray());
 
-        $customCollection = $sut->toArrayByCategory('custom');
         $this->assertSame(
             [
                 'contentSize' => 'clamp(16rem, 60vw, 60rem)',
@@ -175,7 +185,7 @@ EOF
                         ],
                     ],
             ],
-            $customCollection
+            $this->themeJsonFrom($sut)->get('settings.custom')
         );
 
 //        codecept_debug($sut->get('custom.grandParentField.parentField.childField')->var());

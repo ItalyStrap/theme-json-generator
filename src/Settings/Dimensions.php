@@ -11,6 +11,10 @@ use ItalyStrap\ThemeJsonGenerator\Settings\Dimensions\DimensionSize;
 
 final readonly class Dimensions
 {
+    use ScopedSettingsWriterTrait;
+
+    private const SECTION = 'dimensions';
+
     public const ASPECT_RATIO = 'aspectRatio';
 
     public const ASPECT_RATIOS = 'aspectRatios';
@@ -119,10 +123,7 @@ final readonly class Dimensions
     #[ThemeSchemaCoverage(['settings', 'dimensions', 'aspectRatios'])]
     public function addAspectRatio(string $slug, string $name, string $ratio): self
     {
-        $this->settings->addPreset(
-            ['dimensions', self::ASPECT_RATIOS],
-            new AspectRatio($slug, $name, $ratio)
-        );
+        $this->settings->addPreset(new AspectRatio($slug, $name, $ratio));
 
         return $this;
     }
@@ -130,23 +131,8 @@ final readonly class Dimensions
     #[ThemeSchemaCoverage(['settings', 'dimensions', 'dimensionSizes'])]
     public function addDimensionSize(string $slug, string $name, string $size): self
     {
-        $this->settings->addPreset(
-            ['dimensions', self::DIMENSION_SIZES],
-            new DimensionSize($slug, $name, $size)
-        );
+        $this->settings->addPreset(new DimensionSize($slug, $name, $size));
 
         return $this;
-    }
-
-    /**
-     * @param array<array-key, string|int>|string $path
-     */
-    public function set(array|string $path, mixed $value): bool
-    {
-        if (\is_string($path)) {
-            $path = \explode('.', $path);
-        }
-
-        return $this->settings->set(['dimensions', ...$path], $value);
     }
 }

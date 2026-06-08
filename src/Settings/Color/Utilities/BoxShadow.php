@@ -95,7 +95,6 @@ final class BoxShadow implements \Stringable
             $this->color,
         ];
 
-        $this->reset();
         return \trim(\implode(' ', \array_filter($shadow, static fn(string $value): bool => $value !== '')));
     }
 
@@ -106,6 +105,9 @@ final class BoxShadow implements \Stringable
 
     private function assertValidCssDimension(string $value): void
     {
+        /**
+         * @TODO Maybe it's better to move this list to a separated helper so we can reuse it in other places.
+         */
         $unit = \implode('|', [
             'px',
             'em',

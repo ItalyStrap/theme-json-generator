@@ -10,6 +10,10 @@ use ItalyStrap\ThemeJsonGenerator\Settings\Border\RadiusSize;
 
 final readonly class Border
 {
+    use ScopedSettingsWriterTrait;
+
+    private const SECTION = 'border';
+
     public const COLOR = 'color';
 
     public const RADIUS = 'radius';
@@ -84,20 +88,8 @@ final readonly class Border
     #[ThemeSchemaCoverage(['settings', 'border', 'radiusSizes'])]
     public function addRadiusSize(string $slug, string $name, string $size): self
     {
-        $this->settings->addPreset(['border', self::RADIUS_SIZES], new RadiusSize($slug, $name, $size));
+        $this->settings->addPreset(new RadiusSize($slug, $name, $size));
 
         return $this;
-    }
-
-    /**
-     * @param array<array-key, string|int>|string $path
-     */
-    public function set(array|string $path, mixed $value): bool
-    {
-        if (\is_string($path)) {
-            $path = \explode('.', $path);
-        }
-
-        return $this->settings->set(['border', ...$path], $value);
     }
 }

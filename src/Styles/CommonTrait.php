@@ -56,16 +56,16 @@ trait CommonTrait
      * that because inside the styles section you only need to get a css variable created in the
      * Settings section.
      *
-     * Now obviously if you need to pass other CSS accepted values you can also use them
-     * and because they are not keys of the collection they will be returned as is.
+     * Now if you need to pass other CSS accepted values, you can also use them,
+     * and because they are not keys of the collection, they will be returned as is.
      *
      * In short:
      *
-     * If you pass a key of the collection you will get the value of the item.
+     * If you pass a key of the collection, you will get the value of the item.
      * Example:
      * Collection::get('color.base') === 'var(--wp--preset--color--base)'
      *
-     * If you pass a CSS value you will get the same value (because all CSS value are not keys of the collection)
+     * If you pass a CSS value, you will get the same value (because all CSS values are not keys of the collection)
      * Example:
      * Collection::get('nonExistentKey', 'inherit') === 'inherit'
      *

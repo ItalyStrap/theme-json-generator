@@ -22,6 +22,11 @@ use ScssPhp\ScssPhp\Compiler;
 
 final readonly class Styles
 {
+    /**
+     * @var string
+     */
+    public const SECTION = 'styles';
+
     private CssInterface $css;
 
     private Scss $scss;
@@ -37,13 +42,13 @@ final readonly class Styles
     ) {
         $this->css = $css ?? new Css($this->presets);
         $this->scss = $scss ?? new Scss(new Css($this->presets), new Compiler(), $this->presets);
-        $this->context = $context ?? new StyleContext($this->themeJson, [SectionNames::STYLES]);
+        $this->context = $context ?? new StyleContext($this->themeJson, [self::SECTION]);
     }
 
     #[ThemeSchemaCoverage(['styles', 'css'])]
     public function css(string $css, string $selector = ''): bool
     {
-        return $this->set('css', $this->css->parse($css, $selector));
+        return $this->write('css', $this->css->parse($css, $selector));
     }
 
     #[ThemeSchemaCoverage(['styles', 'css'])]
@@ -55,7 +60,7 @@ final readonly class Styles
     #[ThemeSchemaCoverage(['styles', 'css'])]
     public function scss(string $scss, string $selector = ''): bool
     {
-        return $this->set('css', $this->scss->parse($scss, $selector));
+        return $this->write('css', $this->scss->parse($scss, $selector));
     }
 
     #[ThemeSchemaCoverage(['styles', 'css'])]
@@ -66,10 +71,10 @@ final readonly class Styles
 
     private function appendParsedCss(string $parsedCss): bool
     {
-        $currentCss = $this->get('css');
+        $currentCss = $this->read('css');
         $currentCss = \is_string($currentCss) ? $currentCss : '';
 
-        return $this->set('css', $currentCss . $this->cssAppendSeparator($currentCss, $parsedCss) . $parsedCss);
+        return $this->write('css', $currentCss . $this->cssAppendSeparator($currentCss, $parsedCss) . $parsedCss);
     }
 
     private function cssAppendSeparator(string $currentCss, string $parsedCss): string
@@ -120,7 +125,7 @@ final readonly class Styles
     #[ThemeSchemaCoverage(['styles', 'shadow'])]
     public function shadow(string $value): bool
     {
-        return $this->context->set('shadow', $this->parseStyleValue($value));
+        return $this->write('shadow', $this->parseStyleValue($value));
     }
 
     #[ThemeSchemaCoverage(['styles', 'spacing'])]
@@ -168,27 +173,20 @@ final readonly class Styles
     }
 
     /**
+     * @internal
      * @param array<array-key, string|int>|string $path
-     * @TODO Investigate whether this generic escape hatch should remain public.
      */
-    public function set(array|string $path, mixed $value): bool
+    public function write(array|string $path, mixed $value): bool
     {
-        if (\is_string($path)) {
-            $path = \explode('.', $path);
-        }
-
         return $this->context->set($path, $value);
     }
 
     /**
+     * @internal
      * @param array<array-key, string|int>|string $path
      */
-    private function get(array|string $path, mixed $default = null): mixed
+    public function read(array|string $path, mixed $default = null): mixed
     {
-        if (\is_string($path)) {
-            $path = \explode('.', $path);
-        }
-
         return $this->context->get($path, $default);
     }
 

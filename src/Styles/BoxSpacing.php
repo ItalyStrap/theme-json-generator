@@ -13,13 +13,6 @@ final readonly class BoxSpacing
     ) {
     }
 
-    public function property(string $property, string $value): self
-    {
-        $this->box->property($property, $value);
-
-        return $this;
-    }
-
     #[ThemeSchemaCoverage(['styles', 'spacing', 'margin', 'top'])]
     #[ThemeSchemaCoverage(['styles', 'spacing', 'padding', 'top'])]
     public function top(string $value): self

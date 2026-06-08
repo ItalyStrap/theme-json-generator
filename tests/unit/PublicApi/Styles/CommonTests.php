@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace ItalyStrap\Tests\Unit\PublicApi\Styles;
 
 use ItalyStrap\Config\Config;
-use ItalyStrap\ThemeJsonGenerator\SectionNames;
+use ItalyStrap\ThemeJsonGenerator\Styles;
 use ItalyStrap\ThemeJsonGenerator\Styles\CommonTrait;
 use ItalyStrap\ThemeJsonGenerator\ThemeJson;
 
@@ -55,7 +55,7 @@ trait CommonTests
         $sut = $this->makeInstance();
 
         $data = [
-            SectionNames::STYLES => [
+            Styles::SECTION => [
                 'blocks' => [
                     'core/site-title' => [
                         'color' => $object1 = $sut->property('property', 'core/site-title'),

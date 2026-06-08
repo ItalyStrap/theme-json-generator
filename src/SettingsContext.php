@@ -35,7 +35,23 @@ final readonly class SettingsContext
         return new self($this->themeJson, [...$this->path, 'blocks', $block], true);
     }
 
+    public function blockName(): ?string
+    {
+        if (!$this->insideBlock) {
+            return null;
+        }
+
+        $blocksIndex = \array_search('blocks', $this->path, true);
+        if ($blocksIndex === false) {
+            return null;
+        }
+
+        $block = $this->path[$blocksIndex + 1] ?? null;
+        return \is_string($block) ? $block : null;
+    }
+
     /**
+     * @internal
      * @param array<array-key, string|int>|string|int $path
      */
     public function set(array|string|int $path, mixed $value): bool
@@ -44,6 +60,7 @@ final readonly class SettingsContext
     }
 
     /**
+     * @internal
      * @param array<array-key, string|int>|string|int $path
      */
     public function get(array|string|int $path, mixed $default = null): mixed
@@ -53,24 +70,24 @@ final readonly class SettingsContext
 
     /**
      * @param array<array-key, string|int>|string|int $path
-     * @return list<string|int>
+     * @return list<string|int>|string
      */
-    public function path(array|string|int $path): array
+    public function path(array|string|int $path): array|string
     {
-        return [...$this->path, ...$this->normalizePath($path)];
-    }
-
-    /**
-     * @param array<array-key, string|int>|string|int $path
-     * @return list<string|int>
-     */
-    private function normalizePath(array|string|int $path): array
-    {
-        if (\is_array($path)) {
-            return \array_values($path);
+        if (\is_string($path)) {
+            return $this->pathAsString() . ($path === '' ? '' : '.' . $path);
         }
 
-        return [$path];
+        if (\is_int($path)) {
+            return [...$this->path, $path];
+        }
+
+        return [...$this->path, ...\array_values($path)];
+    }
+
+    private function pathAsString(): string
+    {
+        return \implode('.', \array_map(strval(...), $this->path));
     }
 
     private function callerLocation(): string

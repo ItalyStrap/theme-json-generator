@@ -14,6 +14,10 @@ use ItalyStrap\ThemeJsonGenerator\Settings\Typography\Utilities\FontFace;
 
 final readonly class Typography
 {
+    use ScopedSettingsWriterTrait;
+
+    private const SECTION = 'typography';
+
     public const CUSTOM_FONT_SIZE = 'customFontSize';
 
     public const DEFAULT_FONT_SIZES = 'defaultFontSizes';
@@ -236,7 +240,7 @@ final readonly class Typography
     public function addFontSize(string $slug, string $name, string $size, ?FontSizeFluid $fluid = null): self
     {
         $this->guardAgainstFluidClampConflict($size);
-        $this->settings->addPreset(['typography', self::FONT_SIZES], new FontSize($slug, $name, $size, $fluid));
+        $this->settings->addPreset(new FontSize($slug, $name, $size, $fluid));
 
         return $this;
     }
@@ -244,24 +248,9 @@ final readonly class Typography
     #[ThemeSchemaCoverage(['settings', 'typography', 'fontFamilies'])]
     public function addFontFamily(string $slug, string $name, string $fontFamily, FontFace ...$fontFace): self
     {
-        $this->settings->addPreset(
-            ['typography', self::FONT_FAMILIES],
-            new FontFamily($slug, $name, $fontFamily, ...$fontFace)
-        );
+        $this->settings->addPreset(new FontFamily($slug, $name, $fontFamily, ...$fontFace));
 
         return $this;
-    }
-
-    /**
-     * @param array<array-key, string|int>|string $path
-     */
-    public function set(array|string $path, mixed $value): bool
-    {
-        if (\is_string($path)) {
-            $path = \explode('.', $path);
-        }
-
-        return $this->settings->set(['typography', ...$path], $value);
     }
 
     private function setBoolean(string $property, bool $value): self
@@ -270,13 +259,18 @@ final readonly class Typography
         return $this;
     }
 
+    public function writeFluidConfig(string $property, string $value): bool
+    {
+        return $this->set([self::FLUID, $property], $value);
+    }
+
     private function guardAgainstFluidClampConflict(string $size): void
     {
         if (!$this->containsClamp($size)) {
             return;
         }
 
-        $fluid = $this->settings->get(['typography', self::FLUID], false);
+        $fluid = $this->settings->read([self::SECTION, self::FLUID], false);
 
         if ($fluid === false || $fluid === null) {
             return;

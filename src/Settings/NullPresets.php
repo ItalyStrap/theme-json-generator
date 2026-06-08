@@ -14,7 +14,7 @@ final class NullPresets implements PresetsInterface
         return $this;
     }
 
-    public function addAt(array|string $path, PresetInterface $item): PresetsInterface
+    public function addToBlock(string $block, PresetInterface $item): PresetsInterface
     {
         return $this;
     }
@@ -24,7 +24,7 @@ final class NullPresets implements PresetsInterface
         return $this;
     }
 
-    public function get(string $key, $default = null)
+    public function get(array|string $key, $default = null)
     {
         return $default;
     }
@@ -34,12 +34,7 @@ final class NullPresets implements PresetsInterface
         return $content;
     }
 
-    public function toArrayByCategory(string $category): array
-    {
-        return [];
-    }
-
-    public function toArraysByPath(): array
+    public function collection(): array
     {
         return [];
     }

@@ -14,6 +14,10 @@ use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\ColorInterface;
 
 final readonly class Color
 {
+    use ScopedSettingsWriterTrait;
+
+    private const SECTION = 'color';
+
     public const BACKGROUND = 'background';
 
     public const BUTTON = 'button';
@@ -214,7 +218,7 @@ final readonly class Color
     #[ThemeSchemaCoverage(['settings', 'color', 'palette'])]
     public function addColor(string $slug, string $name, string|ColorInterface $color): self
     {
-        $this->settings->addPreset(['color', 'palette'], new Palette(
+        $this->settings->addPreset(new Palette(
             $slug,
             $name,
             \is_string($color) ? new Color\Utilities\Color($color) : $color
@@ -238,7 +242,7 @@ final readonly class Color
                 ));
             }
 
-            $this->settings->addPreset(['color', 'palette'], $color);
+            $this->settings->addPreset($color);
         }
 
         return $this;
@@ -251,32 +255,15 @@ final readonly class Color
         GradientInterface $gradient
     ): self {
 
-        $this->settings
-            ->addPreset(['color', 'gradients'], new Gradient(
-                $slug,
-                $name,
-                $gradient
-            ));
+        $this->settings->addPreset(new Gradient($slug, $name, $gradient));
         return $this;
     }
 
     #[ThemeSchemaCoverage(['settings', 'color', 'duotone'])]
     public function addDuotone(string $slug, string $name, Palette ...$colors): self
     {
-        $this->settings->addPreset(['color', 'duotone'], new Duotone($slug, $name, ...$colors));
+        $this->settings->addPreset(new Duotone($slug, $name, ...$colors));
 
         return $this;
-    }
-
-    /**
-     * @param array<array-key, string|int>|string $path
-     */
-    public function set(array|string $path, mixed $value): bool
-    {
-        if (\is_string($path)) {
-            $path = \explode('.', $path);
-        }
-
-        return $this->settings->set(['color', ...$path], $value);
     }
 }

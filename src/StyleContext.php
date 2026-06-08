@@ -64,32 +64,43 @@ final readonly class StyleContext
     }
 
     /**
+     * @internal
      * @param array<array-key, string|int>|string|int $path
      */
     public function set(array|string|int $path, mixed $value): bool
     {
-        return $this->themeJson->set([...$this->path, ...$this->normalizePath($path)], $value);
+        return $this->themeJson->set($this->path($path), $value);
     }
 
     /**
+     * @internal
      * @param array<array-key, string|int>|string|int $path
      */
     public function get(array|string|int $path, mixed $default = null): mixed
     {
-        return $this->themeJson->get([...$this->path, ...$this->normalizePath($path)], $default);
+        return $this->themeJson->get($this->path($path), $default);
     }
 
     /**
      * @param array<array-key, string|int>|string|int $path
-     * @return list<string|int>
+     * @return list<string|int>|string
      */
-    private function normalizePath(array|string|int $path): array
+    private function path(array|string|int $path): array|string
     {
-        if (\is_array($path)) {
-            return \array_values($path);
+        if (\is_string($path)) {
+            return $this->pathAsString() . ($path === '' ? '' : '.' . $path);
         }
 
-        return [$path];
+        if (\is_int($path)) {
+            return [...$this->path, $path];
+        }
+
+        return [...$this->path, ...\array_values($path)];
+    }
+
+    private function pathAsString(): string
+    {
+        return \implode('.', \array_map(strval(...), $this->path));
     }
 
     /**
@@ -108,13 +119,9 @@ final readonly class StyleContext
             ));
         }
 
-        if (\is_string($path)) {
-            $path = \explode('.', $path);
-        }
-
         return new self(
             $this->themeJson,
-            [...$this->path, $structure, ...$this->normalizePath($path)],
+            [...$this->path, $structure, ...(\is_string($path) ? [$path] : \array_values($path))],
             [...$this->structure, $structure],
         );
     }

@@ -9,6 +9,10 @@ use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
 
 final readonly class Lightbox
 {
+    use ScopedSettingsWriterTrait;
+
+    private const SECTION = 'lightbox';
+
     public const ALLOW_EDITING = 'allowEditing';
 
     public const ENABLED = 'enabled';
@@ -44,17 +48,5 @@ final readonly class Lightbox
     {
         $this->set(self::ALLOW_EDITING, false);
         return $this;
-    }
-
-    /**
-     * @param array<array-key, string|int>|string $path
-     */
-    public function set(array|string $path, mixed $value): bool
-    {
-        if (\is_string($path)) {
-            $path = \explode('.', $path);
-        }
-
-        return $this->settings->set(['lightbox', ...$path], $value);
     }
 }

@@ -9,6 +9,10 @@ use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
 
 final readonly class Background
 {
+    use ScopedSettingsWriterTrait;
+
+    private const SECTION = 'background';
+
     public const BACKGROUND_IMAGE = 'backgroundImage';
 
     public const BACKGROUND_SIZE = 'backgroundSize';
@@ -60,17 +64,5 @@ final readonly class Background
     {
         $this->set(self::GRADIENT, false);
         return $this;
-    }
-
-    /**
-     * @param array<array-key, string|int>|string $path
-     */
-    public function set(array|string $path, mixed $value): bool
-    {
-        if (\is_string($path)) {
-            $path = \explode('.', $path);
-        }
-
-        return $this->settings->set(['background', ...$path], $value);
     }
 }

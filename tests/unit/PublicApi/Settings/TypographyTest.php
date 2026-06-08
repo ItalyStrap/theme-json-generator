@@ -6,6 +6,7 @@ namespace ItalyStrap\Tests\Unit\PublicApi\Settings;
 
 use ItalyStrap\Config\Config;
 use ItalyStrap\Tests\UnitTestCase;
+use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Container\PresetsToThemeJson;
 use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\Settings\Typography;
 use ItalyStrap\ThemeJsonGenerator\Settings\Typography\Utilities\FontFace;
@@ -63,6 +64,9 @@ final class TypographyTest extends UnitTestCase
         $this->assertSame('1rem', $sut->get('settings.blocks.core/paragraph.typography.fluid.minFontSize'));
         $this->assertSame('80rem', $sut->get('settings.blocks.core/paragraph.typography.fluid.maxViewportWidth'));
         $this->assertSame('20rem', $sut->get('settings.blocks.core/paragraph.typography.fluid.minViewportWidth'));
+
+        (new PresetsToThemeJson())($sut, $presets);
+
         $this->assertSame(
             [
                 [
@@ -71,7 +75,7 @@ final class TypographyTest extends UnitTestCase
                     'size' => '1rem',
                 ],
             ],
-            $presets->toArraysByPath()['settings.blocks.core/paragraph.typography.fontSizes']
+            $sut->get('settings.blocks.core/paragraph.typography.fontSizes')
         );
         $this->assertSame(
             [
@@ -91,7 +95,7 @@ final class TypographyTest extends UnitTestCase
                     ],
                 ],
             ],
-            $presets->toArraysByPath()['settings.blocks.core/paragraph.typography.fontFamilies']
+            $sut->get('settings.blocks.core/paragraph.typography.fontFamilies')
         );
     }
 

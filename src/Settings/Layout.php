@@ -9,6 +9,10 @@ use ItalyStrap\ThemeJsonGenerator\Settings;
 
 final readonly class Layout
 {
+    use ScopedSettingsWriterTrait;
+
+    private const SECTION = 'layout';
+
     public const ALLOW_CUSTOM_CONTENT_AND_WIDE_SIZE = 'allowCustomContentAndWideSize';
 
     public const ALLOW_EDITING = 'allowEditing';
@@ -81,17 +85,5 @@ final readonly class Layout
     {
         $this->set(self::ALLOW_CUSTOM_CONTENT_AND_WIDE_SIZE, false);
         return $this;
-    }
-
-    /**
-     * @param array<array-key, string|int>|string $path
-     */
-    public function set(array|string $path, mixed $value): bool
-    {
-        if (\is_string($path)) {
-            $path = \explode('.', $path);
-        }
-
-        return $this->settings->set(['layout', ...$path], $value);
     }
 }

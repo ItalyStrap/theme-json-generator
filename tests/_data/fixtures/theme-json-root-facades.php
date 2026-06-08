@@ -23,15 +23,13 @@ $themeJson->customTemplates()->addTemplate('landing', 'Landing');
 $themeJson->templateParts()->addPart('header', 'header', 'Header');
 $themeJson->patterns()->add('moduli/hero');
 
-//$themeJson->settings()->background()->set('backgroundImage', 'url(hero.jpg)');
-$themeJson->settings()->layout()->set('contentSize', '960px');
-$themeJson->settings()->typography()->set('fontStyle', true);
-$themeJson->settings()->custom()->set('brand.primary', '#111111');
+$themeJson->settings()->layout()->contentSize('960px');
+$themeJson->settings()->typography()->enableFontStyle();
+$themeJson->set('settings.custom.brand.primary', '#111111');
 
 //$themeJson->styles()->background()->backgroundImage('url(hero.jpg)');
 $themeJson->styles()->border()->color('red');
 $themeJson->styles()->color()->text('#111111');
-//$themeJson->styles()->spacing()->set('padding.top', '1rem');
 $themeJson->styles()->typography()->lineHeight('1.5');
 $themeJson->styles()->blocks('core/button')->variations('outline')->color()->text('#333333');
 

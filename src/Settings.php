@@ -21,6 +21,11 @@ use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
 
 final readonly class Settings
 {
+    /**
+     * @var string
+     */
+    public const SECTION = 'settings';
+
     private SettingsContext $context;
 
     public function __construct(
@@ -28,139 +33,136 @@ final readonly class Settings
         private PresetsInterface $presets,
         ?SettingsContext $context = null,
     ) {
-        $this->context = $context ?? new SettingsContext($this->themeJson, [SectionNames::SETTINGS]);
+        $this->context = $context ?? new SettingsContext($this->themeJson, [self::SECTION]);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'appearanceTools'])]
+    #[ThemeSchemaCoverage([self::SECTION, 'appearanceTools'])]
     public function enableAppearanceTools(): self
     {
-        $this->set('appearanceTools', true);
+        $this->write('appearanceTools', true);
         return $this;
     }
 
-    #[ThemeSchemaCoverage(['settings', 'appearanceTools'])]
+    #[ThemeSchemaCoverage([self::SECTION, 'appearanceTools'])]
     public function disableAppearanceTools(): self
     {
-        $this->set('appearanceTools', false);
+        $this->write('appearanceTools', false);
         return $this;
     }
 
-    #[ThemeSchemaCoverage(['settings', 'useRootPaddingAwareAlignments'])]
+    #[ThemeSchemaCoverage([self::SECTION, 'useRootPaddingAwareAlignments'])]
     public function enableUseRootPaddingAwareAlignments(): self
     {
-        $this->set('useRootPaddingAwareAlignments', true);
+        $this->write('useRootPaddingAwareAlignments', true);
         return $this;
     }
 
-    #[ThemeSchemaCoverage(['settings', 'useRootPaddingAwareAlignments'])]
+    #[ThemeSchemaCoverage([self::SECTION, 'useRootPaddingAwareAlignments'])]
     public function disableUseRootPaddingAwareAlignments(): self
     {
-        $this->set('useRootPaddingAwareAlignments', false);
+        $this->write('useRootPaddingAwareAlignments', false);
         return $this;
     }
 
-    #[ThemeSchemaCoverage(['settings', 'color'])]
+    #[ThemeSchemaCoverage([self::SECTION, 'color'])]
     public function color(): Color
     {
         return new Color($this);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'background'])]
+    #[ThemeSchemaCoverage([self::SECTION, 'background'])]
     public function background(): Background
     {
         return new Background($this);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'border'])]
+    #[ThemeSchemaCoverage([self::SECTION, 'border'])]
     public function border(): Border
     {
         return new Border($this);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'dimensions'])]
+    #[ThemeSchemaCoverage([self::SECTION, 'dimensions'])]
     public function dimensions(): Dimensions
     {
         return new Dimensions($this);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'layout'])]
+    #[ThemeSchemaCoverage([self::SECTION, 'layout'])]
     public function layout(): Layout
     {
         return new Layout($this, $this->presets);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'lightbox'])]
+    #[ThemeSchemaCoverage([self::SECTION, 'lightbox'])]
     public function lightbox(): Lightbox
     {
         return new Lightbox($this);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'position'])]
+    #[ThemeSchemaCoverage([self::SECTION, 'position'])]
     public function position(): Position
     {
         return new Position($this);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'shadow'])]
+    #[ThemeSchemaCoverage([self::SECTION, 'shadow'])]
     public function shadow(): Shadow
     {
         return new Shadow($this);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'spacing'])]
+    #[ThemeSchemaCoverage([self::SECTION, 'spacing'])]
     public function spacing(): Spacing
     {
         return new Spacing($this);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'typography'])]
+    #[ThemeSchemaCoverage([self::SECTION, 'typography'])]
     public function typography(): Typography
     {
         return new Typography($this);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'custom'])]
+    #[ThemeSchemaCoverage([self::SECTION, 'custom'])]
     public function custom(): Custom
     {
         return new Custom($this);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'blocks'])]
-    #[ThemeSchemaCoverage(['settings', 'blockTargets', '*'])]
+    #[ThemeSchemaCoverage([self::SECTION, 'blocks'])]
+    #[ThemeSchemaCoverage([self::SECTION, 'blockTargets', '*'])]
     public function blocks(string $block): self
     {
         return new self($this->themeJson, $this->presets, $this->context->blocks($block));
     }
 
-    /**
-     * @param array<array-key, string|int>|string $path
-     */
-    public function set(array|string $path, mixed $value): bool
+    public function addPreset(PresetInterface $preset): void
     {
-        if (\is_string($path)) {
-            $path = \explode('.', $path);
+        $block = $this->context->blockName();
+        if ($block === null) {
+            $this->presets->add($preset);
+            return;
         }
 
+        $this->presets->addToBlock($block, $preset);
+    }
+
+    /**
+     * @internal
+     * @param array<array-key, string|int>|string $path
+     */
+    public function write(array|string $path, mixed $value): bool
+    {
         return $this->context->set($path, $value);
     }
 
     /**
+     * @internal
      * @param array<array-key, string|int>|string $path
      */
-    public function get(array|string $path, mixed $default = null): mixed
+    public function read(array|string $path, mixed $default = null): mixed
     {
-        if (\is_string($path)) {
-            $path = \explode('.', $path);
-        }
-
         return $this->context->get($path, $default);
-    }
-
-    /**
-     * @param array<array-key, string|int>|string $path
-     */
-    public function addPreset(array|string $path, PresetInterface $preset): void
-    {
-        $this->presets->addAt($this->context->path($path), $preset);
     }
 }

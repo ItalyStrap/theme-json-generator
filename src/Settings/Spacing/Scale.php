@@ -53,7 +53,7 @@ final readonly class Scale
 
     private function set(string $property, mixed $value): self
     {
-        $this->spacing->set([Spacing::SPACING_SCALE, $property], $value);
+        $this->spacing->writeScale($property, $value);
         return $this;
     }
 

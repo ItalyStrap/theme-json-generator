@@ -8,6 +8,11 @@ use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
 
 final readonly class BlockTypes
 {
+    /**
+     * @var string
+     */
+    public const SECTION = 'blockTypes';
+
     public function __construct(
         private ThemeJson $themeJson,
     ) {

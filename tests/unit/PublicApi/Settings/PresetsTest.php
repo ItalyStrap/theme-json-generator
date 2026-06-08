@@ -26,8 +26,10 @@ final class PresetsTest extends UnitTestCase
 
         $this->assertInstanceOf(PresetInterface::class, $sut->get('category1.slug1'));
         $this->assertSame('var1', (string)$sut->get('category1.slug1'));
+        $this->assertSame('var1', (string)$sut->get(['category1', 'slug1']));
         $this->assertNull($sut->get('category1.slug2'));
         $this->assertSame('default', $sut->get('category1.slug2', 'default'));
+        $this->assertSame('default', $sut->get(['category1', 'slug2'], 'default'));
     }
 
     public function testItShouldParse(): void
@@ -50,35 +52,9 @@ final class PresetsTest extends UnitTestCase
         $sut = $this->makeInstance();
         $sut->add($this->prepareFakeItem('1'));
 
-        $this->assertIsArray($sut->toArrayByCategory('category1'));
+        $collection = $sut->collection();
 
-        $this->assertSame(
-            [
-                [
-                    'slug' => 'slug1',
-                    'ref' => 'ref1',
-                    'prop' => 'prop1',
-                    'var' => 'var1',
-                ]
-            ],
-            $sut->toArrayByCategory('category1'),
-            ''
-        );
-    }
-
-    public function testItShouldBeJsonSerializableByTag(): void
-    {
-
-        $sut = $this->makeInstance();
-        $sut->add($this->prepareFakeItem('1'));
-
-        $sut->field('category1');
-
-        $this->assertJsonStringEqualsJsonString(
-            '[{"slug":"slug1","ref":"ref1","prop":"prop1","var":"var1"}]',
-            \json_encode($sut),
-            ''
-        );
+        $this->assertSame($sut->get('category1.slug1'), $collection['category1']['slug1']);
     }
 
     public function testItShouldCreatePresetHelpers(): void
@@ -92,32 +68,33 @@ final class PresetsTest extends UnitTestCase
         ]);
 
         $this->assertSame('#ffffff', $sut->get('color.base')->toArray()['color']);
+        $this->assertSame('#ffffff', $sut->get(['color', 'base'])->toArray()['color']);
         $this->assertSame('var(--wp--preset--font-size--base)', $sut->get('fontSize.base')->var());
         $this->assertSame('1rem', (string)$sut->get('custom.spacing.base'));
+        $this->assertSame('1rem', (string)$sut->get(['custom', 'spacing', 'base']));
     }
 
-    public function testItShouldSerializeBlockScopedPresetsWithoutOverwritingRootPresets(): void
+    public function testItShouldUseDotNotationAsNestedPresetPath(): void
+    {
+        $sut = $this->makeInstance();
+
+        $sut->add(new Palette('brand.primary', 'Brand Primary', new Color('#111111')));
+
+        $this->assertSame('#111111', $sut->get('color.brand.primary')->toArray()['color']);
+        $this->assertSame('#111111', $sut->get(['color', 'brand', 'primary'])->toArray()['color']);
+        $this->assertSame('fallback', $sut->get(['color', 'brand.secondary'], 'fallback'));
+    }
+
+    public function testItShouldStoreBlockScopedPresetsWithoutOverwritingRootPresets(): void
     {
         $sut = $this->makeInstance();
         $sut->add(new Palette('base', 'Base', new Color('#ffffff')));
-        $sut->addAt(
-            ['settings', 'blocks', 'core/group', 'color', 'palette'],
-            new Palette('base', 'Block Base', new Color('#000000'))
-        );
+        $sut->addToBlock('core/group', new Palette('base', 'Block Base', new Color('#000000')));
+
+        $collection = $sut->collection();
 
         $this->assertSame('#ffffff', $sut->get('color.base')->toArray()['color']);
-        $this->assertSame(
-            [
-                'settings.blocks.core/group.color.palette' => [
-                    [
-                        'slug' => 'base',
-                        'name' => 'Block Base',
-                        'color' => '#000000',
-                    ],
-                ],
-            ],
-            $sut->toArraysByPath()
-        );
+        $this->assertSame('#000000', $collection['blocks']['core/group']['color']['base']->toArray()['color']);
     }
 
     private function prepareFakeItem(string $val = ''): PresetInterface

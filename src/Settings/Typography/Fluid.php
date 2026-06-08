@@ -33,7 +33,7 @@ final readonly class Fluid
 
     private function set(string $property, string $value): self
     {
-        $this->typography->set([Typography::FLUID, $property], $value);
+        $this->typography->writeFluidConfig($property, $value);
         return $this;
     }
 }

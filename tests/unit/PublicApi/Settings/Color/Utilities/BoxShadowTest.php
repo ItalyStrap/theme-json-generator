@@ -65,6 +65,19 @@ final class BoxShadowTest extends UnitTestCase
         );
     }
 
+    public function testItShouldSerializeRepeatedlyWithoutChangingState(): void
+    {
+        $sut = $this->makeInstance();
+        $sut->offsetX('0')
+            ->offsetY('10px')
+            ->blur('0')
+            ->spread('0')
+            ->color('#fff');
+
+        $this->assertSame('0 10px 0 0 #ffffff', (string)$sut);
+        $this->assertSame('0 10px 0 0 #ffffff', (string)$sut);
+    }
+
     public function testWithColorObject(): void
     {
         $color = $this->colorInfo

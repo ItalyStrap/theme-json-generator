@@ -9,6 +9,10 @@ use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
 
 final readonly class Position
 {
+    use ScopedSettingsWriterTrait;
+
+    private const SECTION = 'position';
+
     public const STICKY = 'sticky';
 
     public function __construct(
@@ -28,17 +32,5 @@ final readonly class Position
     {
         $this->set(self::STICKY, false);
         return $this;
-    }
-
-    /**
-     * @param array<array-key, string|int>|string $path
-     */
-    public function set(array|string $path, mixed $value): bool
-    {
-        if (\is_string($path)) {
-            $path = \explode('.', $path);
-        }
-
-        return $this->settings->set(['position', ...$path], $value);
     }
 }

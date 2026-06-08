@@ -11,7 +11,7 @@ use ItalyStrap\ThemeJsonGenerator\Settings\Custom\Custom;
  * @see PresetsTest
  * @see PresetsIntegrationTest
  */
-final class Presets implements PresetsInterface, \JsonSerializable
+final class Presets implements PresetsInterface
 {
     use AccessValueInArrayWithNotationTrait;
 
@@ -20,71 +20,27 @@ final class Presets implements PresetsInterface, \JsonSerializable
      */
     private array $collection = [];
 
-    /**
-     * @var array<string, array{category: string, collection: array<array-key, mixed>}>
-     */
-    private array $scopedCollections = [];
-
-    private string $field = '';
-
     public function add(PresetInterface $item): self
     {
-        /**
-         * The slug method can return a value like this "navbar.min.height"
-         * So the key needs to be built before all the insert value in the correct position
-         * @TODO convert the $key into an array
-         */
-        $key = $item->type() . '.' . $item->slug();
+        $key = [$item->type(), ...$this->path($item->slug())];
 
         $this->assertIsUnique($key, $item);
 
         $this->insertValue(
             $this->collection,
-            \explode('.', $key),
+            $key,
             $item
         );
 
         return $this;
     }
 
-    /**
-     * @TODO Explore if we can move the logic of this method inside the slef::add() method
-     *       Eventually the add() method will have this signature add(PresetInterface $item, array|string $path)
-     */
-    public function addAt(array|string $path, PresetInterface $item): self
+    public function addToBlock(string $block, PresetInterface $item): self
     {
-        $path = $this->normalizePath($path);
+        $key = ['blocks', $block, $item->type(), ...$this->path($item->slug())];
 
-        if (!\str_contains($path, '.blocks.')) {
-            return $this->add($item);
-        }
-
-        $scope = $this->scopedCollections[$path] ?? [
-            'category' => $item->type(),
-            'collection' => [],
-        ];
-
-        if ($scope['category'] !== $item->type()) {
-            throw new \LogicException(\sprintf(
-                'Cannot register preset type "%s" at "%s": preset type "%s" is already registered there.',
-                $item->type(),
-                $path,
-                $scope['category'],
-            ));
-        }
-
-        $key = $item->slug();
-        if ($this->findValue($scope['collection'], \explode('.', $key)) !== null) {
-            throw new \RuntimeException(\sprintf(
-                '%s already registered in %s category at %s',
-                $key,
-                $item->type(),
-                $path,
-            ));
-        }
-
-        $this->insertValue($scope['collection'], \explode('.', $key), $item);
-        $this->scopedCollections[$path] = $scope;
+        $this->assertIsUnique($key, $item);
+        $this->insertValue($this->collection, $key, $item);
 
         return $this;
     }
@@ -98,9 +54,12 @@ final class Presets implements PresetsInterface, \JsonSerializable
         return $this;
     }
 
-    public function get(string $key, $default = null)
+    /**
+     * @param array<array-key, string|int>|string $key
+     */
+    public function get(array|string $key, $default = null)
     {
-        return $this->findValue($this->collection, \explode('.', $key), $default);
+        return $this->findValue($this->collection, $this->path($key), $default);
     }
 
     /**
@@ -125,7 +84,7 @@ final class Presets implements PresetsInterface, \JsonSerializable
 
             /**
              * The second parameter is needed to search also in the custom collection
-             * Let say you define a custom value `spacer.base`, `spacer` is not any Presets category
+             * Let say you define a custom value `spacer.base`, `spacer` is not any Presets category,
              * so in this case the second $this->get() is added as default and will search in the custom collection
              * for `custom.spacer.base` and if found will return the value from the custom collection.
              * If any value in the Preset and Custom collection is found then the null default will be returned.
@@ -144,115 +103,10 @@ final class Presets implements PresetsInterface, \JsonSerializable
         return \str_replace($search, $replace, $content);
     }
 
-    public function field(string $field): self
-    {
-        if (!\array_key_exists($field, $this->collection)) {
-            throw new \RuntimeException(\sprintf(
-                'Field %s does not exists in the collection, got: %s',
-                $field,
-                \implode(', ', \array_keys($this->collection)) ?: 'empty collection'
-            ));
-        }
-
-        $this->field = $field;
-        return $this;
-    }
-
     /**
-     * @return array<array-key, mixed>
+     * @param array<array-key, string|int>|string $key
      */
-    public function toArray(): array
-    {
-        $field = $this->field;
-        $this->field = '';
-
-        if ($field === '') {
-            return $this->collection;
-        }
-
-        $fetched = (array)$this->get($field, []);
-
-        if ($field === 'custom') {
-            return $this->processCustomCollection($fetched);
-        }
-
-        /** @var PresetInterface[] $fetched */
-        return $this->processPresetCollection(...$fetched);
-    }
-
-    /**
-     * @todo Filter empty values from collection
-     * @internal
-     */
-    public function toArrayByCategory(string $category): array
-    {
-        $this->field($category);
-        return $this->toArray();
-    }
-
-    public function toArraysByPath(): array
-    {
-        $collections = [];
-        foreach ($this->scopedCollections as $path => $scope) {
-            if ($scope['category'] === Custom::TYPE) {
-                $collections[$path] = $this->processCustomCollection($scope['collection']);
-                continue;
-            }
-
-            /** @var PresetInterface[] $collection */
-            $collection = $scope['collection'];
-            $collections[$path] = $this->processPresetCollection(...$collection);
-        }
-
-        return $collections;
-    }
-
-    /**
-     * @param PresetInterface ...$collection
-     * @return array<int, array<string, mixed>>
-     */
-    private function processPresetCollection(PresetInterface ...$collection): array
-    {
-        return \array_values(\array_map(
-            function (PresetInterface $item): array {
-                $newItems = [];
-                foreach ($item->toArray() as $key => $value) {
-                    if (\is_string($value)) {
-                        $value = $this->parse($value);
-                    }
-
-                    $newItems[$key] = $value;
-                }
-
-                return $newItems;
-            },
-            $collection
-        ));
-    }
-
-    /**
-     * @param array<array-key, mixed> $collection
-     * @param string $prefix
-     * @return array<array-key, mixed>
-     */
-    private function processCustomCollection(array $collection, string $prefix = ''): array
-    {
-        $processed = [];
-        /** @var array<array-key, mixed>|PresetInterface $value */
-        foreach ($collection as $key => $value) {
-            $fullKey = $prefix === '' ? $key : $prefix . '.' . $key;
-            if (\is_array($value)) {
-                $processed[$key] = $this->processCustomCollection($value, $fullKey);
-                continue;
-            }
-
-            $processed[$key] = $this->parse((string)$value);
-        }
-
-        return $processed;
-    }
-
-    private function assertIsUnique(string $key, PresetInterface $item): void
+    private function assertIsUnique(array|string $key, PresetInterface $item): void
     {
         if ($this->get($key) !== null) {
             throw new \RuntimeException(
@@ -260,7 +114,7 @@ final class Presets implements PresetsInterface, \JsonSerializable
                     '%s already registered in %s category: got %s',
                     $item->slug(),
                     $item->type(),
-                    $key
+                    $this->normalizePath($key)
                 )
             );
         }
@@ -279,10 +133,23 @@ final class Presets implements PresetsInterface, \JsonSerializable
     }
 
     /**
+     * @param array<array-key, string|int>|string $path
+     * @return list<string>
+     */
+    private function path(array|string $path): array
+    {
+        if (\is_string($path)) {
+            return \explode('.', $path);
+        }
+
+        return \array_map(strval(...), \array_values($path));
+    }
+
+    /**
      * @return array<array-key, mixed>
      */
-    public function jsonSerialize(): array
+    public function collection(): array
     {
-        return $this->toArray();
+        return $this->collection;
     }
 }

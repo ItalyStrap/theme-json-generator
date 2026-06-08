@@ -12,6 +12,31 @@ use ItalyStrap\ThemeJsonGenerator\Settings\PresetsInterface;
 final readonly class ThemeJson implements \JsonSerializable
 {
     /**
+     * @var string
+     */
+    public const SCHEMA = '$schema';
+
+    /**
+     * @var string
+     */
+    public const VERSION = 'version';
+
+    /**
+     * @var string
+     */
+    public const TITLE = 'title';
+
+    /**
+     * @var string
+     */
+    public const SLUG = 'slug';
+
+    /**
+     * @var string
+     */
+    public const DESCRIPTION = 'description';
+
+    /**
      * @param ConfigInterface<array-key, mixed> $config
      */
     public function __construct(
@@ -20,113 +45,70 @@ final readonly class ThemeJson implements \JsonSerializable
     ) {
     }
 
-    #[ThemeSchemaCoverage(['topLevel', '$schema'])]
+    #[ThemeSchemaCoverage(['topLevel', self::SCHEMA])]
     public function schema(string $schema): self
     {
-        return $this->setRoot('$schema', $schema);
+        return $this->setRoot(self::SCHEMA, $schema);
     }
 
-    #[ThemeSchemaCoverage(['topLevel', 'version'])]
+    #[ThemeSchemaCoverage(['topLevel', self::VERSION])]
     public function version(int $version): self
     {
-        return $this->setRoot('version', $version);
+        return $this->setRoot(self::VERSION, $version);
     }
 
-    #[ThemeSchemaCoverage(['topLevel', 'title'])]
+    #[ThemeSchemaCoverage(['topLevel', self::TITLE])]
     public function title(string $title): self
     {
-        return $this->setRoot('title', $title);
+        return $this->setRoot(self::TITLE, $title);
     }
 
-    #[ThemeSchemaCoverage(['topLevel', 'slug'])]
+    #[ThemeSchemaCoverage(['topLevel', self::SLUG])]
     public function slug(string $slug): self
     {
-        return $this->setRoot('slug', $slug);
+        return $this->setRoot(self::SLUG, $slug);
     }
 
-    #[ThemeSchemaCoverage(['topLevel', 'description'])]
+    #[ThemeSchemaCoverage(['topLevel', self::DESCRIPTION])]
     public function description(string $description): self
     {
-        return $this->setRoot('description', $description);
+        return $this->setRoot(self::DESCRIPTION, $description);
     }
 
-    #[ThemeSchemaCoverage(['topLevel', 'settings'])]
+    #[ThemeSchemaCoverage(['topLevel', Settings::SECTION])]
     public function settings(): Settings
     {
         return new Settings($this, $this->presets);
     }
 
-    #[ThemeSchemaCoverage(['topLevel', 'styles'])]
+    #[ThemeSchemaCoverage(['topLevel', Styles::SECTION])]
     public function styles(): Styles
     {
         return new Styles($this, $this->presets);
     }
 
-    #[ThemeSchemaCoverage(['topLevel', 'blockTypes'])]
+    #[ThemeSchemaCoverage(['topLevel', BlockTypes::SECTION])]
     public function blockTypes(): BlockTypes
     {
         return new BlockTypes($this);
     }
 
-    #[ThemeSchemaCoverage(['topLevel', 'customTemplates'])]
+    #[ThemeSchemaCoverage(['topLevel', CustomTemplates::SECTION])]
     public function customTemplates(): CustomTemplates
     {
         return new CustomTemplates($this);
     }
 
-    #[ThemeSchemaCoverage(['topLevel', 'templateParts'])]
+    #[ThemeSchemaCoverage(['topLevel', TemplateParts::SECTION])]
     public function templateParts(): TemplateParts
     {
         return new TemplateParts($this);
     }
 
-    #[ThemeSchemaCoverage(['topLevel', 'patterns'])]
+    #[ThemeSchemaCoverage(['topLevel', Patterns::SECTION])]
     public function patterns(): Patterns
     {
         return new Patterns($this);
-    }
-
-    /**
-     * @deprecated Use styles()->set() instead.
-     */
-    public function setGlobalStyle(string $elementName, \JsonSerializable $config): bool
-    {
-        return $this->styles()->set($elementName, $config);
-    }
-
-    /**
-     * @param array<string, mixed> $config
-     * @deprecated Use styles()->set(['elements', $elementName], $config) instead.
-     */
-    public function setElementStyle(string $elementName, array $config): bool
-    {
-        return $this->styles()->set(['elements', $elementName], $config);
-    }
-
-    /**
-     * @param array<string, mixed> $config
-     * @deprecated Use settings()->blocks($blockName)->set([], $config) instead.
-     */
-    public function setBlockSettings(string $blockName, array $config): bool
-    {
-        return $this->settings()->blocks($blockName)->set([], $config);
-    }
-
-    /**
-     * @param array<string, mixed> $config
-     * @deprecated Use styles()->blocks($blockName) instead.
-     */
-    public function setBlockStyle(string $blockName, array $config): bool
-    {
-        return $this->styles()->set(['blocks', $blockName], $config);
-    }
-
-    /**
-     * @deprecated Use styles()->set(['blocks', $blockName, 'css'], $css) instead.
-     */
-    public function setPerBlockCss(string $blockName, string $css): bool
-    {
-        return $this->styles()->blocks($blockName)->set('css', $css);
     }
 
     /**
@@ -134,7 +116,8 @@ final readonly class ThemeJson implements \JsonSerializable
      */
     public function set(string|array $key, mixed $value): bool
     {
-        return $this->config->set($this->normalizePath($key), $value);
+        /** @phpstan-ignore-next-line Config accepts array paths, StoreInterface only advertises string keys. */
+        return $this->config->set($key, $value);
     }
 
     /**
@@ -142,7 +125,8 @@ final readonly class ThemeJson implements \JsonSerializable
      */
     public function get(string|array $key, mixed $default = null): mixed
     {
-        return $this->config->get($this->normalizePath($key), $default);
+        /** @phpstan-ignore-next-line Config accepts array paths, StoreInterface only advertises string keys. */
+        return $this->config->get($key, $default);
     }
 
     /**
@@ -150,7 +134,7 @@ final readonly class ThemeJson implements \JsonSerializable
      */
     public function appendTo(string|array $key, mixed $value): bool
     {
-        return $this->nodeManipulation()->appendTo($this->normalizePath($key), $value);
+        return $this->nodeManipulation()->appendTo($key, $value);
     }
 
     /**
@@ -159,11 +143,6 @@ final readonly class ThemeJson implements \JsonSerializable
     public function merge(array ...$arrays): void
     {
         $this->config->merge(...$arrays);
-    }
-
-    public function count(): int
-    {
-        return $this->config->count();
     }
 
     /**
@@ -178,18 +157,6 @@ final readonly class ThemeJson implements \JsonSerializable
     public function jsonSerialize(): mixed
     {
         return $this->config->toArray();
-    }
-
-    /**
-     * @param array<array-key, string|int>|string $path
-     */
-    private function normalizePath(string|array $path): string
-    {
-        if (\is_string($path)) {
-            return $path;
-        }
-
-        return \implode('.', \array_map(strval(...), $path));
     }
 
     private function setRoot(string $key, mixed $value): self

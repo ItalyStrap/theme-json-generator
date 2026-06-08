@@ -75,6 +75,29 @@ final class ThemeJsonTest extends UnitTestCase
         $this->assertSame('Theme metadata', $sut->get('description'));
     }
 
+    public function testItShouldDelegateGenericPathAccessToConfig(): void
+    {
+        $sut = $this->makeInstance();
+
+        $this->assertTrue($sut->set('settings.color.text', true));
+        $this->assertTrue($sut->set(['styles', 'blocks', 'core/paragraph', 'color'], ['text' => '#111111']));
+
+        $this->assertTrue($sut->get('settings.color.text'));
+        $this->assertSame(['text' => '#111111'], $sut->get(['styles', 'blocks', 'core/paragraph', 'color']));
+        $this->assertSame('fallback', $sut->get('missing.path', 'fallback'));
+    }
+
+    public function testItShouldDelegateAppendToPathAccessToConfig(): void
+    {
+        $sut = $this->makeInstance();
+
+        $this->assertTrue($sut->appendTo('patterns', 'moduli/hero'));
+        $this->assertTrue($sut->appendTo(['customTemplates'], [['name' => 'landing', 'title' => 'Landing']]));
+
+        $this->assertSame(['moduli/hero'], $sut->get('patterns'));
+        $this->assertSame([['name' => 'landing', 'title' => 'Landing']], $sut->get(['customTemplates']));
+    }
+
     public function testItShouldExposeTopLevelRootCollectionObjects(): void
     {
         $sut = $this->makeInstance();
@@ -106,7 +129,7 @@ final class ThemeJsonTest extends UnitTestCase
 
         $this->assertTrue($sut->styles()->css('body{color:red;}'));
         $this->assertTrue($sut->styles()->appendCss('a{color:blue;}'));
-        $this->assertTrue($sut->styles()->set('color.text', 'var(--wp--preset--color--base)'));
+        $this->assertTrue($sut->set('styles.color.text', 'var(--wp--preset--color--base)'));
         $sut->styles()->background()->backgroundImage('url(hero.jpg)');
         $sut->styles()->color()->text('#111111');
         $sut->styles()->border()->color('#222222')->width('1px');
@@ -164,7 +187,7 @@ final class ThemeJsonTest extends UnitTestCase
             ->disableStyle()
             ->enableWidth()
             ->addRadiusSize('small', 'Small', '4px');
-        $this->assertTrue($settings->dimensions()->set('aspectRatio', true));
+        $settings->dimensions()->enableAspectRatio();
         $settings->layout()->contentSize('960px');
         $settings->lightbox()->enableEditing();
         $settings->position()->enableSticky();
@@ -178,7 +201,7 @@ final class ThemeJsonTest extends UnitTestCase
                 'large' => '3rem',
             ],
         ]));
-        $this->assertTrue($settings->custom()->set('brand.primary', '#111111'));
+        $this->assertTrue($sut->set('settings.custom.brand.primary', '#111111'));
 
         $this->assertTrue($sut->get('settings.background.backgroundImage'));
         $this->assertTrue($sut->get('settings.background.backgroundSize'));
@@ -278,9 +301,9 @@ final class ThemeJsonTest extends UnitTestCase
     {
         $sut = $this->makeInstance();
 
-        $this->assertTrue($sut->settings()->blocks('core/paragraph')->set('color.text', true));
+        $this->assertTrue($sut->set('settings.blocks.core/paragraph.color.text', true));
         $sut->settings()->blocks('core/image')->color()->disableText();
-        $this->assertTrue($sut->styles()->set(['blocks', 'core/paragraph'], ['color' => ['text' => 'red']]));
+        $this->assertTrue($sut->set(['styles', 'blocks', 'core/paragraph'], ['color' => ['text' => 'red']]));
         $this->assertTrue(
             $sut->styles()->blocks('core/paragraph')->css('.wp-block-paragraph a{color:red;}', '.wp-block-paragraph')
         );

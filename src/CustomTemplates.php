@@ -8,6 +8,11 @@ use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
 
 final readonly class CustomTemplates
 {
+    /**
+     * @var string
+     */
+    public const SECTION = 'customTemplates';
+
     public function __construct(
         private ThemeJson $themeJson,
     ) {

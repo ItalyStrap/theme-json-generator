@@ -11,6 +11,10 @@ use ItalyStrap\ThemeJsonGenerator\Settings\Spacing\SpacingSize;
 
 final readonly class Spacing
 {
+    use ScopedSettingsWriterTrait;
+
+    private const SECTION = 'spacing';
+
     public const BLOCK_GAP = 'blockGap';
 
     public const CUSTOM_SPACING_SIZE = 'customSpacingSize';
@@ -123,10 +127,7 @@ final readonly class Spacing
     #[ThemeSchemaCoverage(['settings', 'spacing', 'spacingSizes'])]
     public function addSpacingSize(string $slug, string $name, string $size): self
     {
-        $this->settings->addPreset(
-            ['spacing', self::SPACING_SIZES],
-            new SpacingSize($slug, $name, $size)
-        );
+        $this->settings->addPreset(new SpacingSize($slug, $name, $size));
 
         return $this;
     }
@@ -137,15 +138,8 @@ final readonly class Spacing
         return new Scale($this);
     }
 
-    /**
-     * @param array<array-key, string|int>|string $path
-     */
-    public function set(array|string $path, mixed $value): bool
+    public function writeScale(string $property, mixed $value): bool
     {
-        if (\is_string($path)) {
-            $path = \explode('.', $path);
-        }
-
-        return $this->settings->set(['spacing', ...$path], $value);
+        return $this->set([self::SPACING_SCALE, $property], $value);
     }
 }

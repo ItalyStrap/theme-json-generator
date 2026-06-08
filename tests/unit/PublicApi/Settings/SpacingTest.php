@@ -6,6 +6,7 @@ namespace ItalyStrap\Tests\Unit\PublicApi\Settings;
 
 use ItalyStrap\Config\Config;
 use ItalyStrap\Tests\UnitTestCase;
+use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Container\PresetsToThemeJson;
 use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\Settings\Spacing;
 use ItalyStrap\ThemeJsonGenerator\ThemeJson;
@@ -49,6 +50,9 @@ final class SpacingTest extends UnitTestCase
             PHP_FLOAT_EPSILON
         );
         $this->assertSame('rem', $sut->get('settings.blocks.core/group.spacing.spacingScale.unit'));
+
+        (new PresetsToThemeJson())($sut, $presets);
+
         $this->assertSame(
             [
                 [
@@ -57,7 +61,7 @@ final class SpacingTest extends UnitTestCase
                     'size' => '1rem',
                 ],
             ],
-            $presets->toArraysByPath()['settings.blocks.core/group.spacing.spacingSizes']
+            $sut->get('settings.blocks.core/group.spacing.spacingSizes')
         );
     }
 
