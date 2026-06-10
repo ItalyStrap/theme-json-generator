@@ -103,35 +103,37 @@ final class JsonFileWriterIntegrationTest extends UnitTestCase
       }
   }';
 
-        $this->themeJson->setBlockStyle('core/site-title', [
-            'color' => $this->colorIntegration
-                ->text(self::COLOR_HEADING_TEXT),
-            'typography' => $this->typographyIntegration
-                ->fontSize(self::FONT_SIZE_H1)
-                ->fontWeight('600'),
-        ]);
+        $this->themeJson->styles()->blocks('core/site-title')
+            ->color()
+            ->text(self::COLOR_HEADING_TEXT);
 
-        $this->themeJson->setBlockStyle('core/post-title', [ // .wp-block-post-title
-            'color' => $this->colorIntegration
-                ->text(self::COLOR_HEADING_TEXT),
-            'typography' => $this->typographyIntegration
-                ->fontSize(self::FONT_SIZE_H1),
-            'elements' => [
-                'link' => [ // .wp-block-post-title a
-                    'color' => $this->colorIntegration
-                        ->text('inherit')
-                        ->background('transparent'),
-                ],
-            ],
-        ]);
+        $this->themeJson->styles()->blocks('core/site-title')
+            ->typography()
+            ->fontSize(self::FONT_SIZE_H1)
+            ->fontWeight('600');
 
-        $this->themeJson->setBlockStyle('core/query-title', [
-            'color' => $this->colorIntegration
-                ->text(self::COLOR_GRAY_400),
-            'typography' => $this->typographyIntegration
-                ->fontSize(self::FONT_SIZE_H5)
-                ->fontWeight('700'),
-        ]);
+        $this->themeJson->styles()->blocks('core/post-title')
+            ->color()
+            ->text(self::COLOR_HEADING_TEXT);
+
+        $this->themeJson->styles()->blocks('core/post-title')
+            ->typography()
+            ->fontSize(self::FONT_SIZE_H1);
+
+        $this->themeJson->styles()->blocks('core/post-title')
+            ->elements('link')
+            ->color()
+            ->text('inherit')
+            ->background('transparent');
+
+        $this->themeJson->styles()->blocks('core/query-title')
+            ->color()
+            ->text(self::COLOR_GRAY_400);
+
+        $this->themeJson->styles()->blocks('core/query-title')
+            ->typography()
+            ->fontSize(self::FONT_SIZE_H5)
+            ->fontWeight('700');
 
         $sut->write($this->originalConfig);
 
