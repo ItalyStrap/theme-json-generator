@@ -7,14 +7,14 @@ namespace ItalyStrap\Tests\Unit\Cli\Application\Middlewares;
 use ItalyStrap\Pipeline\CallbackHandler;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\Message;
-use ItalyStrap\ThemeJsonGenerator\Cli\Application\Middlewares\Init;
+use ItalyStrap\ThemeJsonGenerator\Cli\Application\Middlewares\GenerateThemeJsonConfigFileFromThemeJson;
 use Prophecy\Argument;
 
-final class InitTest extends UnitTestCase
+final class GenerateThemeJsonConfigFileFromThemeJsonTest extends UnitTestCase
 {
-    private function makeInstance(): Init
+    private function makeInstance(): GenerateThemeJsonConfigFileFromThemeJson
     {
-        return new Init(
+        return new GenerateThemeJsonConfigFileFromThemeJson(
             $this->makeFilesFinder(),
         );
     }

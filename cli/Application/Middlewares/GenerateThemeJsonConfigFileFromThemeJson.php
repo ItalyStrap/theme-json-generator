@@ -10,19 +10,13 @@ use ItalyStrap\Pipeline\MiddlewareInterface;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\Message;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Filesystem\DataFromJsonTrait;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Filesystem\FilesFinder;
-use PhpParser\Error;
-use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\ClassConst;
-use PhpParser\NodeFinder;
-use PhpParser\ParserFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Webimpress\SafeWriter\Exception\ExceptionInterface as FileWriterException;
 use Webimpress\SafeWriter\FileWriter;
-use Webmozart\Assert\Assert;
 
-final class Init implements MiddlewareInterface
+final class GenerateThemeJsonConfigFileFromThemeJson implements MiddlewareInterface
 {
     use DataFromJsonTrait;
 
@@ -112,48 +106,10 @@ TEMPLATE;
     {
         $data = $this->associativeFromPath((string)$file);
 
-        $dataExported = VarExporter::export(
+        return VarExporter::export(
             $data,
             VarExporter::TRAILING_COMMA_IN_ARRAY,
             1
         );
-
-        $search = [];
-        $replace = [];
-
-        $code = (string)\file_get_contents(__DIR__ . '/../../../src/SectionNames.php');
-        $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
-
-        try {
-            $ast = (array)$parser->parse($code);
-
-            $nodeFinder = new NodeFinder();
-            $constants = $nodeFinder->findInstanceOf($ast, ClassConst::class);
-
-            /**
-             * @var ClassConst $constant
-             */
-            foreach ($constants as $constant) {
-                Assert::propertyExists($constant, 'consts');
-                foreach ($constant->consts as $const) {
-                    $name = $const->name->toString();
-                    $value = null;
-
-                    if ($const->value instanceof String_) {
-                        $value = $const->value->value;
-                    }
-
-                    if ($value !== null) {
-                        $search[] = \sprintf("'%s'", $value);
-                        $replace[] = 'SectionNames::' . $name;
-                    }
-                }
-            }
-        } catch (Error $error) {
-            echo sprintf('Parse error: %s%s', $error->getMessage(), PHP_EOL);
-            return '';
-        }
-
-        return \str_replace($search, $replace, $dataExported);
     }
 }

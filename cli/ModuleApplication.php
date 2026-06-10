@@ -13,7 +13,7 @@ use ItalyStrap\ThemeJsonGenerator\Cli\Application\Commands\ValidateCommand;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\Middlewares\DeleteSchemaJson;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\Middlewares\Dump;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\Middlewares\Info;
-use ItalyStrap\ThemeJsonGenerator\Cli\Application\Middlewares\Init;
+use ItalyStrap\ThemeJsonGenerator\Cli\Application\Middlewares\GenerateThemeJsonConfigFileFromThemeJson;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\Middlewares\SchemaJson;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\Middlewares\Validate;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\ThemeJsonContainerFactoryInterface;
@@ -36,7 +36,7 @@ final class ModuleApplication implements ModuleInterface
                 InitCommand::class
                     => fn(ContainerInterface $container): InitCommand
                         => new InitCommand(new ConsoleHandler(
-                            $container->get(Init::class)
+                            $container->get(GenerateThemeJsonConfigFileFromThemeJson::class)
                         )),
                 DumpCommand::class
                     => fn(ContainerInterface $container): DumpCommand
