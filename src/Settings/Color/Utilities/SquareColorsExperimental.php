@@ -15,9 +15,9 @@ final readonly class SquareColorsExperimental implements ColorsGenerator
     {
         return [
             $this->colorModifier->color(),
-            $this->colorModifier->hueRotate(60),
-            $this->colorModifier->hueRotate(120),
+            $this->colorModifier->hueRotate(90),
             $this->colorModifier->hueRotate(180),
+            $this->colorModifier->hueRotate(270),
         ];
     }
 }
