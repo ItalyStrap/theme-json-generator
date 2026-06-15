@@ -91,16 +91,8 @@ final readonly class ColorModifier implements ColorModifierInterface
 
     public function hueRotate(int $amount = 0): ColorInterface
     {
-        $sumHue = $this->color->hue() + $amount;
-
-        if ($sumHue < 0) {
-            $sumHue = 360 + $sumHue;
-        }
-
-        $sumHue %= 360;
-
         return $this->createNewColorFrom(
-            (string) $sumHue,
+            (string) $this->normalizeHue($this->color->hue() + $amount),
             (string) $this->color->saturation(),
             (string) $this->color->lightness(),
             (string) $this->color->alpha()
@@ -215,6 +207,11 @@ final readonly class ColorModifier implements ColorModifierInterface
         }
 
         return \round((float) $alpha, 2);
+    }
+
+    private function normalizeHue(int $hue): int
+    {
+        return (($hue % 360) + 360) % 360;
     }
 
     private function callMethodOnColorObjectWithAlpha(float $alpha): ColorInterface

@@ -288,6 +288,22 @@ final class ColorModifierTest extends UnitTestCase
         $this->assertSame($expected, (string)$sut->opacity($alpha));
     }
 
+    public static function largeNegativeHueRotationProvider(): \Generator
+    {
+        yield 'minus 400 degrees' => [-400, 'hsl(330,50%,50%)'];
+        yield 'minus 760 degrees' => [-760, 'hsl(330,50%,50%)'];
+    }
+
+    /**
+     * @dataProvider largeNegativeHueRotationProvider
+     */
+    public function testItShouldHueRotateWithLargeNegativeAmounts(int $amount, string $expected): void
+    {
+        $sut = $this->makeInstance('hsl(10,50%,50%)');
+
+        $this->assertSame($expected, (string)$sut->hueRotate($amount));
+    }
+
     public static function eightDigitHexModifierProvider(): \Generator
     {
         yield 'darken numeric alpha' => ['#33669980', 'darken', 10, '#264d73'];
