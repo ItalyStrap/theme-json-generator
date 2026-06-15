@@ -7,7 +7,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Settings\Custom;
 use ItalyStrap\ThemeJsonGenerator\Settings\PresetInterface;
 use ItalyStrap\ThemeJsonGenerator\Settings\PresetTrait;
 
-final class Custom implements PresetInterface
+final readonly class Custom implements PresetInterface
 {
     use PresetTrait;
 
