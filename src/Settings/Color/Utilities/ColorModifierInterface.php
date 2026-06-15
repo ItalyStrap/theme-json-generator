@@ -12,7 +12,7 @@ interface ColorModifierInterface
 
     public function tone(float $weight = 0): ColorInterface;
 
-    public function opacity(float $alpha = 1): ColorInterface;
+    public function opacity(?float $alpha = null): ColorInterface;
 
     public function darken(int $amount = 0): ColorInterface;
 

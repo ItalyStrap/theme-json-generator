@@ -244,6 +244,24 @@ final class ColorModifierTest extends UnitTestCase
 
     public static function opacityProvider(): \Generator
     {
+        yield 'hex without alpha' => [
+            '#336699',
+            0.5,
+            'rgba(51,102,153,0.50)',
+        ];
+
+        yield 'rgb without alpha' => [
+            'rgb(51,102,153)',
+            0.5,
+            'rgba(51,102,153,0.50)',
+        ];
+
+        yield 'hsl without alpha' => [
+            'hsl(210,50%,40%)',
+            0.5,
+            'hsla(210,50%,40%,0.5)',
+        ];
+
         yield 'rgba with fractional alpha' => [
             'rgba(255,0,0,1.00)',
             0.5,

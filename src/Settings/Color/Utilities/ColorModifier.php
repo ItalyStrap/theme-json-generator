@@ -41,9 +41,13 @@ final readonly class ColorModifier implements ColorModifierInterface
         return $this->mixWith('rgb(128,128,128)', $weight);
     }
 
-    public function opacity(float $alpha = 1): ColorInterface
+    public function opacity(?float $alpha = null): ColorInterface
     {
-        return $this->createNewColorWithChangedLightnessOrOpacity(0, $alpha);
+        if ($alpha === null) {
+            return $this->color;
+        }
+
+        return $this->callMethodOnColorObjectWithAlpha($alpha);
     }
 
     public function darken(int $amount = 0): ColorInterface
@@ -211,6 +215,19 @@ final readonly class ColorModifier implements ColorModifierInterface
         }
 
         return \round((float) $alpha, 2);
+    }
+
+    private function callMethodOnColorObjectWithAlpha(float $alpha): ColorInterface
+    {
+        if (\in_array($this->initialType, ['Hex', 'Rgb', 'Rgba'], true)) {
+            return $this->color->toRgba($alpha);
+        }
+
+        if (\in_array($this->initialType, ['Hsl', 'Hsla'], true)) {
+            return $this->color->toHsla($alpha);
+        }
+
+        return $this->createNewColorWithChangedLightnessOrOpacity(0, $alpha);
     }
 
     /**
