@@ -270,18 +270,32 @@ final class ColorModifierTest extends UnitTestCase
         $this->assertSame($expected, (string)$sut->opacity($alpha));
     }
 
-    public function testItShouldHueRotateEightDigitHexWithNumericAlpha(): void
+    public static function eightDigitHexModifierProvider(): \Generator
     {
-        $sut = $this->makeInstance('#33669980');
-
-        $this->assertSame('#335599', (string)$sut->hueRotate(10));
+        yield 'darken numeric alpha' => ['#33669980', 'darken', 10, '#264d73'];
+        yield 'lighten numeric alpha' => ['#33669980', 'lighten', 10, '#4080bf'];
+        yield 'saturate numeric alpha' => ['#33669980', 'saturate', 10, '#2966a3'];
+        yield 'contrast numeric alpha' => ['#33669980', 'contrast', 10, '#3380cc'];
+        yield 'hue rotate numeric alpha' => ['#33669980', 'hueRotate', 10, '#335599'];
+        yield 'darken alpha with letters' => ['#336699ab', 'darken', 10, '#264d73'];
+        yield 'invert alpha with letters' => ['#336699ab', 'invert', null, '#6699cc'];
+        yield 'tint alpha with letters' => ['#336699ab', 'tint', 0.5, '#99b3cc'];
     }
 
-    public function testItShouldDarkenEightDigitHexWithAlphaContainingLetters(): void
-    {
-        $sut = $this->makeInstance('#336699ab');
+    /**
+     * @dataProvider eightDigitHexModifierProvider
+     */
+    public function testItShouldModifyEightDigitHexColors(
+        string $color,
+        string $method,
+        int|float|null $amount,
+        string $expected
+    ): void {
+        $sut = $this->makeInstance($color);
 
-        $this->assertSame('#264d73', (string)$sut->darken(10));
+        $actual = $amount === null ? $sut->$method() : $sut->$method($amount);
+
+        $this->assertSame($expected, (string)$actual);
     }
 
     public static function complementaryColorProvider(): \Generator
