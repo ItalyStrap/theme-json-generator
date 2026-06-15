@@ -20,17 +20,24 @@ final class Presets implements PresetsInterface
      */
     private array $collection = [];
 
+    /**
+     * @var array<string, true>
+     */
+    private array $registeredPaths = [];
+
     public function add(PresetInterface $item): self
     {
         $key = [$item->type(), ...$this->path($item->slug())];
 
-        $this->assertIsUnique($key, $item);
+        $this->assertIsUnique($key);
 
         $this->insertValue(
             $this->collection,
             $key,
             $item
         );
+
+        $this->registeredPaths[$this->normalizePath($key)] = true;
 
         return $this;
     }
@@ -39,8 +46,9 @@ final class Presets implements PresetsInterface
     {
         $key = ['blocks', $block, $item->type(), ...$this->path($item->slug())];
 
-        $this->assertIsUnique($key, $item);
+        $this->assertIsUnique($key);
         $this->insertValue($this->collection, $key, $item);
+        $this->registeredPaths[$this->normalizePath($key)] = true;
 
         return $this;
     }
@@ -66,7 +74,7 @@ final class Presets implements PresetsInterface
      * Just a reminder:
      * '/{{([\w.]+)}}|var:(preset|custom)\|([\w.]+)\|([\w.]+)/'
      * The pattern above will match also the shortcut syntax used as a reference by WordPress to search values.
-     * For now let the WordPress doing the job, and we will see later if we need to change this.
+     * For now let the WordPress do the job, and we will see later if we need to change this.
      */
     public function parse(string $content): string
     {
@@ -106,18 +114,70 @@ final class Presets implements PresetsInterface
     /**
      * @param array<array-key, string|int>|string $key
      */
-    private function assertIsUnique(array|string $key, PresetInterface $item): void
+    private function assertIsUnique(array|string $key): void
     {
-        if ($this->get($key) !== null) {
+        $path = $this->path($key);
+        $normalizedPath = $this->normalizePath($path);
+
+        if (\array_key_exists($normalizedPath, $this->registeredPaths)) {
             throw new \RuntimeException(
                 \sprintf(
-                    '%s already registered in %s category: got %s',
-                    $item->slug(),
-                    $item->type(),
-                    $this->normalizePath($key)
+                    'Preset path %s is already registered.',
+                    $normalizedPath
                 )
             );
         }
+
+        $registeredParentPath = $this->registeredParentPath($path);
+
+        if ($registeredParentPath !== null) {
+            throw new \RuntimeException(
+                \sprintf(
+                    'Cannot register %s because %s is already a preset.',
+                    $normalizedPath,
+                    $registeredParentPath
+                )
+            );
+        }
+
+        if ($this->containsNestedPresets($normalizedPath)) {
+            throw new \RuntimeException(
+                \sprintf(
+                    'Cannot register %s because %s already contains nested presets.',
+                    $normalizedPath,
+                    $normalizedPath
+                )
+            );
+        }
+    }
+
+    /**
+     * @param list<string> $path
+     */
+    private function registeredParentPath(array $path): ?string
+    {
+        for ($index = 1, $length = \count($path); $index < $length; ++$index) {
+            $parentPath = $this->normalizePath(\array_slice($path, 0, $index));
+
+            if (\array_key_exists($parentPath, $this->registeredPaths)) {
+                return $parentPath;
+            }
+        }
+
+        return null;
+    }
+
+    private function containsNestedPresets(string $path): bool
+    {
+        $prefix = $path . '.';
+
+        foreach (\array_keys($this->registeredPaths) as $registeredPath) {
+            if (\str_starts_with($registeredPath, $prefix)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

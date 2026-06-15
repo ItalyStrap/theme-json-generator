@@ -85,6 +85,41 @@ final class PresetsTest extends UnitTestCase
         $this->assertSame('fallback', $sut->get(['color', 'brand.secondary'], 'fallback'));
     }
 
+    public function testItShouldRejectDottedSlugWhenParentPresetAlreadyExists(): void
+    {
+        $sut = $this->makeInstance();
+        $sut->add(new Custom('spacer', '1rem'));
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Cannot register custom.spacer.base because custom.spacer is already a preset.');
+
+        $sut->add(new Custom('spacer.base', '2rem'));
+    }
+
+    public function testItShouldRejectDuplicatedPresetPath(): void
+    {
+        $sut = $this->makeInstance();
+        $sut->add(new Custom('spacer', '1rem'));
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Preset path custom.spacer is already registered.');
+
+        $sut->add(new Custom('spacer', '2rem'));
+    }
+
+    public function testItShouldRejectParentPresetWhenDottedSlugAlreadyExists(): void
+    {
+        $sut = $this->makeInstance();
+        $sut->add(new Custom('spacer.base', '1rem'));
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage(
+            'Cannot register custom.spacer because custom.spacer already contains nested presets.'
+        );
+
+        $sut->add(new Custom('spacer', '2rem'));
+    }
+
     public function testItShouldStoreBlockScopedPresetsWithoutOverwritingRootPresets(): void
     {
         $sut = $this->makeInstance();
