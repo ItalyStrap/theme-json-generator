@@ -8,7 +8,7 @@ use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\Color;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\ColorModifier;
 
-final class ColorModifiertTest extends UnitTestCase
+final class ColorModifierTest extends UnitTestCase
 {
     protected function makeInstance(string $color): ColorModifier
     {
@@ -171,6 +171,75 @@ final class ColorModifiertTest extends UnitTestCase
         $sut = $this->makeInstance('#ff0000');
 
         $this->assertStringMatchesFormat('#c04040', (string)$sut->tone(0.5), '');
+    }
+
+    public static function alphaPreservingLightnessProvider(): \Generator
+    {
+        yield 'darken' => [
+            'darken',
+            'hsla(120,50%,50%,0.5)',
+            10,
+            'hsla(120,50%,40%,0.5)',
+        ];
+
+        yield 'lighten' => [
+            'lighten',
+            'hsla(120,50%,50%,0.5)',
+            10,
+            'hsla(120,50%,60%,0.5)',
+        ];
+    }
+
+    /**
+     * @dataProvider alphaPreservingLightnessProvider
+     */
+    public function testItShouldPreserveAlphaWhenChangingLightness(
+        string $method,
+        string $color,
+        int $amount,
+        string $expected
+    ): void {
+        $sut = $this->makeInstance($color);
+
+        $this->assertSame($expected, (string)$sut->$method($amount));
+    }
+
+    public static function alphaPreservingMixProvider(): \Generator
+    {
+        yield 'tint' => [
+            'tint',
+            'rgba(100,100,100,0.50)',
+            0.5,
+            'rgba(178,178,178,0.50)',
+        ];
+
+        yield 'shade' => [
+            'shade',
+            'rgba(100,100,100,0.50)',
+            0.5,
+            'rgba(50,50,50,0.50)',
+        ];
+
+        yield 'tone' => [
+            'tone',
+            'rgba(100,100,100,0.50)',
+            0.5,
+            'rgba(114,114,114,0.50)',
+        ];
+    }
+
+    /**
+     * @dataProvider alphaPreservingMixProvider
+     */
+    public function testItShouldPreserveAlphaWhenMixingColors(
+        string $method,
+        string $color,
+        float $weight,
+        string $expected
+    ): void {
+        $sut = $this->makeInstance($color);
+
+        $this->assertSame($expected, (string)$sut->$method($weight));
     }
 
     public static function opacityProvider(): \Generator

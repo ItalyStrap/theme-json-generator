@@ -103,13 +103,13 @@ final readonly class ColorModifier implements ColorModifierInterface
         );
     }
 
-    private function createNewColorWithChangedLightnessOrOpacity(int $amount, float $alpha = 1): ColorInterface
+    private function createNewColorWithChangedLightnessOrOpacity(int $amount, ?float $alpha = null): ColorInterface
     {
         return $this->createNewColorFrom(
             (string) $this->color->hue(),
             (string) $this->color->saturation(),
             (string) $this->sanitizeFromFloatToInteger($this->color->lightness() + $amount),
-            (string) $alpha
+            (string) ($alpha ?? $this->color->alpha())
         );
     }
 
@@ -144,7 +144,7 @@ final readonly class ColorModifier implements ColorModifierInterface
             $hue,
             $saturation,
             $lightness,
-            \is_numeric($alpha) ? (float) $alpha : \hexdec($alpha) / 255
+            $this->normalizeAlpha($alpha)
         ));
 
         return $this->callMethodOnColorObject($newColor);
@@ -169,8 +169,9 @@ final readonly class ColorModifier implements ColorModifierInterface
         );
 
         $newColor = $this->color_factory->fromColorString(\sprintf(
-            'rgb(%s)',
-            \implode(',', $result)
+            'rgba(%s, %s)',
+            \implode(',', $result),
+            $this->normalizeAlpha($this->color->alpha())
         ));
 
         return $this->callMethodOnColorObject($newColor);
@@ -199,6 +200,19 @@ final readonly class ColorModifier implements ColorModifierInterface
             : ($value < 0 ? 0 : (int) $value);
     }
 
+    private function normalizeAlpha(string|float $alpha): float
+    {
+        if (\is_float($alpha)) {
+            return $alpha;
+        }
+
+        if (\preg_match('/^[\da-f]{2}$/i', $alpha) === 1) {
+            return \hexdec($alpha) / 255;
+        }
+
+        return (float) $alpha;
+    }
+
     /**
      * @param ColorInterface $newColor
      * @return ColorInterface
@@ -209,7 +223,7 @@ final readonly class ColorModifier implements ColorModifierInterface
         if (\method_exists($newColor, 'to' . $this->initialType)) {
             $methodName = 'to' . $this->initialType;
             /**
-             * Cast to original type passed to the constructor
+             * Cast to the original type passed to the constructor
              * to make consistence between the original color and the new one
              */
             return $newColor->$methodName();
