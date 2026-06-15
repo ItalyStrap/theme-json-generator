@@ -270,6 +270,20 @@ final class ColorModifierTest extends UnitTestCase
         $this->assertSame($expected, (string)$sut->opacity($alpha));
     }
 
+    public function testItShouldHueRotateEightDigitHexWithNumericAlpha(): void
+    {
+        $sut = $this->makeInstance('#33669980');
+
+        $this->assertSame('#335599', (string)$sut->hueRotate(10));
+    }
+
+    public function testItShouldDarkenEightDigitHexWithAlphaContainingLetters(): void
+    {
+        $sut = $this->makeInstance('#336699ab');
+
+        $this->assertSame('#264d73', (string)$sut->darken(10));
+    }
+
     public static function complementaryColorProvider(): \Generator
     {
         yield 'red hex' => [

@@ -203,14 +203,14 @@ final readonly class ColorModifier implements ColorModifierInterface
     private function normalizeAlpha(string|float $alpha): float
     {
         if (\is_float($alpha)) {
-            return $alpha;
+            return \round($alpha, 2);
         }
 
         if (\preg_match('/^[\da-f]{2}$/i', $alpha) === 1) {
-            return \hexdec($alpha) / 255;
+            return \round(\hexdec($alpha) / 255, 2);
         }
 
-        return (float) $alpha;
+        return \round((float) $alpha, 2);
     }
 
     /**
