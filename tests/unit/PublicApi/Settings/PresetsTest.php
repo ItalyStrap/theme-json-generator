@@ -47,6 +47,41 @@ final class PresetsTest extends UnitTestCase
         $this->assertSame('', $sut->parse(''));
     }
 
+    public function testItShouldThrowExceptionWhenPresetNotFound(): void
+    {
+        $sut = $this->makeInstance();
+        $sut->addMultiple([
+            $this->prepareFakeItem('1'),
+            $this->prepareFakeItem('2'),
+        ]);
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('{{category1.slug3}} does not exists');
+        $sut->parse('{{category1.slug3}}');
+    }
+
+    public function testItShouldRejectPresetGroupPlaceholder(): void
+    {
+        $sut = $this->makeInstance();
+        $sut->add(new Custom('spacer.base', '1rem'));
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('{{custom.spacer}} resolves to a preset group, not a preset.');
+
+        $sut->parse('{{custom.spacer}}');
+    }
+
+    public function testItShouldRejectShortcutPlaceholderResolvingToCustomGroup(): void
+    {
+        $sut = $this->makeInstance();
+        $sut->add(new Custom('spacer.base', '1rem'));
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('{{spacer}} resolves to a preset group, not a preset.');
+
+        $sut->parse('{{spacer}}');
+    }
+
     public function testItShouldReturnTheCollection(): void
     {
         $sut = $this->makeInstance();

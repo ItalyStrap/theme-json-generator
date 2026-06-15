@@ -97,12 +97,19 @@ final class Presets implements PresetsInterface
              * for `custom.spacer.base` and if found will return the value from the custom collection.
              * If any value in the Preset and Custom collection is found then the null default will be returned.
              *
-             * @var PresetInterface|null $item
+             * @var PresetInterface|array<array-key, mixed>|null $item
              */
             $item = $this->get($match[0], $this->get(Custom::TYPE . '.' . $match[0]));
 
             if ($item === null) {
                 throw new \RuntimeException(sprintf('{{%s}} does not exists', $match[0]));
+            }
+
+            if (!$item instanceof PresetInterface) {
+                throw new \RuntimeException(sprintf(
+                    '{{%s}} resolves to a preset group, not a preset.',
+                    $match[0]
+                ));
             }
 
             $replace[] = $item->var();
