@@ -13,7 +13,6 @@ use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\ShadesGeneratorExperi
 use ItalyStrap\ThemeJsonGenerator\Settings\Custom\CustomToPresets;
 use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\Settings\Typography\FontSize;
-use ItalyStrap\ThemeJsonGenerator\Styles\Typography;
 use ItalyStrap\ThemeJsonGenerator\ThemeJson;
 
 final class PresetsIntegrationTest extends UnitTestCase
@@ -190,7 +189,9 @@ EOF
 
 //        codecept_debug($sut->get('custom.grandParentField.parentField.childField')->var());
 
-        $typo = (new Typography($sut))
+        $typo = $this->themeJsonFrom($sut)
+            ->styles()
+            ->typography()
             ->fontSize('fontSize.h1')
             ->toArray();
 

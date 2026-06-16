@@ -8,6 +8,9 @@ use ItalyStrap\Config\ConfigInterface;
 use ItalyStrap\Config\NodeManipulationInterface;
 use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
 use ItalyStrap\ThemeJsonGenerator\Settings\PresetsInterface;
+use ItalyStrap\ThemeJsonGenerator\Styles\Css;
+use ItalyStrap\ThemeJsonGenerator\Styles\Scss;
+use ScssPhp\ScssPhp\Compiler;
 
 final readonly class ThemeJson implements \JsonSerializable
 {
@@ -78,13 +81,18 @@ final readonly class ThemeJson implements \JsonSerializable
     #[ThemeSchemaCoverage(['topLevel', Settings::SECTION])]
     public function settings(): Settings
     {
-        return new Settings($this, $this->presets);
+        return new Settings($this->presets, new SettingsContext($this, [Settings::SECTION]));
     }
 
     #[ThemeSchemaCoverage(['topLevel', Styles::SECTION])]
     public function styles(): Styles
     {
-        return new Styles($this, $this->presets);
+        return new Styles(
+            $this->presets,
+            new StyleContext($this, [Styles::SECTION]),
+            new Css($this->presets),
+            new Scss(new Css($this->presets), new Compiler(), $this->presets),
+        );
     }
 
     #[ThemeSchemaCoverage(['topLevel', BlockTypes::SECTION])]

@@ -10,7 +10,6 @@ use ItalyStrap\ThemeJsonGenerator\Settings\PresetsInterface;
 use ItalyStrap\ThemeJsonGenerator\Styles\Background;
 use ItalyStrap\ThemeJsonGenerator\Styles\Border;
 use ItalyStrap\ThemeJsonGenerator\Styles\Color;
-use ItalyStrap\ThemeJsonGenerator\Styles\Css;
 use ItalyStrap\ThemeJsonGenerator\Styles\CssInterface;
 use ItalyStrap\ThemeJsonGenerator\Styles\Dimensions;
 use ItalyStrap\ThemeJsonGenerator\Styles\Filter;
@@ -18,7 +17,6 @@ use ItalyStrap\ThemeJsonGenerator\Styles\Outline;
 use ItalyStrap\ThemeJsonGenerator\Styles\Scss;
 use ItalyStrap\ThemeJsonGenerator\Styles\Spacing;
 use ItalyStrap\ThemeJsonGenerator\Styles\Typography;
-use ScssPhp\ScssPhp\Compiler;
 
 final readonly class Styles
 {
@@ -27,22 +25,12 @@ final readonly class Styles
      */
     public const SECTION = 'styles';
 
-    private CssInterface $css;
-
-    private Scss $scss;
-
-    private StyleContext $context;
-
     public function __construct(
-        private ThemeJson $themeJson,
         private PresetsInterface $presets,
-        ?StyleContext $context = null,
-        ?CssInterface $css = null,
-        ?Scss $scss = null,
+        private StyleContext $context,
+        private CssInterface $css,
+        private Scss $scss,
     ) {
-        $this->css = $css ?? new Css($this->presets);
-        $this->scss = $scss ?? new Scss(new Css($this->presets), new Compiler(), $this->presets);
-        $this->context = $context ?? new StyleContext($this->themeJson, [self::SECTION]);
     }
 
     #[ThemeSchemaCoverage(['styles', 'css'])]
@@ -147,7 +135,7 @@ final readonly class Styles
     #[ThemeSchemaCoverage(['styles', 'elements', '*'])]
     public function elements(array|string $path): self
     {
-        return new self($this->themeJson, $this->presets, $this->context->elements($path), $this->css, $this->scss);
+        return new self($this->presets, $this->context->elements($path), $this->css, $this->scss);
     }
 
     /**
@@ -157,14 +145,13 @@ final readonly class Styles
     #[ThemeSchemaCoverage(['styles', 'blockTargets', '*'])]
     public function blocks(array|string $path): self
     {
-        return new self($this->themeJson, $this->presets, $this->context->blocks($path), $this->css, $this->scss);
+        return new self($this->presets, $this->context->blocks($path), $this->css, $this->scss);
     }
 
     #[ThemeSchemaCoverage(['styles', 'variations'])]
     public function variations(string $variation): self
     {
         return new self(
-            $this->themeJson,
             $this->presets,
             $this->context->variations($variation),
             $this->css,
@@ -173,19 +160,17 @@ final readonly class Styles
     }
 
     /**
-     * @internal
      * @param array<array-key, string|int>|string $path
      */
-    public function write(array|string $path, mixed $value): bool
+    private function write(array|string $path, mixed $value): bool
     {
         return $this->context->set($path, $value);
     }
 
     /**
-     * @internal
      * @param array<array-key, string|int>|string $path
      */
-    public function read(array|string $path, mixed $default = null): mixed
+    private function read(array|string $path, mixed $default = null): mixed
     {
         return $this->context->get($path, $default);
     }

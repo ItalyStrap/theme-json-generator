@@ -13,6 +13,6 @@ final class OutlineTest extends UnitTestCase
 
     protected function makeInstance(): Outline
     {
-        return new Outline();
+        return $this->makeStyles()->outline();
     }
 }

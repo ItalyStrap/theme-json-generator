@@ -13,6 +13,6 @@ final class FilterTest extends UnitTestCase
 
     protected function makeInstance(): Filter
     {
-        return new Filter();
+        return $this->makeStyles()->filter();
     }
 }

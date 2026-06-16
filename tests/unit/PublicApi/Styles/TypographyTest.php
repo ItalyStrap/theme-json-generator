@@ -13,7 +13,7 @@ final class TypographyTest extends UnitTestCase
 
     protected function makeInstance(): Typography
     {
-        return new Typography();
+        return $this->makeStyles()->typography();
     }
 
     public function testItShouldCreateCorrectArray(): void

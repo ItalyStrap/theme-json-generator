@@ -26,14 +26,10 @@ final readonly class Settings
      */
     public const SECTION = 'settings';
 
-    private SettingsContext $context;
-
     public function __construct(
-        private ThemeJson $themeJson,
         private PresetsInterface $presets,
-        ?SettingsContext $context = null,
+        private SettingsContext $context,
     ) {
-        $this->context = $context ?? new SettingsContext($this->themeJson, [self::SECTION]);
     }
 
     #[ThemeSchemaCoverage([self::SECTION, 'appearanceTools'])]
@@ -134,7 +130,7 @@ final readonly class Settings
     #[ThemeSchemaCoverage([self::SECTION, 'blockTargets', '*'])]
     public function blocks(string $block): self
     {
-        return new self($this->themeJson, $this->presets, $this->context->blocks($block));
+        return new self($this->presets, $this->context->blocks($block));
     }
 
     public function addPreset(PresetInterface $preset): void

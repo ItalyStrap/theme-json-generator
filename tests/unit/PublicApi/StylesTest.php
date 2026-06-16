@@ -85,6 +85,18 @@ CSS,
         );
     }
 
+    public function testItShouldPersistNestedSpacingProperties(): void
+    {
+        $sut = $this->makeThemeJson();
+
+        $sut->styles()->spacing()->margin()->top('1rem');
+        $sut->styles()->spacing()->padding()->horizontal('2rem');
+
+        $this->assertSame('1rem', $sut->get('styles.spacing.margin.top'));
+        $this->assertSame('2rem', $sut->get('styles.spacing.padding.right'));
+        $this->assertSame('2rem', $sut->get('styles.spacing.padding.left'));
+    }
+
     /**
      * @dataProvider invalidVariationSlugProvider
      */

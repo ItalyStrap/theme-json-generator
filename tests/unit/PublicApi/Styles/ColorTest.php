@@ -13,7 +13,7 @@ final class ColorTest extends UnitTestCase
 
     protected function makeInstance(): Color
     {
-        return new Color();
+        return $this->makeStyles()->color();
     }
 
     public function testItShouldCreateCorrectArray(): void

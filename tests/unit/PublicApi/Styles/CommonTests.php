@@ -5,12 +5,17 @@ declare(strict_types=1);
 namespace ItalyStrap\Tests\Unit\PublicApi\Styles;
 
 use ItalyStrap\Config\Config;
+use ItalyStrap\ThemeJsonGenerator\Settings\NullPresets;
 use ItalyStrap\ThemeJsonGenerator\Styles;
-use ItalyStrap\ThemeJsonGenerator\Styles\CommonTrait;
 use ItalyStrap\ThemeJsonGenerator\ThemeJson;
 
 trait CommonTests
 {
+    protected function makeStyles(): Styles
+    {
+        return (new ThemeJson(new Config(), new NullPresets()))->styles();
+    }
+
     public function testItShouldBeAnInstanceOfJsonSerializable(): void
     {
         $sut = $this->makeInstance();
@@ -131,13 +136,10 @@ trait CommonTests
 
     public function testTheNameOfVariableInConstructorMustBePresets(): void
     {
-        $styleObject = new class {
-            use CommonTrait;
-        };
-
-        $reflection = new \ReflectionClass($styleObject);
+        $reflection = new \ReflectionClass($this->makeInstance());
         $constructor = $reflection->getConstructor();
         $parameters = $constructor->getParameters();
+
         $this->assertSame(
             'presets',
             $parameters[0]->getName(),
@@ -145,5 +147,14 @@ trait CommonTests
             'The name of the variable in the constructor of \ItalyStrap\ThemeJsonGenerator\Styles\CommonTrait must be presets'
             // phpcs:enable
         );
+        $this->assertSame(
+            'context',
+            $parameters[2]->getName(),
+            // phpcs:disable
+            'The name of the context variable in the constructor of \ItalyStrap\ThemeJsonGenerator\Styles\CommonTrait must be context'
+            // phpcs:enable
+        );
+        $this->assertFalse($parameters[2]->allowsNull(), 'The context parameter must not allow null');
+        $this->assertFalse($parameters[2]->isDefaultValueAvailable(), 'The context parameter must be required');
     }
 }

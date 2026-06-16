@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Styles;
 
-use ItalyStrap\ThemeJsonGenerator\Settings\NullPresets;
 use ItalyStrap\ThemeJsonGenerator\Settings\PresetInterface;
 use ItalyStrap\ThemeJsonGenerator\Settings\PresetsInterface;
 use ItalyStrap\ThemeJsonGenerator\StyleContext;
@@ -18,17 +17,17 @@ trait CommonTrait
 
     private PresetsInterface $presets;
 
-    private ?StyleContext $context;
+    private StyleContext $context;
 
     /**
      * @param array<string, string> $properties
      */
     public function __construct(
-        ?PresetsInterface $presets = null,
-        array $properties = [],
-        ?StyleContext $context = null,
+        PresetsInterface $presets,
+        array $properties,
+        StyleContext $context,
     ) {
-        $this->presets = $presets ?? new NullPresets();
+        $this->presets = $presets;
         $this->properties = $properties;
         $this->context = $context;
     }
@@ -96,7 +95,7 @@ trait CommonTrait
         $value = $this->presets->parse((string)$value);
         $this->properties[$key] =  $value;
 
-        $this->context?->set($key, $value);
+        $this->context->set($key, $value);
 
         $class = self::class;
         return new $class($this->presets, $this->properties, $this->context);
@@ -106,7 +105,7 @@ trait CommonTrait
     {
         $class = self::class;
 
-        return new $class($this->presets, [], $this->context?->at($segment));
+        return new $class($this->presets, [], $this->context->at($segment));
     }
 
     final public function __clone()

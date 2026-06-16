@@ -13,7 +13,7 @@ final class BackgroundTest extends UnitTestCase
 
     protected function makeInstance(): Background
     {
-        return new Background();
+        return $this->makeStyles()->background();
     }
 
     public function testItShouldCreateCorrectArray(): void

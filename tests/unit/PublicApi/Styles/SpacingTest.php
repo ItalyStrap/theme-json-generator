@@ -13,7 +13,7 @@ final class SpacingTest extends UnitTestCase
 
     private function makeInstance(): Spacing
     {
-        return new Spacing();
+        return $this->makeStyles()->spacing();
     }
 
     public function testItShouldCreateCorrectJson(): void

@@ -12,8 +12,6 @@ use ItalyStrap\ThemeJsonGenerator\Settings\Color\Palette;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\Color;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\ColorModifier;
 use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
-use ItalyStrap\ThemeJsonGenerator\Styles\Color as StylesColor;
-use ItalyStrap\ThemeJsonGenerator\Styles\Typography;
 use ItalyStrap\ThemeJsonGenerator\ThemeJson;
 
 final class JsonFileWriterIntegrationTest extends UnitTestCase
@@ -31,10 +29,6 @@ final class JsonFileWriterIntegrationTest extends UnitTestCase
     private ThemeJson $themeJson;
 
     private ConfigInterface $originalConfig;
-
-    private ?\ItalyStrap\ThemeJsonGenerator\Styles\Color $colorIntegration = null;
-
-    private ?Typography $typographyIntegration = null;
 
     protected function makeInstance(): JsonFileWriter
     {
@@ -54,8 +48,6 @@ final class JsonFileWriterIntegrationTest extends UnitTestCase
 
         $collection->add($headingClrPalette);
 
-        $this->colorIntegration = new StylesColor($collection);
-        $this->typographyIntegration = new Typography($collection);
         return new JsonFileWriter($this->theme_json_path);
     }
 

@@ -13,6 +13,6 @@ final class DimensionsTest extends UnitTestCase
 
     protected function makeInstance(): Dimensions
     {
-        return new Dimensions();
+        return $this->makeStyles()->dimensions();
     }
 }

@@ -13,7 +13,7 @@ final class BorderTest extends UnitTestCase
 
     protected function makeInstance(): Border
     {
-        return new Border();
+        return $this->makeStyles()->border();
     }
 
     public function testItShouldCreateCorrectArray(): void
