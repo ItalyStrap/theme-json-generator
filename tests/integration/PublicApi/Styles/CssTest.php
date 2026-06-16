@@ -49,6 +49,34 @@ final class CssTest extends IntegrationTestCase
         $this->assertNotSame($processedActualCss, $processedParsedCss);
     }
 
+    /**
+     * @dataProvider scopedAtRuleProvider
+     */
+    public function testItShouldNotHoistAtRuleDeclarationsIntoScopedWordPressCss(
+        string $actual,
+        string $expectedWordPressCss
+    ): void {
+        $selector = '.test-selector';
+
+        $parsed = $this->makeInstance()->compressed()->parse($actual, $selector);
+        $processedParsedCss = $this->processBlocksCustomCssWithWordPress($parsed, $selector);
+
+        $this->assertSame($expectedWordPressCss, $processedParsedCss);
+    }
+
+    public static function scopedAtRuleProvider(): iterable
+    {
+        yield '@media' => [
+            'actual' => '.test-selector{color:red;}@media (min-width: 600px){.test-selector{color:blue;}}',
+            'expectedWordPressCss' => ':root :where(.test-selector){color: red;}',
+        ];
+
+        yield '@supports' => [
+            'actual' => '.test-selector{display:block;}@supports (display: grid){.test-selector{display:grid;}}',
+            'expectedWordPressCss' => ':root :where(.test-selector){display: block;}',
+        ];
+    }
+
     private function processBlocksCustomCssWithWordPress(string $css, string $selector): string
     {
         $wpThemeJson = new \WP_Theme_JSON();

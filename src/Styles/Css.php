@@ -10,6 +10,7 @@ use ItalyStrap\ThemeJsonGenerator\Settings\PresetsInterface;
 use Sabberworm\CSS\Parser;
 use Sabberworm\CSS\Parsing\SourceException;
 use Sabberworm\CSS\Property\Selector;
+use Sabberworm\CSS\RuleSet\DeclarationBlock;
 
 /**
  * @todo
@@ -83,7 +84,11 @@ final class Css implements CssInterface
         $space = $this->isCompressed ? '' : \implode('', \array_fill(0, 4, ' '));
         $spaceAfterSelector = $this->isCompressed ? '' : ' ';
 
-        foreach ($doc->getAllDeclarationBlocks() as $declarationBlock) {
+        foreach ($doc->getContents() as $declarationBlock) {
+            if (!$declarationBlock instanceof DeclarationBlock) {
+                continue;
+            }
+
             foreach ($declarationBlock->getSelectors() as $cssSelector) {
                 if (\is_string($cssSelector)) {
                     $cssSelector = new Selector($cssSelector);
