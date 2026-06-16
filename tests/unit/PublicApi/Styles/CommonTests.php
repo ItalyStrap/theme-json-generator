@@ -30,8 +30,8 @@ trait CommonTests
 
         $this->assertSame(
             \json_encode($sut),
-            '[]',
-            'Calling the second time should return an empty array'
+            '{"property":"value"}',
+            'Calling the second time should return the same result'
         );
 
         // Now we repopulate the array, same property but different value
@@ -45,9 +45,18 @@ trait CommonTests
 
         $this->assertSame(
             \json_encode($sut),
-            '[]',
-            'Calling the second time should return an empty array'
+            '{"property":"another-value"}',
+            'Calling the second time should return the same result'
         );
+    }
+
+    public function testItShouldReturnTheSameArrayWhenCalledMultipleTimes(): void
+    {
+        $sut = $this->makeInstance();
+        $sut->property('property', 'value');
+
+        $this->assertSame(['property' => 'value'], $sut->toArray());
+        $this->assertSame(['property' => 'value'], $sut->toArray());
     }
 
     public function testItShouldBeImmutable(): void
@@ -111,12 +120,13 @@ trait CommonTests
 
         $sut_cloned = clone $sut;
 
-        $this->assertNotEmpty($sut->toArray(), '');
-        $this->assertEmpty($sut_cloned->toArray(), '');
+        $this->assertSame(['style' => '#000000'], $sut->toArray(), '');
+        $this->assertSame([], $sut_cloned->toArray(), '');
 
-        $sut_cloned->property('style', '#000000');
+        $sut_cloned->property('style', '#ffffff');
 
-        $this->assertNotSame($sut->toArray(), $sut_cloned->toArray(), '');
+        $this->assertSame(['style' => '#000000'], $sut->toArray(), '');
+        $this->assertSame(['style' => '#ffffff'], $sut_cloned->toArray(), '');
     }
 
     public function testTheNameOfVariableInConstructorMustBePresets(): void

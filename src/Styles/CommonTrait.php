@@ -119,9 +119,7 @@ trait CommonTrait
      */
     public function toArray(): array
     {
-        $result = \array_filter($this->properties, static fn ($value): bool => $value !== '');
-        $this->properties = [];
-        return $result;
+        return \array_filter($this->properties, static fn ($value): bool => $value !== '');
     }
 
     /**
