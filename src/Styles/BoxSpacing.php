@@ -17,36 +17,28 @@ final readonly class BoxSpacing
     #[ThemeSchemaCoverage(['styles', 'spacing', 'padding', 'top'])]
     public function top(string $value): self
     {
-        $this->setProperty(Spacing::TOP, $value);
-
-        return $this;
+        return $this->setProperty(Spacing::TOP, $value);
     }
 
     #[ThemeSchemaCoverage(['styles', 'spacing', 'margin', 'right'])]
     #[ThemeSchemaCoverage(['styles', 'spacing', 'padding', 'right'])]
     public function right(string $value): self
     {
-        $this->setProperty(Spacing::RIGHT, $value);
-
-        return $this;
+        return $this->setProperty(Spacing::RIGHT, $value);
     }
 
     #[ThemeSchemaCoverage(['styles', 'spacing', 'margin', 'bottom'])]
     #[ThemeSchemaCoverage(['styles', 'spacing', 'padding', 'bottom'])]
     public function bottom(string $value): self
     {
-        $this->setProperty(Spacing::BOTTOM, $value);
-
-        return $this;
+        return $this->setProperty(Spacing::BOTTOM, $value);
     }
 
     #[ThemeSchemaCoverage(['styles', 'spacing', 'margin', 'left'])]
     #[ThemeSchemaCoverage(['styles', 'spacing', 'padding', 'left'])]
     public function left(string $value): self
     {
-        $this->setProperty(Spacing::LEFT, $value);
-
-        return $this;
+        return $this->setProperty(Spacing::LEFT, $value);
     }
 
     /**
@@ -130,8 +122,10 @@ final readonly class BoxSpacing
             ->left($left);
     }
 
-    private function setProperty(string $property, string $value): void
+    private function setProperty(string $property, string $value): self
     {
         $this->box->property($property, $value);
+
+        return $this;
     }
 }
