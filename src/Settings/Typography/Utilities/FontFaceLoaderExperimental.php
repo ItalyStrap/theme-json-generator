@@ -36,7 +36,7 @@ final readonly class FontFaceLoaderExperimental
     }
 
     /**
-     * @todo USe the ItalyStrap\Finder component instead of this custom implementation.
+     * @todo Use the ItalyStrap\Finder component instead of this custom implementation.
      * @see https://github.com/italystrap/finder
      * @return list<string>
      */
@@ -79,7 +79,10 @@ final readonly class FontFaceLoaderExperimental
         $font = Font::load($file);
 
         if (!$font instanceof File) {
-            return null;
+            throw new \RuntimeException(\sprintf(
+                'Unable to load supported font file "%s".',
+                $file
+            ));
         }
 
         try {
