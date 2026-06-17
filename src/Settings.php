@@ -26,37 +26,47 @@ final readonly class Settings
      */
     public const SECTION = 'settings';
 
+    /**
+     * @var string
+     */
+    public const APPEARANCE_TOOLS = 'appearanceTools';
+
+    /**
+     * @var string
+     */
+    public const USE_ROOT_PADDING_AWARE_ALIGNMENTS = 'useRootPaddingAwareAlignments';
+
     public function __construct(
         private PresetsInterface $presets,
         private SettingsContext $context,
     ) {
     }
 
-    #[ThemeSchemaCoverage([self::SECTION, 'appearanceTools'])]
+    #[ThemeSchemaCoverage([self::SECTION, self::APPEARANCE_TOOLS])]
     public function enableAppearanceTools(): self
     {
-        $this->write('appearanceTools', true);
+        $this->write(self::APPEARANCE_TOOLS, true);
         return $this;
     }
 
-    #[ThemeSchemaCoverage([self::SECTION, 'appearanceTools'])]
+    #[ThemeSchemaCoverage([self::SECTION, self::APPEARANCE_TOOLS])]
     public function disableAppearanceTools(): self
     {
-        $this->write('appearanceTools', false);
+        $this->write(self::APPEARANCE_TOOLS, false);
         return $this;
     }
 
-    #[ThemeSchemaCoverage([self::SECTION, 'useRootPaddingAwareAlignments'])]
+    #[ThemeSchemaCoverage([self::SECTION, self::USE_ROOT_PADDING_AWARE_ALIGNMENTS])]
     public function enableUseRootPaddingAwareAlignments(): self
     {
-        $this->write('useRootPaddingAwareAlignments', true);
+        $this->write(self::USE_ROOT_PADDING_AWARE_ALIGNMENTS, true);
         return $this;
     }
 
-    #[ThemeSchemaCoverage([self::SECTION, 'useRootPaddingAwareAlignments'])]
+    #[ThemeSchemaCoverage([self::SECTION, self::USE_ROOT_PADDING_AWARE_ALIGNMENTS])]
     public function disableUseRootPaddingAwareAlignments(): self
     {
-        $this->write('useRootPaddingAwareAlignments', false);
+        $this->write(self::USE_ROOT_PADDING_AWARE_ALIGNMENTS, false);
         return $this;
     }
 
