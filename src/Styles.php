@@ -34,35 +34,35 @@ final readonly class Styles
     }
 
     #[ThemeSchemaCoverage(['styles', 'css'])]
-    public function css(string $css, string $selector = ''): bool
+    public function css(string $css, string $selector = ''): self
     {
-        return $this->write('css', $this->css->parse($css, $selector));
+        return $this->writeOrFail('css', $this->css->parse($css, $selector));
     }
 
     #[ThemeSchemaCoverage(['styles', 'css'])]
-    public function appendCss(string $css, string $selector = ''): bool
+    public function appendCss(string $css, string $selector = ''): self
     {
         return $this->appendParsedCss($this->css->parse($css, $selector));
     }
 
     #[ThemeSchemaCoverage(['styles', 'css'])]
-    public function scss(string $scss, string $selector = ''): bool
+    public function scss(string $scss, string $selector = ''): self
     {
-        return $this->write('css', $this->scss->parse($scss, $selector));
+        return $this->writeOrFail('css', $this->scss->parse($scss, $selector));
     }
 
     #[ThemeSchemaCoverage(['styles', 'css'])]
-    public function appendScss(string $scss, string $selector = ''): bool
+    public function appendScss(string $scss, string $selector = ''): self
     {
         return $this->appendParsedCss($this->scss->parse($scss, $selector));
     }
 
-    private function appendParsedCss(string $parsedCss): bool
+    private function appendParsedCss(string $parsedCss): self
     {
         $currentCss = $this->read('css');
         $currentCss = \is_string($currentCss) ? $currentCss : '';
 
-        return $this->write('css', $currentCss . $this->cssAppendSeparator($currentCss, $parsedCss) . $parsedCss);
+        return $this->writeOrFail('css', $currentCss . $this->cssAppendSeparator($currentCss, $parsedCss) . $parsedCss);
     }
 
     private function cssAppendSeparator(string $currentCss, string $parsedCss): string
@@ -111,9 +111,9 @@ final readonly class Styles
     }
 
     #[ThemeSchemaCoverage(['styles', 'shadow'])]
-    public function shadow(string $value): bool
+    public function shadow(string $value): self
     {
-        return $this->write('shadow', $this->parseStyleValue($value));
+        return $this->writeOrFail('shadow', $this->parseStyleValue($value));
     }
 
     #[ThemeSchemaCoverage(['styles', 'spacing'])]
@@ -170,9 +170,36 @@ final readonly class Styles
     /**
      * @param array<array-key, string|int>|string $path
      */
+    private function writeOrFail(array|string $path, mixed $value): self
+    {
+        if (!$this->write($path, $value)) {
+            throw new \RuntimeException(\sprintf(
+                'Unable to write styles property "%s".',
+                $this->pathToString($path)
+            ));
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param array<array-key, string|int>|string $path
+     */
     private function read(array|string $path, mixed $default = null): mixed
     {
         return $this->context->get($path, $default);
+    }
+
+    /**
+     * @param array<array-key, string|int>|string $path
+     */
+    private function pathToString(array|string $path): string
+    {
+        if (\is_string($path)) {
+            return $path;
+        }
+
+        return \implode('.', \array_map(strval(...), $path));
     }
 
     /**

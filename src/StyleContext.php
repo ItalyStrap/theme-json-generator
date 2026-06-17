@@ -69,7 +69,8 @@ final readonly class StyleContext
      */
     public function set(array|string|int $path, mixed $value): bool
     {
-        return $this->themeJson->set($this->path($path), $value);
+        $this->themeJson->set($this->path($path), $value);
+        return true;
     }
 
     /**

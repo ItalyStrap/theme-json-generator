@@ -21,10 +21,7 @@ final readonly class BlockTypes
     #[ThemeSchemaCoverage(['topLevel', 'blockTypes'])]
     public function add(string $blockType): self
     {
-        if (!$this->themeJson->appendTo('blockTypes', $blockType)) {
-            throw new \RuntimeException('Unable to append root property "blockTypes".');
-        }
-
+        $this->themeJson->appendTo('blockTypes', $blockType);
         return $this;
     }
 }

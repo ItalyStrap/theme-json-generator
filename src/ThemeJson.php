@@ -122,10 +122,16 @@ final readonly class ThemeJson implements \JsonSerializable
     /**
      * @param array<array-key, string|int>|string $key
      */
-    public function set(string|array $key, mixed $value): bool
+    public function set(string|array $key, mixed $value): self
     {
-        /** @phpstan-ignore-next-line Config accepts array paths, StoreInterface only advertises string keys. */
-        return $this->config->set($key, $value);
+        if (!$this->setConfigValue($key, $value)) {
+            throw new \RuntimeException(\sprintf(
+                'Unable to set theme.json property "%s".',
+                $this->pathToString($key)
+            ));
+        }
+
+        return $this;
     }
 
     /**
@@ -140,9 +146,16 @@ final readonly class ThemeJson implements \JsonSerializable
     /**
      * @param array<array-key, string|int>|string $key
      */
-    public function appendTo(string|array $key, mixed $value): bool
+    public function appendTo(string|array $key, mixed $value): self
     {
-        return $this->nodeManipulation()->appendTo($key, $value);
+        if (!$this->nodeManipulation()->appendTo($key, $value)) {
+            throw new \RuntimeException(\sprintf(
+                'Unable to append theme.json property "%s".',
+                $this->pathToString($key)
+            ));
+        }
+
+        return $this;
     }
 
     /**
@@ -164,16 +177,33 @@ final readonly class ThemeJson implements \JsonSerializable
 
     public function jsonSerialize(): mixed
     {
-        return $this->config->toArray();
+        return $this->config;
     }
 
     private function setRoot(string $key, mixed $value): self
     {
-        if (!$this->set($key, $value)) {
-            throw new \RuntimeException(\sprintf('Unable to set root property "%s".', $key));
+        return $this->set($key, $value);
+    }
+
+    /**
+     * @param array<array-key, string|int>|string $key
+     */
+    private function setConfigValue(string|array $key, mixed $value): bool
+    {
+        /** @phpstan-ignore-next-line Config accepts array paths, StoreInterface only advertises string keys. */
+        return $this->config->set($key, $value);
+    }
+
+    /**
+     * @param array<array-key, string|int>|string $path
+     */
+    private function pathToString(string|array $path): string
+    {
+        if (\is_string($path)) {
+            return $path;
         }
 
-        return $this;
+        return \implode('.', \array_map(strval(...), $path));
     }
 
     /**

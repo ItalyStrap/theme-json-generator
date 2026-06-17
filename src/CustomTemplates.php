@@ -44,10 +44,7 @@ final readonly class CustomTemplates
             'postTypes' => $postTypes,
         ], static fn (string|array $value): bool => $value !== []);
 
-        if (!$this->themeJson->appendTo('customTemplates', [$customTemplate])) {
-            throw new \RuntimeException('Unable to append root property "customTemplates".');
-        }
-
+        $this->themeJson->appendTo('customTemplates', [$customTemplate]);
         return $this;
     }
 }

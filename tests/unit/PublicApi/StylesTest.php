@@ -9,6 +9,7 @@ use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Palette;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\Color as ColorValue;
 use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
+use ItalyStrap\ThemeJsonGenerator\Styles;
 use ItalyStrap\ThemeJsonGenerator\ThemeJson;
 
 final class StylesTest extends UnitTestCase
@@ -45,7 +46,7 @@ CSS,
     {
         $sut = new ThemeJson(new Config(), $this->makeStylePresets());
 
-        $this->assertTrue($sut->styles()->blocks('core/paragraph')->scss(
+        $this->assertInstanceOf(Styles::class, $sut->styles()->blocks('core/paragraph')->scss(
             '.wp-block-paragraph { a { color: red; } }',
             '.wp-block-paragraph'
         ));
@@ -68,7 +69,7 @@ CSS,
             '.wp-block-paragraph { a { color: red; } }',
             '.wp-block-paragraph'
         );
-        $this->assertTrue($sut->styles()->blocks('core/paragraph')->appendScss(
+        $this->assertInstanceOf(Styles::class, $sut->styles()->blocks('core/paragraph')->appendScss(
             '.wp-block-paragraph { strong { font-weight: 700; } }',
             '.wp-block-paragraph'
         ));

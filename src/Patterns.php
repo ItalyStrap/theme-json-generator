@@ -21,10 +21,7 @@ final readonly class Patterns
     #[ThemeSchemaCoverage(['topLevel', 'patterns'])]
     public function add(string $pattern): self
     {
-        if (!$this->themeJson->appendTo('patterns', $pattern)) {
-            throw new \RuntimeException('Unable to append root property "patterns".');
-        }
-
+        $this->themeJson->appendTo('patterns', $pattern);
         return $this;
     }
 }

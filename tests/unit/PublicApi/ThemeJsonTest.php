@@ -17,6 +17,7 @@ use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\LinearGradient;
 use ItalyStrap\ThemeJsonGenerator\Settings\Custom;
 use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\Settings\Typography;
+use ItalyStrap\ThemeJsonGenerator\Styles as StylesFacade;
 use ItalyStrap\ThemeJsonGenerator\ThemeJson;
 
 final class ThemeJsonTest extends UnitTestCase
@@ -79,8 +80,8 @@ final class ThemeJsonTest extends UnitTestCase
     {
         $sut = $this->makeInstance();
 
-        $this->assertTrue($sut->set('settings.color.text', true));
-        $this->assertTrue($sut->set(['styles', 'blocks', 'core/paragraph', 'color'], ['text' => '#111111']));
+        $this->assertSame($sut, $sut->set('settings.color.text', true));
+        $this->assertSame($sut, $sut->set(['styles', 'blocks', 'core/paragraph', 'color'], ['text' => '#111111']));
 
         $this->assertTrue($sut->get('settings.color.text'));
         $this->assertSame(['text' => '#111111'], $sut->get(['styles', 'blocks', 'core/paragraph', 'color']));
@@ -91,8 +92,8 @@ final class ThemeJsonTest extends UnitTestCase
     {
         $sut = $this->makeInstance();
 
-        $this->assertTrue($sut->appendTo('patterns', 'moduli/hero'));
-        $this->assertTrue($sut->appendTo(['customTemplates'], [['name' => 'landing', 'title' => 'Landing']]));
+        $this->assertSame($sut, $sut->appendTo('patterns', 'moduli/hero'));
+        $this->assertSame($sut, $sut->appendTo(['customTemplates'], [['name' => 'landing', 'title' => 'Landing']]));
 
         $this->assertSame(['moduli/hero'], $sut->get('patterns'));
         $this->assertSame([['name' => 'landing', 'title' => 'Landing']], $sut->get(['customTemplates']));
@@ -127,9 +128,9 @@ final class ThemeJsonTest extends UnitTestCase
     {
         $sut = $this->makeInstance();
 
-        $this->assertTrue($sut->styles()->css('body{color:red;}'));
-        $this->assertTrue($sut->styles()->appendCss('a{color:blue;}'));
-        $this->assertTrue($sut->set('styles.color.text', 'var(--wp--preset--color--base)'));
+        $this->assertInstanceOf(StylesFacade::class, $sut->styles()->css('body{color:red;}'));
+        $this->assertInstanceOf(StylesFacade::class, $sut->styles()->appendCss('a{color:blue;}'));
+        $this->assertSame($sut, $sut->set('styles.color.text', 'var(--wp--preset--color--base)'));
         $sut->styles()->background()->backgroundImage('url(hero.jpg)');
         $sut->styles()->color()->text('#111111');
         $sut->styles()->border()->color('#222222')->width('1px');
@@ -137,7 +138,7 @@ final class ThemeJsonTest extends UnitTestCase
         $sut->styles()->dimensions()->aspectRatio('16/9')->height('100%')->minHeight('10rem');
         $sut->styles()->filter()->duotone('var:preset|duotone|brand');
         $sut->styles()->outline()->color('#444444')->offset('2px')->style('solid')->width('1px');
-        $this->assertTrue($sut->styles()->shadow('0 1px 2px 0 rgb(0 0 0 / 0.05)'));
+        $this->assertInstanceOf(StylesFacade::class, $sut->styles()->shadow('0 1px 2px 0 rgb(0 0 0 / 0.05)'));
         $sut->styles()->spacing()->blockGap('1rem');
         $sut->styles()->spacing()->margin()->top('2rem');
         $sut->styles()->spacing()->padding()->horizontal('3rem');
@@ -201,7 +202,7 @@ final class ThemeJsonTest extends UnitTestCase
                 'large' => '3rem',
             ],
         ]));
-        $this->assertTrue($sut->set('settings.custom.brand.primary', '#111111'));
+        $this->assertSame($sut, $sut->set('settings.custom.brand.primary', '#111111'));
 
         $this->assertTrue($sut->get('settings.background.backgroundImage'));
         $this->assertTrue($sut->get('settings.background.backgroundSize'));
@@ -278,7 +279,7 @@ final class ThemeJsonTest extends UnitTestCase
         $sut->styles()->elements('button')->dimensions()->minWidth('12rem');
         $sut->styles()->elements('button')->filter()->duotone('var:preset|duotone|button');
         $sut->styles()->elements('button')->shadow('0 1px 2px 0 rgb(0 0 0 / 0.05)');
-        $this->assertTrue($sut->styles()->elements('button')->css(':focus{outline:none;}'));
+        $this->assertInstanceOf(StylesFacade::class, $sut->styles()->elements('button')->css(':focus{outline:none;}'));
         $sut->styles()->elements('button')->border()->radius('4px');
         $sut->styles()->elements('button')->border()->bottom()->style('solid');
         $sut->styles()->elements('button')->spacing()->padding()->vertical('1rem');
@@ -301,13 +302,15 @@ final class ThemeJsonTest extends UnitTestCase
     {
         $sut = $this->makeInstance();
 
-        $this->assertTrue($sut->set('settings.blocks.core/paragraph.color.text', true));
+        $this->assertSame($sut, $sut->set('settings.blocks.core/paragraph.color.text', true));
         $sut->settings()->blocks('core/image')->color()->disableText();
-        $this->assertTrue($sut->set(['styles', 'blocks', 'core/paragraph'], ['color' => ['text' => 'red']]));
-        $this->assertTrue(
+        $this->assertSame($sut, $sut->set(['styles', 'blocks', 'core/paragraph'], ['color' => ['text' => 'red']]));
+        $this->assertInstanceOf(
+            StylesFacade::class,
             $sut->styles()->blocks('core/paragraph')->css('.wp-block-paragraph a{color:red;}', '.wp-block-paragraph')
         );
-        $this->assertTrue(
+        $this->assertInstanceOf(
+            StylesFacade::class,
             $sut->styles()->blocks('core/paragraph')->appendCss(
                 '.wp-block-paragraph strong{font-weight:700;}',
                 '.wp-block-paragraph'
@@ -324,7 +327,10 @@ final class ThemeJsonTest extends UnitTestCase
         $sut->styles()->blocks('core/button')->variations('outline')->background()->backgroundImage('url(button.jpg)');
         $sut->styles()->blocks('core/button')->variations('outline')->color()->text('#555555');
         $sut->styles()->blocks('core/button')->variations('outline')->typography()->fontWeight('700');
-        $this->assertTrue($sut->styles()->blocks('core/heading')->shadow('0 1px 2px 0 rgb(0 0 0 / 0.05)'));
+        $this->assertInstanceOf(
+            StylesFacade::class,
+            $sut->styles()->blocks('core/heading')->shadow('0 1px 2px 0 rgb(0 0 0 / 0.05)')
+        );
 
         $this->assertTrue($sut->get('settings.blocks.core/paragraph.color.text'));
         $this->assertFalse($sut->get('settings.blocks.core/image.color.text'));
@@ -358,5 +364,91 @@ CSS,
         $this->assertSame('#555555', $sut->get('styles.blocks.core/button.variations.outline.color.text'));
         $this->assertSame('700', $sut->get('styles.blocks.core/button.variations.outline.typography.fontWeight'));
         $this->assertSame('0 1px 2px 0 rgb(0 0 0 / 0.05)', $sut->get('styles.blocks.core/heading.shadow'));
+    }
+
+    /**
+     * @dataProvider themeJsonBoolWriterProvider
+     */
+    public function testThemeJsonBoolWritersShouldReturnThemeJsonFacadeToContinueChain(
+        callable $write,
+        string $path,
+        mixed $expected
+    ): void {
+        $sut = $this->makeInstance();
+
+        $this->assertInstanceOf(ThemeJson::class, $write($sut));
+        $this->assertSame($expected, $sut->get($path));
+    }
+
+    public static function themeJsonBoolWriterProvider(): iterable
+    {
+        yield 'set' => [
+            static fn (ThemeJson $themeJson): mixed => $themeJson->set('title', 'Moduli'),
+            'title',
+            'Moduli',
+        ];
+
+        yield 'append to' => [
+            static fn (ThemeJson $themeJson): mixed => $themeJson->appendTo('patterns', 'moduli/hero'),
+            'patterns',
+            ['moduli/hero'],
+        ];
+    }
+
+    /**
+     * @dataProvider stylesBoolWriterProvider
+     */
+    public function testStylesBoolWritersShouldReturnStylesFacadeToContinueChain(
+        callable $write,
+        string $path,
+        mixed $expected
+    ): void {
+        $sut = $this->makeInstance();
+
+        $this->assertInstanceOf(StylesFacade::class, $write($sut->styles()));
+        $this->assertSame($expected, $sut->get($path));
+    }
+
+    public static function stylesBoolWriterProvider(): iterable
+    {
+        yield 'css' => [
+            static fn (StylesFacade $styles): mixed => $styles->css('body{color:red;}'),
+            'styles.css',
+            'body{color:red;}',
+        ];
+
+        yield 'append css' => [
+            static fn (StylesFacade $styles): mixed => $styles->appendCss('a{color:blue;}'),
+            'styles.css',
+            'a{color:blue;}',
+        ];
+
+        yield 'scss' => [
+            static fn (StylesFacade $styles): mixed => $styles->scss('.test{color:red;}'),
+            'styles.css',
+            <<<CSS
+.test {
+  color: red;
+}
+
+CSS,
+        ];
+
+        yield 'append scss' => [
+            static fn (StylesFacade $styles): mixed => $styles->appendScss('.test{color:blue;}'),
+            'styles.css',
+            <<<CSS
+.test {
+  color: blue;
+}
+
+CSS,
+        ];
+
+        yield 'shadow' => [
+            static fn (StylesFacade $styles): mixed => $styles->shadow('0 1px 2px #000'),
+            'styles.shadow',
+            '0 1px 2px #000',
+        ];
     }
 }

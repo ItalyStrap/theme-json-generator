@@ -35,10 +35,7 @@ final readonly class TemplateParts
             'area' => $area,
         ], static fn (?string $value): bool => $value !== null);
 
-        if (!$this->themeJson->appendTo('templateParts', [$templatePart])) {
-            throw new \RuntimeException('Unable to append root property "templateParts".');
-        }
-
+        $this->themeJson->appendTo('templateParts', [$templatePart]);
         return $this;
     }
 }

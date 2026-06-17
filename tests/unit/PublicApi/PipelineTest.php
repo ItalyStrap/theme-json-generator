@@ -10,6 +10,7 @@ use ItalyStrap\Tests\Fixtures\SecondThemeJsonConfiguratorFixture;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Pipeline;
 use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
+use ItalyStrap\ThemeJsonGenerator\Styles;
 use ItalyStrap\ThemeJsonGenerator\ThemeJson;
 use Psr\Container\ContainerInterface;
 
@@ -29,7 +30,9 @@ final class PipelineTest extends UnitTestCase
 
         $result = $sut->process([
             FirstThemeJsonConfiguratorFixture::class,
-            static fn (ThemeJson $themeJson): bool => $themeJson->styles()->appendCss('b{color:blue;}'),
+            static fn (ThemeJson $themeJson): Styles => $themeJson
+                ->styles()
+                ->appendCss('b{color:blue;}'),
             new SecondThemeJsonConfiguratorFixture(),
         ]);
 
