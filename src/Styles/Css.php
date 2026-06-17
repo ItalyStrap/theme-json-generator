@@ -9,6 +9,7 @@ use ItalyStrap\ThemeJsonGenerator\Settings\NullPresets;
 use ItalyStrap\ThemeJsonGenerator\Settings\PresetsInterface;
 use Sabberworm\CSS\Parser;
 use Sabberworm\CSS\Parsing\SourceException;
+use Sabberworm\CSS\Property\AtRule;
 use Sabberworm\CSS\Property\Selector;
 use Sabberworm\CSS\RuleSet\DeclarationBlock;
 
@@ -85,6 +86,13 @@ final class Css implements CssInterface
         $spaceAfterSelector = $this->isCompressed ? '' : ' ';
 
         foreach ($doc->getContents() as $declarationBlock) {
+            if ($declarationBlock instanceof AtRule) {
+                throw new \RuntimeException(\sprintf(
+                    CssInterface::M_AT_RULES_ARE_NOT_SUPPORTED_IN_SCOPED_CSS,
+                    $this->formatAtRuleName($declarationBlock)
+                ));
+            }
+
             if (!$declarationBlock instanceof DeclarationBlock) {
                 continue;
             }
@@ -128,6 +136,17 @@ final class Css implements CssInterface
 
         \array_unshift($additionalSelectors, $rootRules . $newLine);
         return \trim(\implode('&', $additionalSelectors), "\t\n\r\0\x0B&");
+    }
+
+    private function formatAtRuleName(AtRule $atRule): string
+    {
+        $name = $atRule->atRuleName();
+
+        if ($name === null || $name === '') {
+            return 'at-rules';
+        }
+
+        return '@' . $name;
     }
 
     private function selectorBelongsToScope(string $actualSelector, string $selector): bool

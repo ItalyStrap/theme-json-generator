@@ -7,6 +7,7 @@ namespace ItalyStrap\Tests\Integration\PublicApi\Styles;
 use ItalyStrap\Tests\CssParserScenarioProviderTrait;
 use ItalyStrap\Tests\IntegrationTestCase;
 use ItalyStrap\ThemeJsonGenerator\Styles\Css;
+use ItalyStrap\ThemeJsonGenerator\Styles\CssInterface;
 
 final class CssTest extends IntegrationTestCase
 {
@@ -52,28 +53,31 @@ final class CssTest extends IntegrationTestCase
     /**
      * @dataProvider scopedAtRuleProvider
      */
-    public function testItShouldNotHoistAtRuleDeclarationsIntoScopedWordPressCss(
+    public function testItShouldRejectAtRulesInScopedCss(
         string $actual,
-        string $expectedWordPressCss
+        string $atRuleName
     ): void {
         $selector = '.test-selector';
 
-        $parsed = $this->makeInstance()->compressed()->parse($actual, $selector);
-        $processedParsedCss = $this->processBlocksCustomCssWithWordPress($parsed, $selector);
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage(\sprintf(
+            CssInterface::M_AT_RULES_ARE_NOT_SUPPORTED_IN_SCOPED_CSS,
+            $atRuleName
+        ));
 
-        $this->assertSame($expectedWordPressCss, $processedParsedCss);
+        $this->makeInstance()->compressed()->parse($actual, $selector);
     }
 
     public static function scopedAtRuleProvider(): iterable
     {
         yield '@media' => [
             'actual' => '.test-selector{color:red;}@media (min-width: 600px){.test-selector{color:blue;}}',
-            'expectedWordPressCss' => ':root :where(.test-selector){color: red;}',
+            'atRuleName' => '@media',
         ];
 
         yield '@supports' => [
             'actual' => '.test-selector{display:block;}@supports (display: grid){.test-selector{display:grid;}}',
-            'expectedWordPressCss' => ':root :where(.test-selector){display: block;}',
+            'atRuleName' => '@supports',
         ];
     }
 
