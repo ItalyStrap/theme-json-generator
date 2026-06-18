@@ -7,7 +7,6 @@ namespace ItalyStrap\Tests\Unit\PublicApi\Styles;
 use ItalyStrap\Tests\CssParserScenarioProviderTrait;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Styles\Css;
-use ItalyStrap\ThemeJsonGenerator\Styles\CssInterface;
 
 final class CssTest extends UnitTestCase
 {
@@ -18,21 +17,21 @@ final class CssTest extends UnitTestCase
         return new Css();
     }
 
-    public function testItShouldThrowErrorIfCssStartWithAmpersand(): void
+    public function testItShouldPreserveWordPressScopedCssStartingWithAmpersand(): void
     {
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage(CssInterface::M_AMPERSAND_MUST_NOT_BE_AT_THE_BEGINNING);
-
-        $this->makeInstance()->parse('& .foo{color: red;}');
+        $this->assertSame(
+            '& .foo{color: red;}',
+            $this->makeInstance()->parse('& .foo{color: red;}')
+        );
     }
 
     public function testItShouldParseExpandedCssByDefault(): void
     {
         $actual = '.test-selector{height: 100%;width: 100%;color: red;}.test-selector:hover {color: red;}';
         $expected = <<<CSS
-    height: 100%;
-    width: 100%;
-    color: red;
+height: 100%;
+width: 100%;
+color: red;
 
 &:hover {
     color: red;

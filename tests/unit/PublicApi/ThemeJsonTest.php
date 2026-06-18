@@ -279,7 +279,7 @@ final class ThemeJsonTest extends UnitTestCase
         $sut->styles()->elements('button')->dimensions()->minWidth('12rem');
         $sut->styles()->elements('button')->filter()->duotone('var:preset|duotone|button');
         $sut->styles()->elements('button')->shadow('0 1px 2px 0 rgb(0 0 0 / 0.05)');
-        $this->assertInstanceOf(StylesFacade::class, $sut->styles()->elements('button')->css(':focus{outline:none;}'));
+        $this->assertInstanceOf(StylesFacade::class, $sut->styles()->elements('button')->css('&:focus{outline:none;}'));
         $sut->styles()->elements('button')->border()->radius('4px');
         $sut->styles()->elements('button')->border()->bottom()->style('solid');
         $sut->styles()->elements('button')->spacing()->padding()->vertical('1rem');
@@ -291,7 +291,7 @@ final class ThemeJsonTest extends UnitTestCase
         $this->assertSame('12rem', $sut->get('styles.elements.button.dimensions.minWidth'));
         $this->assertSame('var:preset|duotone|button', $sut->get('styles.elements.button.filter.duotone'));
         $this->assertSame('0 1px 2px 0 rgb(0 0 0 / 0.05)', $sut->get('styles.elements.button.shadow'));
-        $this->assertSame(':focus{outline:none;}', $sut->get('styles.elements.button.css'));
+        $this->assertSame('&:focus{outline:none;}', $sut->get('styles.elements.button.css'));
         $this->assertSame('4px', $sut->get('styles.elements.button.border.radius'));
         $this->assertSame('solid', $sut->get('styles.elements.button.border.bottom.style'));
         $this->assertSame('1rem', $sut->get('styles.elements.button.spacing.padding.top'));
@@ -339,7 +339,8 @@ final class ThemeJsonTest extends UnitTestCase
             <<<CSS
  a {
     color: red;
-}& strong {
+}
+& strong {
     font-weight: 700;
 }
 CSS,

@@ -36,13 +36,13 @@ final readonly class Styles
     #[ThemeSchemaCoverage([self::SECTION, 'css'])]
     public function css(string $css, string $selector = ''): self
     {
-        return $this->writeOrFail('css', $this->css->parse($css, $selector));
+        return $this->writeOrFail('css', $this->parseCss($css, $selector));
     }
 
     #[ThemeSchemaCoverage([self::SECTION, 'css'])]
     public function appendCss(string $css, string $selector = ''): self
     {
-        return $this->appendParsedCss($this->css->parse($css, $selector));
+        return $this->appendParsedCss($this->parseCss($css, $selector), $selector !== '');
     }
 
     #[ThemeSchemaCoverage([self::SECTION, 'css'])]
@@ -54,24 +54,96 @@ final readonly class Styles
     #[ThemeSchemaCoverage([self::SECTION, 'css'])]
     public function appendScss(string $scss, string $selector = ''): self
     {
-        return $this->appendParsedCss($this->scss->parse($scss, $selector));
+        return $this->appendParsedCss($this->scss->parse($scss, $selector), $selector !== '');
     }
 
-    private function appendParsedCss(string $parsedCss): self
+    private function parseCss(string $css, string $selector): string
+    {
+        if (!$this->context->isScoped()) {
+            $this->assertRootCssDoesNotStartWithAmpersand($css);
+        }
+
+        if ($this->context->isScoped() && \trim($selector) === '') {
+            $this->assertNestedSelectorsAreScoped($css);
+        }
+
+        return $this->css->parse($css, $selector);
+    }
+
+    private function assertRootCssDoesNotStartWithAmpersand(string $css): void
+    {
+        if (!\str_starts_with(\trim($css), '&')) {
+            return;
+        }
+
+        throw new \RuntimeException(CssInterface::M_AMPERSAND_MUST_NOT_BE_AT_THE_BEGINNING);
+    }
+
+    private function appendParsedCss(string $parsedCss, bool $wasParsedWithSelector): self
     {
         $currentCss = $this->read('css');
         $currentCss = \is_string($currentCss) ? $currentCss : '';
 
-        return $this->writeOrFail('css', $currentCss . $this->cssAppendSeparator($currentCss, $parsedCss) . $parsedCss);
+        if (!$this->context->isScoped()) {
+            return $this->writeOrFail('css', $currentCss . $parsedCss);
+        }
+
+        return $this->writeOrFail(
+            'css',
+            $currentCss . $this->scopedCssAppendSeparator($currentCss, $parsedCss, $wasParsedWithSelector) . $parsedCss
+        );
     }
 
-    private function cssAppendSeparator(string $currentCss, string $parsedCss): string
-    {
-        if ($currentCss === '') {
+    private function scopedCssAppendSeparator(
+        string $currentCss,
+        string $parsedCss,
+        bool $wasParsedWithSelector
+    ): string {
+        if ($currentCss === '' || $parsedCss === '') {
             return '';
         }
 
-        return \preg_match('/^(?:\s|[&.:#\[>+~*])/', $parsedCss) === 1 ? '&' : '';
+        $separator = '';
+        $lastCharacter = \substr(\rtrim($currentCss), -1);
+        if ($lastCharacter !== ';' && $lastCharacter !== '}') {
+            $separator = ';';
+        }
+
+        if (!$wasParsedWithSelector) {
+            return $separator;
+        }
+
+        if (\preg_match('/^(?:\s|[.:#\[>+~*])/', $parsedCss) !== 1) {
+            return $separator;
+        }
+
+        $newLine = \str_contains($currentCss, PHP_EOL) || \str_contains($parsedCss, PHP_EOL) ? PHP_EOL : '';
+
+        return $separator . $newLine . '&';
+    }
+
+    private function assertNestedSelectorsAreScoped(string $css): void
+    {
+        $offset = 0;
+
+        while (($openingBrace = \strpos($css, '{', $offset)) !== false) {
+            $selector = \substr($css, $offset, $openingBrace - $offset);
+            $declarationEnd = \strrpos($selector, ';');
+            if ($declarationEnd !== false) {
+                $selector = \substr($selector, $declarationEnd + 1);
+            }
+
+            if (!\str_starts_with(\trim($selector), '&')) {
+                throw new \InvalidArgumentException(CssInterface::M_NESTED_SELECTORS_MUST_BE_SCOPED);
+            }
+
+            $closingBrace = \strpos($css, '}', $openingBrace + 1);
+            if ($closingBrace === false) {
+                throw new \InvalidArgumentException('Scoped CSS contains an unclosed declaration block.');
+            }
+
+            $offset = $closingBrace + 1;
+        }
     }
 
     #[ThemeSchemaCoverage([self::SECTION, 'background'])]

@@ -78,12 +78,93 @@ CSS,
             <<<CSS
  a {
     color: red;
-}& strong {
+}
+& strong {
     font-weight: 700;
 }
 CSS,
             $sut->get('styles.blocks.core/paragraph.css')
         );
+    }
+
+    public function testItShouldAppendGlobalCssWithoutChangingIt(): void
+    {
+        $sut = $this->makeThemeJson();
+
+        $sut->styles()->css('body {color:red}');
+        $sut->styles()->appendCss('a{color:blue;}');
+
+        $this->assertSame('body {color:red}a{color:blue;}', $sut->get('styles.css'));
+    }
+
+    public function testItShouldSeparateScopedDeclarationLists(): void
+    {
+        $sut = $this->makeThemeJson();
+
+        $sut->styles()->blocks('core/button')->css('color:red');
+        $sut->styles()->blocks('core/button')->appendCss('background:blue');
+
+        $this->assertSame('color:red;background:blue', $sut->get('styles.blocks.core/button.css'));
+    }
+
+    public function testItShouldAppendExplicitlyScopedNestedCss(): void
+    {
+        $sut = $this->makeThemeJson();
+
+        $sut->styles()->blocks('core/button')->css('color:red');
+        $sut->styles()->blocks('core/button')->appendCss('& a{color:blue;}');
+
+        $this->assertSame('color:red;& a{color:blue;}', $sut->get('styles.blocks.core/button.css'));
+    }
+
+    public function testItShouldParseAndAppendBlockCssWithSelector(): void
+    {
+        $sut = $this->makeThemeJson();
+        $styles = $sut->styles()->blocks('core/button');
+
+        $styles->css('.wp-block-button{color:red;}', '.wp-block-button');
+        $styles->appendCss('.wp-block-button a{color:blue;}', '.wp-block-button');
+
+        $this->assertSame(
+            <<<CSS
+color: red;
+& a {
+    color: blue;
+}
+CSS,
+            $sut->get('styles.blocks.core/button.css')
+        );
+    }
+
+    public function testItShouldParseAndAppendElementCssWithSelector(): void
+    {
+        $sut = $this->makeThemeJson();
+        $styles = $sut->styles()->elements('button');
+
+        $styles->css('button{color:red;margin:0;}', 'button');
+        $styles->appendCss('button:hover{color:blue;}', 'button');
+
+        $this->assertSame(
+            <<<CSS
+color: red;
+margin: 0;
+&:hover {
+    color: blue;
+}
+CSS,
+            $sut->get('styles.elements.button.css')
+        );
+    }
+
+    public function testItShouldRejectNestedCssWithoutExplicitScope(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Nested scoped CSS selectors must begin with an ampersand (&)');
+
+        $this->makeThemeJson()
+            ->styles()
+            ->blocks('core/button')
+            ->appendCss('a{color:blue;}');
     }
 
     public function testItShouldPersistNestedSpacingProperties(): void

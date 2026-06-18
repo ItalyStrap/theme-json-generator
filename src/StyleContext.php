@@ -65,6 +65,14 @@ final readonly class StyleContext
 
     /**
      * @internal
+     */
+    public function isScoped(): bool
+    {
+        return $this->structure !== [];
+    }
+
+    /**
+     * @internal
      * @param array<array-key, string|int>|string|int $path
      */
     public function set(array|string|int $path, mixed $value): bool

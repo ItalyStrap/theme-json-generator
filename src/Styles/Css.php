@@ -60,10 +60,6 @@ final class Css implements CssInterface
     #[ThemeSchemaCoverage(['styles', 'css'])]
     public function parse(string $css, string $selector = ''): string
     {
-        if (\str_starts_with(\trim($css), '&')) {
-            throw new \RuntimeException(CssInterface::M_AMPERSAND_MUST_NOT_BE_AT_THE_BEGINNING);
-        }
-
         if ($this->shouldResolveVariables) {
             $css = $this->presets->parse($css);
         }
@@ -106,7 +102,7 @@ final class Css implements CssInterface
                     foreach ($declarationBlock->getRules() as $rule) {
                         $important = $rule->getIsImportant() ? ' !important' : '';
                         // phpcs:disable
-                        $ruleText = $space . $rule->getRule() . ': ' . (string)$rule->getValue() . $important . ';' . $newLine;
+                        $ruleText = $rule->getRule() . ': ' . (string)$rule->getValue() . $important . ';' . $newLine;
                         // phpcs:enable
                         $rootRules .= $ruleText;
                     }
