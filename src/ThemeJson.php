@@ -87,11 +87,13 @@ final readonly class ThemeJson implements \JsonSerializable
     #[ThemeSchemaCoverage(['topLevel', Styles::SECTION])]
     public function styles(): Styles
     {
+        $css = new Css($this->presets);
+
         return new Styles(
             $this->presets,
             new StyleContext($this, [Styles::SECTION]),
-            new Css($this->presets),
-            new Scss(new Css($this->presets), new Compiler(), $this->presets),
+            $css,
+            new Scss($css, new Compiler(), $this->presets),
         );
     }
 

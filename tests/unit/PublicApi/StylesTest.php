@@ -10,10 +10,27 @@ use ItalyStrap\ThemeJsonGenerator\Settings\Color\Palette;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\Color as ColorValue;
 use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\Styles;
+use ItalyStrap\ThemeJsonGenerator\Styles\Css;
+use ItalyStrap\ThemeJsonGenerator\Styles\Scss;
 use ItalyStrap\ThemeJsonGenerator\ThemeJson;
 
 final class StylesTest extends UnitTestCase
 {
+    public function testItShouldShareTheCssParserWithTheScssPath(): void
+    {
+        $styles = $this->makeThemeJson()->styles();
+        $cssProperty = new \ReflectionProperty(Styles::class, 'css');
+        $scssProperty = new \ReflectionProperty(Styles::class, 'scss');
+        $scssCssProperty = new \ReflectionProperty(Scss::class, 'css');
+
+        $css = $cssProperty->getValue($styles);
+        $scss = $scssProperty->getValue($styles);
+
+        $this->assertInstanceOf(Css::class, $css);
+        $this->assertInstanceOf(Scss::class, $scss);
+        $this->assertSame($css, $scssCssProperty->getValue($scss));
+    }
+
     public function testItShouldComposeDeepStyleContexts(): void
     {
         $sut = new ThemeJson(new Config(), $this->makeStylePresets());
