@@ -82,8 +82,8 @@ final class BoxShadow implements \Stringable
 
     public function __toString(): string
     {
-        if ($this->x === '' && $this->y === '') {
-            throw new \RuntimeException('You must add at least 2 value, offset-x and offset-y');
+        if ($this->x === '' || $this->y === '') {
+            throw new \RuntimeException('Box shadow requires both offset-x and offset-y.');
         }
 
         $shadow = [

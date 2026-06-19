@@ -24,7 +24,28 @@ final class BoxShadowTest extends UnitTestCase
     {
         $sut = $this->makeInstance();
         $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Box shadow requires both offset-x and offset-y.');
         $var = (string)$sut;
+    }
+
+    /**
+     * @dataProvider incompleteOffsetsProvider
+     */
+    public function testItShouldRejectIncompleteOffsets(string $method): void
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Box shadow requires both offset-x and offset-y.');
+
+        $sut = $this->makeInstance();
+        $sut->{$method}('1px');
+
+        (string)$sut;
+    }
+
+    public static function incompleteOffsetsProvider(): iterable
+    {
+        yield 'missing offset-y' => ['offsetX'];
+        yield 'missing offset-x' => ['offsetY'];
     }
 
     public function testItShouldReturnValiShadow(): void
