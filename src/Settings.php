@@ -171,4 +171,17 @@ final readonly class Settings
     {
         return $this->context->get($path, $default);
     }
+
+    /**
+     * @internal
+     */
+    public function readPresets(string $type): mixed
+    {
+        $block = $this->context->blockName();
+        if ($block === null) {
+            return $this->presets->get($type);
+        }
+
+        return $this->presets->get(['blocks', $block, $type]);
+    }
 }

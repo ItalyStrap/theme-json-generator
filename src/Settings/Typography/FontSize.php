@@ -21,17 +21,12 @@ final readonly class FontSize implements PresetInterface
         private string $slug,
         private string $name,
         private string $size,
-        private ?Fluid $fluid = null
+        private Fluid|false|null $fluid = null
     ) {
-        if ($this->fluid instanceof Fluid && \stripos($this->size, 'clamp(') !== false) {
-            throw new \InvalidArgumentException(
-                'Fluid typography cannot be applied to a font size that already uses clamp().'
-            );
-        }
     }
 
     /**
-     * @return array{slug: string, name: string, size: string, fluid?: Fluid}
+     * @return array{slug: string, name: string, size: string, fluid?: Fluid|false}
      */
     public function toArray(): array
     {
@@ -40,6 +35,6 @@ final readonly class FontSize implements PresetInterface
             'name' => $this->name,
             'size' => $this->size,
             'fluid' => $this->fluid,
-        ], static fn (string|Fluid|null $value): bool => null !== $value);
+        ], static fn (string|Fluid|bool|null $value): bool => null !== $value);
     }
 }

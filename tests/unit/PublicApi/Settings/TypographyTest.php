@@ -167,4 +167,128 @@ final class TypographyTest extends UnitTestCase
         $typography->fluid()->minFontSize('1rem');
         $typography->addFontSize('fluid', 'Fluid', 'clamp(1rem, 2vw, 1.5rem)');
     }
+
+    public function testItShouldRejectGlobalFluidWhenClampFontSizeIsAlreadyRegistered(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Fluid typography cannot be applied to a font size that already uses clamp().');
+
+        (new ThemeJson(new Config(), new Presets()))
+            ->settings()
+            ->typography()
+            ->addFontSize('fluid', 'Fluid', 'clamp(1rem, 2vw, 1.5rem)')
+            ->enableFluid();
+    }
+
+    public function testItShouldRejectGlobalFluidConfigWhenClampFontSizeIsAlreadyRegistered(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Fluid typography cannot be applied to a font size that already uses clamp().');
+
+        $typography = (new ThemeJson(new Config(), new Presets()))->settings()->typography();
+        $typography->addFontSize('fluid', 'Fluid', 'clamp(1rem, 2vw, 1.5rem)');
+        $typography->fluid()->minFontSize('1rem');
+    }
+
+    public function testItShouldAllowClampWhenGlobalFluidIsDisabled(): void
+    {
+        $presets = new Presets();
+        $themeJson = new ThemeJson(new Config(), $presets);
+
+        $themeJson->settings()
+            ->typography()
+            ->disableFluid()
+            ->addFontSize('custom-clamp', 'Custom clamp', 'clamp(1rem, 2vw, 1.5rem)');
+
+        (new PresetsToThemeJson())($themeJson, $presets);
+
+        $this->assertSame(
+            'clamp(1rem, 2vw, 1.5rem)',
+            $themeJson->get('settings.typography.fontSizes.0.size')
+        );
+    }
+
+    /**
+     * @dataProvider booleanFluidMethodProvider
+     */
+    public function testItShouldRejectReplacingGlobalFluidConfigWithBoolean(string $method): void
+    {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage(
+            'Global fluid typography is already configured and cannot be replaced with a boolean.'
+        );
+
+        $typography = (new ThemeJson(new Config(), new Presets()))->settings()->typography();
+        $typography->fluid()->minFontSize('1rem');
+        $typography->{$method}();
+    }
+
+    public static function booleanFluidMethodProvider(): iterable
+    {
+        yield 'enable' => ['enableFluid'];
+        yield 'disable' => ['disableFluid'];
+    }
+
+    /**
+     * @dataProvider booleanFluidMethodProvider
+     */
+    public function testItShouldRejectExtendingBooleanFluidAsConfig(string $method): void
+    {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage(
+            'Global fluid typography is already configured as a boolean and cannot be replaced with an object.'
+        );
+
+        $typography = (new ThemeJson(new Config(), new Presets()))->settings()->typography();
+        $typography->{$method}();
+        $typography->fluid()->minFontSize('1rem');
+    }
+
+    public function testFluidAccessorAloneShouldNotWriteAnEmptyObject(): void
+    {
+        $themeJson = new ThemeJson(new Config(), new Presets());
+
+        $themeJson->settings()->typography()->fluid();
+
+        $this->assertNull($themeJson->get('settings.typography.fluid'));
+    }
+
+    /**
+     * @dataProvider globalFluidConfigurationProvider
+     */
+    public function testItShouldAllowClampWhenFluidIsDisabledForFontSize(callable $configureGlobalFluid): void
+    {
+        $presets = new Presets();
+        $themeJson = new ThemeJson(new Config(), $presets);
+        $typography = $themeJson->settings()->typography();
+        $configureGlobalFluid($typography);
+
+        $typography->addFontSize(
+            'custom-clamp',
+            'Custom clamp',
+            'clamp(1rem, 2vw, 1.5rem)',
+            false
+        );
+
+        (new PresetsToThemeJson())($themeJson, $presets);
+
+        $this->assertSame(
+            false,
+            $themeJson->get('settings.typography.fontSizes.0.fluid')
+        );
+        $this->assertSame(
+            'clamp(1rem, 2vw, 1.5rem)',
+            $themeJson->get('settings.typography.fontSizes.0.size')
+        );
+    }
+
+    public static function globalFluidConfigurationProvider(): iterable
+    {
+        yield 'enabled' => [
+            static fn (Typography $typography): Typography => $typography->enableFluid(),
+        ];
+        yield 'configured' => [
+            static fn (Typography $typography): mixed => $typography->fluid()->minFontSize('1rem'),
+        ];
+    }
 }

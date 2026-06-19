@@ -40,16 +40,36 @@ final class FontSizeTest extends UnitTestCase
         $this->assertSame('clamp(1rem, 2vw, 1.5rem)', $sut->toArray()['size']);
     }
 
-    public function testItShouldRejectClampWithFluidConfig(): void
+    public function testItShouldAllowClampWhenFluidIsExplicitlyDisabled(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Fluid typography cannot be applied to a font size that already uses clamp().');
-
-        new FontSize(
+        $sut = new FontSize(
             'fluid',
             'Fluid',
             'clamp(1rem, 2vw, 1.5rem)',
-            new Fluid('1rem', '1.5rem')
+            false
         );
+
+        $this->assertSame(
+            [
+                'slug' => 'fluid',
+                'name' => 'Fluid',
+                'size' => 'clamp(1rem, 2vw, 1.5rem)',
+                'fluid' => false,
+            ],
+            $sut->toArray()
+        );
+    }
+
+    public function testItShouldAcceptClampWithFluidConfig(): void
+    {
+        $fluid = new Fluid('1rem', '1.5rem');
+        $sut = new FontSize(
+            'fluid',
+            'Fluid',
+            'clamp(1rem, 2vw, 1.5rem)',
+            $fluid
+        );
+
+        $this->assertSame($fluid, $sut->toArray()['fluid']);
     }
 }

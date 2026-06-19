@@ -106,13 +106,13 @@ final readonly class Typography
     #[ThemeSchemaCoverage(['settings', 'typography', 'fluid'])]
     public function enableFluid(): self
     {
-        return $this->setBoolean(self::FLUID, true);
+        return $this->setFluidBoolean(true);
     }
 
     #[ThemeSchemaCoverage(['settings', 'typography', 'fluid'])]
     public function disableFluid(): self
     {
-        return $this->setBoolean(self::FLUID, false);
+        return $this->setFluidBoolean(false);
     }
 
     #[ThemeSchemaCoverage(['settings', 'typography', 'fluid'])]
@@ -237,9 +237,13 @@ final readonly class Typography
     }
 
     #[ThemeSchemaCoverage(['settings', 'typography', 'fontSizes'])]
-    public function addFontSize(string $slug, string $name, string $size, ?FontSizeFluid $fluid = null): self
-    {
-        $this->guardAgainstFluidClampConflict($size);
+    public function addFontSize(
+        string $slug,
+        string $name,
+        string $size,
+        FontSizeFluid|false|null $fluid = null
+    ): self {
+        $this->guardAgainstFluidClampConflict($size, $fluid);
         $this->settings->addPreset(new FontSize($slug, $name, $size, $fluid));
 
         return $this;
@@ -261,11 +265,44 @@ final readonly class Typography
 
     public function writeFluidConfig(string $property, string $value): bool
     {
+        $fluid = $this->settings->read([self::SECTION, self::FLUID]);
+
+        if (\is_bool($fluid)) {
+            throw new \LogicException(
+                'Global fluid typography is already configured as a boolean and cannot be replaced with an object.'
+            );
+        }
+
+        $this->guardAgainstRegisteredClampFontSizes();
+
         return $this->set([self::FLUID, $property], $value);
     }
 
-    private function guardAgainstFluidClampConflict(string $size): void
+    private function setFluidBoolean(bool $value): self
     {
+        $fluid = $this->settings->read([self::SECTION, self::FLUID]);
+
+        if (\is_array($fluid)) {
+            throw new \LogicException(
+                'Global fluid typography is already configured and cannot be replaced with a boolean.'
+            );
+        }
+
+        if ($value) {
+            $this->guardAgainstRegisteredClampFontSizes();
+        }
+
+        return $this->setBoolean(self::FLUID, $value);
+    }
+
+    private function guardAgainstFluidClampConflict(
+        string $size,
+        FontSizeFluid|false|null $fontSizeFluid
+    ): void {
+        if ($fontSizeFluid === false) {
+            return;
+        }
+
         if (!$this->containsClamp($size)) {
             return;
         }
@@ -279,6 +316,39 @@ final readonly class Typography
         throw new \InvalidArgumentException(
             'Fluid typography cannot be applied to a font size that already uses clamp().'
         );
+    }
+
+    private function guardAgainstRegisteredClampFontSizes(): void
+    {
+        if (!$this->containsConflictingFontSize($this->settings->readPresets(FontSize::TYPE))) {
+            return;
+        }
+
+        throw new \InvalidArgumentException(
+            'Fluid typography cannot be applied to a font size that already uses clamp().'
+        );
+    }
+
+    private function containsConflictingFontSize(mixed $fontSizes): bool
+    {
+        if ($fontSizes instanceof FontSize) {
+            $fontSize = $fontSizes->toArray();
+
+            return ($fontSize['fluid'] ?? null) !== false
+                && $this->containsClamp($fontSize['size']);
+        }
+
+        if (!\is_array($fontSizes)) {
+            return false;
+        }
+
+        foreach ($fontSizes as $fontSize) {
+            if ($this->containsConflictingFontSize($fontSize)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function containsClamp(string $value): bool
