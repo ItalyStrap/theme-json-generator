@@ -19,8 +19,11 @@ final readonly class Custom
     ) {
     }
 
+    /**
+     * @param list<string>|string $key
+     */
     #[ThemeSchemaCoverage(['settings', 'custom'])]
-    public function add(string $key, string $value): self
+    public function add(array|string $key, string $value): self
     {
         $this->settings->addPreset(new CustomPreset($key, $value));
 
@@ -28,36 +31,53 @@ final readonly class Custom
     }
 
     /**
-     * @param array<string, mixed> $customs
+     * @param array<array-key, mixed> $customs
      */
     #[ThemeSchemaCoverage(['settings', 'custom'])]
     public function addMultiple(array $customs): self
     {
-        $this->presetsToFlat($customs);
+        $this->presetsToFlat($customs, [], true);
         return $this;
     }
 
     /**
-     * @param array<string, mixed> $customs
+     * @param array<array-key, mixed> $customs
+     * @param list<string> $prefix
      */
-    private function presetsToFlat(array $customs, string $prefix = ''): void
+    private function presetsToFlat(array $customs, array $prefix, bool $isFirstLevel): void
     {
-        /**
-         * @var string|array<string, mixed>|\Stringable $value
-         */
         foreach ($customs as $key => $value) {
+            $fullKey = [...$prefix, (string) $key];
+
             if ($value instanceof CustomPreset) {
+                if (!$isFirstLevel) {
+                    throw new \InvalidArgumentException(
+                        \sprintf(
+                            'CustomPreset "%s" at key "%s" is supported only at the first level.',
+                            $value->slug(),
+                            $this->formatKey($fullKey)
+                        )
+                    );
+                }
+
                 $this->settings->addPreset($value);
                 continue;
             }
 
-            $fullKey = (string)($prefix === '' ? $key : $prefix . '.' . $key);
             if (\is_array($value)) {
-                $this->presetsToFlat($value, $fullKey);
+                $this->presetsToFlat($value, $fullKey, false);
                 continue;
             }
 
-            $this->add($fullKey, (string)$value);
+            $this->settings->addPreset(new CustomPreset($fullKey, $value));
         }
+    }
+
+    /**
+     * @param list<string> $segments
+     */
+    private function formatKey(array $segments): string
+    {
+        return \implode('.', $segments);
     }
 }

@@ -16,12 +16,21 @@ final readonly class Custom implements PresetInterface
      */
     public const TYPE = 'custom';
 
+    private string $key;
+
     private string $name;
 
+    private string $value;
+
+    /**
+     * @param list<string>|string $key
+     */
     public function __construct(
-        private string $key,
-        private string $value
+        array|string $key,
+        mixed $value
     ) {
+        $this->key = $this->normalizeKey($key);
+        $this->value = $this->validateValue($value);
         $this->name = \ucfirst(\str_replace('.', ' ', $this->key));
     }
 
@@ -54,5 +63,43 @@ final readonly class Custom implements PresetInterface
     public function __toString(): string
     {
         return $this->value;
+    }
+
+    /**
+     * @param list<string>|string $key
+     */
+    private function normalizeKey(array|string $key): string
+    {
+        $segments = \is_string($key) ? [$key] : $key;
+        $formattedKey = $segments === [] ? '<empty>' : \implode('.', $segments);
+
+        foreach ($segments as $segment) {
+            if ($segment !== '') {
+                continue;
+            }
+
+            throw new \InvalidArgumentException(\sprintf(
+                'Custom key "%s" contains an empty segment.',
+                $formattedKey
+            ));
+        }
+
+        if ($segments === []) {
+            throw new \InvalidArgumentException('Custom key "<empty>" contains an empty segment.');
+        }
+
+        return $formattedKey;
+    }
+
+    private function validateValue(mixed $value): string
+    {
+        if (\is_string($value) && $value !== '') {
+            return $value;
+        }
+
+        throw new \InvalidArgumentException(\sprintf(
+            'Custom value for key "%s" must be a non-empty string.',
+            $this->key
+        ));
     }
 }

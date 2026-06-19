@@ -10,7 +10,7 @@ use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Container\PresetsToThemeJso
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Palette;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\Color;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\ShadesGeneratorExperimental;
-use ItalyStrap\ThemeJsonGenerator\Settings\Custom\CustomToPresets;
+use ItalyStrap\ThemeJsonGenerator\Settings\Custom\Custom;
 use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\Settings\Typography\FontSize;
 use ItalyStrap\ThemeJsonGenerator\ThemeJson;
@@ -37,11 +37,11 @@ final class PresetsIntegrationTest extends UnitTestCase
 //        $sut->addMultiple(ShadesGeneratorExperimental::fromColorInfo($body_text, 'bodyColor')->toArray());
         $sut->addMultiple(ShadesGeneratorExperimental::fromPalette($bodyClrPalette)->toArray());
 
-        $sut->addMultiple((new CustomToPresets([
-            'contentSize' => 'clamp(16rem, 60vw, 60rem)',
-            'wideSize' => 'clamp(16rem, 85vw, 70rem)',
-            'baseFontSize' => "{{fontSize.base}}",
-        ]))->toArray());
+        $sut->addMultiple([
+            new Custom('contentSize', 'clamp(16rem, 60vw, 60rem)'),
+            new Custom('wideSize', 'clamp(16rem, 85vw, 70rem)'),
+            new Custom('baseFontSize', "{{fontSize.base}}"),
+        ]);
 
         return $sut;
     }
@@ -144,25 +144,19 @@ EOF
             $this->themeJsonFrom($sut)->get('settings.typography.fontSizes')
         );
 
-        $sut->addMultiple((new CustomToPresets([
-            'contentSize' => 'clamp(16rem, 60vw, 60rem)',
-            'wideSize' => 'clamp(16rem, 85vw, 70rem)',
-            'baseFontSize' => "{{fontSize.base}}",
-            'spacer' => [
-                'base' => '1rem',
-                'v' => 'calc( {{spacer.base}} * 4 )',
-                'h' => 'calc( {{spacer.base}} * 4 )',
-                's' => 'calc( {{spacer.base}} / 1.5 )',
-                'm' => 'calc( {{spacer.base}} * 2 )',
-                'l' => 'calc( {{spacer.base}} * 3 )',
-                'xl' => 'calc( {{spacer.base}} * 4 )',
-            ],
-            'grandParentField' => [
-                'parentField' => [
-                    'childField' => 'calc( {{spacer.base}} * 4 )',
-                ],
-            ],
-        ]))->toArray());
+        $sut->addMultiple([
+            new Custom('contentSize', 'clamp(16rem, 60vw, 60rem)'),
+            new Custom('wideSize', 'clamp(16rem, 85vw, 70rem)'),
+            new Custom('baseFontSize', "{{fontSize.base}}"),
+            new Custom('spacer.base', '1rem'),
+            new Custom('spacer.v', 'calc( {{spacer.base}} * 4 )'),
+            new Custom('spacer.h', 'calc( {{spacer.base}} * 4 )'),
+            new Custom('spacer.s', 'calc( {{spacer.base}} / 1.5 )'),
+            new Custom('spacer.m', 'calc( {{spacer.base}} * 2 )'),
+            new Custom('spacer.l', 'calc( {{spacer.base}} * 3 )'),
+            new Custom('spacer.xl', 'calc( {{spacer.base}} * 4 )'),
+            new Custom('grandParentField.parentField.childField', 'calc( {{spacer.base}} * 4 )'),
+        ]);
 
         $this->assertSame(
             [
