@@ -50,22 +50,22 @@ final readonly class ColorModifier implements ColorModifierInterface
         return $this->callMethodOnColorObjectWithAlpha($alpha);
     }
 
-    public function darken(int $amount = 0): ColorInterface
+    public function darken(float $amount = 0): ColorInterface
     {
         return $this->createNewColorWithChangedLightnessOrOpacity(-$amount);
     }
 
-    public function lighten(int $amount = 0): ColorInterface
+    public function lighten(float $amount = 0): ColorInterface
     {
         return $this->createNewColorWithChangedLightnessOrOpacity($amount);
     }
 
-    public function saturate(int $amount = 0): ColorInterface
+    public function saturate(float $amount = 0): ColorInterface
     {
         return $this->createNewColorWithChangedSaturation($amount);
     }
 
-    public function contrast(int $amount = 0): ColorInterface
+    public function contrast(float $amount = 0): ColorInterface
     {
         return $this->createNewColorWithChangedContrast($amount);
     }
@@ -99,7 +99,7 @@ final readonly class ColorModifier implements ColorModifierInterface
         );
     }
 
-    private function createNewColorWithChangedLightnessOrOpacity(int $amount, ?float $alpha = null): ColorInterface
+    private function createNewColorWithChangedLightnessOrOpacity(float $amount, ?float $alpha = null): ColorInterface
     {
         return $this->createNewColorFrom(
             (string) $this->color->hue(),
@@ -109,7 +109,7 @@ final readonly class ColorModifier implements ColorModifierInterface
         );
     }
 
-    private function createNewColorWithChangedSaturation(int $amount): ColorInterface
+    private function createNewColorWithChangedSaturation(float $amount): ColorInterface
     {
         return $this->createNewColorFrom(
             (string) $this->color->hue(),
@@ -119,7 +119,7 @@ final readonly class ColorModifier implements ColorModifierInterface
         );
     }
 
-    private function createNewColorWithChangedContrast(int $amount): ColorInterface
+    private function createNewColorWithChangedContrast(float $amount): ColorInterface
     {
         return $this->createNewColorFrom(
             (string) $this->color->hue(),

@@ -14,13 +14,13 @@ interface ColorModifierInterface
 
     public function opacity(?float $alpha = null): ColorInterface;
 
-    public function darken(int $amount = 0): ColorInterface;
+    public function darken(float $amount = 0): ColorInterface;
 
-    public function lighten(int $amount = 0): ColorInterface;
+    public function lighten(float $amount = 0): ColorInterface;
 
-    public function saturate(int $amount = 0): ColorInterface;
+    public function saturate(float $amount = 0): ColorInterface;
 
-    public function contrast(int $amount = 0): ColorInterface;
+    public function contrast(float $amount = 0): ColorInterface;
 
     public function hueRotate(int $amount = 0): ColorInterface;
 

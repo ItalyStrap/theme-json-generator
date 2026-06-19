@@ -62,15 +62,26 @@ final readonly class ShadesGeneratorExperimental implements \IteratorAggregate
         private int $max = self::MAX,
         private int $increment_by = self::INCREMENT_BY
     ) {
+        if ($this->increment_by <= 0) {
+            throw new \InvalidArgumentException('Shade increment must be greater than zero.');
+        }
+
+        if ($this->min < 0) {
+            throw new \InvalidArgumentException('Minimum shade must be zero or greater.');
+        }
+
+        if ($this->max < $this->min) {
+            throw new \InvalidArgumentException(
+                'Maximum shade must be greater than or equal to minimum shade.'
+            );
+        }
     }
 
     public function toColors(): array
     {
         $colors = [];
-        for ($i = $this->min; $i < $this->max; $i += $this->increment_by) {
-            $colors[$i] = $this->color->isDark()
-                ? (new ColorModifier($this->color))->lighten($i / 10)
-                : (new ColorModifier($this->color))->darken($i / 10);
+        foreach ($this->shadeIndexes() as $index) {
+            $colors[$index] = $this->shadeAt($index);
         }
 
         return $colors;
@@ -105,41 +116,44 @@ final readonly class ShadesGeneratorExperimental implements \IteratorAggregate
     public function toArray(): array
     {
         $colors = [];
-        for ($i = $this->min; $i < $this->max; $i += $this->increment_by) {
-            $colors[$i] = new Palette(
-                \sprintf('%s-%d', $this->slug, $i),
-                \sprintf("Shade of %s by %s%%", \ucfirst($this->slug), $i / 10),
-                $this->color->isDark()
-                    ? (new ColorModifier($this->color))->lighten($i / 10)
-                    : (new ColorModifier($this->color))->darken($i / 10)
+        foreach ($this->shadeIndexes() as $index) {
+            $colors[$index] = new Palette(
+                \sprintf('%s-%d', $this->slug, $index),
+                \sprintf("Shade of %s by %s%%", \ucfirst($this->slug), $index / 10),
+                $this->shadeAt($index)
             );
 
-            $r = $colors[$i]->color()->red();
-            $g = $colors[$i]->color()->green();
-            $b = $colors[$i]->color()->blue();
-
-//          var_dump($r, $g, $b);
-
-//          if ( $r === 0 && $g === 0 && $b === 0 ) {
-//              // This removes the current element from the array
-//              unset($colors[$i]);
-//              // This ensures that the loop will stop
-//              $i = $this->max;
-//          }
-
-            $colorToCheck = (string)$colors[$i]->color()->toHex();
+            $colorToCheck = (string)$colors[$index]->color()->toHex();
             if (
                 $colorToCheck === '#000000'
                 || $colorToCheck === '#ffffff'
             ) {
-                // This removes the current element from the array
-                unset($colors[$i]);
-                // This ensures that the loop will stop
-                $i = $this->max;
+                unset($colors[$index]);
+                break;
             }
         }
 
         return $colors;
+    }
+
+    /**
+     * @return \Generator<int>
+     */
+    private function shadeIndexes(): \Generator
+    {
+        for ($index = $this->min; $index <= $this->max; $index += $this->increment_by) {
+            yield $index;
+        }
+    }
+
+    private function shadeAt(int $index): ColorInterface
+    {
+        $modifier = new ColorModifier($this->color);
+        $amount = $index / 10;
+
+        return $this->color->isDark()
+            ? $modifier->lighten($amount)
+            : $modifier->darken($amount);
     }
 
     public function getIterator(): Traversable
