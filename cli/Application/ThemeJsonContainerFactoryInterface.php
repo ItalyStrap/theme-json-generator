@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Cli\Application;
 
-use ItalyStrap\ThemeJsonGenerator\ThemeJson;
+use ItalyStrap\Config\ConfigInterface;
 
 interface ThemeJsonContainerFactoryInterface
 {
-    public function execute(callable $entrypoint): ThemeJson;
+    /**
+     * @return ConfigInterface<array-key, mixed>
+     */
+    public function execute(callable $entrypoint): ConfigInterface;
 }

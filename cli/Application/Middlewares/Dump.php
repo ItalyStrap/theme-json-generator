@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Cli\Application\Middlewares;
 
+use ItalyStrap\Config\ConfigInterface;
 use ItalyStrap\Pipeline\HandlerInterface;
 use ItalyStrap\Pipeline\MiddlewareInterface;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\DumpMessage;
@@ -12,7 +13,6 @@ use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Filesystem\FilesFinder;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Filesystem\JsonFileWriter;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Filesystem\ScssFileWriter;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Handler\ConsoleHandler;
-use ItalyStrap\ThemeJsonGenerator\ThemeJson;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -50,7 +50,7 @@ final readonly class Dump implements MiddlewareInterface
          *         'theme' => 'theme.json'
          */
         foreach ($this->filesFinder->find($message->getRootFolder(), 'php') as $fileName => $file) {
-            $themeJson = $this->containerFactory->execute(require $file);
+            $config = $this->containerFactory->execute(require $file);
             $count++;
 
             if ($message->isDryRun()) {
@@ -61,8 +61,8 @@ final readonly class Dump implements MiddlewareInterface
                 continue;
             }
 
-            $this->generateJsonFile($output, $message, $fileName, $file, $themeJson);
-            $this->generateScssFile($output, $message, $fileName, $themeJson);
+            $this->generateJsonFile($output, $message, $fileName, $file, $config);
+            $this->generateScssFile($output, $message, $fileName, $config);
         }
 
         if ($count === 0) {
@@ -72,12 +72,15 @@ final readonly class Dump implements MiddlewareInterface
         return $handler->handle($message);
     }
 
+    /**
+     * @param ConfigInterface<array-key, mixed> $config
+     */
     private function generateJsonFile(
         OutputInterface $output,
         DumpMessage $message,
         string $fileName,
         \SplFileInfo $file,
-        ThemeJson $themeJson
+        ConfigInterface $config
     ): void {
 
         $output->writeln(\sprintf(
@@ -86,7 +89,7 @@ final readonly class Dump implements MiddlewareInterface
         ));
 
         (new JsonFileWriter($this->filesFinder->resolveJsonFile($file)))
-            ->write($themeJson->getConfig());
+            ->write($config);
 
         $output->writeln(\sprintf(
             '<info>Generated %s file</info>',
@@ -95,11 +98,14 @@ final readonly class Dump implements MiddlewareInterface
         $output->writeln('========================');
     }
 
+    /**
+     * @param ConfigInterface<array-key, mixed> $config
+     */
     private function generateScssFile(
         OutputInterface $output,
         DumpMessage $message,
         string $fileName,
-        ThemeJson $themeJson
+        ConfigInterface $config
     ): void {
         $path_for_theme_sass = $message->getRootFolder() . DIRECTORY_SEPARATOR . $message->getSassFolder();
         if ($message->getSassFolder() !== '' && \is_writable($path_for_theme_sass)) {
@@ -109,7 +115,7 @@ final readonly class Dump implements MiddlewareInterface
             ));
 
             (new ScssFileWriter($path_for_theme_sass . DIRECTORY_SEPARATOR . $fileName . '.scss'))
-                ->write($themeJson->getConfig());
+                ->write($config);
 
             $output->writeln(\sprintf(
                 '<info>Generated %s file</info>',

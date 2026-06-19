@@ -17,7 +17,8 @@ final class TypographyTest extends UnitTestCase
     public function testItShouldWriteTypographySettingsInsideBlockContext(): void
     {
         $presets = new Presets();
-        $sut = new ThemeJson(new Config(), $presets);
+        $config = new Config();
+        $sut = new ThemeJson($config, $presets);
         $typography = $sut->settings()->blocks('core/paragraph')->typography();
 
         $result = $typography
@@ -65,7 +66,7 @@ final class TypographyTest extends UnitTestCase
         $this->assertSame('80rem', $sut->get('settings.blocks.core/paragraph.typography.fluid.maxViewportWidth'));
         $this->assertSame('20rem', $sut->get('settings.blocks.core/paragraph.typography.fluid.minViewportWidth'));
 
-        (new PresetsToThemeJson())($sut, $presets);
+        (new PresetsToThemeJson())($config, $presets);
 
         $this->assertSame(
             [
@@ -193,14 +194,15 @@ final class TypographyTest extends UnitTestCase
     public function testItShouldAllowClampWhenGlobalFluidIsDisabled(): void
     {
         $presets = new Presets();
-        $themeJson = new ThemeJson(new Config(), $presets);
+        $config = new Config();
+        $themeJson = new ThemeJson($config, $presets);
 
         $themeJson->settings()
             ->typography()
             ->disableFluid()
             ->addFontSize('custom-clamp', 'Custom clamp', 'clamp(1rem, 2vw, 1.5rem)');
 
-        (new PresetsToThemeJson())($themeJson, $presets);
+        (new PresetsToThemeJson())($config, $presets);
 
         $this->assertSame(
             'clamp(1rem, 2vw, 1.5rem)',
@@ -259,7 +261,8 @@ final class TypographyTest extends UnitTestCase
     public function testItShouldAllowClampWhenFluidIsDisabledForFontSize(callable $configureGlobalFluid): void
     {
         $presets = new Presets();
-        $themeJson = new ThemeJson(new Config(), $presets);
+        $config = new Config();
+        $themeJson = new ThemeJson($config, $presets);
         $typography = $themeJson->settings()->typography();
         $configureGlobalFluid($typography);
 
@@ -270,10 +273,9 @@ final class TypographyTest extends UnitTestCase
             false
         );
 
-        (new PresetsToThemeJson())($themeJson, $presets);
+        (new PresetsToThemeJson())($config, $presets);
 
-        $this->assertSame(
-            false,
+        $this->assertFalse(
             $themeJson->get('settings.typography.fontSizes.0.fluid')
         );
         $this->assertSame(

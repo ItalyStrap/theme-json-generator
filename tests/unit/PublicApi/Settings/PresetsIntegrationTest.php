@@ -48,9 +48,10 @@ final class PresetsIntegrationTest extends UnitTestCase
 
     private function themeJsonFrom(Presets $presets): ThemeJson
     {
-        $themeJson = new ThemeJson(new Config(), $presets);
+        $config = new Config();
+        $themeJson = new ThemeJson($config, $presets);
 
-        (new PresetsToThemeJson())($themeJson, $presets);
+        (new PresetsToThemeJson())($config, $presets);
 
         return $themeJson;
     }

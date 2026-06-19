@@ -17,7 +17,8 @@ final class ShadowTest extends UnitTestCase
     public function testItShouldWriteShadowSettingsInsideBlockContext(): void
     {
         $presets = new Presets();
-        $sut = new ThemeJson(new Config(), $presets);
+        $config = new Config();
+        $sut = new ThemeJson($config, $presets);
 
         $result = $sut->settings()->blocks('core/group')->shadow()
             ->disableDefaultPresets()
@@ -30,7 +31,7 @@ final class ShadowTest extends UnitTestCase
         $this->assertInstanceOf(Shadow::class, $result);
         $this->assertFalse($sut->get('settings.blocks.core/group.shadow.defaultPresets'));
 
-        (new PresetsToThemeJson())($sut, $presets);
+        (new PresetsToThemeJson())($config, $presets);
 
         $this->assertSame(
             [

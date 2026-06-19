@@ -16,7 +16,8 @@ final class DimensionsTest extends UnitTestCase
     public function testItShouldWriteDimensionsSettingsInsideBlockContext(): void
     {
         $presets = new Presets();
-        $sut = new ThemeJson(new Config(), $presets);
+        $config = new Config();
+        $sut = new ThemeJson($config, $presets);
 
         $result = $sut->settings()->blocks('core/group')->dimensions()
             ->enableAspectRatio()
@@ -36,7 +37,7 @@ final class DimensionsTest extends UnitTestCase
         $this->assertTrue($sut->get('settings.blocks.core/group.dimensions.minWidth'));
         $this->assertFalse($sut->get('settings.blocks.core/group.dimensions.width'));
 
-        (new PresetsToThemeJson())($sut, $presets);
+        (new PresetsToThemeJson())($config, $presets);
 
         $this->assertSame(
             [

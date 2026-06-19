@@ -16,7 +16,8 @@ final class SpacingTest extends UnitTestCase
     public function testItShouldWriteSpacingSettingsInsideBlockContext(): void
     {
         $presets = new Presets();
-        $sut = new ThemeJson(new Config(), $presets);
+        $config = new Config();
+        $sut = new ThemeJson($config, $presets);
         $spacing = $sut->settings()->blocks('core/group')->spacing();
 
         $result = $spacing
@@ -51,7 +52,7 @@ final class SpacingTest extends UnitTestCase
         );
         $this->assertSame('rem', $sut->get('settings.blocks.core/group.spacing.spacingScale.unit'));
 
-        (new PresetsToThemeJson())($sut, $presets);
+        (new PresetsToThemeJson())($config, $presets);
 
         $this->assertSame(
             [

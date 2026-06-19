@@ -26,9 +26,10 @@ final class PresetsToThemeJsonTest extends UnitTestCase
             ->add(new Custom('spacing.base', '{{fontSize.base}}'))
             ->addToBlock('core/group', new Palette('base', 'Block Base', new Color('#000000')));
 
-        $themeJson = new ThemeJson(new Config(), $presets);
+        $config = new Config();
+        $themeJson = new ThemeJson($config, $presets);
 
-        (new PresetsToThemeJson())($themeJson, $presets);
+        (new PresetsToThemeJson())($config, $presets);
 
         $this->assertSame(
             [

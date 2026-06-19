@@ -8,7 +8,8 @@ use ItalyStrap\Config\Config;
 use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\ThemeJson;
 
-$themeJson = new ThemeJson(new Config(), new Presets());
+$config = new Config();
+$themeJson = new ThemeJson($config, new Presets());
 
 $themeJson
     ->schema('https://schemas.wp.org/trunk/theme.json')
@@ -33,4 +34,4 @@ $themeJson->styles()->color()->text('#111111');
 $themeJson->styles()->typography()->lineHeight('1.5');
 $themeJson->styles()->blocks('core/button')->variations('outline')->color()->text('#333333');
 
-echo json_encode($themeJson, JSON_THROW_ON_ERROR);
+echo json_encode($config, JSON_THROW_ON_ERROR);

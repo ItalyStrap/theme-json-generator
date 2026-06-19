@@ -15,13 +15,13 @@ final class ThemeJsonContainerFactoryTest extends UnitTestCase
     {
         $sut = new ThemeJsonContainerFactory();
 
-        $themeJson = $sut->execute(static function (Pipeline $pipeline): void {
+        $config = $sut->execute(static function (Pipeline $pipeline): void {
             $pipeline->process([
                 ThemeJsonContainerFactoryPaletteConfiguratorFixture::class,
             ]);
         });
 
-        $this->assertSame('body{color: red;}', $themeJson->get('styles.css'));
+        $this->assertSame('body{color: red;}', $config->get('styles.css'));
         $this->assertSame(
             [
                 [
@@ -30,7 +30,7 @@ final class ThemeJsonContainerFactoryTest extends UnitTestCase
                     'color' => '#ffffff',
                 ],
             ],
-            $themeJson->get('settings.color.palette')
+            $config->get('settings.color.palette')
         );
         $this->assertSame(
             [
@@ -40,7 +40,7 @@ final class ThemeJsonContainerFactoryTest extends UnitTestCase
                     'size' => '4px',
                 ],
             ],
-            $themeJson->get('settings.border.radiusSizes')
+            $config->get('settings.border.radiusSizes')
         );
         $this->assertSame(
             [
@@ -50,7 +50,7 @@ final class ThemeJsonContainerFactoryTest extends UnitTestCase
                     'ratio' => '1/1',
                 ],
             ],
-            $themeJson->get('settings.dimensions.aspectRatios')
+            $config->get('settings.dimensions.aspectRatios')
         );
         $this->assertSame(
             [
@@ -60,7 +60,7 @@ final class ThemeJsonContainerFactoryTest extends UnitTestCase
                     'size' => '1rem',
                 ],
             ],
-            $themeJson->get('settings.spacing.spacingSizes')
+            $config->get('settings.spacing.spacingSizes')
         );
         $this->assertSame(
             [
@@ -70,7 +70,7 @@ final class ThemeJsonContainerFactoryTest extends UnitTestCase
                     'color' => '#000000',
                 ],
             ],
-            $themeJson->get('settings.blocks.core/group.color.palette')
+            $config->get('settings.blocks.core/group.color.palette')
         );
         $this->assertSame(
             [
@@ -80,7 +80,7 @@ final class ThemeJsonContainerFactoryTest extends UnitTestCase
                     'size' => '12px',
                 ],
             ],
-            $themeJson->get('settings.blocks.core/group.border.radiusSizes')
+            $config->get('settings.blocks.core/group.border.radiusSizes')
         );
         $this->assertSame(
             [
@@ -90,7 +90,7 @@ final class ThemeJsonContainerFactoryTest extends UnitTestCase
                     'size' => '42rem',
                 ],
             ],
-            $themeJson->get('settings.blocks.core/group.dimensions.dimensionSizes')
+            $config->get('settings.blocks.core/group.dimensions.dimensionSizes')
         );
         $this->assertSame(
             [
@@ -100,7 +100,7 @@ final class ThemeJsonContainerFactoryTest extends UnitTestCase
                     'shadow' => '0 2px 4px #000000',
                 ],
             ],
-            $themeJson->get('settings.blocks.core/group.shadow.presets')
+            $config->get('settings.blocks.core/group.shadow.presets')
         );
         $this->assertSame(
             [
@@ -110,7 +110,7 @@ final class ThemeJsonContainerFactoryTest extends UnitTestCase
                     'size' => '0.75rem',
                 ],
             ],
-            $themeJson->get('settings.blocks.core/group.spacing.spacingSizes')
+            $config->get('settings.blocks.core/group.spacing.spacingSizes')
         );
         $this->assertSame(
             [
@@ -120,7 +120,7 @@ final class ThemeJsonContainerFactoryTest extends UnitTestCase
                     'size' => '1rem',
                 ],
             ],
-            $themeJson->get('settings.blocks.core/group.typography.fontSizes')
+            $config->get('settings.blocks.core/group.typography.fontSizes')
         );
         $this->assertSame(
             [
@@ -130,8 +130,8 @@ final class ThemeJsonContainerFactoryTest extends UnitTestCase
                     'fontFamily' => 'Arial, sans-serif',
                 ],
             ],
-            $themeJson->get('settings.blocks.core/group.typography.fontFamilies')
+            $config->get('settings.blocks.core/group.typography.fontFamilies')
         );
-        $this->assertSame('2rem', $themeJson->get('settings.blocks.core/group.custom.spacing.base'));
+        $this->assertSame('2rem', $config->get('settings.blocks.core/group.custom.spacing.base'));
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Container;
 
+use ItalyStrap\Config\ConfigInterface;
 use ItalyStrap\ThemeJsonGenerator\Settings\Border\RadiusSize;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Duotone;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Gradient;
@@ -17,7 +18,6 @@ use ItalyStrap\ThemeJsonGenerator\Settings\PresetsInterface;
 use ItalyStrap\ThemeJsonGenerator\Settings\Spacing\SpacingSize;
 use ItalyStrap\ThemeJsonGenerator\Settings\Typography\FontFamily;
 use ItalyStrap\ThemeJsonGenerator\Settings\Typography\FontSize;
-use ItalyStrap\ThemeJsonGenerator\ThemeJson;
 
 final class PresetsToThemeJson
 {
@@ -55,13 +55,19 @@ final class PresetsToThemeJson
         SpacingSize::TYPE => ['spacing', 'spacingSizes'],
     ];
 
-    public function __invoke(ThemeJson $themeJson, PresetsInterface $presets): void
+    /**
+     * @param ConfigInterface<array-key, mixed> $config
+     */
+    public function __invoke(ConfigInterface $config, PresetsInterface $presets): void
     {
-        $this->setRootPresets($themeJson, $presets);
-        $this->setBlockPresets($themeJson, $presets);
+        $this->setRootPresets($config, $presets);
+        $this->setBlockPresets($config, $presets);
     }
 
-    private function setRootPresets(ThemeJson $themeJson, PresetsInterface $presets): void
+    /**
+     * @param ConfigInterface<array-key, mixed> $config
+     */
+    private function setRootPresets(ConfigInterface $config, PresetsInterface $presets): void
     {
         $collection = $presets->collection();
 
@@ -71,11 +77,14 @@ final class PresetsToThemeJson
                 continue;
             }
 
-            $themeJson->set($path, $this->serializeCollection($presets, $type, $items));
+            $config->set($path, $this->serializeCollection($presets, $type, $items));
         }
     }
 
-    private function setBlockPresets(ThemeJson $themeJson, PresetsInterface $presets): void
+    /**
+     * @param ConfigInterface<array-key, mixed> $config
+     */
+    private function setBlockPresets(ConfigInterface $config, PresetsInterface $presets): void
     {
         $blocks = $presets->collection()['blocks'] ?? [];
         if (!\is_array($blocks)) {
@@ -87,7 +96,7 @@ final class PresetsToThemeJson
          */
         foreach ($blocks as $block => $categories) {
             foreach ($categories as $type => $items) {
-                $themeJson->set(
+                $config->set(
                     $this->blockSettingsPath($block, $type),
                     $this->serializeCollection($presets, $type, $items)
                 );

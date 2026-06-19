@@ -30,27 +30,6 @@ final class ThemeJsonTest extends UnitTestCase
         );
     }
 
-    public function testItShouldImplementsJsonSerializable(): void
-    {
-        $sut = $this->makeInstance();
-        $this->assertInstanceOf(\JsonSerializable::class, $sut, 'Should implements JsonSerializable');
-    }
-
-    public function testItShouldBeJsonSerializable(): void
-    {
-        $sut = $this->makeInstance();
-        $sut->merge([
-            'foo' => 'bar',
-            'baz' => 'qux',
-        ]);
-
-        $this->assertJsonStringEqualsJsonString(
-            '{"foo":"bar","baz":"qux"}',
-            \json_encode($sut),
-            'Json encode should be equals'
-        );
-    }
-
     public function testItShouldNotExposeInternalPresetHydrationMethod(): void
     {
         $this->assertFalse(\method_exists($this->makeInstance(), 'setPresets'));

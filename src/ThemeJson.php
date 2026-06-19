@@ -12,7 +12,7 @@ use ItalyStrap\ThemeJsonGenerator\Styles\Css;
 use ItalyStrap\ThemeJsonGenerator\Styles\Scss;
 use ScssPhp\ScssPhp\Compiler;
 
-final readonly class ThemeJson implements \JsonSerializable
+final readonly class ThemeJson
 {
     /**
      * @var string
@@ -166,20 +166,6 @@ final readonly class ThemeJson implements \JsonSerializable
     public function merge(array ...$arrays): void
     {
         $this->config->merge(...$arrays);
-    }
-
-    /**
-     * @TODO Let see if we can remove this method.
-     * @return ConfigInterface<array-key, mixed>
-     */
-    public function getConfig(): ConfigInterface
-    {
-        return $this->config;
-    }
-
-    public function jsonSerialize(): mixed
-    {
-        return $this->config;
     }
 
     private function setRoot(string $key, mixed $value): self

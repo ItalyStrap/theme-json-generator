@@ -27,6 +27,7 @@ final class ThemeJsonModule implements ModuleInterface
             AurynConfig::SHARING => [
                 Presets::class,
                 ThemeJson::class,
+                Config::class,
             ],
             AurynConfig::FACTORIES => [
                 Config::class => static fn (): ConfigInterface => new Config([

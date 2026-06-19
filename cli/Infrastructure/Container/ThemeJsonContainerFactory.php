@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Container;
 
 use Auryn\Injector;
+use ItalyStrap\Config\ConfigInterface;
 use ItalyStrap\Empress\ContainerBuilder;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\ThemeJsonContainerFactoryInterface;
 use ItalyStrap\ThemeJsonGenerator\Settings\PresetsInterface;
-use ItalyStrap\ThemeJsonGenerator\ThemeJson;
 use Psr\Container\ContainerInterface;
 
 final class ThemeJsonContainerFactory implements ThemeJsonContainerFactoryInterface
@@ -20,7 +20,10 @@ final class ThemeJsonContainerFactory implements ThemeJsonContainerFactoryInterf
             ->build();
     }
 
-    public function execute(callable $entrypoint): ThemeJson
+    /**
+     * @return ConfigInterface<array-key, mixed>
+     */
+    public function execute(callable $entrypoint): ConfigInterface
     {
         $container = $this->create();
         $injector = $container->get(Injector::class);
@@ -33,10 +36,7 @@ final class ThemeJsonContainerFactory implements ThemeJsonContainerFactoryInterf
         $injector->defineParam('presets', $injector->make(PresetsInterface::class));
 
         $injector->execute($entrypoint);
-
-        $themeJson = $container->get(ThemeJson::class);
-        $container->get(PresetsToThemeJson::class)($themeJson, $container->get(PresetsInterface::class));
-
-        return $themeJson;
+        $injector->execute(PresetsToThemeJson::class);
+        return $container->get(ConfigInterface::class);
     }
 }
