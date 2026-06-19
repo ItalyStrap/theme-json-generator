@@ -28,8 +28,6 @@ final class Css implements CssInterface
 
     private bool $isCompressed = false;
 
-    private bool $shouldResolveVariables = true;
-
     public function __construct(
         ?PresetsInterface $presets = null
     ) {
@@ -48,22 +46,21 @@ final class Css implements CssInterface
         return $this;
     }
 
-    public function stopResolveVariables(): self
-    {
-        $this->shouldResolveVariables = false;
-        return $this;
-    }
-
     /**
      * @throws SourceException
      */
     #[ThemeSchemaCoverage(['styles', 'css'])]
     public function parse(string $css, string $selector = ''): string
     {
-        if ($this->shouldResolveVariables) {
-            $css = $this->presets->parse($css);
-        }
+        return $this->parseResolved($this->presets->parse($css), $selector);
+    }
 
+    /**
+     * @internal
+     * @throws SourceException
+     */
+    public function parseResolved(string $css, string $selector = ''): string
+    {
         $selector = \trim($selector);
 
         if ($selector === '') {

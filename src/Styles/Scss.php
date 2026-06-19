@@ -49,7 +49,6 @@ final class Scss implements CssInterface
             throw new \RuntimeException(CssInterface::M_AMPERSAND_MUST_NOT_BE_AT_THE_BEGINNING);
         }
 
-        $this->css->stopResolveVariables();
         $css = $this->presets->parse($css);
 
         $selector = \trim($selector);
@@ -57,6 +56,6 @@ final class Scss implements CssInterface
         $this->compiler->setOutputStyle($this->outputStyle);
         $cssCompiled = $this->compiler->compileString($css);
 
-        return $this->css->parse($cssCompiled->getCss(), $selector);
+        return $this->css->parseResolved($cssCompiled->getCss(), $selector);
     }
 }

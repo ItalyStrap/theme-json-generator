@@ -6,6 +6,8 @@ namespace ItalyStrap\Tests\Unit\PublicApi\Styles;
 
 use ItalyStrap\Tests\CssParserScenarioProviderTrait;
 use ItalyStrap\Tests\UnitTestCase;
+use ItalyStrap\ThemeJsonGenerator\Settings\Custom\Custom;
+use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\Styles\Css;
 use ItalyStrap\ThemeJsonGenerator\Styles\Scss;
 use ScssPhp\ScssPhp\Compiler;
@@ -24,6 +26,22 @@ final class ScssTest extends UnitTestCase
     {
         $instance = $this->makeInstance();
         $this->assertInstanceOf(Scss::class, $instance);
+    }
+
+    public function testItShouldNotDisableVariableResolutionOnSharedCssParser(): void
+    {
+        $presets = new Presets();
+        $presets->add(new Custom('color.base', '#ffffff'));
+
+        $css = new Css($presets);
+        $scss = new Scss($css, new Compiler(), $presets);
+
+        $scss->parse('.scope { color: red; }', '.scope');
+
+        $this->assertSame(
+            'var(--wp--custom--color--base)',
+            $css->parse('{{color.base}}')
+        );
     }
 
     public static function newStyleProvider(): iterable
