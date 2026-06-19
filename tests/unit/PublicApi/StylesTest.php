@@ -35,7 +35,7 @@ final class StylesTest extends UnitTestCase
     {
         $sut = new ThemeJson(new Config(), $this->makeStylePresets());
 
-        $sut->styles()->elements(['button', ':hover'])->color()->background('color.base');
+        $sut->styles()->elements('button')->state(':hover')->color()->background('color.base');
         $sut->styles()->blocks('core/pullquote')->elements('cite')->typography()->fontStyle('italic');
         $sut->styles()->blocks('core/button')->variations('outline')->border()->color('#333333');
         $sut->styles()->blocks('core/paragraph')->css(
@@ -216,6 +216,66 @@ CSS,
         yield 'contains dot' => ['outline.color'];
     }
 
+    public function testItShouldWriteBlockAndElementStates(): void
+    {
+        $sut = $this->makeThemeJson();
+
+        $sut->styles()->blocks('core/button')->state(':hover')->color()->text('#111111');
+        $sut->styles()->elements('button')->state(':active')->color()->background('#222222');
+
+        $this->assertSame('#111111', $sut->get('styles.blocks.core/button.:hover.color.text'));
+        $this->assertSame('#222222', $sut->get('styles.elements.button.:active.color.background'));
+    }
+
+    /**
+     * @dataProvider invalidStateProvider
+     */
+    public function testItShouldRejectInvalidStates(string $state): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Expected a valid state');
+
+        $this->makeThemeJson()->styles()->elements('button')->state($state);
+    }
+
+    public static function invalidStateProvider(): iterable
+    {
+        yield 'empty' => [''];
+        yield 'missing colon' => ['hover'];
+        yield 'selector prefix' => ['button:hover'];
+        yield 'pseudo element' => ['::before'];
+        yield 'colon only' => [':'];
+        yield 'uppercase' => [':Hover'];
+        yield 'underscore' => [':focus_visible'];
+    }
+
+    /**
+     * @dataProvider invalidBlockNameProvider
+     */
+    public function testItShouldRejectInvalidBlockNames(string $block): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Expected a valid block name');
+
+        $this->makeThemeJson()->styles()->blocks($block);
+    }
+
+    public static function invalidBlockNameProvider(): iterable
+    {
+        yield 'empty' => [''];
+        yield 'missing namespace' => ['group'];
+        yield 'uppercase' => ['core/Group'];
+        yield 'nested path' => ['core/group/elements'];
+    }
+
+    public function testItShouldRejectStateOutsideBlockOrElementContext(): void
+    {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Cannot call "state()" outside a block or element context');
+
+        $this->makeThemeJson()->styles()->state(':hover');
+    }
+
     /**
      * @dataProvider invalidStructuralTransitionProvider
      * @param \Closure(ThemeJson): void $transition
@@ -256,6 +316,17 @@ CSS,
                 $themeJson->styles()->variations('outline')->variations('filled');
             },
             'Cannot chain "variations()" after "variations()": this style structure is not supported.',
+        ];
+
+        yield 'state from state' => [
+            static function (ThemeJson $themeJson): void {
+                $themeJson
+                    ->styles()
+                    ->elements('button')
+                    ->state(':hover')
+                    ->state(':active');
+            },
+            'Cannot chain "state()" after "state()": this style structure is not supported.',
         ];
     }
 

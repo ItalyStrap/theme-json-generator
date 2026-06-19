@@ -200,35 +200,55 @@ final readonly class Styles
         return new Typography($this->presets, [], $this->context->at('typography'));
     }
 
-    /**
-     * @param array<array-key, string|int>|string $path
-     */
     #[ThemeSchemaCoverage([self::SECTION, 'elements'])]
     #[ThemeSchemaCoverage([self::SECTION, 'elements', '*'])]
-    public function elements(array|string $path): self
+    public function elements(string $path): self
     {
         return new self($this->presets, $this->context->elements($path), $this->css, $this->scss);
     }
 
-    /**
-     * @param array<array-key, string|int>|string $path
-     */
     #[ThemeSchemaCoverage([self::SECTION, 'blocks'])]
     #[ThemeSchemaCoverage([self::SECTION, 'blockTargets', '*'])]
-    public function blocks(array|string $path): self
+    public function blocks(string $path): self
     {
+        if (\preg_match('/^[a-z][a-z0-9-]*\/[a-z][a-z0-9-]*$/', $path) !== 1) {
+            throw new \InvalidArgumentException(\sprintf(
+                'Expected a valid block name, got "%s".',
+                $path
+            ));
+        }
+
         return new self($this->presets, $this->context->blocks($path), $this->css, $this->scss);
     }
 
     #[ThemeSchemaCoverage([self::SECTION, 'variations'])]
     public function variations(string $variation): self
     {
+        if (\preg_match('/^[a-z][a-z0-9-]*$/', $variation) !== 1) {
+            throw new \InvalidArgumentException(\sprintf(
+                'Expected a valid variation slug, got "%s".',
+                $variation
+            ));
+        }
+
         return new self(
             $this->presets,
             $this->context->variations($variation),
             $this->css,
             $this->scss
         );
+    }
+
+    public function state(string $state): self
+    {
+        if (\preg_match('/^:[a-z][a-z0-9-]*$/', $state) !== 1) {
+            throw new \InvalidArgumentException(\sprintf(
+                'Expected a valid state, got "%s".',
+                $state
+            ));
+        }
+
+        return new self($this->presets, $this->context->state($state), $this->css, $this->scss);
     }
 
     /**

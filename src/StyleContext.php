@@ -11,9 +11,10 @@ final readonly class StyleContext
      */
     private const ALLOWED_TRANSITIONS = [
         'root' => ['blocks', 'elements', 'variations'],
-        'blocks' => ['elements', 'variations'],
-        'elements' => [],
+        'blocks' => ['elements', 'variations', 'state'],
+        'elements' => ['state'],
         'variations' => ['blocks', 'elements'],
+        'state' => [],
     ];
 
     /**
@@ -35,32 +36,28 @@ final readonly class StyleContext
         return new self($this->themeJson, $path, $this->structure);
     }
 
-    /**
-     * @param array<array-key, string|int>|string $path
-     */
-    public function blocks(array|string $path): self
+    public function blocks(string $path): self
     {
         return $this->enter('blocks', $path);
     }
 
-    /**
-     * @param array<array-key, string|int>|string $path
-     */
-    public function elements(array|string $path): self
+    public function elements(string $path): self
     {
         return $this->enter('elements', $path);
     }
 
     public function variations(string $variation): self
     {
-        if (\preg_match('/^[a-z][a-z0-9-]*$/', $variation) !== 1) {
-            throw new \InvalidArgumentException(\sprintf(
-                'Expected a valid variation slug, got "%s".',
-                $variation
-            ));
+        return $this->enter('variations', $variation);
+    }
+
+    public function state(string $state): self
+    {
+        if ($this->structure === []) {
+            throw new \LogicException('Cannot call "state()" outside a block or element context.');
         }
 
-        return $this->enter('variations', $variation);
+        return $this->enter('state', $state, false);
     }
 
     /**
@@ -112,10 +109,7 @@ final readonly class StyleContext
         return \implode('.', \array_map(strval(...), $this->path));
     }
 
-    /**
-     * @param array<array-key, string|int>|string $path
-     */
-    private function enter(string $structure, array|string $path): self
+    private function enter(string $structure, string $path, bool $includeStructureInPath = true): self
     {
         $parent = $this->structure === [] ? 'root' : $this->structure[\array_key_last($this->structure)];
 
@@ -130,7 +124,11 @@ final readonly class StyleContext
 
         return new self(
             $this->themeJson,
-            [...$this->path, $structure, ...(\is_string($path) ? [$path] : \array_values($path))],
+            [
+                ...$this->path,
+                ...($includeStructureInPath ? [$structure] : []),
+                $path,
+            ],
             [...$this->structure, $structure],
         );
     }

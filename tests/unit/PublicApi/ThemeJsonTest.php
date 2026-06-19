@@ -274,8 +274,8 @@ final class ThemeJsonTest extends UnitTestCase
         $sut = $this->makeInstance();
 
         $sut->styles()->elements('button')->color()->text('#111111');
-        $sut->styles()->elements(['button', ':hover'])->color()->background('#222222');
-        $sut->styles()->elements(['button', ':focus'])->outline()->color('#333333')->style('dotted');
+        $sut->styles()->elements('button')->state(':hover')->color()->background('#222222');
+        $sut->styles()->elements('button')->state(':focus')->outline()->color('#333333')->style('dotted');
         $sut->styles()->elements('button')->dimensions()->minWidth('12rem');
         $sut->styles()->elements('button')->filter()->duotone('var:preset|duotone|button');
         $sut->styles()->elements('button')->shadow('0 1px 2px 0 rgb(0 0 0 / 0.05)');
