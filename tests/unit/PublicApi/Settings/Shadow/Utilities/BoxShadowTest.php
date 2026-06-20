@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\Tests\Unit\PublicApi\Settings\Color\Utilities;
+namespace ItalyStrap\Tests\Unit\PublicApi\Settings\Shadow\Utilities;
 
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\BoxShadow;
+use ItalyStrap\ThemeJsonGenerator\Settings\Shadow\Utilities\BoxShadow;
 
 final class BoxShadowTest extends UnitTestCase
 {

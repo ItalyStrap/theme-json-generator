@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\Tests\Unit\PublicApi\Settings\Color;
+namespace ItalyStrap\Tests\Unit\PublicApi\Settings\Shadow;
 
 use ItalyStrap\Tests\Unit\PublicApi\Settings\PresetCommonTrait;
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Shadow;
+use ItalyStrap\ThemeJsonGenerator\Settings\Shadow\Shadow;
 
 final class ShadowTest extends UnitTestCase
 {

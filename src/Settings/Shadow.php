@@ -6,8 +6,8 @@ namespace ItalyStrap\ThemeJsonGenerator\Settings;
 
 use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
 use ItalyStrap\ThemeJsonGenerator\Settings;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Shadow as ShadowPreset;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\BoxShadow;
+use ItalyStrap\ThemeJsonGenerator\Settings\Shadow\Shadow as ShadowPreset;
+use ItalyStrap\ThemeJsonGenerator\Settings\Shadow\Utilities\BoxShadow;
 
 final readonly class Shadow
 {

@@ -7,9 +7,9 @@ namespace ItalyStrap\Tests\Unit\PublicApi\Settings;
 use ItalyStrap\Config\Config;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Container\PresetsToThemeJson;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\BoxShadow;
 use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\Settings\Shadow;
+use ItalyStrap\ThemeJsonGenerator\Settings\Shadow\Utilities\BoxShadow;
 use ItalyStrap\ThemeJsonGenerator\ThemeJson;
 
 final class ShadowTest extends UnitTestCase

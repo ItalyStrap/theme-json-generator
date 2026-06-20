@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\ThemeJsonGenerator\Settings\Color;
+namespace ItalyStrap\ThemeJsonGenerator\Settings\Shadow;
 
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\BoxShadow;
 use ItalyStrap\ThemeJsonGenerator\Settings\PresetInterface;
 use ItalyStrap\ThemeJsonGenerator\Settings\PresetTrait;
+use ItalyStrap\ThemeJsonGenerator\Settings\Shadow\Utilities\BoxShadow;
 
 final class Shadow implements PresetInterface
 {

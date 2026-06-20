@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities;
+namespace ItalyStrap\ThemeJsonGenerator\Settings\Shadow\Utilities;
 
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Palette;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\ColorFactory;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\ColorInterface;
 
 final class BoxShadow implements \Stringable
 {
