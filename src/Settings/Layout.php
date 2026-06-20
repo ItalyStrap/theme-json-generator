@@ -30,60 +30,52 @@ final readonly class Layout
     #[ThemeSchemaCoverage(['settings', 'layout', 'contentSize'])]
     public function contentSize(string $keyOrValue): self
     {
-        $size = $this->presets->get($keyOrValue);
-        if ($size instanceof PresetInterface) {
-            $size = $size->var();
-        }
-
-        if (\is_null($size)) {
-            $size = $keyOrValue;
-        }
-
-        $this->set(self::CONTENT_SIZE, $size);
+        $this->set(self::CONTENT_SIZE, $this->resolveSize($keyOrValue));
         return $this;
     }
 
     #[ThemeSchemaCoverage(['settings', 'layout', 'wideSize'])]
     public function wideSize(string $keyOrValue): self
     {
+        $this->set(self::WIDE_SIZE, $this->resolveSize($keyOrValue));
+        return $this;
+    }
+
+    private function resolveSize(string $keyOrValue): mixed
+    {
         $size = $this->presets->get($keyOrValue);
         if ($size instanceof PresetInterface) {
-            $size = $size->var();
+            return $size->var();
         }
 
-        if (\is_null($size)) {
-            $size = $keyOrValue;
+        if ($size === null) {
+            return $keyOrValue;
         }
 
-        $this->set(self::WIDE_SIZE, $size);
-        return $this;
+        return $size;
     }
 
     #[ThemeSchemaCoverage(['settings', 'layout', 'allowEditing'])]
     public function enableEditing(): self
     {
-        $this->set(self::ALLOW_EDITING, true);
-        return $this;
+        return $this->setBoolean(self::ALLOW_EDITING, true);
     }
 
     #[ThemeSchemaCoverage(['settings', 'layout', 'allowEditing'])]
     public function disableEditing(): self
     {
-        $this->set(self::ALLOW_EDITING, false);
-        return $this;
+        return $this->setBoolean(self::ALLOW_EDITING, false);
     }
 
     #[ThemeSchemaCoverage(['settings', 'layout', 'allowCustomContentAndWideSize'])]
     public function enableCustomContentAndWideSize(): self
     {
-        $this->set(self::ALLOW_CUSTOM_CONTENT_AND_WIDE_SIZE, true);
-        return $this;
+        return $this->setBoolean(self::ALLOW_CUSTOM_CONTENT_AND_WIDE_SIZE, true);
     }
 
     #[ThemeSchemaCoverage(['settings', 'layout', 'allowCustomContentAndWideSize'])]
     public function disableCustomContentAndWideSize(): self
     {
-        $this->set(self::ALLOW_CUSTOM_CONTENT_AND_WIDE_SIZE, false);
-        return $this;
+        return $this->setBoolean(self::ALLOW_CUSTOM_CONTENT_AND_WIDE_SIZE, false);
     }
 }

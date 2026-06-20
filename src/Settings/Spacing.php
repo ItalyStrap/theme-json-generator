@@ -39,15 +39,13 @@ final readonly class Spacing
     #[ThemeSchemaCoverage(['settings', 'spacing', 'blockGap'])]
     public function enableBlockGap(): self
     {
-        $this->set(self::BLOCK_GAP, true);
-        return $this;
+        return $this->setBoolean(self::BLOCK_GAP, true);
     }
 
     #[ThemeSchemaCoverage(['settings', 'spacing', 'blockGap'])]
     public function disableBlockGap(): self
     {
-        $this->set(self::BLOCK_GAP, false);
-        return $this;
+        return $this->setBoolean(self::BLOCK_GAP, false);
     }
 
     #[ThemeSchemaCoverage(['settings', 'spacing', 'blockGap'])]
@@ -60,29 +58,25 @@ final readonly class Spacing
     #[ThemeSchemaCoverage(['settings', 'spacing', 'margin'])]
     public function enableMargin(): self
     {
-        $this->set(self::MARGIN, true);
-        return $this;
+        return $this->setBoolean(self::MARGIN, true);
     }
 
     #[ThemeSchemaCoverage(['settings', 'spacing', 'margin'])]
     public function disableMargin(): self
     {
-        $this->set(self::MARGIN, false);
-        return $this;
+        return $this->setBoolean(self::MARGIN, false);
     }
 
     #[ThemeSchemaCoverage(['settings', 'spacing', 'padding'])]
     public function enablePadding(): self
     {
-        $this->set(self::PADDING, true);
-        return $this;
+        return $this->setBoolean(self::PADDING, true);
     }
 
     #[ThemeSchemaCoverage(['settings', 'spacing', 'padding'])]
     public function disablePadding(): self
     {
-        $this->set(self::PADDING, false);
-        return $this;
+        return $this->setBoolean(self::PADDING, false);
     }
 
     #[ThemeSchemaCoverage(['settings', 'spacing', 'units'])]
@@ -99,29 +93,25 @@ final readonly class Spacing
     #[ThemeSchemaCoverage(['settings', 'spacing', 'customSpacingSize'])]
     public function enableCustomSpacingSize(): self
     {
-        $this->set(self::CUSTOM_SPACING_SIZE, true);
-        return $this;
+        return $this->setBoolean(self::CUSTOM_SPACING_SIZE, true);
     }
 
     #[ThemeSchemaCoverage(['settings', 'spacing', 'customSpacingSize'])]
     public function disableCustomSpacingSize(): self
     {
-        $this->set(self::CUSTOM_SPACING_SIZE, false);
-        return $this;
+        return $this->setBoolean(self::CUSTOM_SPACING_SIZE, false);
     }
 
     #[ThemeSchemaCoverage(['settings', 'spacing', 'defaultSpacingSizes'])]
     public function enableDefaultSpacingSizes(): self
     {
-        $this->set(self::DEFAULT_SPACING_SIZES, true);
-        return $this;
+        return $this->setBoolean(self::DEFAULT_SPACING_SIZES, true);
     }
 
     #[ThemeSchemaCoverage(['settings', 'spacing', 'defaultSpacingSizes'])]
     public function disableDefaultSpacingSizes(): self
     {
-        $this->set(self::DEFAULT_SPACING_SIZES, false);
-        return $this;
+        return $this->setBoolean(self::DEFAULT_SPACING_SIZES, false);
     }
 
     #[ThemeSchemaCoverage(['settings', 'spacing', 'spacingSizes'])]

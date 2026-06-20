@@ -28,4 +28,17 @@ final class LayoutTest extends UnitTestCase
         $this->assertFalse($sut->get('settings.blocks.core/group.layout.allowEditing'));
         $this->assertTrue($sut->get('settings.blocks.core/group.layout.allowCustomContentAndWideSize'));
     }
+
+    public function testItShouldWriteOppositeLayoutBooleanValues(): void
+    {
+        $sut = new ThemeJson(new Config(), new Presets());
+
+        $result = $sut->settings()->layout()
+            ->enableEditing()
+            ->disableCustomContentAndWideSize();
+
+        $this->assertInstanceOf(Layout::class, $result);
+        $this->assertTrue($sut->get('settings.layout.allowEditing'));
+        $this->assertFalse($sut->get('settings.layout.allowCustomContentAndWideSize'));
+    }
 }

@@ -23,14 +23,12 @@ final readonly class Position
     #[ThemeSchemaCoverage(['settings', 'position', 'sticky'])]
     public function enableSticky(): self
     {
-        $this->set(self::STICKY, true);
-        return $this;
+        return $this->setBoolean(self::STICKY, true);
     }
 
     #[ThemeSchemaCoverage(['settings', 'position', 'sticky'])]
     public function disableSticky(): self
     {
-        $this->set(self::STICKY, false);
-        return $this;
+        return $this->setBoolean(self::STICKY, false);
     }
 }

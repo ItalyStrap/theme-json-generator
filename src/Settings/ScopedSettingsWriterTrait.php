@@ -14,6 +14,12 @@ trait ScopedSettingsWriterTrait
         return $this->settings->write($this->scopedPath($path), $value);
     }
 
+    private function setBoolean(string $property, bool $value): self
+    {
+        $this->set($property, $value);
+        return $this;
+    }
+
     /**
      * @param array<array-key, string|int>|string $path
      * @return array<array-key, string|int>|string

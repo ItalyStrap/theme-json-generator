@@ -39,85 +39,73 @@ final readonly class Dimensions
     #[ThemeSchemaCoverage(['settings', 'dimensions', 'aspectRatio'])]
     public function enableAspectRatio(): self
     {
-        $this->set(self::ASPECT_RATIO, true);
-        return $this;
+        return $this->setBoolean(self::ASPECT_RATIO, true);
     }
 
     #[ThemeSchemaCoverage(['settings', 'dimensions', 'aspectRatio'])]
     public function disableAspectRatio(): self
     {
-        $this->set(self::ASPECT_RATIO, false);
-        return $this;
+        return $this->setBoolean(self::ASPECT_RATIO, false);
     }
 
     #[ThemeSchemaCoverage(['settings', 'dimensions', 'defaultAspectRatios'])]
     public function enableDefaultAspectRatios(): self
     {
-        $this->set(self::DEFAULT_ASPECT_RATIOS, true);
-        return $this;
+        return $this->setBoolean(self::DEFAULT_ASPECT_RATIOS, true);
     }
 
     #[ThemeSchemaCoverage(['settings', 'dimensions', 'defaultAspectRatios'])]
     public function disableDefaultAspectRatios(): self
     {
-        $this->set(self::DEFAULT_ASPECT_RATIOS, false);
-        return $this;
+        return $this->setBoolean(self::DEFAULT_ASPECT_RATIOS, false);
     }
 
     #[ThemeSchemaCoverage(['settings', 'dimensions', 'height'])]
     public function enableHeight(): self
     {
-        $this->set(self::HEIGHT, true);
-        return $this;
+        return $this->setBoolean(self::HEIGHT, true);
     }
 
     #[ThemeSchemaCoverage(['settings', 'dimensions', 'height'])]
     public function disableHeight(): self
     {
-        $this->set(self::HEIGHT, false);
-        return $this;
+        return $this->setBoolean(self::HEIGHT, false);
     }
 
     #[ThemeSchemaCoverage(['settings', 'dimensions', 'minHeight'])]
     public function enableMinHeight(): self
     {
-        $this->set(self::MIN_HEIGHT, true);
-        return $this;
+        return $this->setBoolean(self::MIN_HEIGHT, true);
     }
 
     #[ThemeSchemaCoverage(['settings', 'dimensions', 'minHeight'])]
     public function disableMinHeight(): self
     {
-        $this->set(self::MIN_HEIGHT, false);
-        return $this;
+        return $this->setBoolean(self::MIN_HEIGHT, false);
     }
 
     #[ThemeSchemaCoverage(['settings', 'dimensions', 'minWidth'])]
     public function enableMinWidth(): self
     {
-        $this->set(self::MIN_WIDTH, true);
-        return $this;
+        return $this->setBoolean(self::MIN_WIDTH, true);
     }
 
     #[ThemeSchemaCoverage(['settings', 'dimensions', 'minWidth'])]
     public function disableMinWidth(): self
     {
-        $this->set(self::MIN_WIDTH, false);
-        return $this;
+        return $this->setBoolean(self::MIN_WIDTH, false);
     }
 
     #[ThemeSchemaCoverage(['settings', 'dimensions', 'width'])]
     public function enableWidth(): self
     {
-        $this->set(self::WIDTH, true);
-        return $this;
+        return $this->setBoolean(self::WIDTH, true);
     }
 
     #[ThemeSchemaCoverage(['settings', 'dimensions', 'width'])]
     public function disableWidth(): self
     {
-        $this->set(self::WIDTH, false);
-        return $this;
+        return $this->setBoolean(self::WIDTH, false);
     }
 
     #[ThemeSchemaCoverage(['settings', 'dimensions', 'aspectRatios'])]

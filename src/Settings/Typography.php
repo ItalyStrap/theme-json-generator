@@ -257,12 +257,6 @@ final readonly class Typography
         return $this;
     }
 
-    private function setBoolean(string $property, bool $value): self
-    {
-        $this->set($property, $value);
-        return $this;
-    }
-
     public function writeFluidConfig(string $property, string $value): bool
     {
         $fluid = $this->settings->read([self::SECTION, self::FLUID]);

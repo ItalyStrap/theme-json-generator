@@ -27,15 +27,13 @@ final readonly class Shadow
     #[ThemeSchemaCoverage(['settings', 'shadow', 'defaultPresets'])]
     public function enableDefaultPresets(): self
     {
-        $this->set(self::DEFAULT_PRESETS, true);
-        return $this;
+        return $this->setBoolean(self::DEFAULT_PRESETS, true);
     }
 
     #[ThemeSchemaCoverage(['settings', 'shadow', 'defaultPresets'])]
     public function disableDefaultPresets(): self
     {
-        $this->set(self::DEFAULT_PRESETS, false);
-        return $this;
+        return $this->setBoolean(self::DEFAULT_PRESETS, false);
     }
 
     #[ThemeSchemaCoverage(['settings', 'shadow', 'presets'])]

@@ -32,57 +32,49 @@ final readonly class Border
     #[ThemeSchemaCoverage(['settings', 'border', 'color'])]
     public function enableColor(): self
     {
-        $this->set(self::COLOR, true);
-        return $this;
+        return $this->setBoolean(self::COLOR, true);
     }
 
     #[ThemeSchemaCoverage(['settings', 'border', 'color'])]
     public function disableColor(): self
     {
-        $this->set(self::COLOR, false);
-        return $this;
+        return $this->setBoolean(self::COLOR, false);
     }
 
     #[ThemeSchemaCoverage(['settings', 'border', 'radius'])]
     public function enableRadius(): self
     {
-        $this->set(self::RADIUS, true);
-        return $this;
+        return $this->setBoolean(self::RADIUS, true);
     }
 
     #[ThemeSchemaCoverage(['settings', 'border', 'radius'])]
     public function disableRadius(): self
     {
-        $this->set(self::RADIUS, false);
-        return $this;
+        return $this->setBoolean(self::RADIUS, false);
     }
 
     #[ThemeSchemaCoverage(['settings', 'border', 'style'])]
     public function enableStyle(): self
     {
-        $this->set(self::STYLE, true);
-        return $this;
+        return $this->setBoolean(self::STYLE, true);
     }
 
     #[ThemeSchemaCoverage(['settings', 'border', 'style'])]
     public function disableStyle(): self
     {
-        $this->set(self::STYLE, false);
-        return $this;
+        return $this->setBoolean(self::STYLE, false);
     }
 
     #[ThemeSchemaCoverage(['settings', 'border', 'width'])]
     public function enableWidth(): self
     {
-        $this->set(self::WIDTH, true);
-        return $this;
+        return $this->setBoolean(self::WIDTH, true);
     }
 
     #[ThemeSchemaCoverage(['settings', 'border', 'width'])]
     public function disableWidth(): self
     {
-        $this->set(self::WIDTH, false);
-        return $this;
+        return $this->setBoolean(self::WIDTH, false);
     }
 
     #[ThemeSchemaCoverage(['settings', 'border', 'radiusSizes'])]
