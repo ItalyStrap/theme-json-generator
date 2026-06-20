@@ -252,6 +252,7 @@ final class ThemeJsonTest extends UnitTestCase
     {
         $sut = $this->makeInstance();
 
+        $sut->styles()->elements('link')->color()->text('#0000ff');
         $sut->styles()->elements('button')->color()->text('#111111');
         $sut->styles()->elements('button')->state(':hover')->color()->background('#222222');
         $sut->styles()->elements('button')->state(':focus')->outline()->color('#333333')->style('dotted');
@@ -263,6 +264,7 @@ final class ThemeJsonTest extends UnitTestCase
         $sut->styles()->elements('button')->border()->bottom()->style('solid');
         $sut->styles()->elements('button')->spacing()->padding()->vertical('1rem');
 
+        $this->assertSame('#0000ff', $sut->get('styles.elements.link.color.text'));
         $this->assertSame('#111111', $sut->get('styles.elements.button.color.text'));
         $this->assertSame('#222222', $sut->get('styles.elements.button.:hover.color.background'));
         $this->assertSame('#333333', $sut->get('styles.elements.button.:focus.outline.color'));

@@ -25,11 +25,6 @@ final class Color implements ArrayableInterface, \JsonSerializable
      */
     public const TEXT = 'text';
 
-    /**
-     * @var string
-     */
-    public const LINK = 'link';
-
     #[ThemeSchemaCoverage(['styles', 'color', 'background'])]
     public function background(string $value): Color
     {
@@ -46,10 +41,5 @@ final class Color implements ArrayableInterface, \JsonSerializable
     public function text(string $value): Color
     {
         return $this->setProperty(self::TEXT, $value);
-    }
-
-    public function link(string $value): Color
-    {
-        return $this->setProperty(self::LINK, $value);
     }
 }
