@@ -162,15 +162,47 @@ final class ColorModifierTest extends UnitTestCase
     {
         $sut = $this->makeInstance('#7f7f7f');
 
-        $this->assertStringMatchesFormat('#cccccc', (string)$sut->tint(0.6), '');
-        $this->assertStringMatchesFormat('#333333', (string)$sut->shade(0.6), '');
+        $this->assertStringMatchesFormat('#cccccc', (string)$sut->tint(60), '');
+        $this->assertStringMatchesFormat('#333333', (string)$sut->shade(60), '');
+    }
+
+    public function testItShouldClampMixWeightsToTheSupportedRange(): void
+    {
+        $sut = $this->makeInstance('#336699');
+
+        $this->assertSame('#ffffff', (string)$sut->tint(150)->toHex());
+        $this->assertSame('#336699', (string)$sut->shade(-20)->toHex());
+    }
+
+    public function testItShouldAcceptFractionalPercentagesForMixWeights(): void
+    {
+        $sut = $this->makeInstance('#000000');
+
+        $this->assertSame('#040404', (string)$sut->tint(1.5)->toHex());
+    }
+
+    public function testItShouldIncreaseContrastWithoutChangingSaturation(): void
+    {
+        $sut = $this->makeInstance('hsl(210,50%,40%)');
+
+        $result = $sut->contrast(20);
+
+        $this->assertSame(50, $result->saturation());
+        $this->assertLessThan(40, $result->lightness());
+    }
+
+    public function testItShouldRoundFractionalModifierResults(): void
+    {
+        $sut = $this->makeInstance('hsl(210,50%,40%)');
+
+        $this->assertSame('hsl(210,50%,41%)', (string)$sut->lighten(0.6));
     }
 
     public function testItShouldTone(): void
     {
         $sut = $this->makeInstance('#ff0000');
 
-        $this->assertStringMatchesFormat('#c04040', (string)$sut->tone(0.5), '');
+        $this->assertStringMatchesFormat('#c04040', (string)$sut->tone(50), '');
     }
 
     public static function alphaPreservingLightnessProvider(): \Generator
@@ -209,21 +241,21 @@ final class ColorModifierTest extends UnitTestCase
         yield 'tint' => [
             'tint',
             'rgba(100,100,100,0.50)',
-            0.5,
+            50,
             'rgba(178,178,178,0.50)',
         ];
 
         yield 'shade' => [
             'shade',
             'rgba(100,100,100,0.50)',
-            0.5,
+            50,
             'rgba(50,50,50,0.50)',
         ];
 
         yield 'tone' => [
             'tone',
             'rgba(100,100,100,0.50)',
-            0.5,
+            50,
             'rgba(114,114,114,0.50)',
         ];
     }
@@ -309,11 +341,11 @@ final class ColorModifierTest extends UnitTestCase
         yield 'darken numeric alpha' => ['#33669980', 'darken', 10, '#264d73'];
         yield 'lighten numeric alpha' => ['#33669980', 'lighten', 10, '#4080bf'];
         yield 'saturate numeric alpha' => ['#33669980', 'saturate', 10, '#2966a3'];
-        yield 'contrast numeric alpha' => ['#33669980', 'contrast', 10, '#3380cc'];
+        yield 'contrast numeric alpha' => ['#33669980', 'contrast', 10, '#264d73'];
         yield 'hue rotate numeric alpha' => ['#33669980', 'hueRotate', 10, '#335599'];
         yield 'darken alpha with letters' => ['#336699ab', 'darken', 10, '#264d73'];
         yield 'invert alpha with letters' => ['#336699ab', 'invert', null, '#6699cc'];
-        yield 'tint alpha with letters' => ['#336699ab', 'tint', 0.5, '#99b3cc'];
+        yield 'tint alpha with letters' => ['#336699ab', 'tint', 50, '#99b3cc'];
     }
 
     /**

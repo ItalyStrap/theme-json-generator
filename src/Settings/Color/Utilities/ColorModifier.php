@@ -121,10 +121,13 @@ final readonly class ColorModifier implements ColorModifierInterface
 
     private function createNewColorWithChangedContrast(float $amount): ColorInterface
     {
+        $lightness = $this->color->lightness();
+        $direction = $lightness < 50 ? -1 : 1;
+
         return $this->createNewColorFrom(
             (string) $this->color->hue(),
-            (string) $this->sanitizeFromFloatToInteger($this->color->saturation() + $amount),
-            (string) $this->sanitizeFromFloatToInteger($this->color->lightness() + $amount),
+            (string) $this->color->saturation(),
+            (string) $this->sanitizeFromFloatToInteger($lightness + ($amount * $direction)),
             (string) $this->color->alpha()
         );
     }
@@ -155,13 +158,13 @@ final readonly class ColorModifier implements ColorModifierInterface
         /**
          * I need to cast to RGB or RGBA because the mixRgb method
          * uses calculation over `ColorInfo::red()` and `ColorInfo::green()` and `ColorInfo::blue()`
-         * as a number (0 to 255) and not as string (ff, or 00 or whatever)
+         * as a number (0 to 255) and not as string (ff, or 00 or whatever),
          * So the cast here is necessary
          */
         $result = $this->mixRgb(
             $this->color_factory->fromColorString($color_string)->toRgba(),
             $this->color->toRgba(),
-            $weight > 1 ? $weight / 100 : $weight
+            $this->normalizePercentage($weight)
         );
 
         $newColor = $this->color_factory->fromColorString(\sprintf(
@@ -193,7 +196,12 @@ final readonly class ColorModifier implements ColorModifierInterface
     {
         return $value > 100
             ? 100
-            : ($value < 0 ? 0 : (int) $value);
+            : ($value < 0 ? 0 : (int) \round($value));
+    }
+
+    private function normalizePercentage(float $percentage): float
+    {
+        return \max(0, \min(100, $percentage)) / 100;
     }
 
     private function normalizeAlpha(string|float $alpha): float
