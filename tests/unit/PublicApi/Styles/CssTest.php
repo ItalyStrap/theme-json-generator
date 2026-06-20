@@ -7,6 +7,7 @@ namespace ItalyStrap\Tests\Unit\PublicApi\Styles;
 use ItalyStrap\Tests\CssParserScenarioProviderTrait;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Styles\Css;
+use ItalyStrap\ThemeJsonGenerator\Styles\CssInterface;
 
 final class CssTest extends UnitTestCase
 {
@@ -42,14 +43,44 @@ CSS;
         $this->assertSame($expected, $parseString, 'The parsed string is not the same as expected');
     }
 
-    public function testItShouldIgnoreUnrelatedSelectorsWhenParsingScopedCss(): void
-    {
-        $parseString = $this->makeInstance()->compressed()->parse(
-            '.other-selector{color: red;}.test-selector-one{color: blue;}',
-            '.test-selector'
-        );
+    /**
+     * @dataProvider unrelatedScopedSelectorProvider
+     */
+    public function testItShouldRejectUnrelatedSelectorsWhenParsingScopedCss(
+        string $css,
+        string $selector,
+        string $unrelatedSelector
+    ): void {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(\sprintf(
+            CssInterface::M_SELECTOR_IS_OUTSIDE_SCOPE,
+            $unrelatedSelector,
+            $selector,
+            $unrelatedSelector
+        ));
 
-        $this->assertSame('', $parseString);
+        $this->makeInstance()->compressed()->parse($css, $selector);
+    }
+
+    public static function unrelatedScopedSelectorProvider(): iterable
+    {
+        yield 'unrelated selector' => [
+            'css' => '.other-selector{color:red;}',
+            'selector' => '.test-selector',
+            'unrelatedSelector' => '.other-selector',
+        ];
+
+        yield 'same prefix with hyphen' => [
+            'css' => '.test-selector-one{color:blue;}',
+            'selector' => '.test-selector',
+            'unrelatedSelector' => '.test-selector-one',
+        ];
+
+        yield 'same prefix with underscore' => [
+            'css' => '.card{color:red;}.card_title{color:blue;}',
+            'selector' => '.card',
+            'unrelatedSelector' => '.card_title',
+        ];
     }
 
     /**

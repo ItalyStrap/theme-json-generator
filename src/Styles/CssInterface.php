@@ -13,6 +13,9 @@ interface CssInterface
 
     public const M_NESTED_SELECTORS_MUST_BE_SCOPED = 'Nested scoped CSS selectors must begin with an ampersand (&).';
 
+    public const M_SELECTOR_IS_OUTSIDE_SCOPE = 'Selector "%s" is outside the "%s" scope. '
+        . 'Use "& %s" for a descendant selector or styles()->css() for global CSS.';
+
     public function expanded(): self;
 
     public function parse(string $css, string $selector = ''): string;

@@ -109,7 +109,12 @@ final class Css implements CssInterface
 
                 $actualSelector = $cssSelector->getSelector();
                 if (!$this->selectorBelongsToScope($actualSelector, $selector)) {
-                    continue;
+                    throw new \InvalidArgumentException(\sprintf(
+                        CssInterface::M_SELECTOR_IS_OUTSIDE_SCOPE,
+                        $actualSelector,
+                        $selector,
+                        $actualSelector
+                    ));
                 }
 
                 $newSelector = \substr($actualSelector, \strlen($selector));
@@ -149,6 +154,6 @@ final class Css implements CssInterface
         }
 
         $nextCharacter = \substr($actualSelector, \strlen($selector), 1);
-        return $nextCharacter === '' || \str_contains(' .:#[>+~*_', $nextCharacter);
+        return $nextCharacter === '' || \str_contains(' .:#[>+~*', $nextCharacter);
     }
 }

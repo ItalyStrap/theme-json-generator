@@ -40,14 +40,33 @@ final class CssTest extends IntegrationTestCase
         $selector = '.test-selector';
         $actual = '.other-selector{color: red;}';
 
-        $parsed = $this->makeInstance()->compressed()->parse($actual, $selector);
-        $processedParsedCss = $this->processBlocksCustomCssWithWordPress($parsed, $selector);
         $processedActualCss = $this->processBlocksCustomCssWithWordPress($actual, $selector);
 
-        $this->assertSame('', $parsed);
-        $this->assertSame('', $processedParsedCss);
         $this->assertSame(':root :where(.test-selector.other-selector){color: red;}', $processedActualCss);
-        $this->assertNotSame($processedActualCss, $processedParsedCss);
+    }
+
+    public function testItShouldRejectUnderscoreIdentifierBeforeWordPressProcessesScopedCss(): void
+    {
+        $selector = '.card';
+        $actual = '.card{color:red;}.card_title{color:blue;}';
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(\sprintf(
+            CssInterface::M_SELECTOR_IS_OUTSIDE_SCOPE,
+            '.card_title',
+            '.card',
+            '.card_title'
+        ));
+
+        $this->makeInstance()->compressed()->parse($actual, $selector);
+    }
+
+    public function testItCharacterizesWordPressAppendingUnderscoreAsPartOfTheIdentifier(): void
+    {
+        $this->assertSame(
+            ':root :where(.card_title){color:blue;}',
+            $this->processBlocksCustomCssWithWordPress('&_title{color:blue;}', '.card')
+        );
     }
 
     /**

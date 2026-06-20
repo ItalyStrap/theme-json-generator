@@ -9,6 +9,7 @@ use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Settings\Custom\Custom;
 use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\Styles\Css;
+use ItalyStrap\ThemeJsonGenerator\Styles\CssInterface;
 use ItalyStrap\ThemeJsonGenerator\Styles\Scss;
 use ScssPhp\ScssPhp\Compiler;
 
@@ -61,19 +62,6 @@ CSS,
             'expected' => 'gap: 0;&.test-selector-one{color: blue;}& .test-selector-two{color: blue;}',
         ];
 
-        yield 'selector used also as prefix for nested selectors with nested selectors' => [
-            'selector' => '.test-selector',
-            'actual' => <<<CSS
-.test-selector__button-inside {
-    & .test-selector__button {
-        margin-left: -1px;
-        transition: margin-left 0.3s;
-    }
-}
-CSS,
-            'expected' => '__button-inside .test-selector__button{margin-left: -1px;transition: margin-left .3s;}',
-        ];
-
         yield 'without selector' => [
             'selector' => '',
             'actual' => <<<CSS
@@ -100,6 +88,28 @@ CSS,
         $this->presets->parse($actual)->willReturn($actual)->shouldBeCalledTimes(1);
         $parseString = $this->makeInstance()->compress()->parse($actual, $selector);
         $this->assertSame($expected, $parseString, 'The parsed string is not the same as expected');
+    }
+
+    public function testItShouldRejectCompiledSelectorsOutsideTheScope(): void
+    {
+        $actual = <<<'CSS'
+.test-selector__button-inside {
+    & .test-selector__button {
+        margin-left: -1px;
+    }
+}
+CSS;
+
+        $this->presets->parse($actual)->willReturn($actual)->shouldBeCalledTimes(1);
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(\sprintf(
+            CssInterface::M_SELECTOR_IS_OUTSIDE_SCOPE,
+            '.test-selector__button-inside .test-selector__button',
+            '.test-selector',
+            '.test-selector__button-inside .test-selector__button'
+        ));
+
+        $this->makeInstance()->compress()->parse($actual, '.test-selector');
     }
 
     /**
