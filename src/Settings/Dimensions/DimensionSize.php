@@ -18,6 +18,7 @@ final readonly class DimensionSize implements PresetInterface
         private string $name,
         private string $size,
     ) {
+        $this->assertSlugIsWellFormed($slug);
     }
 
     /**

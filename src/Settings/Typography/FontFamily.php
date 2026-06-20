@@ -28,6 +28,7 @@ final readonly class FontFamily implements PresetInterface
         private string $fontFamily,
         FontFace ...$fontFace
     ) {
+        $this->assertSlugIsWellFormed($slug);
         $this->fontFace = \array_values($fontFace);
     }
 

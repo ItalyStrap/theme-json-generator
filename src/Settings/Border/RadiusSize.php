@@ -18,6 +18,7 @@ final readonly class RadiusSize implements PresetInterface
         private string $name,
         private string $size,
     ) {
+        $this->assertSlugIsWellFormed($slug);
     }
 
     /**

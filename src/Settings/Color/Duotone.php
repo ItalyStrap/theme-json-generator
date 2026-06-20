@@ -28,6 +28,8 @@ final class Duotone implements PresetInterface
         string $name,
         Palette ...$colors
     ) {
+        $this->assertSlugIsWellFormed($slug);
+
         if ($name === '') {
             throw new \InvalidArgumentException('Duotone must have a name.');
         }

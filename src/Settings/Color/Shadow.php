@@ -28,6 +28,7 @@ final class Shadow implements PresetInterface
         private readonly string $name,
         BoxShadow ...$shadow
     ) {
+        $this->assertSlugIsWellFormed($slug);
         $this->shadow = $shadow;
     }
 

@@ -63,6 +63,56 @@ final class PaletteTest extends UnitTestCase
         $this->assertSame('var(--wp--preset--color--base)', $sut->var());
     }
 
+    /**
+     * @dataProvider validSlugProvider
+     */
+    public function testItShouldAcceptValidSlugAtConstruction(string $slug): void
+    {
+        $sut = new Palette($slug, 'Name', $this->makeColorInfo());
+
+        $this->assertSame($slug, $sut->slug());
+    }
+
+    public static function validSlugProvider(): iterable
+    {
+        yield 'letters' => ['base'];
+        yield 'letters and digits' => ['h1'];
+        yield 'hyphenated' => ['brand-500'];
+        yield 'digits' => ['50'];
+        yield 'uppercase letters' => ['BrandBase'];
+    }
+
+    /**
+     * @dataProvider invalidSlugProvider
+     */
+    public function testItShouldRejectInvalidSlugAtConstruction(
+        string $slug,
+        string $expectedMessage
+    ): void {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage($expectedMessage);
+
+        new Palette($slug, 'Name', $this->makeColorInfo());
+    }
+
+    public static function invalidSlugProvider(): iterable
+    {
+        yield 'empty' => [
+            'slug' => '',
+            'expectedMessage' => 'Preset slug must not be empty.',
+        ];
+
+        foreach (['with space', 'a.b', 'with_underscore', 'path/segment', 'brand@500', 'caffè'] as $slug) {
+            yield $slug => [
+                'slug' => $slug,
+                'expectedMessage' => \sprintf(
+                    'Invalid preset slug "%s": only ASCII letters, digits, and hyphens are allowed.',
+                    $slug
+                ),
+            ];
+        }
+    }
+
     public static function propertiesProvider(): \Generator
     {
         yield 'Primary color' => [

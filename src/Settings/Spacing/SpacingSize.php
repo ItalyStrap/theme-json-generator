@@ -18,6 +18,7 @@ final readonly class SpacingSize implements PresetInterface
         private string $name,
         private string $size,
     ) {
+        $this->assertSlugIsWellFormed($slug);
     }
 
     /**

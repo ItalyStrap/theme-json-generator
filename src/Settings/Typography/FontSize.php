@@ -23,6 +23,7 @@ final readonly class FontSize implements PresetInterface
         private string $size,
         private Fluid|false|null $fluid = null
     ) {
+        $this->assertSlugIsWellFormed($slug);
     }
 
     /**

@@ -27,6 +27,7 @@ final readonly class Palette implements PresetInterface
         private string $name,
         private ColorInterface $color
     ) {
+        $this->assertSlugIsWellFormed($slug);
     }
 
     /**

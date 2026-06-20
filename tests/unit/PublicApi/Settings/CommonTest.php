@@ -13,16 +13,28 @@ final class CommonTest extends UnitTestCase
 
     public static function invalidSlugProvider(): \Generator
     {
-        yield 'empty' => [''];
-        yield 'with space' => ['with space'];
+        yield 'empty' => ['', 'Preset slug must not be empty.'];
+        yield 'with space' => [
+            'with space',
+            'Invalid preset slug "with space": only ASCII letters, digits, and hyphens are allowed.',
+        ];
+        yield 'with dot' => [
+            'a.b',
+            'Invalid preset slug "a.b": only ASCII letters, digits, and hyphens are allowed.',
+        ];
+        yield 'with underscore' => [
+            'with_underscore',
+            'Invalid preset slug "with_underscore": only ASCII letters, digits, and hyphens are allowed.',
+        ];
     }
 
     /**
      * @dataProvider invalidSlugProvider
      */
-    public function testSlugIsWellFormed(string $slug): void
+    public function testSlugIsWellFormed(string $slug, string $expectedMessage): void
     {
         $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage($expectedMessage);
         $this->assertSlugIsWellFormed($slug);
     }
 

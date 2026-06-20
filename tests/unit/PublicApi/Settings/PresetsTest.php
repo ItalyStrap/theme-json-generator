@@ -109,15 +109,14 @@ final class PresetsTest extends UnitTestCase
         $this->assertSame('1rem', (string)$sut->get(['custom', 'spacing', 'base']));
     }
 
-    public function testItShouldUseDotNotationAsNestedPresetPath(): void
+    public function testItShouldRejectDotNotationInStandardPresetSlug(): void
     {
-        $sut = $this->makeInstance();
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'Invalid preset slug "brand.primary": only ASCII letters, digits, and hyphens are allowed.'
+        );
 
-        $sut->add(new Palette('brand.primary', 'Brand Primary', new Color('#111111')));
-
-        $this->assertSame('#111111', $sut->get('color.brand.primary')->toArray()['color']);
-        $this->assertSame('#111111', $sut->get(['color', 'brand', 'primary'])->toArray()['color']);
-        $this->assertSame('fallback', $sut->get(['color', 'brand.secondary'], 'fallback'));
+        new Palette('brand.primary', 'Brand Primary', new Color('#111111'));
     }
 
     public function testItShouldRejectDottedSlugWhenParentPresetAlreadyExists(): void

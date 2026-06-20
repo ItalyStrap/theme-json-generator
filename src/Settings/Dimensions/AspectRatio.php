@@ -18,6 +18,7 @@ final readonly class AspectRatio implements PresetInterface
         private string $name,
         private string $ratio,
     ) {
+        $this->assertSlugIsWellFormed($slug);
     }
 
     /**

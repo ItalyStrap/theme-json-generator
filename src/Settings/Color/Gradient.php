@@ -22,6 +22,7 @@ final readonly class Gradient implements PresetInterface
         private string $name,
         private GradientInterface $gradient
     ) {
+        $this->assertSlugIsWellFormed($slug);
     }
 
     /**

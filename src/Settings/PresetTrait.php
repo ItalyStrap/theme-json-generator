@@ -13,7 +13,6 @@ trait PresetTrait
 
     public function slug(): string
     {
-        $this->assertSlugIsWellFormed($this->slug);
         return $this->slug;
     }
 
@@ -51,12 +50,13 @@ trait PresetTrait
 
     private function assertSlugIsWellFormed(string $slug): void
     {
-        if (
-            \preg_match('#\s#', $slug)
-            || $slug === ''
-        ) {
+        if ($slug === '') {
+            throw new \InvalidArgumentException('Preset slug must not be empty.');
+        }
+
+        if (\preg_match('/^[A-Za-z0-9-]+$/', $slug) !== 1) {
             throw new \InvalidArgumentException(\sprintf(
-                'Slug with spaces is not allowed, got %s',
+                'Invalid preset slug "%s": only ASCII letters, digits, and hyphens are allowed.',
                 $slug
             ));
         }
