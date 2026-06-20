@@ -29,6 +29,10 @@ final readonly class TemplateParts
             throw new \InvalidArgumentException('Expected a non-empty template part area.');
         }
 
+        if ($title === '') {
+            throw new \InvalidArgumentException('Expected a non-empty template part title when provided.');
+        }
+
         $templatePart = \array_filter([
             'name' => $name,
             'title' => $title,

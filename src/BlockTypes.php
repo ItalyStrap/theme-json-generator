@@ -21,6 +21,10 @@ final readonly class BlockTypes
     #[ThemeSchemaCoverage(['topLevel', 'blockTypes'])]
     public function add(string $blockType): self
     {
+        if ($blockType === '') {
+            throw new \InvalidArgumentException('Expected a non-empty block type.');
+        }
+
         $this->themeJson->appendTo('blockTypes', $blockType);
         return $this;
     }

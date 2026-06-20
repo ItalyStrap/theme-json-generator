@@ -95,6 +95,22 @@ final class ThemeJsonTest extends UnitTestCase
         $this->assertSame(['moduli/hero'], $sut->get('patterns'));
     }
 
+    public function testItShouldRejectEmptyBlockTypes(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Expected a non-empty block type.');
+
+        $this->makeInstance()->blockTypes()->add('');
+    }
+
+    public function testItShouldRejectEmptyPatterns(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Expected a non-empty pattern name.');
+
+        $this->makeInstance()->patterns()->add('');
+    }
+
     public function testItShouldExposeSettingsFacade(): void
     {
         $sut = $this->makeInstance();

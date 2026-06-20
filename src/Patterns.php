@@ -21,6 +21,10 @@ final readonly class Patterns
     #[ThemeSchemaCoverage(['topLevel', 'patterns'])]
     public function add(string $pattern): self
     {
+        if ($pattern === '') {
+            throw new \InvalidArgumentException('Expected a non-empty pattern name.');
+        }
+
         $this->themeJson->appendTo('patterns', $pattern);
         return $this;
     }

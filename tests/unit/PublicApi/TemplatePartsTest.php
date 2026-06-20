@@ -68,4 +68,12 @@ final class TemplatePartsTest extends UnitTestCase
 
         $this->makeInstance()->templateParts()->addPart('header', '');
     }
+
+    public function testItShouldRejectEmptyTitles(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Expected a non-empty template part title when provided.');
+
+        $this->makeInstance()->templateParts()->addPart('header', 'header', '');
+    }
 }
