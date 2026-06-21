@@ -58,4 +58,13 @@ final class LinearGradientTest extends UnitTestCase
             (string)$sut
         );
     }
+
+    public function testItShouldRejectABlankStringColor(): void
+    {
+        $sut = $this->makeInstance();
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Gradient color must not be empty.');
+
+        $sut->colorStop('  ');
+    }
 }

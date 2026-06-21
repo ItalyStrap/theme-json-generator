@@ -21,12 +21,14 @@ final class LinearGradient implements GradientInterface
         return $this;
     }
 
-    /**
-     * @param Palette|ColorInterface|string $color
-     * @throws \Exception
-     */
-    public function colorStop($color = null, string $stop = ''): self
-    {
+    public function colorStop(
+        Palette|ColorInterface|string $color,
+        string $stop = ''
+    ): self {
+        if (\is_string($color) && \trim($color) === '') {
+            throw new \InvalidArgumentException('Gradient color must not be empty.');
+        }
+
         $colorVar = '';
         if ($color instanceof Palette) {
             $colorVar = $color->var((string)$color->color());
@@ -41,10 +43,6 @@ final class LinearGradient implements GradientInterface
         }
 
         $result = \trim($colorVar . ' ' . $stop);
-
-        if ($result === '') {
-            return $this;
-        }
 
         $this->colors[] = $result;
         return $this;
