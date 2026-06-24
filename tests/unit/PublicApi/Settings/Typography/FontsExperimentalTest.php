@@ -48,16 +48,38 @@ final class FontsExperimentalTest extends UnitTestCase
         $this->assertSame('file:./fixtures/fonts/Roboto/Roboto-BlackItalic.ttf', $fontFaces[1]->toArray()['src']);
     }
 
-    public function testItShouldNotSilentlySkipDiscoveredWoff2FilesThatCannotBeLoaded(): void
+    public function testItShouldStripOnlyTheLeadingDirectoryPrefixFromTheSource(): void
     {
         $directory = $this->createTemporaryFontDirectory();
-        $file = $directory . '/Inter.woff2';
-        \file_put_contents($file, 'wOF2' . \str_repeat("\0", 44));
+        $relativeDirectory = \ltrim($directory, '/');
+        $nestedDirectory = $directory . '/nested/' . $relativeDirectory;
+        \mkdir($nestedDirectory, 0777, true);
+        \copy(
+            \codecept_data_dir('fixtures/fonts/Roboto/Roboto-Regular.ttf'),
+            $nestedDirectory . '/Roboto-Regular.ttf'
+        );
 
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Unable to load supported font file');
+        $fontFaces = (new FontFaceLoaderExperimental($directory, 'file:./fonts'))->load();
 
-        (new FontFaceLoaderExperimental($directory, 'file:./fixtures/fonts'))->load();
+        $this->assertSame(
+            'file:./fonts/nested/' . $relativeDirectory . '/Roboto-Regular.ttf',
+            $fontFaces[0]->toArray()['src']
+        );
+    }
+
+    public function testItShouldContinueLoadingAfterACorruptFontFile(): void
+    {
+        $directory = $this->createTemporaryFontDirectory();
+        \file_put_contents($directory . '/Corrupt.woff2', 'wOF2' . \str_repeat("\0", 44));
+        \copy(
+            \codecept_data_dir('fixtures/fonts/Roboto/Roboto-Regular.ttf'),
+            $directory . '/Roboto-Regular.ttf'
+        );
+
+        $fontFaces = (new FontFaceLoaderExperimental($directory, 'file:./fixtures/fonts'))->load();
+
+        $this->assertCount(1, $fontFaces);
+        $this->assertSame('Roboto', $fontFaces[0]->toArray()['fontFamily']);
     }
 
     public function testItShouldRejectMissingDirectories(): void
@@ -85,10 +107,25 @@ final class FontsExperimentalTest extends UnitTestCase
     protected function _after(): void
     {
         if ($this->temporaryFontDirectory !== '') {
-            foreach (new \FilesystemIterator($this->temporaryFontDirectory) as $file) {
-                if ($file instanceof \SplFileInfo && $file->isFile()) {
-                    \unlink($file->getPathname());
+            $iterator = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator(
+                    $this->temporaryFontDirectory,
+                    \FilesystemIterator::SKIP_DOTS
+                ),
+                \RecursiveIteratorIterator::CHILD_FIRST
+            );
+
+            foreach ($iterator as $file) {
+                if (!$file instanceof \SplFileInfo) {
+                    continue;
                 }
+
+                if ($file->isFile()) {
+                    \unlink($file->getPathname());
+                    continue;
+                }
+
+                \rmdir($file->getPathname());
             }
 
             \rmdir($this->temporaryFontDirectory);
