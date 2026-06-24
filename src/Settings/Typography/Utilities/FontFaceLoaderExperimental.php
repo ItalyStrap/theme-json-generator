@@ -23,7 +23,11 @@ final readonly class FontFaceLoaderExperimental
         $fontFaces = [];
 
         foreach ($this->files() as $file) {
-            $fontFace = $this->fontFaceFromFile($file);
+            try {
+                $fontFace = $this->fontFaceFromFile($file);
+            } catch (\Throwable) {
+                continue;
+            }
 
             if (!$fontFace instanceof FontFace) {
                 continue;
@@ -117,7 +121,10 @@ final readonly class FontFaceLoaderExperimental
 
     private function src(string $file): string
     {
-        $relativePath = \ltrim(\str_replace($this->normalizedDirectory(), '', $this->normalizedPath($file)), '/');
+        $relativePath = \substr(
+            $this->normalizedPath($file),
+            \strlen($this->normalizedDirectory())
+        );
 
         return \rtrim($this->srcPrefix, '/') . '/' . $relativePath;
     }

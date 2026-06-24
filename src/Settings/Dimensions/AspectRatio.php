@@ -11,6 +11,8 @@ final readonly class AspectRatio implements PresetInterface
 {
     use PresetTrait;
 
+    public const SECTION = 'aspectRatios';
+
     public const TYPE = 'aspectRatio';
 
     public function __construct(

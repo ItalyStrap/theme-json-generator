@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator\Styles;
 
 use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
+use ItalyStrap\ThemeJsonGenerator\Styles;
 
 final class Spacing implements ArrayableInterface, \JsonSerializable
 {
     use CommonTrait;
+
+    public const SECTION = 'spacing';
 
     /**
      * @var string
@@ -45,19 +48,19 @@ final class Spacing implements ArrayableInterface, \JsonSerializable
      */
     public const PADDING = 'padding';
 
-    #[ThemeSchemaCoverage(['styles', 'spacing', 'blockGap'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::BLOCK_GAP])]
     public function blockGap(string $value): self
     {
         return $this->setProperty(self::BLOCK_GAP, $value);
     }
 
-    #[ThemeSchemaCoverage(['styles', 'spacing', 'margin'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::MARGIN])]
     public function margin(): BoxSpacing
     {
         return new BoxSpacing($this->at(self::MARGIN));
     }
 
-    #[ThemeSchemaCoverage(['styles', 'spacing', 'padding'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::PADDING])]
     public function padding(): BoxSpacing
     {
         return new BoxSpacing($this->at(self::PADDING));

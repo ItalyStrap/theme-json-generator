@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator\Settings;
 
 use ItalyStrap\Config\AccessValueInArrayWithNotationTrait;
+use ItalyStrap\ThemeJsonGenerator\Settings;
 use ItalyStrap\ThemeJsonGenerator\Settings\Custom\Custom;
 
 /**
@@ -44,7 +45,7 @@ final class Presets implements PresetsInterface
 
     public function addToBlock(string $block, PresetInterface $item): self
     {
-        $key = ['blocks', $block, $item->type(), ...$this->path($item->slug())];
+        $key = [Settings::BLOCKS_SECTION, $block, $item->type(), ...$this->path($item->slug())];
 
         $this->assertIsUnique($key);
         $this->insertValue($this->collection, $key, $item);

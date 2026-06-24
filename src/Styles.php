@@ -10,6 +10,7 @@ use ItalyStrap\ThemeJsonGenerator\Settings\PresetsInterface;
 use ItalyStrap\ThemeJsonGenerator\Styles\Background;
 use ItalyStrap\ThemeJsonGenerator\Styles\Border;
 use ItalyStrap\ThemeJsonGenerator\Styles\Color;
+use ItalyStrap\ThemeJsonGenerator\Styles\Css;
 use ItalyStrap\ThemeJsonGenerator\Styles\CssInterface;
 use ItalyStrap\ThemeJsonGenerator\Styles\Dimensions;
 use ItalyStrap\ThemeJsonGenerator\Styles\Filter;
@@ -25,6 +26,14 @@ final readonly class Styles
      */
     public const SECTION = 'styles';
 
+    public const BLOCKS_SECTION = 'blocks';
+
+    public const ELEMENTS_SECTION = 'elements';
+
+    public const SHADOW = 'shadow';
+
+    public const VARIATIONS_SECTION = 'variations';
+
     public function __construct(
         private PresetsInterface $presets,
         private StyleContext $context,
@@ -33,25 +42,25 @@ final readonly class Styles
     ) {
     }
 
-    #[ThemeSchemaCoverage([self::SECTION, 'css'])]
+    #[ThemeSchemaCoverage([self::SECTION, Css::SECTION])]
     public function css(string $css, string $selector = ''): self
     {
-        return $this->writeOrFail('css', $this->parseCss($css, $selector));
+        return $this->writeOrFail(Css::SECTION, $this->parseCss($css, $selector));
     }
 
-    #[ThemeSchemaCoverage([self::SECTION, 'css'])]
+    #[ThemeSchemaCoverage([self::SECTION, Css::SECTION])]
     public function appendCss(string $css, string $selector = ''): self
     {
         return $this->appendParsedCss($this->parseCss($css, $selector), $selector !== '');
     }
 
-    #[ThemeSchemaCoverage([self::SECTION, 'css'])]
+    #[ThemeSchemaCoverage([self::SECTION, Css::SECTION])]
     public function scss(string $scss, string $selector = ''): self
     {
-        return $this->writeOrFail('css', $this->scss->parse($scss, $selector));
+        return $this->writeOrFail(Css::SECTION, $this->scss->parse($scss, $selector));
     }
 
-    #[ThemeSchemaCoverage([self::SECTION, 'css'])]
+    #[ThemeSchemaCoverage([self::SECTION, Css::SECTION])]
     public function appendScss(string $scss, string $selector = ''): self
     {
         return $this->appendParsedCss($this->scss->parse($scss, $selector), $selector !== '');
@@ -81,15 +90,15 @@ final readonly class Styles
 
     private function appendParsedCss(string $parsedCss, bool $wasParsedWithSelector): self
     {
-        $currentCss = $this->read('css');
+        $currentCss = $this->read(Css::SECTION);
         $currentCss = \is_string($currentCss) ? $currentCss : '';
 
         if (!$this->context->isScoped()) {
-            return $this->writeOrFail('css', $currentCss . $parsedCss);
+            return $this->writeOrFail(Css::SECTION, $currentCss . $parsedCss);
         }
 
         return $this->writeOrFail(
-            'css',
+            Css::SECTION,
             $currentCss . $this->scopedCssAppendSeparator($currentCss, $parsedCss, $wasParsedWithSelector) . $parsedCss
         );
     }
@@ -146,69 +155,69 @@ final readonly class Styles
         }
     }
 
-    #[ThemeSchemaCoverage([self::SECTION, 'background'])]
+    #[ThemeSchemaCoverage([self::SECTION, Background::SECTION])]
     public function background(): Background
     {
-        return new Background($this->presets, [], $this->context->at('background'));
+        return new Background($this->presets, [], $this->context->at(Background::SECTION));
     }
 
-    #[ThemeSchemaCoverage([self::SECTION, 'border'])]
+    #[ThemeSchemaCoverage([self::SECTION, Border::SECTION])]
     public function border(): Border
     {
-        return new Border($this->presets, [], $this->context->at('border'));
+        return new Border($this->presets, [], $this->context->at(Border::SECTION));
     }
 
-    #[ThemeSchemaCoverage([self::SECTION, 'color'])]
+    #[ThemeSchemaCoverage([self::SECTION, Color::SECTION])]
     public function color(): Color
     {
-        return new Color($this->presets, [], $this->context->at('color'));
+        return new Color($this->presets, [], $this->context->at(Color::SECTION));
     }
 
-    #[ThemeSchemaCoverage([self::SECTION, 'dimensions'])]
+    #[ThemeSchemaCoverage([self::SECTION, Dimensions::SECTION])]
     public function dimensions(): Dimensions
     {
-        return new Dimensions($this->presets, [], $this->context->at('dimensions'));
+        return new Dimensions($this->presets, [], $this->context->at(Dimensions::SECTION));
     }
 
-    #[ThemeSchemaCoverage([self::SECTION, 'filter'])]
+    #[ThemeSchemaCoverage([self::SECTION, Filter::SECTION])]
     public function filter(): Filter
     {
-        return new Filter($this->presets, [], $this->context->at('filter'));
+        return new Filter($this->presets, [], $this->context->at(Filter::SECTION));
     }
 
-    #[ThemeSchemaCoverage([self::SECTION, 'outline'])]
+    #[ThemeSchemaCoverage([self::SECTION, Outline::SECTION])]
     public function outline(): Outline
     {
-        return new Outline($this->presets, [], $this->context->at('outline'));
+        return new Outline($this->presets, [], $this->context->at(Outline::SECTION));
     }
 
-    #[ThemeSchemaCoverage([self::SECTION, 'shadow'])]
+    #[ThemeSchemaCoverage([self::SECTION, self::SHADOW])]
     public function shadow(string $value): self
     {
-        return $this->writeOrFail('shadow', $this->parseStyleValue($value));
+        return $this->writeOrFail(self::SHADOW, $this->parseStyleValue($value));
     }
 
-    #[ThemeSchemaCoverage([self::SECTION, 'spacing'])]
+    #[ThemeSchemaCoverage([self::SECTION, Spacing::SECTION])]
     public function spacing(): Spacing
     {
-        return new Spacing($this->presets, [], $this->context->at('spacing'));
+        return new Spacing($this->presets, [], $this->context->at(Spacing::SECTION));
     }
 
-    #[ThemeSchemaCoverage([self::SECTION, 'typography'])]
+    #[ThemeSchemaCoverage([self::SECTION, Typography::SECTION])]
     public function typography(): Typography
     {
-        return new Typography($this->presets, [], $this->context->at('typography'));
+        return new Typography($this->presets, [], $this->context->at(Typography::SECTION));
     }
 
-    #[ThemeSchemaCoverage([self::SECTION, 'elements'])]
-    #[ThemeSchemaCoverage([self::SECTION, 'elements', '*'])]
+    #[ThemeSchemaCoverage([self::SECTION, self::ELEMENTS_SECTION])]
+    #[ThemeSchemaCoverage([self::SECTION, self::ELEMENTS_SECTION, '*'])]
     public function elements(string $path): self
     {
         return new self($this->presets, $this->context->elements($path), $this->css, $this->scss);
     }
 
-    #[ThemeSchemaCoverage([self::SECTION, 'blocks'])]
-    #[ThemeSchemaCoverage([self::SECTION, 'blockTargets', '*'])]
+    #[ThemeSchemaCoverage([self::SECTION, self::BLOCKS_SECTION])]
+    #[ThemeSchemaCoverage([self::SECTION, self::BLOCKS_SECTION, '*'])]
     public function blocks(string $path): self
     {
         if (\preg_match('/^[a-z][a-z0-9-]*\/[a-z][a-z0-9-]*$/', $path) !== 1) {
@@ -221,7 +230,7 @@ final readonly class Styles
         return new self($this->presets, $this->context->blocks($path), $this->css, $this->scss);
     }
 
-    #[ThemeSchemaCoverage([self::SECTION, 'variations'])]
+    #[ThemeSchemaCoverage([self::SECTION, self::VARIATIONS_SECTION])]
     public function variations(string $variation): self
     {
         if (\preg_match('/^[a-z][a-z0-9-]*$/', $variation) !== 1) {

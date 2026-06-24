@@ -11,7 +11,7 @@ final readonly class Position
 {
     use ScopedSettingsWriterTrait;
 
-    private const SECTION = 'position';
+    public const SECTION = 'position';
 
     public const STICKY = 'sticky';
 
@@ -20,13 +20,13 @@ final readonly class Position
     ) {
     }
 
-    #[ThemeSchemaCoverage(['settings', 'position', 'sticky'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::STICKY])]
     public function enableSticky(): self
     {
         return $this->setBoolean(self::STICKY, true);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'position', 'sticky'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::STICKY])]
     public function disableSticky(): self
     {
         return $this->setBoolean(self::STICKY, false);

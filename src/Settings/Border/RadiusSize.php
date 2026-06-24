@@ -11,6 +11,8 @@ final readonly class RadiusSize implements PresetInterface
 {
     use PresetTrait;
 
+    public const SECTION = 'radiusSizes';
+
     public const TYPE = 'borderRadius';
 
     public function __construct(

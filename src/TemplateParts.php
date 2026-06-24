@@ -18,7 +18,7 @@ final readonly class TemplateParts
     ) {
     }
 
-    #[ThemeSchemaCoverage(['topLevel', 'templateParts'])]
+    #[ThemeSchemaCoverage([ThemeJson::SECTION, self::SECTION])]
     public function addPart(string $name, string $area = 'uncategorized', ?string $title = null): self
     {
         if ($name === '') {
@@ -39,7 +39,7 @@ final readonly class TemplateParts
             'area' => $area,
         ], static fn (?string $value): bool => $value !== null);
 
-        $this->themeJson->appendTo('templateParts', [$templatePart]);
+        $this->themeJson->appendTo(self::SECTION, [$templatePart]);
         return $this;
     }
 }

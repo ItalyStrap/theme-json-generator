@@ -12,7 +12,7 @@ final readonly class Border
 {
     use ScopedSettingsWriterTrait;
 
-    private const SECTION = 'border';
+    public const SECTION = 'border';
 
     public const COLOR = 'color';
 
@@ -22,62 +22,60 @@ final readonly class Border
 
     public const WIDTH = 'width';
 
-    public const RADIUS_SIZES = 'radiusSizes';
-
     public function __construct(
         private Settings $settings,
     ) {
     }
 
-    #[ThemeSchemaCoverage(['settings', 'border', 'color'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::COLOR])]
     public function enableColor(): self
     {
         return $this->setBoolean(self::COLOR, true);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'border', 'color'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::COLOR])]
     public function disableColor(): self
     {
         return $this->setBoolean(self::COLOR, false);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'border', 'radius'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::RADIUS])]
     public function enableRadius(): self
     {
         return $this->setBoolean(self::RADIUS, true);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'border', 'radius'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::RADIUS])]
     public function disableRadius(): self
     {
         return $this->setBoolean(self::RADIUS, false);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'border', 'style'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::STYLE])]
     public function enableStyle(): self
     {
         return $this->setBoolean(self::STYLE, true);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'border', 'style'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::STYLE])]
     public function disableStyle(): self
     {
         return $this->setBoolean(self::STYLE, false);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'border', 'width'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::WIDTH])]
     public function enableWidth(): self
     {
         return $this->setBoolean(self::WIDTH, true);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'border', 'width'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::WIDTH])]
     public function disableWidth(): self
     {
         return $this->setBoolean(self::WIDTH, false);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'border', 'radiusSizes'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, RadiusSize::SECTION])]
     public function addRadiusSize(string $slug, string $name, string $size): self
     {
         $this->settings->addPreset(new RadiusSize($slug, $name, $size));

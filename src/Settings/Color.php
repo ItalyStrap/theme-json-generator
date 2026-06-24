@@ -16,7 +16,7 @@ final readonly class Color
 {
     use ScopedSettingsWriterTrait;
 
-    private const SECTION = 'color';
+    public const SECTION = 'color';
 
     public const BACKGROUND = 'background';
 
@@ -47,151 +47,151 @@ final readonly class Color
     ) {
     }
 
-    #[ThemeSchemaCoverage(['settings', 'color', 'text'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, Color::SECTION, self::TEXT])]
     public function enableText(): self
     {
         return $this->setBoolean(self::TEXT, true);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'color', 'text'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, Color::SECTION, self::TEXT])]
     public function disableText(): self
     {
         return $this->setBoolean(self::TEXT, false);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'color', 'background'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, Color::SECTION, self::BACKGROUND])]
     public function enableBackground(): self
     {
         return $this->setBoolean(self::BACKGROUND, true);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'color', 'background'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, Color::SECTION, self::BACKGROUND])]
     public function disableBackground(): self
     {
         return $this->setBoolean(self::BACKGROUND, false);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'color', 'link'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, Color::SECTION, self::LINK])]
     public function enableLink(): self
     {
         return $this->setBoolean(self::LINK, true);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'color', 'link'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, Color::SECTION, self::LINK])]
     public function disableLink(): self
     {
         return $this->setBoolean(self::LINK, false);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'color', 'custom'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, Color::SECTION, self::CUSTOM])]
     public function enableCustom(): self
     {
         return $this->setBoolean(self::CUSTOM, true);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'color', 'custom'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, Color::SECTION, self::CUSTOM])]
     public function disableCustom(): self
     {
         return $this->setBoolean(self::CUSTOM, false);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'color', 'customDuotone'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, Color::SECTION, self::CUSTOM_DUOTONE])]
     public function enableCustomDuotone(): self
     {
         return $this->setBoolean(self::CUSTOM_DUOTONE, true);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'color', 'customDuotone'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, Color::SECTION, self::CUSTOM_DUOTONE])]
     public function disableCustomDuotone(): self
     {
         return $this->setBoolean(self::CUSTOM_DUOTONE, false);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'color', 'customGradient'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, Color::SECTION, self::CUSTOM_GRADIENT])]
     public function enableCustomGradient(): self
     {
         return $this->setBoolean(self::CUSTOM_GRADIENT, true);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'color', 'customGradient'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, Color::SECTION, self::CUSTOM_GRADIENT])]
     public function disableCustomGradient(): self
     {
         return $this->setBoolean(self::CUSTOM_GRADIENT, false);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'color', 'defaultDuotone'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, Color::SECTION, self::DEFAULT_DUOTONE])]
     public function enableDefaultDuotone(): self
     {
         return $this->setBoolean(self::DEFAULT_DUOTONE, true);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'color', 'defaultDuotone'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, Color::SECTION, self::DEFAULT_DUOTONE])]
     public function disableDefaultDuotone(): self
     {
         return $this->setBoolean(self::DEFAULT_DUOTONE, false);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'color', 'defaultGradients'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, Color::SECTION, self::DEFAULT_GRADIENTS])]
     public function enableDefaultGradients(): self
     {
         return $this->setBoolean(self::DEFAULT_GRADIENTS, true);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'color', 'defaultGradients'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, Color::SECTION, self::DEFAULT_GRADIENTS])]
     public function disableDefaultGradients(): self
     {
         return $this->setBoolean(self::DEFAULT_GRADIENTS, false);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'color', 'defaultPalette'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, Color::SECTION, self::DEFAULT_PALETTE])]
     public function enableDefaultPalette(): self
     {
         return $this->setBoolean(self::DEFAULT_PALETTE, true);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'color', 'defaultPalette'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, Color::SECTION, self::DEFAULT_PALETTE])]
     public function disableDefaultPalette(): self
     {
         return $this->setBoolean(self::DEFAULT_PALETTE, false);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'color', 'heading'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, Color::SECTION, self::HEADING])]
     public function enableHeading(): self
     {
         return $this->setBoolean(self::HEADING, true);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'color', 'heading'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, Color::SECTION, self::HEADING])]
     public function disableHeading(): self
     {
         return $this->setBoolean(self::HEADING, false);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'color', 'button'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, Color::SECTION, self::BUTTON])]
     public function enableButton(): self
     {
         return $this->setBoolean(self::BUTTON, true);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'color', 'button'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, Color::SECTION, self::BUTTON])]
     public function disableButton(): self
     {
         return $this->setBoolean(self::BUTTON, false);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'color', 'caption'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, Color::SECTION, self::CAPTION])]
     public function enableCaption(): self
     {
         return $this->setBoolean(self::CAPTION, true);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'color', 'caption'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, Color::SECTION, self::CAPTION])]
     public function disableCaption(): self
     {
         return $this->setBoolean(self::CAPTION, false);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'color', 'palette'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, Color::SECTION, Palette::SECTION])]
     public function addColor(string $slug, string $name, string|ColorInterface $color): self
     {
         $this->settings->addPreset(new Palette(
@@ -206,7 +206,7 @@ final readonly class Color
     /**
      * @param iterable<mixed> $colors
      */
-    #[ThemeSchemaCoverage(['settings', 'color', 'palette'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, Color::SECTION, Palette::SECTION])]
     public function addColors(iterable $colors): self
     {
         foreach ($colors as $color) {
@@ -224,7 +224,15 @@ final readonly class Color
         return $this;
     }
 
-    #[ThemeSchemaCoverage(['settings', 'color', 'gradients'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, Color::SECTION, Duotone::SECTION])]
+    public function addDuotone(string $slug, string $name, Palette ...$colors): self
+    {
+        $this->settings->addPreset(new Duotone($slug, $name, ...$colors));
+
+        return $this;
+    }
+
+    #[ThemeSchemaCoverage([Settings::SECTION, Color::SECTION, Gradient::SECTION])]
     public function addGradient(
         string $slug,
         string $name,
@@ -232,14 +240,6 @@ final readonly class Color
     ): self {
 
         $this->settings->addPreset(new Gradient($slug, $name, $gradient));
-        return $this;
-    }
-
-    #[ThemeSchemaCoverage(['settings', 'color', 'duotone'])]
-    public function addDuotone(string $slug, string $name, Palette ...$colors): self
-    {
-        $this->settings->addPreset(new Duotone($slug, $name, ...$colors));
-
         return $this;
     }
 }

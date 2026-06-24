@@ -21,7 +21,7 @@ final readonly class CustomTemplates
     /**
      * @param list<string> $postTypes
      */
-    #[ThemeSchemaCoverage(['topLevel', 'customTemplates'])]
+    #[ThemeSchemaCoverage([ThemeJson::SECTION, self::SECTION])]
     public function addTemplate(string $name, string $title, array $postTypes = []): self
     {
         if ($name === '') {
@@ -44,7 +44,7 @@ final readonly class CustomTemplates
             'postTypes' => $postTypes,
         ], static fn (string|array $value): bool => $value !== []);
 
-        $this->themeJson->appendTo('customTemplates', [$customTemplate]);
+        $this->themeJson->appendTo(self::SECTION, [$customTemplate]);
         return $this;
     }
 }

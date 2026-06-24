@@ -5,54 +5,43 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Container;
 
 use ItalyStrap\Config\ConfigInterface;
+use ItalyStrap\ThemeJsonGenerator\Settings;
+use ItalyStrap\ThemeJsonGenerator\Settings\Border;
 use ItalyStrap\ThemeJsonGenerator\Settings\Border\RadiusSize;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Duotone;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Gradient;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Palette;
 use ItalyStrap\ThemeJsonGenerator\Settings\Custom\Custom;
+use ItalyStrap\ThemeJsonGenerator\Settings\Dimensions;
 use ItalyStrap\ThemeJsonGenerator\Settings\Dimensions\AspectRatio;
 use ItalyStrap\ThemeJsonGenerator\Settings\Dimensions\DimensionSize;
 use ItalyStrap\ThemeJsonGenerator\Settings\PresetInterface;
 use ItalyStrap\ThemeJsonGenerator\Settings\PresetsInterface;
 use ItalyStrap\ThemeJsonGenerator\Settings\Shadow\Shadow;
+use ItalyStrap\ThemeJsonGenerator\Settings\Spacing;
 use ItalyStrap\ThemeJsonGenerator\Settings\Spacing\SpacingSize;
+use ItalyStrap\ThemeJsonGenerator\Settings\Typography;
 use ItalyStrap\ThemeJsonGenerator\Settings\Typography\FontFamily;
 use ItalyStrap\ThemeJsonGenerator\Settings\Typography\FontSize;
 
 final class PresetsToThemeJson
 {
     /**
-     * @var array<string, string>
-     */
-    private const ROOT_PATH_BY_TYPE = [
-        RadiusSize::TYPE => 'settings.border.radiusSizes',
-        Palette::TYPE => 'settings.color.palette',
-        Gradient::TYPE => 'settings.color.gradients',
-        Duotone::TYPE => 'settings.color.duotone',
-        AspectRatio::TYPE => 'settings.dimensions.aspectRatios',
-        DimensionSize::TYPE => 'settings.dimensions.dimensionSizes',
-        Shadow::TYPE => 'settings.shadow.presets',
-        SpacingSize::TYPE => 'settings.spacing.spacingSizes',
-        FontSize::TYPE => 'settings.typography.fontSizes',
-        FontFamily::TYPE => 'settings.typography.fontFamilies',
-        Custom::TYPE => 'settings.custom',
-    ];
-
-    /**
      * @var array<string, list<string>>
      */
     private const SETTINGS_PATH_BY_TYPE = [
-        AspectRatio::TYPE => ['dimensions', 'aspectRatios'],
-        RadiusSize::TYPE => ['border', 'radiusSizes'],
-        Palette::TYPE => ['color', 'palette'],
-        Custom::TYPE => ['custom'],
-        DimensionSize::TYPE => ['dimensions', 'dimensionSizes'],
-        Duotone::TYPE => ['color', 'duotone'],
-        FontFamily::TYPE => ['typography', 'fontFamilies'],
-        FontSize::TYPE => ['typography', 'fontSizes'],
-        Gradient::TYPE => ['color', 'gradients'],
-        Shadow::TYPE => ['shadow', 'presets'],
-        SpacingSize::TYPE => ['spacing', 'spacingSizes'],
+        AspectRatio::TYPE => [Dimensions::SECTION, AspectRatio::SECTION],
+        Custom::TYPE => [Settings\Custom::SECTION],
+        RadiusSize::TYPE => [Border::SECTION, RadiusSize::SECTION],
+        Palette::TYPE => [Color::SECTION, Palette::SECTION],
+        Duotone::TYPE => [Color::SECTION, Duotone::SECTION],
+        Gradient::TYPE => [Color::SECTION, Gradient::SECTION],
+        DimensionSize::TYPE => [Dimensions::SECTION, DimensionSize::SECTION],
+        Shadow::TYPE => [Settings\Shadow::SECTION, Shadow::SECTION],
+        SpacingSize::TYPE => [Spacing::SECTION, SpacingSize::SECTION],
+        FontFamily::TYPE => [Typography::SECTION, FontFamily::SECTION],
+        FontSize::TYPE => [Typography::SECTION, FontSize::SECTION],
     ];
 
     /**
@@ -69,15 +58,14 @@ final class PresetsToThemeJson
      */
     private function setRootPresets(ConfigInterface $config, PresetsInterface $presets): void
     {
-        $collection = $presets->collection();
-
-        foreach (self::ROOT_PATH_BY_TYPE as $type => $path) {
-            $items = $collection[$type] ?? null;
+        foreach (self::SETTINGS_PATH_BY_TYPE as $type => $path) {
+            $items = $presets->get($type);
             if (!\is_array($items)) {
                 continue;
             }
 
-            $config->set($path, $this->serializeCollection($presets, $type, $items));
+            /** @phpstan-ignore-next-line Config accepts array paths, StoreInterface only advertises string keys. */
+            $config->set([Settings::SECTION,  ...$path], $this->serializeCollection($presets, $type, $items));
         }
     }
 
@@ -86,7 +74,7 @@ final class PresetsToThemeJson
      */
     private function setBlockPresets(ConfigInterface $config, PresetsInterface $presets): void
     {
-        $blocks = $presets->collection()['blocks'] ?? [];
+        $blocks = $presets->get(Settings::BLOCKS_SECTION, []);
         if (!\is_array($blocks)) {
             return;
         }
@@ -97,7 +85,8 @@ final class PresetsToThemeJson
         foreach ($blocks as $block => $categories) {
             foreach ($categories as $type => $items) {
                 $config->set(
-                    $this->blockSettingsPath($block, $type),
+                    /** @phpstan-ignore-next-line Config accepts array paths, StoreInterface only advertises string keys. */
+                    [Settings::SECTION, Settings::BLOCKS_SECTION, $block, ...self::SETTINGS_PATH_BY_TYPE[$type]],
                     $this->serializeCollection($presets, $type, $items)
                 );
             }
@@ -179,12 +168,5 @@ final class PresetsToThemeJson
         }
 
         return $processed;
-    }
-
-    private function blockSettingsPath(string $block, string $type): string
-    {
-        $path = self::SETTINGS_PATH_BY_TYPE[$type] ?? [$type];
-
-        return \implode('.', ['settings', 'blocks', $block, ...$path]);
     }
 }

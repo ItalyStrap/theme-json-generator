@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator\Styles;
 
 use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
+use ItalyStrap\ThemeJsonGenerator\Styles;
 
 final class Border implements ArrayableInterface, \JsonSerializable
 {
     use CommonTrait;
+
+    public const SECTION = 'border';
 
     /**
      * @var string
@@ -50,61 +53,61 @@ final class Border implements ArrayableInterface, \JsonSerializable
      */
     public const LEFT = 'left';
 
-    #[ThemeSchemaCoverage(['styles', 'border', 'color'])]
-    #[ThemeSchemaCoverage(['styles', 'border', 'top', 'color'])]
-    #[ThemeSchemaCoverage(['styles', 'border', 'right', 'color'])]
-    #[ThemeSchemaCoverage(['styles', 'border', 'bottom', 'color'])]
-    #[ThemeSchemaCoverage(['styles', 'border', 'left', 'color'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::COLOR])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::TOP, self::COLOR])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::RIGHT, self::COLOR])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::BOTTOM, self::COLOR])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::LEFT, self::COLOR])]
     public function color(string $value): Border
     {
         return $this->setProperty(self::COLOR, $value);
     }
 
-    #[ThemeSchemaCoverage(['styles', 'border', 'radius'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::RADIUS])]
     public function radius(string $value): Border
     {
         return $this->setProperty(self::RADIUS, $value);
     }
 
-    #[ThemeSchemaCoverage(['styles', 'border', 'style'])]
-    #[ThemeSchemaCoverage(['styles', 'border', 'top', 'style'])]
-    #[ThemeSchemaCoverage(['styles', 'border', 'right', 'style'])]
-    #[ThemeSchemaCoverage(['styles', 'border', 'bottom', 'style'])]
-    #[ThemeSchemaCoverage(['styles', 'border', 'left', 'style'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::STYLE])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::TOP, self::STYLE])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::RIGHT, self::STYLE])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::BOTTOM, self::STYLE])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::LEFT, self::STYLE])]
     public function style(string $value): Border
     {
         return $this->setProperty(self::STYLE, $value);
     }
 
-    #[ThemeSchemaCoverage(['styles', 'border', 'width'])]
-    #[ThemeSchemaCoverage(['styles', 'border', 'top', 'width'])]
-    #[ThemeSchemaCoverage(['styles', 'border', 'right', 'width'])]
-    #[ThemeSchemaCoverage(['styles', 'border', 'bottom', 'width'])]
-    #[ThemeSchemaCoverage(['styles', 'border', 'left', 'width'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::WIDTH])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::TOP, self::WIDTH])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::RIGHT, self::WIDTH])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::BOTTOM, self::WIDTH])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::LEFT, self::WIDTH])]
     public function width(string $value): Border
     {
         return $this->setProperty(self::WIDTH, $value);
     }
 
-    #[ThemeSchemaCoverage(['styles', 'border', 'top'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::TOP])]
     public function top(): Border
     {
         return $this->at(self::TOP);
     }
 
-    #[ThemeSchemaCoverage(['styles', 'border', 'right'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::RIGHT])]
     public function right(): Border
     {
         return $this->at(self::RIGHT);
     }
 
-    #[ThemeSchemaCoverage(['styles', 'border', 'bottom'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::BOTTOM])]
     public function bottom(): Border
     {
         return $this->at(self::BOTTOM);
     }
 
-    #[ThemeSchemaCoverage(['styles', 'border', 'left'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::LEFT])]
     public function left(): Border
     {
         return $this->at(self::LEFT);

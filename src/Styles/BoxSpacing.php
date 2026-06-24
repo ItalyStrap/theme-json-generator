@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator\Styles;
 
 use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
+use ItalyStrap\ThemeJsonGenerator\Styles;
 
 final readonly class BoxSpacing
 {
@@ -13,29 +14,29 @@ final readonly class BoxSpacing
     ) {
     }
 
-    #[ThemeSchemaCoverage(['styles', 'spacing', 'margin', 'top'])]
-    #[ThemeSchemaCoverage(['styles', 'spacing', 'padding', 'top'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::MARGIN, Spacing::TOP])]
+    #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::PADDING, Spacing::TOP])]
     public function top(string $value): self
     {
         return $this->setProperty(Spacing::TOP, $value);
     }
 
-    #[ThemeSchemaCoverage(['styles', 'spacing', 'margin', 'right'])]
-    #[ThemeSchemaCoverage(['styles', 'spacing', 'padding', 'right'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::MARGIN, Spacing::RIGHT])]
+    #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::PADDING, Spacing::RIGHT])]
     public function right(string $value): self
     {
         return $this->setProperty(Spacing::RIGHT, $value);
     }
 
-    #[ThemeSchemaCoverage(['styles', 'spacing', 'margin', 'bottom'])]
-    #[ThemeSchemaCoverage(['styles', 'spacing', 'padding', 'bottom'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::MARGIN, Spacing::BOTTOM])]
+    #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::PADDING, Spacing::BOTTOM])]
     public function bottom(string $value): self
     {
         return $this->setProperty(Spacing::BOTTOM, $value);
     }
 
-    #[ThemeSchemaCoverage(['styles', 'spacing', 'margin', 'left'])]
-    #[ThemeSchemaCoverage(['styles', 'spacing', 'padding', 'left'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::MARGIN, Spacing::LEFT])]
+    #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::PADDING, Spacing::LEFT])]
     public function left(string $value): self
     {
         return $this->setProperty(Spacing::LEFT, $value);
@@ -44,14 +45,14 @@ final readonly class BoxSpacing
     /**
      * @param string[] $values
      */
-    #[ThemeSchemaCoverage(['styles', 'spacing', 'margin', 'top'])]
-    #[ThemeSchemaCoverage(['styles', 'spacing', 'margin', 'right'])]
-    #[ThemeSchemaCoverage(['styles', 'spacing', 'margin', 'bottom'])]
-    #[ThemeSchemaCoverage(['styles', 'spacing', 'margin', 'left'])]
-    #[ThemeSchemaCoverage(['styles', 'spacing', 'padding', 'top'])]
-    #[ThemeSchemaCoverage(['styles', 'spacing', 'padding', 'right'])]
-    #[ThemeSchemaCoverage(['styles', 'spacing', 'padding', 'bottom'])]
-    #[ThemeSchemaCoverage(['styles', 'spacing', 'padding', 'left'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::MARGIN, Spacing::TOP])]
+    #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::MARGIN, Spacing::RIGHT])]
+    #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::MARGIN, Spacing::BOTTOM])]
+    #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::MARGIN, Spacing::LEFT])]
+    #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::PADDING, Spacing::TOP])]
+    #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::PADDING, Spacing::RIGHT])]
+    #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::PADDING, Spacing::BOTTOM])]
+    #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::PADDING, Spacing::LEFT])]
     public function shorthand(array $values): self
     {
         return match (\count($values)) {
@@ -78,10 +79,10 @@ final readonly class BoxSpacing
         };
     }
 
-    #[ThemeSchemaCoverage(['styles', 'spacing', 'margin', 'top'])]
-    #[ThemeSchemaCoverage(['styles', 'spacing', 'margin', 'bottom'])]
-    #[ThemeSchemaCoverage(['styles', 'spacing', 'padding', 'top'])]
-    #[ThemeSchemaCoverage(['styles', 'spacing', 'padding', 'bottom'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::MARGIN, Spacing::TOP])]
+    #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::MARGIN, Spacing::BOTTOM])]
+    #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::PADDING, Spacing::TOP])]
+    #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::PADDING, Spacing::BOTTOM])]
     public function vertical(string $value): self
     {
         return $this
@@ -89,10 +90,10 @@ final readonly class BoxSpacing
             ->bottom($value);
     }
 
-    #[ThemeSchemaCoverage(['styles', 'spacing', 'margin', 'right'])]
-    #[ThemeSchemaCoverage(['styles', 'spacing', 'margin', 'left'])]
-    #[ThemeSchemaCoverage(['styles', 'spacing', 'padding', 'right'])]
-    #[ThemeSchemaCoverage(['styles', 'spacing', 'padding', 'left'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::MARGIN, Spacing::RIGHT])]
+    #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::MARGIN, Spacing::LEFT])]
+    #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::PADDING, Spacing::RIGHT])]
+    #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::PADDING, Spacing::LEFT])]
     public function horizontal(string $value): self
     {
         return $this
@@ -100,10 +101,10 @@ final readonly class BoxSpacing
             ->left($value);
     }
 
-    #[ThemeSchemaCoverage(['styles', 'spacing', 'margin', 'top'])]
-    #[ThemeSchemaCoverage(['styles', 'spacing', 'margin', 'bottom'])]
-    #[ThemeSchemaCoverage(['styles', 'spacing', 'padding', 'top'])]
-    #[ThemeSchemaCoverage(['styles', 'spacing', 'padding', 'bottom'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::MARGIN, Spacing::TOP])]
+    #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::MARGIN, Spacing::BOTTOM])]
+    #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::PADDING, Spacing::TOP])]
+    #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::PADDING, Spacing::BOTTOM])]
     public function verticalAsync(string $top, string $bottom): self
     {
         return $this
@@ -111,10 +112,10 @@ final readonly class BoxSpacing
             ->bottom($bottom);
     }
 
-    #[ThemeSchemaCoverage(['styles', 'spacing', 'margin', 'right'])]
-    #[ThemeSchemaCoverage(['styles', 'spacing', 'margin', 'left'])]
-    #[ThemeSchemaCoverage(['styles', 'spacing', 'padding', 'right'])]
-    #[ThemeSchemaCoverage(['styles', 'spacing', 'padding', 'left'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::MARGIN, Spacing::RIGHT])]
+    #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::MARGIN, Spacing::LEFT])]
+    #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::PADDING, Spacing::RIGHT])]
+    #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::PADDING, Spacing::LEFT])]
     public function horizontalAsync(string $right, string $left): self
     {
         return $this

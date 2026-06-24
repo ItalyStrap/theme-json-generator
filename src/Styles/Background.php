@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator\Styles;
 
 use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
+use ItalyStrap\ThemeJsonGenerator\Styles;
 
 final class Background implements ArrayableInterface, \JsonSerializable
 {
     use CommonTrait;
+
+    public const SECTION = 'background';
 
     /**
      * @var string
@@ -35,31 +38,31 @@ final class Background implements ArrayableInterface, \JsonSerializable
      */
     public const BACKGROUND_ATTACHMENT = 'backgroundAttachment';
 
-    #[ThemeSchemaCoverage(['styles', 'background', 'backgroundImage'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::BACKGROUND_IMAGE])]
     public function backgroundImage(string $value): self
     {
         return $this->setProperty(self::BACKGROUND_IMAGE, $value);
     }
 
-    #[ThemeSchemaCoverage(['styles', 'background', 'backgroundPosition'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::BACKGROUND_POSITION])]
     public function backgroundPosition(string $value): self
     {
         return $this->setProperty(self::BACKGROUND_POSITION, $value);
     }
 
-    #[ThemeSchemaCoverage(['styles', 'background', 'backgroundRepeat'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::BACKGROUND_REPEAT])]
     public function backgroundRepeat(string $value): self
     {
         return $this->setProperty(self::BACKGROUND_REPEAT, $value);
     }
 
-    #[ThemeSchemaCoverage(['styles', 'background', 'backgroundSize'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::BACKGROUND_SIZE])]
     public function backgroundSize(string $value): self
     {
         return $this->setProperty(self::BACKGROUND_SIZE, $value);
     }
 
-    #[ThemeSchemaCoverage(['styles', 'background', 'backgroundAttachment'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::BACKGROUND_ATTACHMENT])]
     public function backgroundAttachment(string $value): self
     {
         return $this->setProperty(self::BACKGROUND_ATTACHMENT, $value);

@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator\Styles;
 
 use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
+use ItalyStrap\ThemeJsonGenerator\Styles;
 
 final class Color implements ArrayableInterface, \JsonSerializable
 {
     use CommonTrait;
+
+    public const SECTION = 'color';
 
     /**
      * @var string
@@ -25,19 +28,19 @@ final class Color implements ArrayableInterface, \JsonSerializable
      */
     public const TEXT = 'text';
 
-    #[ThemeSchemaCoverage(['styles', 'color', 'background'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::BACKGROUND])]
     public function background(string $value): Color
     {
         return $this->setProperty(self::BACKGROUND, $value);
     }
 
-    #[ThemeSchemaCoverage(['styles', 'color', 'gradient'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::GRADIENT])]
     public function gradient(string $value): Color
     {
         return $this->setProperty(self::GRADIENT, $value);
     }
 
-    #[ThemeSchemaCoverage(['styles', 'color', 'text'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::TEXT])]
     public function text(string $value): Color
     {
         return $this->setProperty(self::TEXT, $value);

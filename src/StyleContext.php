@@ -8,15 +8,30 @@ final readonly class StyleContext
 {
     use ThemeJsonContextTrait;
 
+    private const ROOT_STRUCTURE = 'root';
+
+    private const STATE_STRUCTURE = 'state';
+
     /**
      * @var array<string, list<string>>
      */
     private const ALLOWED_TRANSITIONS = [
-        'root' => ['blocks', 'elements', 'variations'],
-        'blocks' => ['elements', 'variations', 'state'],
-        'elements' => ['state'],
-        'variations' => ['blocks', 'elements'],
-        'state' => [],
+        self::ROOT_STRUCTURE => [
+            Styles::BLOCKS_SECTION,
+            Styles::ELEMENTS_SECTION,
+            Styles::VARIATIONS_SECTION,
+        ],
+        Styles::BLOCKS_SECTION => [
+            Styles::ELEMENTS_SECTION,
+            Styles::VARIATIONS_SECTION,
+            self::STATE_STRUCTURE,
+        ],
+        Styles::ELEMENTS_SECTION => [self::STATE_STRUCTURE],
+        Styles::VARIATIONS_SECTION => [
+            Styles::BLOCKS_SECTION,
+            Styles::ELEMENTS_SECTION,
+        ],
+        self::STATE_STRUCTURE => [],
     ];
 
     /**
@@ -40,17 +55,17 @@ final readonly class StyleContext
 
     public function blocks(string $path): self
     {
-        return $this->enter('blocks', $path);
+        return $this->enter(Styles::BLOCKS_SECTION, $path);
     }
 
     public function elements(string $path): self
     {
-        return $this->enter('elements', $path);
+        return $this->enter(Styles::ELEMENTS_SECTION, $path);
     }
 
     public function variations(string $variation): self
     {
-        return $this->enter('variations', $variation);
+        return $this->enter(Styles::VARIATIONS_SECTION, $variation);
     }
 
     public function state(string $state): self
@@ -59,7 +74,7 @@ final readonly class StyleContext
             throw new \LogicException('Cannot call "state()" outside a block or element context.');
         }
 
-        return $this->enter('state', $state, false);
+        return $this->enter(self::STATE_STRUCTURE, $state, false);
     }
 
     /**
@@ -72,7 +87,9 @@ final readonly class StyleContext
 
     private function enter(string $structure, string $path, bool $includeStructureInPath = true): self
     {
-        $parent = $this->structure === [] ? 'root' : $this->structure[\array_key_last($this->structure)];
+        $parent = $this->structure === []
+            ? self::ROOT_STRUCTURE
+            : $this->structure[\array_key_last($this->structure)];
 
         if (!\in_array($structure, self::ALLOWED_TRANSITIONS[$parent], true)) {
             throw new \LogicException(\sprintf(

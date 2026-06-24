@@ -11,6 +11,8 @@ final class Duotone implements PresetInterface
 {
     use PresetTrait;
 
+    public const SECTION = 'duotone';
+
     /**
      * @var string
      */

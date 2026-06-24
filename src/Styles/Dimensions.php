@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator\Styles;
 
 use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
+use ItalyStrap\ThemeJsonGenerator\Styles;
 
 final class Dimensions implements ArrayableInterface, \JsonSerializable
 {
     use CommonTrait;
+
+    public const SECTION = 'dimensions';
 
     /**
      * @var string
@@ -35,31 +38,31 @@ final class Dimensions implements ArrayableInterface, \JsonSerializable
      */
     public const WIDTH = 'width';
 
-    #[ThemeSchemaCoverage(['styles', 'dimensions', 'aspectRatio'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::ASPECT_RATIO])]
     public function aspectRatio(string $value): self
     {
         return $this->setProperty(self::ASPECT_RATIO, $value);
     }
 
-    #[ThemeSchemaCoverage(['styles', 'dimensions', 'height'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::HEIGHT])]
     public function height(string $value): self
     {
         return $this->setProperty(self::HEIGHT, $value);
     }
 
-    #[ThemeSchemaCoverage(['styles', 'dimensions', 'minHeight'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::MIN_HEIGHT])]
     public function minHeight(string $value): self
     {
         return $this->setProperty(self::MIN_HEIGHT, $value);
     }
 
-    #[ThemeSchemaCoverage(['styles', 'dimensions', 'minWidth'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::MIN_WIDTH])]
     public function minWidth(string $value): self
     {
         return $this->setProperty(self::MIN_WIDTH, $value);
     }
 
-    #[ThemeSchemaCoverage(['styles', 'dimensions', 'width'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::WIDTH])]
     public function width(string $value): self
     {
         return $this->setProperty(self::WIDTH, $value);

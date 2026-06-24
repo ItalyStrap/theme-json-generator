@@ -13,7 +13,7 @@ final readonly class Spacing
 {
     use ScopedSettingsWriterTrait;
 
-    private const SECTION = 'spacing';
+    public const SECTION = 'spacing';
 
     public const BLOCK_GAP = 'blockGap';
 
@@ -27,8 +27,6 @@ final readonly class Spacing
 
     public const SPACING_SCALE = 'spacingScale';
 
-    public const SPACING_SIZES = 'spacingSizes';
-
     public const UNITS = 'units';
 
     public function __construct(
@@ -36,50 +34,50 @@ final readonly class Spacing
     ) {
     }
 
-    #[ThemeSchemaCoverage(['settings', 'spacing', 'blockGap'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::BLOCK_GAP])]
     public function enableBlockGap(): self
     {
         return $this->setBoolean(self::BLOCK_GAP, true);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'spacing', 'blockGap'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::BLOCK_GAP])]
     public function disableBlockGap(): self
     {
         return $this->setBoolean(self::BLOCK_GAP, false);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'spacing', 'blockGap'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::BLOCK_GAP])]
     public function disableBlockGapAndLayoutStyles(): self
     {
         $this->set(self::BLOCK_GAP, null);
         return $this;
     }
 
-    #[ThemeSchemaCoverage(['settings', 'spacing', 'margin'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::MARGIN])]
     public function enableMargin(): self
     {
         return $this->setBoolean(self::MARGIN, true);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'spacing', 'margin'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::MARGIN])]
     public function disableMargin(): self
     {
         return $this->setBoolean(self::MARGIN, false);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'spacing', 'padding'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::PADDING])]
     public function enablePadding(): self
     {
         return $this->setBoolean(self::PADDING, true);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'spacing', 'padding'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::PADDING])]
     public function disablePadding(): self
     {
         return $this->setBoolean(self::PADDING, false);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'spacing', 'units'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::UNITS])]
     public function units(string ...$units): self
     {
         if ($units === []) {
@@ -90,31 +88,31 @@ final readonly class Spacing
         return $this;
     }
 
-    #[ThemeSchemaCoverage(['settings', 'spacing', 'customSpacingSize'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::CUSTOM_SPACING_SIZE])]
     public function enableCustomSpacingSize(): self
     {
         return $this->setBoolean(self::CUSTOM_SPACING_SIZE, true);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'spacing', 'customSpacingSize'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::CUSTOM_SPACING_SIZE])]
     public function disableCustomSpacingSize(): self
     {
         return $this->setBoolean(self::CUSTOM_SPACING_SIZE, false);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'spacing', 'defaultSpacingSizes'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::DEFAULT_SPACING_SIZES])]
     public function enableDefaultSpacingSizes(): self
     {
         return $this->setBoolean(self::DEFAULT_SPACING_SIZES, true);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'spacing', 'defaultSpacingSizes'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::DEFAULT_SPACING_SIZES])]
     public function disableDefaultSpacingSizes(): self
     {
         return $this->setBoolean(self::DEFAULT_SPACING_SIZES, false);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'spacing', 'spacingSizes'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, SpacingSize::SECTION])]
     public function addSpacingSize(string $slug, string $name, string $size): self
     {
         $this->settings->addPreset(new SpacingSize($slug, $name, $size));
@@ -122,7 +120,7 @@ final readonly class Spacing
         return $this;
     }
 
-    #[ThemeSchemaCoverage(['settings', 'spacing', 'spacingScale'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, Scale::SECTION])]
     public function scale(): Scale
     {
         return new Scale($this);

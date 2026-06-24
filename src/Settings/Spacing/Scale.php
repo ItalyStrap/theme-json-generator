@@ -5,50 +5,63 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator\Settings\Spacing;
 
 use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
+use ItalyStrap\ThemeJsonGenerator\Settings;
 use ItalyStrap\ThemeJsonGenerator\Settings\Spacing;
 
 final readonly class Scale
 {
+    public const SECTION = 'spacingScale';
+
+    public const OPERATOR = 'operator';
+
+    public const INCREMENT = 'increment';
+
+    public const STEPS = 'steps';
+
+    public const MEDIUM_STEP = 'mediumStep';
+
+    public const UNIT = 'unit';
+
     public function __construct(private Spacing $spacing)
     {
     }
 
-    #[ThemeSchemaCoverage(['settings', 'spacing', 'spacingScale', 'operator'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, Spacing::SECTION, self::SECTION, self::OPERATOR])]
     public function operator(string $operator): self
     {
         if (!\in_array($operator, ['+', '*'], true)) {
             throw new \InvalidArgumentException(\sprintf('Expected "+" or "*", got "%s".', $operator));
         }
 
-        return $this->set('operator', $operator);
+        return $this->set(self::OPERATOR, $operator);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'spacing', 'spacingScale', 'increment'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, Spacing::SECTION, self::SECTION, self::INCREMENT])]
     public function increment(float $increment): self
     {
-        return $this->set('increment', $this->positive($increment, 'increment'));
+        return $this->set(self::INCREMENT, $this->positive($increment, self::INCREMENT));
     }
 
-    #[ThemeSchemaCoverage(['settings', 'spacing', 'spacingScale', 'steps'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, Spacing::SECTION, self::SECTION, self::STEPS])]
     public function steps(int $steps): self
     {
         if ($steps < 1 || $steps > 10) {
             throw new \InvalidArgumentException(\sprintf('Expected steps between 1 and 10, got %d.', $steps));
         }
 
-        return $this->set('steps', $steps);
+        return $this->set(self::STEPS, $steps);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'spacing', 'spacingScale', 'mediumStep'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, Spacing::SECTION, self::SECTION, self::MEDIUM_STEP])]
     public function mediumStep(float $mediumStep): self
     {
-        return $this->set('mediumStep', $this->positive($mediumStep, 'medium step'));
+        return $this->set(self::MEDIUM_STEP, $this->positive($mediumStep, 'medium step'));
     }
 
-    #[ThemeSchemaCoverage(['settings', 'spacing', 'spacingScale', 'unit'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, Spacing::SECTION, self::SECTION, self::UNIT])]
     public function unit(string $unit): self
     {
-        return $this->set('unit', $unit);
+        return $this->set(self::UNIT, $unit);
     }
 
     private function set(string $property, mixed $value): self

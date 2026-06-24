@@ -14,6 +14,8 @@ use ScssPhp\ScssPhp\Compiler;
 
 final readonly class ThemeJson
 {
+    public const SECTION = 'topLevel';
+
     /**
      * @var string
      */
@@ -48,43 +50,43 @@ final readonly class ThemeJson
     ) {
     }
 
-    #[ThemeSchemaCoverage(['topLevel', self::SCHEMA])]
+    #[ThemeSchemaCoverage([self::SECTION, self::SCHEMA])]
     public function schema(string $schema): self
     {
         return $this->setRoot(self::SCHEMA, $schema);
     }
 
-    #[ThemeSchemaCoverage(['topLevel', self::VERSION])]
+    #[ThemeSchemaCoverage([self::SECTION, self::VERSION])]
     public function version(int $version): self
     {
         return $this->setRoot(self::VERSION, $version);
     }
 
-    #[ThemeSchemaCoverage(['topLevel', self::TITLE])]
+    #[ThemeSchemaCoverage([self::SECTION, self::TITLE])]
     public function title(string $title): self
     {
         return $this->setRoot(self::TITLE, $title);
     }
 
-    #[ThemeSchemaCoverage(['topLevel', self::SLUG])]
+    #[ThemeSchemaCoverage([self::SECTION, self::SLUG])]
     public function slug(string $slug): self
     {
         return $this->setRoot(self::SLUG, $slug);
     }
 
-    #[ThemeSchemaCoverage(['topLevel', self::DESCRIPTION])]
+    #[ThemeSchemaCoverage([self::SECTION, self::DESCRIPTION])]
     public function description(string $description): self
     {
         return $this->setRoot(self::DESCRIPTION, $description);
     }
 
-    #[ThemeSchemaCoverage(['topLevel', Settings::SECTION])]
+    #[ThemeSchemaCoverage([self::SECTION, Settings::SECTION])]
     public function settings(): Settings
     {
         return new Settings($this->presets, new SettingsContext($this, [Settings::SECTION]));
     }
 
-    #[ThemeSchemaCoverage(['topLevel', Styles::SECTION])]
+    #[ThemeSchemaCoverage([self::SECTION, Styles::SECTION])]
     public function styles(): Styles
     {
         $css = new Css($this->presets);
@@ -97,25 +99,25 @@ final readonly class ThemeJson
         );
     }
 
-    #[ThemeSchemaCoverage(['topLevel', BlockTypes::SECTION])]
+    #[ThemeSchemaCoverage([self::SECTION, BlockTypes::SECTION])]
     public function blockTypes(): BlockTypes
     {
         return new BlockTypes($this);
     }
 
-    #[ThemeSchemaCoverage(['topLevel', CustomTemplates::SECTION])]
+    #[ThemeSchemaCoverage([self::SECTION, CustomTemplates::SECTION])]
     public function customTemplates(): CustomTemplates
     {
         return new CustomTemplates($this);
     }
 
-    #[ThemeSchemaCoverage(['topLevel', TemplateParts::SECTION])]
+    #[ThemeSchemaCoverage([self::SECTION, TemplateParts::SECTION])]
     public function templateParts(): TemplateParts
     {
         return new TemplateParts($this);
     }
 
-    #[ThemeSchemaCoverage(['topLevel', Patterns::SECTION])]
+    #[ThemeSchemaCoverage([self::SECTION, Patterns::SECTION])]
     public function patterns(): Patterns
     {
         return new Patterns($this);

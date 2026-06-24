@@ -12,6 +12,8 @@ final readonly class FontSize implements PresetInterface
 {
     use PresetTrait;
 
+    public const SECTION = 'fontSizes';
+
     /**
      * @var string
      */

@@ -13,30 +13,28 @@ final readonly class Shadow
 {
     use ScopedSettingsWriterTrait;
 
-    private const SECTION = 'shadow';
+    public const SECTION = 'shadow';
 
     public const DEFAULT_PRESETS = 'defaultPresets';
-
-    public const PRESETS = 'presets';
 
     public function __construct(
         private Settings $settings,
     ) {
     }
 
-    #[ThemeSchemaCoverage(['settings', 'shadow', 'defaultPresets'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::DEFAULT_PRESETS])]
     public function enableDefaultPresets(): self
     {
         return $this->setBoolean(self::DEFAULT_PRESETS, true);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'shadow', 'defaultPresets'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::DEFAULT_PRESETS])]
     public function disableDefaultPresets(): self
     {
         return $this->setBoolean(self::DEFAULT_PRESETS, false);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'shadow', 'presets'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, ShadowPreset::SECTION])]
     public function addShadow(string $slug, string $name, BoxShadow ...$shadow): self
     {
         $this->settings->addPreset(new ShadowPreset($slug, $name, ...$shadow));

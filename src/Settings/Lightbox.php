@@ -11,7 +11,7 @@ final readonly class Lightbox
 {
     use ScopedSettingsWriterTrait;
 
-    private const SECTION = 'lightbox';
+    public const SECTION = 'lightbox';
 
     public const ALLOW_EDITING = 'allowEditing';
 
@@ -22,25 +22,25 @@ final readonly class Lightbox
     ) {
     }
 
-    #[ThemeSchemaCoverage(['settings', 'lightbox', 'enabled'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::ENABLED])]
     public function enable(): self
     {
         return $this->setBoolean(self::ENABLED, true);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'lightbox', 'enabled'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::ENABLED])]
     public function disable(): self
     {
         return $this->setBoolean(self::ENABLED, false);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'lightbox', 'allowEditing'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::ALLOW_EDITING])]
     public function enableEditing(): self
     {
         return $this->setBoolean(self::ALLOW_EDITING, true);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'lightbox', 'allowEditing'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::ALLOW_EDITING])]
     public function disableEditing(): self
     {
         return $this->setBoolean(self::ALLOW_EDITING, false);

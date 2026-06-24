@@ -11,6 +11,8 @@ final readonly class DimensionSize implements PresetInterface
 {
     use PresetTrait;
 
+    public const SECTION = 'dimensionSizes';
+
     public const TYPE = 'dimension';
 
     public function __construct(

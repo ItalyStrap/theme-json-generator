@@ -36,7 +36,7 @@ final readonly class SettingsContext
             ));
         }
 
-        return new self($this->themeJson, [...$this->path, 'blocks', $block], true);
+        return new self($this->themeJson, [...$this->path, Settings::BLOCKS_SECTION, $block], true);
     }
 
     public function blockName(): ?string
@@ -45,7 +45,7 @@ final readonly class SettingsContext
             return null;
         }
 
-        $blocksIndex = \array_search('blocks', $this->path, true);
+        $blocksIndex = \array_search(Settings::BLOCKS_SECTION, $this->path, true);
         if ($blocksIndex === false) {
             return null;
         }

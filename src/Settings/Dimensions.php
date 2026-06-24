@@ -13,15 +13,11 @@ final readonly class Dimensions
 {
     use ScopedSettingsWriterTrait;
 
-    private const SECTION = 'dimensions';
+    public const SECTION = 'dimensions';
 
     public const ASPECT_RATIO = 'aspectRatio';
 
-    public const ASPECT_RATIOS = 'aspectRatios';
-
     public const DEFAULT_ASPECT_RATIOS = 'defaultAspectRatios';
-
-    public const DIMENSION_SIZES = 'dimensionSizes';
 
     public const HEIGHT = 'height';
 
@@ -36,79 +32,79 @@ final readonly class Dimensions
     ) {
     }
 
-    #[ThemeSchemaCoverage(['settings', 'dimensions', 'aspectRatio'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::ASPECT_RATIO])]
     public function enableAspectRatio(): self
     {
         return $this->setBoolean(self::ASPECT_RATIO, true);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'dimensions', 'aspectRatio'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::ASPECT_RATIO])]
     public function disableAspectRatio(): self
     {
         return $this->setBoolean(self::ASPECT_RATIO, false);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'dimensions', 'defaultAspectRatios'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::DEFAULT_ASPECT_RATIOS])]
     public function enableDefaultAspectRatios(): self
     {
         return $this->setBoolean(self::DEFAULT_ASPECT_RATIOS, true);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'dimensions', 'defaultAspectRatios'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::DEFAULT_ASPECT_RATIOS])]
     public function disableDefaultAspectRatios(): self
     {
         return $this->setBoolean(self::DEFAULT_ASPECT_RATIOS, false);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'dimensions', 'height'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::HEIGHT])]
     public function enableHeight(): self
     {
         return $this->setBoolean(self::HEIGHT, true);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'dimensions', 'height'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::HEIGHT])]
     public function disableHeight(): self
     {
         return $this->setBoolean(self::HEIGHT, false);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'dimensions', 'minHeight'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::MIN_HEIGHT])]
     public function enableMinHeight(): self
     {
         return $this->setBoolean(self::MIN_HEIGHT, true);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'dimensions', 'minHeight'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::MIN_HEIGHT])]
     public function disableMinHeight(): self
     {
         return $this->setBoolean(self::MIN_HEIGHT, false);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'dimensions', 'minWidth'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::MIN_WIDTH])]
     public function enableMinWidth(): self
     {
         return $this->setBoolean(self::MIN_WIDTH, true);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'dimensions', 'minWidth'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::MIN_WIDTH])]
     public function disableMinWidth(): self
     {
         return $this->setBoolean(self::MIN_WIDTH, false);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'dimensions', 'width'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::WIDTH])]
     public function enableWidth(): self
     {
         return $this->setBoolean(self::WIDTH, true);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'dimensions', 'width'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::WIDTH])]
     public function disableWidth(): self
     {
         return $this->setBoolean(self::WIDTH, false);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'dimensions', 'aspectRatios'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, AspectRatio::SECTION])]
     public function addAspectRatio(string $slug, string $name, string $ratio): self
     {
         $this->settings->addPreset(new AspectRatio($slug, $name, $ratio));
@@ -116,7 +112,7 @@ final readonly class Dimensions
         return $this;
     }
 
-    #[ThemeSchemaCoverage(['settings', 'dimensions', 'dimensionSizes'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, DimensionSize::SECTION])]
     public function addDimensionSize(string $slug, string $name, string $size): self
     {
         $this->settings->addPreset(new DimensionSize($slug, $name, $size));

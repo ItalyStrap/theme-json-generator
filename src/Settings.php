@@ -26,6 +26,8 @@ final readonly class Settings
      */
     public const SECTION = 'settings';
 
+    public const BLOCKS_SECTION = 'blocks';
+
     /**
      * @var string
      */
@@ -70,74 +72,74 @@ final readonly class Settings
         return $this;
     }
 
-    #[ThemeSchemaCoverage([self::SECTION, 'color'])]
+    #[ThemeSchemaCoverage([self::SECTION, Color::SECTION])]
     public function color(): Color
     {
         return new Color($this);
     }
 
-    #[ThemeSchemaCoverage([self::SECTION, 'background'])]
+    #[ThemeSchemaCoverage([self::SECTION, Background::SECTION])]
     public function background(): Background
     {
         return new Background($this);
     }
 
-    #[ThemeSchemaCoverage([self::SECTION, 'border'])]
+    #[ThemeSchemaCoverage([self::SECTION, Border::SECTION])]
     public function border(): Border
     {
         return new Border($this);
     }
 
-    #[ThemeSchemaCoverage([self::SECTION, 'dimensions'])]
+    #[ThemeSchemaCoverage([self::SECTION, Dimensions::SECTION])]
     public function dimensions(): Dimensions
     {
         return new Dimensions($this);
     }
 
-    #[ThemeSchemaCoverage([self::SECTION, 'layout'])]
+    #[ThemeSchemaCoverage([self::SECTION, Layout::SECTION])]
     public function layout(): Layout
     {
         return new Layout($this, $this->presets);
     }
 
-    #[ThemeSchemaCoverage([self::SECTION, 'lightbox'])]
+    #[ThemeSchemaCoverage([self::SECTION, Lightbox::SECTION])]
     public function lightbox(): Lightbox
     {
         return new Lightbox($this);
     }
 
-    #[ThemeSchemaCoverage([self::SECTION, 'position'])]
+    #[ThemeSchemaCoverage([self::SECTION, Position::SECTION])]
     public function position(): Position
     {
         return new Position($this);
     }
 
-    #[ThemeSchemaCoverage([self::SECTION, 'shadow'])]
+    #[ThemeSchemaCoverage([self::SECTION, Shadow::SECTION])]
     public function shadow(): Shadow
     {
         return new Shadow($this);
     }
 
-    #[ThemeSchemaCoverage([self::SECTION, 'spacing'])]
+    #[ThemeSchemaCoverage([self::SECTION, Spacing::SECTION])]
     public function spacing(): Spacing
     {
         return new Spacing($this);
     }
 
-    #[ThemeSchemaCoverage([self::SECTION, 'typography'])]
+    #[ThemeSchemaCoverage([self::SECTION, Typography::SECTION])]
     public function typography(): Typography
     {
         return new Typography($this);
     }
 
-    #[ThemeSchemaCoverage([self::SECTION, 'custom'])]
+    #[ThemeSchemaCoverage([self::SECTION, Custom::SECTION])]
     public function custom(): Custom
     {
         return new Custom($this);
     }
 
-    #[ThemeSchemaCoverage([self::SECTION, 'blocks'])]
-    #[ThemeSchemaCoverage([self::SECTION, 'blockTargets', '*'])]
+    #[ThemeSchemaCoverage([self::SECTION, self::BLOCKS_SECTION])]
+    #[ThemeSchemaCoverage([self::SECTION, self::BLOCKS_SECTION, '*'])]
     public function blocks(string $block): self
     {
         return new self($this->presets, $this->context->blocks($block));
@@ -182,6 +184,6 @@ final readonly class Settings
             return $this->presets->get($type);
         }
 
-        return $this->presets->get(['blocks', $block, $type]);
+        return $this->presets->get([self::BLOCKS_SECTION, $block, $type]);
     }
 }

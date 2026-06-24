@@ -12,15 +12,17 @@ final readonly class FontFamily implements PresetInterface
 {
     use PresetTrait;
 
-    /**
-     * @var list<FontFace>
-     */
-    private array $fontFace;
+    public const SECTION = 'fontFamilies';
 
     /**
      * @var string
      */
     public const TYPE = 'fontFamily';
+
+    /**
+     * @var list<FontFace>
+     */
+    private array $fontFace;
 
     public function __construct(
         private string $slug,

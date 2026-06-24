@@ -11,7 +11,7 @@ final readonly class Background
 {
     use ScopedSettingsWriterTrait;
 
-    private const SECTION = 'background';
+    public const SECTION = 'background';
 
     public const BACKGROUND_IMAGE = 'backgroundImage';
 
@@ -24,37 +24,37 @@ final readonly class Background
     ) {
     }
 
-    #[ThemeSchemaCoverage(['settings', 'background', 'backgroundImage'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::BACKGROUND_IMAGE])]
     public function enableBackgroundImage(): self
     {
         return $this->setBoolean(self::BACKGROUND_IMAGE, true);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'background', 'backgroundImage'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::BACKGROUND_IMAGE])]
     public function disableBackgroundImage(): self
     {
         return $this->setBoolean(self::BACKGROUND_IMAGE, false);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'background', 'backgroundSize'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::BACKGROUND_SIZE])]
     public function enableBackgroundSize(): self
     {
         return $this->setBoolean(self::BACKGROUND_SIZE, true);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'background', 'backgroundSize'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::BACKGROUND_SIZE])]
     public function disableBackgroundSize(): self
     {
         return $this->setBoolean(self::BACKGROUND_SIZE, false);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'background', 'gradient'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::GRADIENT])]
     public function enableGradient(): self
     {
         return $this->setBoolean(self::GRADIENT, true);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'background', 'gradient'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::GRADIENT])]
     public function disableGradient(): self
     {
         return $this->setBoolean(self::GRADIENT, false);

@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator\Styles;
 
 use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
+use ItalyStrap\ThemeJsonGenerator\Styles;
 
 final class Outline implements ArrayableInterface, \JsonSerializable
 {
     use CommonTrait;
+
+    public const SECTION = 'outline';
 
     /**
      * @var string
@@ -30,25 +33,25 @@ final class Outline implements ArrayableInterface, \JsonSerializable
      */
     public const WIDTH = 'width';
 
-    #[ThemeSchemaCoverage(['styles', 'outline', 'color'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::COLOR])]
     public function color(string $value): Outline
     {
         return $this->setProperty(self::COLOR, $value);
     }
 
-    #[ThemeSchemaCoverage(['styles', 'outline', 'offset'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::OFFSET])]
     public function offset(string $value): Outline
     {
         return $this->setProperty(self::OFFSET, $value);
     }
 
-    #[ThemeSchemaCoverage(['styles', 'outline', 'style'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::STYLE])]
     public function style(string $value): Outline
     {
         return $this->setProperty(self::STYLE, $value);
     }
 
-    #[ThemeSchemaCoverage(['styles', 'outline', 'width'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::WIDTH])]
     public function width(string $value): Outline
     {
         return $this->setProperty(self::WIDTH, $value);

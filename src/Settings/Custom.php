@@ -12,7 +12,7 @@ final readonly class Custom
 {
     use ScopedSettingsWriterTrait;
 
-    private const SECTION = 'custom';
+    public const SECTION = 'custom';
 
     public function __construct(
         private Settings $settings,
@@ -22,7 +22,7 @@ final readonly class Custom
     /**
      * @param list<string>|string $key
      */
-    #[ThemeSchemaCoverage(['settings', 'custom'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION])]
     public function add(array|string $key, string $value): self
     {
         $this->settings->addPreset(new CustomPreset($key, $value));
@@ -33,7 +33,7 @@ final readonly class Custom
     /**
      * @param array<array-key, mixed> $customs
      */
-    #[ThemeSchemaCoverage(['settings', 'custom'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION])]
     public function addMultiple(array $customs): self
     {
         $this->presetsToFlat($customs, [], true);

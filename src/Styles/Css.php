@@ -7,6 +7,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Styles;
 use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
 use ItalyStrap\ThemeJsonGenerator\Settings\NullPresets;
 use ItalyStrap\ThemeJsonGenerator\Settings\PresetsInterface;
+use ItalyStrap\ThemeJsonGenerator\Styles;
 use Sabberworm\CSS\Parser;
 use Sabberworm\CSS\Parsing\SourceException;
 use Sabberworm\CSS\Property\AtRule;
@@ -24,6 +25,8 @@ use Sabberworm\CSS\RuleSet\DeclarationBlock;
  */
 final class Css implements CssInterface
 {
+    public const SECTION = 'css';
+
     private readonly PresetsInterface $presets;
 
     private bool $isCompressed = false;
@@ -49,7 +52,7 @@ final class Css implements CssInterface
     /**
      * @throws SourceException
      */
-    #[ThemeSchemaCoverage(['styles', 'css'])]
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION])]
     public function parse(string $css, string $selector = ''): string
     {
         return $this->parseResolved($this->presets->parse($css), $selector);

@@ -12,6 +12,8 @@ final class Shadow implements PresetInterface
 {
     use PresetTrait;
 
+    public const SECTION = 'presets';
+
     /**
      * @var string
      */

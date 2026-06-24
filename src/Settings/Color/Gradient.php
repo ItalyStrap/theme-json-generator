@@ -12,6 +12,8 @@ final readonly class Gradient implements PresetInterface
 {
     use PresetTrait;
 
+    public const SECTION = 'gradients';
+
     /**
      * @var string
      */

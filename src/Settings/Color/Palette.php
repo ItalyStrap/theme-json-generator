@@ -12,15 +12,12 @@ final readonly class Palette implements PresetInterface
 {
     use PresetTrait;
 
-    /**
-     * @var string
-     */
-    public const TYPE = 'color';
+    public const SECTION = 'palette';
 
     /**
      * @var string
      */
-    public const KEY = 'settings.color.palette';
+    public const TYPE = 'color';
 
     public function __construct(
         private string $slug,

@@ -11,6 +11,8 @@ final readonly class SpacingSize implements PresetInterface
 {
     use PresetTrait;
 
+    public const SECTION = 'spacingSizes';
+
     public const TYPE = 'spacing';
 
     public function __construct(

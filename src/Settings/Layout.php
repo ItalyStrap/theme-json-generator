@@ -11,7 +11,7 @@ final readonly class Layout
 {
     use ScopedSettingsWriterTrait;
 
-    private const SECTION = 'layout';
+    public const SECTION = 'layout';
 
     public const ALLOW_CUSTOM_CONTENT_AND_WIDE_SIZE = 'allowCustomContentAndWideSize';
 
@@ -27,14 +27,14 @@ final readonly class Layout
     ) {
     }
 
-    #[ThemeSchemaCoverage(['settings', 'layout', 'contentSize'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::CONTENT_SIZE])]
     public function contentSize(string $keyOrValue): self
     {
         $this->set(self::CONTENT_SIZE, $this->resolveSize($keyOrValue));
         return $this;
     }
 
-    #[ThemeSchemaCoverage(['settings', 'layout', 'wideSize'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::WIDE_SIZE])]
     public function wideSize(string $keyOrValue): self
     {
         $this->set(self::WIDE_SIZE, $this->resolveSize($keyOrValue));
@@ -55,25 +55,25 @@ final readonly class Layout
         return $size;
     }
 
-    #[ThemeSchemaCoverage(['settings', 'layout', 'allowEditing'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::ALLOW_EDITING])]
     public function enableEditing(): self
     {
         return $this->setBoolean(self::ALLOW_EDITING, true);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'layout', 'allowEditing'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::ALLOW_EDITING])]
     public function disableEditing(): self
     {
         return $this->setBoolean(self::ALLOW_EDITING, false);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'layout', 'allowCustomContentAndWideSize'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::ALLOW_CUSTOM_CONTENT_AND_WIDE_SIZE])]
     public function enableCustomContentAndWideSize(): self
     {
         return $this->setBoolean(self::ALLOW_CUSTOM_CONTENT_AND_WIDE_SIZE, true);
     }
 
-    #[ThemeSchemaCoverage(['settings', 'layout', 'allowCustomContentAndWideSize'])]
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::ALLOW_CUSTOM_CONTENT_AND_WIDE_SIZE])]
     public function disableCustomContentAndWideSize(): self
     {
         return $this->setBoolean(self::ALLOW_CUSTOM_CONTENT_AND_WIDE_SIZE, false);
