@@ -26,10 +26,6 @@ final readonly class Typography
 
     public const FLUID = 'fluid';
 
-    public const FONT_FAMILIES = 'fontFamilies';
-
-    public const FONT_SIZES = 'fontSizes';
-
     public const FONT_STYLE = 'fontStyle';
 
     public const FONT_WEIGHT = 'fontWeight';
