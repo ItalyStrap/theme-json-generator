@@ -15,13 +15,15 @@ final class ThemeJsonContainerFactoryTest extends UnitTestCase
     {
         $sut = new ThemeJsonContainerFactory();
 
-        $config = $sut->execute(static function (Pipeline $pipeline): void {
+        $result = $sut->execute(static function (Pipeline $pipeline): void {
             $pipeline->process([
                 ThemeJsonContainerFactoryPaletteConfiguratorFixture::class,
             ]);
         });
+        $config = $result->config;
 
         $this->assertSame('body{color: red;}', $config->get('styles.css'));
+        $this->assertCount(12, \iterator_to_array($result->presets->presets()));
         $this->assertSame(
             [
                 [

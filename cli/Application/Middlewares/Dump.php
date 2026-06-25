@@ -13,6 +13,7 @@ use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Filesystem\FilesFinder;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Filesystem\JsonFileWriter;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Filesystem\ScssFileWriter;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Handler\ConsoleHandler;
+use ItalyStrap\ThemeJsonGenerator\Settings\PresetsInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -50,7 +51,7 @@ final readonly class Dump implements MiddlewareInterface
          *         'theme' => 'theme.json'
          */
         foreach ($this->filesFinder->find($message->getRootFolder(), 'php') as $fileName => $file) {
-            $config = $this->containerFactory->execute(require $file);
+            $result = $this->containerFactory->execute(require $file);
             $count++;
 
             if ($message->isDryRun()) {
@@ -61,8 +62,8 @@ final readonly class Dump implements MiddlewareInterface
                 continue;
             }
 
-            $this->generateJsonFile($output, $message, $fileName, $file, $config);
-            $this->generateScssFile($output, $message, $fileName, $config);
+            $this->generateJsonFile($output, $message, $fileName, $file, $result->config);
+            $this->generateScssFile($output, $message, $fileName, $result->presets);
         }
 
         if ($count === 0) {
@@ -98,14 +99,11 @@ final readonly class Dump implements MiddlewareInterface
         $output->writeln('========================');
     }
 
-    /**
-     * @param ConfigInterface<array-key, mixed> $config
-     */
     private function generateScssFile(
         OutputInterface $output,
         DumpMessage $message,
         string $fileName,
-        ConfigInterface $config
+        PresetsInterface $presets
     ): void {
         $path_for_theme_sass = $message->getRootFolder() . DIRECTORY_SEPARATOR . $message->getSassFolder();
         if ($message->getSassFolder() !== '' && \is_writable($path_for_theme_sass)) {
@@ -115,7 +113,7 @@ final readonly class Dump implements MiddlewareInterface
             ));
 
             (new ScssFileWriter($path_for_theme_sass . DIRECTORY_SEPARATOR . $fileName . '.scss'))
-                ->write($config);
+                ->write($presets);
 
             $output->writeln(\sprintf(
                 '<info>Generated %s file</info>',

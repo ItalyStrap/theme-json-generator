@@ -25,6 +25,11 @@ interface PresetsInterface
     public function parse(string $content): string;
 
     /**
+     * @return iterable<PresetInterface>
+     */
+    public function presets(): iterable;
+
+    /**
      * @return array<array-key, mixed>
      */
     public function collection(): array;

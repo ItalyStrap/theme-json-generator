@@ -4,175 +4,95 @@ declare(strict_types=1);
 
 namespace ItalyStrap\Tests\Unit\Cli\Infrastructure\Filesystem;
 
-use ItalyStrap\Config\Config;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Filesystem\ScssFileWriter;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Palette;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\Color;
+use ItalyStrap\ThemeJsonGenerator\Settings\Custom\Custom;
+use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
+use ItalyStrap\ThemeJsonGenerator\Settings\Spacing\SpacingSize;
+use ItalyStrap\ThemeJsonGenerator\Settings\Typography\FontSize;
 
 final class SassFileWriterTest extends UnitTestCase
 {
-    /**
-     * @var string
-     */
-    private string $theme_sass_path;
+    private string $path;
 
     protected function makeInstance(): ScssFileWriter
     {
-        $this->theme_sass_path = \codecept_output_dir('theme.scss');
-        return new ScssFileWriter($this->theme_sass_path);
+        $this->path = \codecept_output_dir('theme.scss');
+
+        return new ScssFileWriter($this->path);
     }
 
-    public function testItShouldCreateScssFile(): void
+    public function testItWritesUniqueSortedPropertiesFromPresets(): void
     {
-        $sut = $this->makeInstance();
-        $data = new Config(
-            [
-                'settings' => [
-                    'custom' => [
-                        'alignment--center' => 'center',
-                    ],
-                    'color' => [
-                        'palette' => [
-                        ],
-                    ],
-                ]
-            ]
-        );
+        $presets = new Presets();
+        $presets
+            ->add(new SpacingSize('50', 'Medium', '1rem'))
+            ->add(new Custom('alignment.center', 'center'))
+            ->add(new FontSize('bodyText', 'Body', '1rem'))
+            ->add(new Palette('primary', 'Primary', new Color('#ffffff')))
+            ->addToBlock('core/group', new Palette('primary', 'Primary', new Color('#000000')));
 
-        $sut->write($data);
-
-        $this->assertFileExists($this->theme_sass_path, '');
-        $this->assertFileIsReadable($this->theme_sass_path, '');
-        $this->assertFileIsWritable($this->theme_sass_path, '');
-
-        \unlink($this->theme_sass_path);
-    }
-
-    public static function presetSettingsAndCustomProvider(): \Generator
-    {
-        yield 'Color palette' => [
-            [
-                'color' => [
-                    'palette' => [
-                        [
-                            "slug" => "primary",
-                        ]
-                    ],
-                ],
-            ],
-            '$wp--preset--color--primary',
-            '--wp--preset--color--primary',
-        ];
-
-        yield 'Color gradients' => [
-            [
-                'color' => [
-                    'gradients' => [
-                        [
-                            "slug" => "blush-light-purple",
-                        ],
-                    ],
-                ],
-            ],
-            '$wp--preset--gradient--blush-light-purple',
-            '--wp--preset--gradient--blush-light-purple',
-        ];
-
-        yield 'Typography fontSizes' => [
-            [
-                'typography' => [
-                    'fontSizes' => [
-                        [
-                            "slug" => "normal",
-                        ],
-                    ],
-                ],
-            ],
-            '$wp--preset--font-size--normal',
-            '--wp--preset--font-size--normal',
-        ];
-
-        yield 'Typography fontFamilies' => [
-            [
-                'typography' => [
-                    'fontFamilies' => [
-                        [
-                            'slug' => 'system-font',
-                        ],
-                    ],
-                ],
-            ],
-            '$wp--preset--font-family--system-font',
-            '--wp--preset--font-family--system-font',
-        ];
-
-        yield 'Custom' => [
-            [
-                'custom' => [
-                    'alignmentCenter' => 'center',
-                ],
-            ],
-            '$wp--custom--alignment-center',
-            '--wp--custom--alignment-center',
-        ];
-
-        yield 'Custom with child' => [
-            [
-                'custom' => [
-                    'alignment' => [
-                        'center' => 'center',
-                    ],
-                ],
-            ],
-            '$wp--custom--alignment--center',
-            '--wp--custom--alignment--center',
-        ];
-    }
-
-    /**
-     * @dataProvider presetSettingsAndCustomProvider
-     * @return never
-     * @throws \Exception
-     */
-    public function testItShouldIteratePresetAndCustomSettingsFor(
-        array $data,
-        string $expected_slug,
-        string $expected_css_variable
-    ): void {
-        $sut = $this->makeInstance();
-
-        $sut->write(new Config(['settings' => $data]));
-        $this->assertFileExists($this->theme_sass_path, '');
+        $this->makeInstance()->write($presets);
 
         $this->assertStringEqualsFile(
-            $this->theme_sass_path,
-            \sprintf(
-                '%s: %s;' . PHP_EOL,
-                $expected_slug,
-                $expected_css_variable
-            ),
-            ''
+            $this->path,
+            <<<'SCSS'
+$wp--custom--alignment--center: --wp--custom--alignment--center;
+$wp--preset--color--primary: --wp--preset--color--primary;
+$wp--preset--font-size--body-text: --wp--preset--font-size--body-text;
+$wp--preset--spacing--50: --wp--preset--spacing--50;
+SCSS
+            . \PHP_EOL
         );
 
-        \unlink($this->theme_sass_path);
+        \unlink($this->path);
     }
 
-    public function testItShouldThrowError(): void
+    public function testItWritesAnEmptyFileWhenThereAreNoPresets(): void
     {
-        $sut = $this->makeInstance();
+        $this->makeInstance()->write(new Presets());
 
-        $custom = [
-            'alignment' => [
-                'global' => [
-                    'left'
-                ],
-            ]
-        ];
+        $this->assertFileExists($this->path);
+        $this->assertSame('', (string) \file_get_contents($this->path));
 
-        $this->expectException('\Throwable');
-        $this->expectException('\RuntimeException');
+        \unlink($this->path);
+    }
 
-        $sut->write(new Config(['settings' => [ 'custom' => $custom ]]));
+    public function testItWritesAPropertyDefinedOnlyForABlock(): void
+    {
+        $presets = new Presets();
+        $presets->addToBlock(
+            'core/group',
+            new FontSize('block-title', 'Block title', '2rem')
+        );
 
-        \unlink($this->theme_sass_path);
+        $this->makeInstance()->write($presets);
+
+        $this->assertStringEqualsFile(
+            $this->path,
+            '$wp--preset--font-size--block-title: --wp--preset--font-size--block-title;' . \PHP_EOL
+        );
+
+        \unlink($this->path);
+    }
+
+    public function testItReplacesAnExistingFile(): void
+    {
+        $writer = $this->makeInstance();
+        \file_put_contents($this->path, 'obsolete');
+
+        $presets = new Presets();
+        $presets->add(new Custom('spacing.base', '1rem'));
+
+        $writer->write($presets);
+
+        $this->assertStringEqualsFile(
+            $this->path,
+            '$wp--custom--spacing--base: --wp--custom--spacing--base;' . \PHP_EOL
+        );
+
+        \unlink($this->path);
     }
 }

@@ -4,143 +4,46 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Filesystem;
 
-use ItalyStrap\Config\ConfigInterface;
-use Webimpress\SafeWriter;
+use Webimpress\SafeWriter\FileWriter;
+use ItalyStrap\ThemeJsonGenerator\Settings\PresetsInterface;
 
-final class ScssFileWriter implements FileWriter
+final readonly class ScssFileWriter
 {
-    use ConvertCase;
-
-    /**
-     * @param string $path
-     */
     public function __construct(private string $path)
     {
     }
 
-    /**
-     * @param ConfigInterface<array-key, mixed> $data
-     */
-    public function write(ConfigInterface $data): void
+    public function write(PresetsInterface $presets): void
     {
-        if (\count($data) === 0) {
-            throw new \RuntimeException('No data to write');
-        }
-
-        if (\file_exists($this->path) && \is_file($this->path)) {
-            \unlink($this->path);
-        }
-
-        SafeWriter\FileWriter::writeFile($this->path, $this->generateScssContent($data));
-    }
-
-    /**
-     * @param ConfigInterface<array-key, mixed> $data
-     * @return string
-     */
-    private function generateScssContent(ConfigInterface $data): string
-    {
-        if ($data->count() === 0) {
-            return '// No data are provided!';
-        }
-
-        $content = '';
-
-        $schema = [
-            'settings.color.palette' => '--wp--preset--color',
-            'settings.color.gradients' => '--wp--preset--gradient',
-            'settings.typography.fontFamilies' => '--wp--preset--font-family',
-            'settings.typography.fontSizes' => '--wp--preset--font-size',
-        ];
-
-        foreach ($schema as $slug => $prefix) {
-            /** @var array<string, string> $item */
-            foreach ((array) $data->get($slug) as $item) {
-                $content .= $this->generateScssVariableAndCssVariable($item['slug'], $prefix);
-            }
-        }
-
-        /** @var array<string|int, string> $custom */
-        $custom = (array) $data->get('settings.custom');
-        $custom = $this->flattenTree($custom);
-
-//      $map = '$wp-custom: (' . PHP_EOL;
-        foreach (\array_keys($custom) as $property_name) {
-            $content .= $this->generateScssVariableAndCssVariable($property_name, '--wp--custom');
-//          $map .= $this->generateScssMap( $property_name, '--wp-custom' );
-        }
-
-//      $map .= ');' . PHP_EOL;
-
-//      return $content . $map;
-        return $content;
-    }
-
-    //  private function generateScssMap( string $slug, string $prefix ): string {
-//      return \sprintf(
-//          '"%1$s": %2$s--%1$s,' . PHP_EOL,
-//          $this->camelToUnderscore( $slug ),
-//          $prefix
-//      );
-    //  }
-
-    /**
-     * @param string $slug
-     * @param string $prefix
-     * @return string
-     */
-    private function generateScssVariableAndCssVariable(string $slug, string $prefix): string
-    {
-        return \sprintf(
-            '$%3$s--%1$s: %2$s--%1$s;' . PHP_EOL,
-            $this->camelToUnderscore($slug),
-            $prefix,
-            \ltrim($prefix, '-')
+        FileWriter::writeFile(
+            $this->path,
+            $this->generateContent($presets)
         );
     }
 
-    /**
-     * @param array<string|int, string> $tree
-     * @param string $prefix
-     * @param string $token
-     * @return array<string, string>
-     * @author \WP_Theme_Json::flatten_tree
-     */
-    private function flattenTree(array $tree, string $prefix = '', string $token = '--'): array
+    private function generateContent(PresetsInterface $presets): string
     {
-        $result = [];
+        $properties = [];
 
-        /**
-         * @var string|array<string, string> $value
-         */
-        foreach ($tree as $property => $value) {
-            if (!\is_string($property)) {
-                throw new \RuntimeException(
-                    \sprintf(
-                        'Property key is not a string, actual value is: %s',
-                        (string) $property
-                    )
-                );
-            }
-
-            $new_key = $prefix . \str_replace(
-                '/',
-                '-',
-                $this->camelToUnderscore($property)
-            );
-
-            if (\is_array($value)) {
-                $new_prefix = $new_key . $token;
-                $result = \array_merge(
-                    $result,
-                    $this->flattenTree($value, $new_prefix, $token)
-                );
-                continue;
-            }
-
-            $result[ $new_key ] = $value;
+        foreach ($presets->presets() as $preset) {
+            $properties[$preset->prop()] = true;
         }
 
-        return $result;
+        \ksort($properties);
+
+        return \implode('', \array_map(
+            $this->declaration(...),
+            \array_keys($properties)
+        ));
+    }
+
+    private function declaration(string $property): string
+    {
+        return \sprintf(
+            '$%1$s: %2$s;%3$s',
+            \ltrim($property, '-'),
+            $property,
+            \PHP_EOL
+        );
     }
 }

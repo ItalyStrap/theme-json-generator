@@ -34,6 +34,11 @@ final class NullPresets implements PresetsInterface
         return $content;
     }
 
+    public function presets(): iterable
+    {
+        return [];
+    }
+
     public function collection(): array
     {
         return [];

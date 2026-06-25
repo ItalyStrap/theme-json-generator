@@ -120,6 +120,34 @@ final class Presets implements PresetsInterface
     }
 
     /**
+     * @return iterable<PresetInterface>
+     */
+    public function presets(): iterable
+    {
+        foreach ($this->presetLeaves($this->collection) as $preset) {
+            yield $preset;
+        }
+    }
+
+    /**
+     * @param array<array-key, mixed> $collection
+     * @return iterable<PresetInterface>
+     */
+    private function presetLeaves(array $collection): iterable
+    {
+        foreach ($collection as $value) {
+            if ($value instanceof PresetInterface) {
+                yield $value;
+                continue;
+            }
+
+            if (\is_array($value)) {
+                yield from $this->presetLeaves($value);
+            }
+        }
+    }
+
+    /**
      * @param array<array-key, string|int>|string $key
      */
     private function assertIsUnique(array|string $key): void
