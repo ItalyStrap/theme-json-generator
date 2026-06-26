@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Filesystem;
 
-use Webimpress\SafeWriter\FileWriter;
 use ItalyStrap\ThemeJsonGenerator\Settings\PresetsInterface;
+use Webimpress\SafeWriter\FileWriter;
 
 final readonly class ScssFileWriter
 {
