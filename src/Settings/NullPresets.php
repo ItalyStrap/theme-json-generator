@@ -29,6 +29,10 @@ final class NullPresets implements PresetsInterface
         return $default;
     }
 
+    /**
+     * Keep placeholder tokens unresolved because this implementation represents
+     * disabled preset resolution.
+     */
     public function parse(string $content): string
     {
         return $content;
