@@ -153,7 +153,7 @@ final readonly class ColorModifier implements ColorModifierInterface
      * @todo Is it a good idea to make it public?
      *       Evaluate possible side effects.
      */
-    private function mixWith(string $color_string, float $weight = 0): ColorInterface
+    private function mixWith(string $colorString, float $weight = 0): ColorInterface
     {
         /**
          * I need to cast to RGB or RGBA because the mixRgb method
@@ -162,7 +162,7 @@ final readonly class ColorModifier implements ColorModifierInterface
          * So the cast here is necessary
          */
         $result = $this->mixRgb(
-            $this->color_factory->fromColorString($color_string)->toRgba(),
+            $this->color_factory->fromColorString($colorString)->toRgba(),
             $this->color->toRgba(),
             $this->normalizePercentage($weight)
         );
@@ -179,7 +179,7 @@ final readonly class ColorModifier implements ColorModifierInterface
     /**
      * @return array<array-key, int|float>
      */
-    private function mixRgb(ColorInterface $color_1, ColorInterface $color_2, float $weight = 0.5): array
+    private function mixRgb(ColorInterface $color1, ColorInterface $color2, float $weight = 0.5): array
     {
         $f = static fn (int $x): float => $weight * $x;
         $g = static fn (int $x): float => (1 - $weight) * $x;
@@ -187,8 +187,8 @@ final readonly class ColorModifier implements ColorModifierInterface
 
         return \array_map(
             $h,
-            \array_map($f, [ (int)$color_1->red(), (int)$color_1->green(), (int)$color_1->blue() ]),
-            \array_map($g, [ (int)$color_2->red(), (int)$color_2->green(), (int)$color_2->blue() ])
+            \array_map($f, [ (int)$color1->red(), (int)$color1->green(), (int)$color1->blue() ]),
+            \array_map($g, [ (int)$color2->red(), (int)$color2->green(), (int)$color2->blue() ])
         );
     }
 

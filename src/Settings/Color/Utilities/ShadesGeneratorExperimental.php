@@ -28,14 +28,14 @@ final readonly class ShadesGeneratorExperimental implements \IteratorAggregate
         Palette $palette,
         int $min = self::MIN,
         int $max = self::MAX,
-        int $increment_by = self::INCREMENT_BY
+        int $incrementBy = self::INCREMENT_BY
     ): ShadesGeneratorExperimental {
         return new self(
             $palette->color(),
             $palette->slug(),
             $min,
             $max,
-            $increment_by
+            $incrementBy
         );
     }
 
@@ -44,14 +44,14 @@ final readonly class ShadesGeneratorExperimental implements \IteratorAggregate
         string $slug,
         int $min = self::MIN,
         int $max = self::MAX,
-        int $increment_by = self::INCREMENT_BY
+        int $incrementBy = self::INCREMENT_BY
     ): ShadesGeneratorExperimental {
         return new self(
             $color,
             $slug,
             $min,
             $max,
-            $increment_by
+            $incrementBy
         );
     }
 
@@ -60,9 +60,9 @@ final readonly class ShadesGeneratorExperimental implements \IteratorAggregate
         private string $slug,
         private int $min = self::MIN,
         private int $max = self::MAX,
-        private int $increment_by = self::INCREMENT_BY
+        private int $incrementBy = self::INCREMENT_BY
     ) {
-        if ($this->increment_by <= 0) {
+        if ($this->incrementBy <= 0) {
             throw new \InvalidArgumentException('Shade increment must be greater than zero.');
         }
 
@@ -141,7 +141,7 @@ final readonly class ShadesGeneratorExperimental implements \IteratorAggregate
      */
     private function shadeIndexes(): \Generator
     {
-        for ($index = $this->min; $index <= $this->max; $index += $this->increment_by) {
+        for ($index = $this->min; $index <= $this->max; $index += $this->incrementBy) {
             yield $index;
         }
     }

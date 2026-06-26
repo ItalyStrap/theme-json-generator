@@ -9,7 +9,7 @@ final readonly class DumpMessage
     public function __construct(
         private string $rootFolder,
         private string $sassFolder,
-        private bool $dry_run,
+        private bool $dryRun,
         private string $file
     ) {
     }
@@ -26,7 +26,7 @@ final readonly class DumpMessage
 
     public function isDryRun(): bool
     {
-        return $this->dry_run;
+        return $this->dryRun;
     }
 
     public function getFile(): string
