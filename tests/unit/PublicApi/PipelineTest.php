@@ -8,9 +8,9 @@ use ItalyStrap\Config\Config;
 use ItalyStrap\Tests\Fixtures\FirstThemeJsonConfiguratorFixture;
 use ItalyStrap\Tests\Fixtures\SecondThemeJsonConfiguratorFixture;
 use ItalyStrap\Tests\UnitTestCase;
+use ItalyStrap\ThemeJsonGenerator\ConfiguratorInterface;
 use ItalyStrap\ThemeJsonGenerator\Pipeline;
 use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
-use ItalyStrap\ThemeJsonGenerator\Styles;
 use ItalyStrap\ThemeJsonGenerator\ThemeJson;
 use Psr\Container\ContainerInterface;
 
@@ -28,19 +28,23 @@ final class PipelineTest extends UnitTestCase
 
         $sut = new Pipeline($container, $themeJson);
 
-        $result = $sut->process([
+        $sut->process([
             FirstThemeJsonConfiguratorFixture::class,
-            static fn (ThemeJson $themeJson): Styles => $themeJson
-                ->styles()
-                ->appendCss('b{color:blue;}'),
+            new class implements ConfiguratorInterface {
+                public function __invoke(ThemeJson $themeJson): void
+                {
+                    $themeJson
+                        ->styles()
+                        ->appendCss('b{color:blue;}');
+                }
+            },
             new SecondThemeJsonConfiguratorFixture(),
         ]);
 
-        $this->assertSame($themeJson, $result);
         $this->assertSame('a{color:red;}b{color:blue;}c{color:green;}', $themeJson->get('styles.css'));
     }
 
-    public function testItShouldThrowExceptionForInvalidConfigurator(): void
+    public function testItShouldRejectCallableStringConfigurator(): void
     {
         $sut = new Pipeline($this->makeContainer(), new ThemeJson(
             new Config(),
@@ -48,9 +52,22 @@ final class PipelineTest extends UnitTestCase
         ));
 
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Expected configurator to be callable');
+        $this->expectExceptionMessage('Expected configurator class-string to implement ConfiguratorInterface');
 
-        $sut->process([new \stdClass()]);
+        $sut->process(['strlen']);
+    }
+
+    public function testItShouldRejectClassStringNotImplementingConfiguratorInterface(): void
+    {
+        $sut = new Pipeline($this->makeContainer(), new ThemeJson(
+            new Config(),
+            $this->makePresets(),
+        ));
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Expected configurator class-string to implement ConfiguratorInterface');
+
+        $sut->process([\stdClass::class]);
     }
 
     /**

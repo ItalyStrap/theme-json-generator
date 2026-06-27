@@ -15,34 +15,34 @@ final readonly class Pipeline
     }
 
     /**
-     * @param iterable<class-string|callable|object> $configurators
+     * @param iterable<array-key, string|ConfiguratorInterface> $configurators
      */
-    public function process(iterable $configurators): ThemeJson
+    public function process(iterable $configurators): void
     {
         foreach ($configurators as $configurator) {
             $configurator = $this->resolveConfigurator($configurator);
             $configurator($this->themeJson);
         }
 
-        return $this->themeJson;
+        return;
     }
 
     /**
-     * @param class-string|callable|object $configurator
+     * @param string|ConfiguratorInterface $configurator
      */
-    private function resolveConfigurator($configurator): callable
+    private function resolveConfigurator(string|ConfiguratorInterface $configurator): ConfiguratorInterface
     {
-        if (\is_string($configurator) && \class_exists($configurator)) {
-            $configurator = $this->container->get($configurator);
+        if ($configurator instanceof ConfiguratorInterface) {
+            return $configurator;
         }
 
-        if (!\is_callable($configurator)) {
+        if (!\is_a($configurator, ConfiguratorInterface::class, true)) {
             throw new \InvalidArgumentException(\sprintf(
-                'Expected configurator to be callable, got %s.',
-                \get_debug_type($configurator)
+                'Expected configurator class-string to implement ConfiguratorInterface, got %s.',
+                $configurator
             ));
         }
 
-        return $configurator;
+        return $this->container->get($configurator);
     }
 }
