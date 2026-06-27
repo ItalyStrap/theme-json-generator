@@ -105,7 +105,7 @@ final readonly class BoxSpacing
     #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::MARGIN, Spacing::BOTTOM])]
     #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::PADDING, Spacing::TOP])]
     #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::PADDING, Spacing::BOTTOM])]
-    public function verticalAsync(string $top, string $bottom): self
+    public function verticalSides(string $top, string $bottom): self
     {
         return $this
             ->top($top)
@@ -116,7 +116,7 @@ final readonly class BoxSpacing
     #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::MARGIN, Spacing::LEFT])]
     #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::PADDING, Spacing::RIGHT])]
     #[ThemeSchemaCoverage([Styles::SECTION, Spacing::SECTION, Spacing::PADDING, Spacing::LEFT])]
-    public function horizontalAsync(string $right, string $left): self
+    public function horizontalSides(string $right, string $left): self
     {
         return $this
             ->right($right)
