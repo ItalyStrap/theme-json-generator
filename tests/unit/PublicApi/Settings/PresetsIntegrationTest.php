@@ -7,9 +7,9 @@ namespace ItalyStrap\Tests\Unit\PublicApi\Settings;
 use ItalyStrap\Config\Config;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Container\PresetsToThemeJson;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Palette;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\Color;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\ShadesGeneratorExperimental;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Color;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Generators\ShadesExperimental;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\CssColor;
 use ItalyStrap\ThemeJsonGenerator\Settings\Custom\Custom;
 use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\Settings\Typography\FontSize;
@@ -29,13 +29,13 @@ final class PresetsIntegrationTest extends UnitTestCase
             ->add(new FontSize('h1', 'Used in H1 titles', 'calc( {{fontSize.base}} * 2.8125)'))
             ->add(new FontSize('h2', 'Used in H2 titles', 'calc( {{fontSize.base}} * 2.1875)'));
 
-        $body_text = (new Color('#000000'))->toHsla();
-        $bodyClrPalette = new Palette('bodyColor', 'Color for text', $body_text);
+        $body_text = (new CssColor('#000000'))->toHsla();
+        $bodyClrPalette = new Color('bodyColor', 'Color for text', $body_text);
 
         $sut->add($bodyClrPalette);
 
 //        $sut->addMultiple(ShadesGeneratorExperimental::fromColorInfo($body_text, 'bodyColor')->toArray());
-        $sut->addMultiple(ShadesGeneratorExperimental::fromPalette($bodyClrPalette)->toArray());
+        $sut->addMultiple(ShadesExperimental::fromColor($bodyClrPalette)->toArray());
 
         $sut->addMultiple([
             new Custom('contentSize', 'clamp(16rem, 60vw, 60rem)'),
@@ -202,13 +202,13 @@ EOF
     {
         $sut = $this->makeInstance();
 
-        $body_text = (new Color('#000000'))->toHsla();
-        $bodyClrPalette = new Palette('bodyColor', 'Color for text', $body_text);
+        $body_text = (new CssColor('#000000'))->toHsla();
+        $bodyClrPalette = new Color('bodyColor', 'Color for text', $body_text);
 
         $sut->add($bodyClrPalette);
 
 //        $sut->addMultiple(ShadesGeneratorExperimental::fromColorInfo($body_text, 'bodyColor')->toArray());
-        $sut->addMultiple(ShadesGeneratorExperimental::fromPalette($bodyClrPalette)->toArray());
+        $sut->addMultiple(ShadesExperimental::fromColor($bodyClrPalette)->toArray());
 
         $this->assertSame(
             'var(--wp--preset--color--body-color)',

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Settings\Shadow\Utilities;
 
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Palette;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\ColorFactory;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\ColorInterface;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Color;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Factories\ColorFactory;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\CssColorInterface;
 
 final class BoxShadow implements \Stringable
 {
@@ -61,19 +61,19 @@ final class BoxShadow implements \Stringable
     }
 
     /**
-     * @param Palette|ColorInterface|string $color
+     * @param Color|CssColorInterface|string $color
      * @throws \Exception
      */
     public function color($color): self
     {
         $this->assertIsUnique($this->color, 'color');
 
-        if ($color instanceof Palette) {
+        if ($color instanceof Color) {
             $this->color = $color->var((string)$color->color());
             return $this;
         }
 
-        if ($color instanceof ColorInterface) {
+        if ($color instanceof CssColorInterface) {
             $this->color = (string)$color;
             return $this;
         }

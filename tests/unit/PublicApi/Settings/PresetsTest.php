@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace ItalyStrap\Tests\Unit\PublicApi\Settings;
 
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Palette;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\Color;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Color;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\CssColor;
 use ItalyStrap\ThemeJsonGenerator\Settings\Custom\Custom;
 use ItalyStrap\ThemeJsonGenerator\Settings\PresetInterface;
 use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
@@ -97,7 +97,7 @@ final class PresetsTest extends UnitTestCase
         $sut = $this->makeInstance();
 
         $sut->addMultiple([
-            new Palette('base', 'Base', new Color('#ffffff')),
+            new Color('base', 'Base', new CssColor('#ffffff')),
             new FontSize('base', 'Base', '1rem'),
             new Custom('spacing.base', '1rem'),
         ]);
@@ -116,7 +116,7 @@ final class PresetsTest extends UnitTestCase
             'Invalid preset slug "brand.primary": only ASCII letters, digits, and hyphens are allowed.'
         );
 
-        new Palette('brand.primary', 'Brand Primary', new Color('#111111'));
+        new Color('brand.primary', 'Brand Primary', new CssColor('#111111'));
     }
 
     public function testItShouldRejectDottedSlugWhenParentPresetAlreadyExists(): void
@@ -157,8 +157,8 @@ final class PresetsTest extends UnitTestCase
     public function testItShouldStoreBlockScopedPresetsWithoutOverwritingRootPresets(): void
     {
         $sut = $this->makeInstance();
-        $sut->add(new Palette('base', 'Base', new Color('#ffffff')));
-        $sut->addToBlock('core/group', new Palette('base', 'Block Base', new Color('#000000')));
+        $sut->add(new Color('base', 'Base', new CssColor('#ffffff')));
+        $sut->addToBlock('core/group', new Color('base', 'Block Base', new CssColor('#000000')));
 
         $collection = $sut->collection();
 

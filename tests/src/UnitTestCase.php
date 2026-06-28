@@ -7,9 +7,9 @@ namespace ItalyStrap\Tests;
 use Codeception\Test\Unit;
 use ItalyStrap\Config\ConfigInterface;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Filesystem\FilesFinder;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Palette;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\ColorInterface;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\GradientInterface;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Color;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\CssColorInterface;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\GradientInterface;
 use ItalyStrap\ThemeJsonGenerator\Settings\PresetInterface;
 use ItalyStrap\ThemeJsonGenerator\Settings\PresetsInterface;
 use ItalyStrap\ThemeJsonGenerator\Settings\Shadow\Utilities\BoxShadow;
@@ -51,11 +51,11 @@ class UnitTestCase extends Unit
         return $this->config->reveal();
     }
 
-    protected ObjectProphecy $colorInfo;
+    protected ObjectProphecy $cssColor;
 
-    protected function makeColorInfo(): ColorInterface
+    protected function makeCssColor(): CssColorInterface
     {
-        return $this->colorInfo->reveal();
+        return $this->cssColor->reveal();
     }
 
     protected ObjectProphecy $gradient;
@@ -74,7 +74,7 @@ class UnitTestCase extends Unit
 
     protected ObjectProphecy $palette;
 
-    protected function makePalette(): Palette
+    protected function makePalette(): Color
     {
         return $this->palette->reveal();
     }
@@ -118,10 +118,10 @@ class UnitTestCase extends Unit
     protected function _before()
     {
         $this->item = $this->prophesize(PresetInterface::class);
-        $this->colorInfo = $this->prophesize(ColorInterface::class);
+        $this->cssColor = $this->prophesize(CssColorInterface::class);
         $this->gradient = $this->prophesize(GradientInterface::class);
         $this->boxShadow = $this->prophesize(BoxShadow::class);
-        $this->palette = $this->prophesize(Palette::class);
+        $this->palette = $this->prophesize(Color::class);
 
         $this->config = $this->prophesize(ConfigInterface::class);
         $this->dispatcher = $this->prophesize(EventDispatcherInterface::class);

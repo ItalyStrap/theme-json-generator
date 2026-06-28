@@ -1,0 +1,165 @@
+<?php
+
+declare(strict_types=1);
+
+namespace ItalyStrap\ThemeJsonGenerator\Settings\Color\Generators;
+
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Color;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Transformers\ColorModifier;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\CssColorInterface;
+use Traversable;
+
+final readonly class ShadesExperimental implements \IteratorAggregate
+{
+    /**
+     * @var int
+     */
+    public const MIN = 100;
+
+    /**
+     * @var int
+     */
+    public const MAX = 1000;
+
+    /**
+     * @var int
+     */
+    public const INCREMENT_BY = 100;
+
+    public static function fromColor(
+        Color $color,
+        int $min = self::MIN,
+        int $max = self::MAX,
+        int $incrementBy = self::INCREMENT_BY
+    ): ShadesExperimental {
+        return new self(
+            $color->color(),
+            $color->slug(),
+            $min,
+            $max,
+            $incrementBy
+        );
+    }
+
+    public static function fromCssColor(
+        CssColorInterface $color,
+        string $slug,
+        int $min = self::MIN,
+        int $max = self::MAX,
+        int $incrementBy = self::INCREMENT_BY
+    ): ShadesExperimental {
+        return new self(
+            $color,
+            $slug,
+            $min,
+            $max,
+            $incrementBy
+        );
+    }
+
+    public function __construct(
+        private CssColorInterface $color,
+        private string $slug,
+        private int $min = self::MIN,
+        private int $max = self::MAX,
+        private int $incrementBy = self::INCREMENT_BY
+    ) {
+        if ($this->incrementBy <= 0) {
+            throw new \InvalidArgumentException('Shade increment must be greater than zero.');
+        }
+
+        if ($this->min < 0) {
+            throw new \InvalidArgumentException('Minimum shade must be zero or greater.');
+        }
+
+        if ($this->max < $this->min) {
+            throw new \InvalidArgumentException(
+                'Maximum shade must be greater than or equal to minimum shade.'
+            );
+        }
+    }
+
+    public function toCssColors(): array
+    {
+        $colors = [];
+        foreach ($this->shadeIndexes() as $index) {
+            $colors[$index] = $this->shadeAt($index);
+        }
+
+        return $colors;
+    }
+
+    public function toColors(): array
+    {
+        $colors = [];
+        foreach ($this->toCssColors() as $key => $color) {
+            $colors[$key] = new Color(
+                \sprintf('%s-%d', $this->slug, $key),
+                \sprintf("Shade of %s by %s%%", \ucfirst($this->slug), $key / 10),
+                $color
+            );
+        }
+
+        return $colors;
+    }
+
+    /**
+     * This functionality creates an array of shades of a given color
+     * The created shades are from 10% to 100% of the given color
+     * If the color is dark, the shades will be lightened
+     * If the color is light, the shades will be darkened
+     *
+     * This method creates an array of Palette of shades of a color
+     * If the color generated is #000000 or #ffffff it will be skipped,
+     * and you will get only the shades of the color without duplicates values like many #000000 or #ffffff
+     *
+     * @throws \Exception
+     */
+    public function toArray(): array
+    {
+        $colors = [];
+        foreach ($this->shadeIndexes() as $index) {
+            $colors[$index] = new Color(
+                \sprintf('%s-%d', $this->slug, $index),
+                \sprintf("Shade of %s by %s%%", \ucfirst($this->slug), $index / 10),
+                $this->shadeAt($index)
+            );
+
+            $colorToCheck = (string)$colors[$index]->color()->toHex();
+            if (
+                $colorToCheck === '#000000'
+                || $colorToCheck === '#ffffff'
+            ) {
+                unset($colors[$index]);
+                break;
+            }
+        }
+
+        return $colors;
+    }
+
+    /**
+     * @return \Generator<int>
+     */
+    private function shadeIndexes(): \Generator
+    {
+        for ($index = $this->min; $index <= $this->max; $index += $this->incrementBy) {
+            yield $index;
+        }
+    }
+
+    private function shadeAt(int $index): CssColorInterface
+    {
+        $modifier = new ColorModifier($this->color);
+        $amount = $index / 10;
+
+        return $this->color->isDark()
+            ? $modifier->lighten($amount)
+            : $modifier->darken($amount);
+    }
+
+    public function getIterator(): Traversable
+    {
+        return new \ArrayIterator($this->toArray());
+    }
+}

@@ -8,15 +8,15 @@ use ItalyStrap\Config\Config;
 use ItalyStrap\Config\ConfigInterface;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Filesystem\JsonFileWriter;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Palette;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\Color;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\ColorModifier;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Color;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Transformers\ColorModifier;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\CssColor;
 use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\ThemeJson;
 
 final class JsonFileWriterIntegrationTest extends UnitTestCase
 {
-    public const COLOR_HEADING_TEXT = Palette::TYPE . '.headingColor';
+    public const COLOR_HEADING_TEXT = Color::TYPE . '.headingColor';
 
     public const FONT_SIZE_H1 = 'font-size-h1';
 
@@ -42,9 +42,9 @@ final class JsonFileWriterIntegrationTest extends UnitTestCase
             $collection,
         );
 
-        $bodyText = (new Color('#000000'))->toHsla();
+        $bodyText = (new CssColor('#000000'))->toHsla();
         $headingText = (new ColorModifier($bodyText))->lighten(20);
-        $headingClrPalette = new Palette('headingColor', 'Color for headings', $headingText);
+        $headingClrPalette = new Color('headingColor', 'Color for headings', $headingText);
 
         $collection->add($headingClrPalette);
 

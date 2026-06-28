@@ -50,13 +50,13 @@ final class BoxShadowTest extends UnitTestCase
 
     public function testItShouldReturnValiShadow(): void
     {
-        $color = $this->colorInfo
+        $color = $this->cssColor
             ->__toString()
             ->willReturn('#fff');
 
         $this->palette
             ->color()
-            ->willReturn($this->makeColorInfo());
+            ->willReturn($this->makeCssColor());
 
         $this->palette
             ->var('#fff')
@@ -101,14 +101,14 @@ final class BoxShadowTest extends UnitTestCase
 
     public function testWithColorObject(): void
     {
-        $color = $this->colorInfo
+        $color = $this->cssColor
             ->__toString()
             ->willReturn('#fff');
 
         $sut = $this->makeInstance();
         $sut->offsetX('0');
         $sut->offsetY('10px');
-        $sut->color($this->makeColorInfo());
+        $sut->color($this->makeCssColor());
         $this->assertSame(
             '0 10px #fff',
             (string)$sut

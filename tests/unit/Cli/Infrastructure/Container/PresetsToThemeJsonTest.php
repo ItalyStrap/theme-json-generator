@@ -7,8 +7,8 @@ namespace ItalyStrap\Tests\Unit\Cli\Infrastructure\Container;
 use ItalyStrap\Config\Config;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Container\PresetsToThemeJson;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Palette;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\Color;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Color;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\CssColor;
 use ItalyStrap\ThemeJsonGenerator\Settings\Custom\Custom;
 use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\Settings\Typography\FontSize;
@@ -20,11 +20,11 @@ final class PresetsToThemeJsonTest extends UnitTestCase
     {
         $presets = new Presets();
         $presets
-            ->add(new Palette('base', 'Base', new Color('#ffffff')))
+            ->add(new Color('base', 'Base', new CssColor('#ffffff')))
             ->add(new FontSize('base', 'Base', '1rem'))
             ->add(new FontSize('large', 'Large', 'calc( {{fontSize.base}} * 2 )'))
             ->add(new Custom('spacing.base', '{{fontSize.base}}'))
-            ->addToBlock('core/group', new Palette('base', 'Block Base', new Color('#000000')));
+            ->addToBlock('core/group', new Color('base', 'Block Base', new CssColor('#000000')));
 
         $config = new Config();
         $themeJson = new ThemeJson($config, $presets);

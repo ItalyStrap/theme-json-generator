@@ -7,7 +7,7 @@ namespace ItalyStrap\Tests\Unit\PublicApi\Settings;
 use ItalyStrap\Config\Config;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Palette;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Color as ColorPreset;
 use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\ThemeJson;
 
@@ -51,7 +51,7 @@ final class ColorTest extends UnitTestCase
         $sut = new ThemeJson(new Config(), new Presets());
 
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Expected an instance of ' . Palette::class . ', got string.');
+        $this->expectExceptionMessage('Expected an instance of ' . ColorPreset::class . ', got string.');
 
         $sut->settings()->color()->addColors(['#ffffff']);
     }

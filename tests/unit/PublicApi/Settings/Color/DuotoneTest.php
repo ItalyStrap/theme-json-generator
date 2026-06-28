@@ -18,17 +18,17 @@ final class DuotoneTest extends UnitTestCase
 
     private function makeInstance(): Duotone
     {
-        $this->colorInfo
+        $this->cssColor
             ->__toString()
             ->willReturn('rgba(255, 255, 255, 1)');
 
-        $this->colorInfo
+        $this->cssColor
             ->toRgba()
-            ->willReturn($this->colorInfo->reveal());
+            ->willReturn($this->cssColor->reveal());
 
         $this->palette
             ->color()
-            ->willReturn($this->colorInfo->reveal());
+            ->willReturn($this->cssColor->reveal());
 
         return new Duotone(
             $this->slug,

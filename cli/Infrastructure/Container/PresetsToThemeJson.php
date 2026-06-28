@@ -9,9 +9,9 @@ use ItalyStrap\ThemeJsonGenerator\Settings;
 use ItalyStrap\ThemeJsonGenerator\Settings\Border;
 use ItalyStrap\ThemeJsonGenerator\Settings\Border\RadiusSize;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Color as ColorPreset;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Duotone;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Gradient;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Palette;
 use ItalyStrap\ThemeJsonGenerator\Settings\Custom\Custom;
 use ItalyStrap\ThemeJsonGenerator\Settings\Dimensions;
 use ItalyStrap\ThemeJsonGenerator\Settings\Dimensions\AspectRatio;
@@ -34,7 +34,7 @@ final class PresetsToThemeJson
         AspectRatio::TYPE => [Dimensions::SECTION, AspectRatio::SECTION],
         Custom::TYPE => [Settings\Custom::SECTION],
         RadiusSize::TYPE => [Border::SECTION, RadiusSize::SECTION],
-        Palette::TYPE => [Color::SECTION, Palette::SECTION],
+        ColorPreset::TYPE => [Color::SECTION, ColorPreset::SECTION],
         Duotone::TYPE => [Color::SECTION, Duotone::SECTION],
         Gradient::TYPE => [Color::SECTION, Gradient::SECTION],
         DimensionSize::TYPE => [Dimensions::SECTION, DimensionSize::SECTION],

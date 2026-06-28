@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace ItalyStrap\Tests\Fixtures;
 
 use ItalyStrap\ThemeJsonGenerator\ConfiguratorInterface;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Palette;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\Color;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Color;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\CssColor;
 use ItalyStrap\ThemeJsonGenerator\Settings\PresetsInterface;
 use ItalyStrap\ThemeJsonGenerator\Settings\Shadow\Utilities\BoxShadow;
 use ItalyStrap\ThemeJsonGenerator\ThemeJson;
@@ -19,13 +19,13 @@ final readonly class ThemeJsonContainerFactoryPaletteConfiguratorFixture impleme
 
     public function __invoke(ThemeJson $themeJson): void
     {
-        $this->presets->add(new Palette('base', 'Base', new Color('#ffffff')));
+        $this->presets->add(new Color('base', 'Base', new CssColor('#ffffff')));
         $themeJson->settings()->border()->addRadiusSize('small', 'Small', '4px');
         $themeJson->settings()->dimensions()->addAspectRatio('square', 'Square', '1/1');
         $themeJson->settings()->spacing()->addSpacingSize('50', 'Medium', '1rem');
         $blockSettings = $themeJson->settings()->blocks('core/group');
         $blockSettings->color()->addColors([
-            new Palette('base', 'Block Base', new Color('#000000')),
+            new Color('base', 'Block Base', new CssColor('#000000')),
         ]);
         $blockSettings->border()->addRadiusSize('large', 'Large', '12px');
         $blockSettings->dimensions()->addDimensionSize('content', 'Content', '42rem');

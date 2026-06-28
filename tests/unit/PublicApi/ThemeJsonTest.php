@@ -9,11 +9,11 @@ use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Settings;
 use ItalyStrap\ThemeJsonGenerator\Settings\Border\RadiusSize;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color as SettingsColor;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Color;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Duotone;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Gradient;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Palette;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\Color as ColorValue;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\LinearGradient;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\CssColor as ColorValue;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\LinearGradient;
 use ItalyStrap\ThemeJsonGenerator\Settings\Custom;
 use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\Settings\Typography;
@@ -227,18 +227,18 @@ final class ThemeJsonTest extends UnitTestCase
         $sut = new ThemeJson(new Config(), $presets);
         $color = $sut->settings()->color();
 
-        $base = new Palette('base', 'Base', new ColorValue('#000000'));
-        $contrast = new Palette('contrast', 'Contrast', new ColorValue('#ffffff'));
+        $base = new Color('base', 'Base', new ColorValue('#000000'));
+        $contrast = new Color('contrast', 'Contrast', new ColorValue('#ffffff'));
 
         $this->assertInstanceOf(SettingsColor::class, $color->disableLink());
         $this->assertFalse($sut->get('settings.color.link'));
 
         $this->assertInstanceOf(SettingsColor::class, $color->addColor('accent', 'Accent', '#ff0000'));
-        $this->assertInstanceOf(Palette::class, $presets->get('color.accent'));
+        $this->assertInstanceOf(Color::class, $presets->get('color.accent'));
         $this->assertInstanceOf(SettingsColor::class, $color->addColors((static function (): iterable {
-            yield new Palette('muted', 'Muted', new ColorValue('#cccccc'));
+            yield new Color('muted', 'Muted', new ColorValue('#cccccc'));
         })()));
-        $this->assertInstanceOf(Palette::class, $presets->get('color.muted'));
+        $this->assertInstanceOf(Color::class, $presets->get('color.muted'));
 
         $gradient = (new LinearGradient())
             ->colorStop('#000000')

@@ -6,8 +6,8 @@ namespace ItalyStrap\Tests\Unit\PublicApi;
 
 use ItalyStrap\Config\Config;
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Palette;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\Color as ColorValue;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Color;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\CssColor as ColorValue;
 use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\Styles;
 use ItalyStrap\ThemeJsonGenerator\Styles\Css;
@@ -338,7 +338,7 @@ CSS,
     private function makeStylePresets(): Presets
     {
         $presets = new Presets();
-        $presets->add(new Palette('base', 'Base', new ColorValue('#ffffff')));
+        $presets->add(new Color('base', 'Base', new ColorValue('#ffffff')));
 
         return $presets;
     }

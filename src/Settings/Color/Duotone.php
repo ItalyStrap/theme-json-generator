@@ -28,7 +28,7 @@ final class Duotone implements PresetInterface
     public function __construct(
         private readonly string $slug,
         string $name,
-        Palette ...$colors
+        Color ...$colors
     ) {
         $this->assertSlugIsWellFormed($slug);
 
@@ -59,8 +59,8 @@ final class Duotone implements PresetInterface
     /**
      * @return array<array-key, string>
      */
-    private function assertValidColors(Palette ...$colors): array
+    private function assertValidColors(Color ...$colors): array
     {
-        return \array_map(static fn (Palette $color): string => (string)$color->color()->toRgba(), $colors);
+        return \array_map(static fn (Color $color): string => (string)$color->color()->toRgba(), $colors);
     }
 }

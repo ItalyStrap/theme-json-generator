@@ -4,38 +4,43 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Settings\Color;
 
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\GradientInterface;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\CssColorInterface;
 use ItalyStrap\ThemeJsonGenerator\Settings\PresetInterface;
 use ItalyStrap\ThemeJsonGenerator\Settings\PresetTrait;
 
-final readonly class Gradient implements PresetInterface
+final readonly class Color implements PresetInterface
 {
     use PresetTrait;
 
-    public const SECTION = 'gradients';
+    public const SECTION = 'palette';
 
     /**
      * @var string
      */
-    public const TYPE = 'gradient';
+    public const TYPE = 'color';
 
     public function __construct(
         private string $slug,
         private string $name,
-        private GradientInterface $gradient
+        private CssColorInterface $color
     ) {
         $this->assertSlugIsWellFormed($slug);
     }
 
     /**
-     * @return array{slug: string, name: string, gradient: string}
+     * @return array{slug: string, name: string, color: string}
      */
     public function toArray(): array
     {
         return [
             'slug' => $this->slug,
             'name' => $this->name,
-            'gradient' => (string)$this->gradient,
+            'color' => (string)$this->color,
         ];
+    }
+
+    public function color(): CssColorInterface
+    {
+        return $this->color;
     }
 }

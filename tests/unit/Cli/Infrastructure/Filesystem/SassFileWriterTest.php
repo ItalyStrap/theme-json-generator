@@ -6,8 +6,8 @@ namespace ItalyStrap\Tests\Unit\Cli\Infrastructure\Filesystem;
 
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Filesystem\ScssFileWriter;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Palette;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\Color;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Color;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\CssColor;
 use ItalyStrap\ThemeJsonGenerator\Settings\Custom\Custom;
 use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\Settings\Spacing\SpacingSize;
@@ -31,8 +31,8 @@ final class SassFileWriterTest extends UnitTestCase
             ->add(new SpacingSize('50', 'Medium', '1rem'))
             ->add(new Custom('alignment.center', 'center'))
             ->add(new FontSize('bodyText', 'Body', '1rem'))
-            ->add(new Palette('primary', 'Primary', new Color('#ffffff')))
-            ->addToBlock('core/group', new Palette('primary', 'Primary', new Color('#000000')));
+            ->add(new Color('primary', 'Primary', new CssColor('#ffffff')))
+            ->addToBlock('core/group', new Color('primary', 'Primary', new CssColor('#000000')));
 
         $this->makeInstance()->write($presets);
 
