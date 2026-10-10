@@ -2,8 +2,13 @@
 ## Directories to ignore when exporting the package
 .docker/ export-ignore
 .github/ export-ignore
+docs/ export-ignore
+report/ export-ignore
 stubs/ export-ignore
+template/ export-ignore
 tests/ export-ignore
+tools/ export-ignore
+ts/ export-ignore
 
 ## Files to ignore when exporting the package
 /.editorconfig export-ignore
@@ -16,8 +21,11 @@ tests/ export-ignore
 /codeception.yml export-ignore
 /ecs.php export-ignore
 /example.php export-ignore
+/infection.json export-ignore
 /infection.dist export-ignore
 /Makefile export-ignore
+/migrate.php export-ignore
+/PLAN.md export-ignore
 /phpbench.json export-ignore
 /phpcs.xml export-ignore
 /phpstan.neon export-ignore
