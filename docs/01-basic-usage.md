@@ -213,23 +213,45 @@ declare(strict_types=1);
 
 namespace YourVendor\YourProject;
 
-use ItalyStrap\ThemeJsonGenerator\Api\ThemeJson;
+use ItalyStrap\ThemeJsonGenerator\ThemeJson;
 
 return static function (ThemeJson $themeJson): void {
     // Your configuration code goes here
 };
 ```
 
+### Root ThemeJson collections
+
+Top-level collections can be filled through dedicated root objects:
+
+```php
+$themeJson
+    ->schema('https://schemas.wp.org/trunk/theme.json')
+    ->version(3)
+    ->title('Moduli')
+    ->slug('moduli')
+    ->description('Theme metadata');
+
+$themeJson
+    ->blockTypes()
+    ->add('core/paragraph')
+    ->add('core/heading');
+
+$themeJson->customTemplates()->addTemplate('landing', 'Landing');
+$themeJson->templateParts()->addPart('header', 'header', 'Header');
+$themeJson->patterns()->add('moduli/hero');
+```
+
 _This approach utilizes the [Empress](https://github.com/ItalyStrap/empress) package for dependency resolution, emphasizing simplicity and adherence to the KISS principle, we'll see more later._
 
-The `BLueprint` extends the [Config](https://github.com/ItalyStrap/config) package adding some helper methods to simplify the process of configuring the JSON file.
+`ThemeJson` wraps a [Config](https://github.com/ItalyStrap/config) instance and provides methods for configuring the JSON file.
 
 ```php
 declare(strict_types=1);
 
 namespace YourVendor\YourProject;
 
-use ItalyStrap\ThemeJsonGenerator\Api\ThemeJson;
+use ItalyStrap\ThemeJsonGenerator\ThemeJson;
 
 return static function (ThemeJson $themeJson): void {
     $themeJson->merge([
@@ -240,6 +262,54 @@ return static function (ThemeJson $themeJson): void {
 
 The first method you can use is the `merge()` method, this method is used to initially add the configuration to the ThemeJson object.
 
+### Top-level fluent root methods
+
+`ThemeJson` also exposes fluent root methods for top-level schema properties.
+
+```php
+return static function (ThemeJson $themeJson): void {
+    $themeJson
+        ->schema('https://schemas.wp.org/trunk/theme.json')
+        ->version(3)
+        ->title('Experimental Theme')
+        ->description('Experimental Theme');
+};
+```
+
+Use these methods when you want to set top-level properties directly instead of passing them through `merge()`.
+
+### Generic path escape hatch
+
+Prefer typed APIs where they exist. For future or unsupported `theme.json` paths, use the top-level `ThemeJson::set()`, `ThemeJson::get()`, and `ThemeJson::appendTo()` methods.
+
+```php
+return static function (ThemeJson $themeJson): void {
+    $themeJson->set(['styles', 'blocks', 'core/paragraph', 'color', 'text'], '#111111');
+    $themeJson->appendTo(['patterns'], 'moduli/hero');
+
+    $textColor = $themeJson->get(['styles', 'blocks', 'core/paragraph', 'color', 'text']);
+};
+```
+
+Array notation is the first choice for readability. String keys are delegated to `Config` dot notation, for example `styles.color.text`.
+
+#### About `slug()`
+
+`slug()` is mainly useful for **style variation** files.
+
+```php
+return static function (ThemeJson $themeJson): void {
+    $themeJson
+        ->title('Midnight')
+        ->slug('midnight');
+};
+```
+
+- `title()` is the human-readable variation name.
+- `slug()` is the machine-readable identifier for that variation.
+- If `slug()` is omitted, WordPress uses the kebab-case version of the title.
+- For the main `theme.json`, `slug()` is usually not needed.
+
 So, to get started quickly, see the example below:
 
 ```php
@@ -248,15 +318,17 @@ declare(strict_types=1);
 
 namespace YourVendor\YourProject;
 
-use ItalyStrap\ThemeJsonGenerator\Api\SectionNames;use ItalyStrap\ThemeJsonGenerator\Api\ThemeJson;
+use ItalyStrap\ThemeJsonGenerator\Settings;
+use ItalyStrap\ThemeJsonGenerator\Styles;
+use ItalyStrap\ThemeJsonGenerator\ThemeJson;
 
 return static function (ThemeJson $themeJson): void {
     $themeJson->merge([
-        SectionNames::SCHEMA => 'https://schemas.wp.org/trunk/theme.json',
-        SectionNames::VERSION => 2,
-        SectionNames::TITLE => 'Experimental Theme',
-        SectionNames::DESCRIPTION => 'Experimental Theme',
-        SectionNames::SETTINGS => [
+        ThemeJson::SCHEMA => 'https://schemas.wp.org/trunk/theme.json',
+        ThemeJson::VERSION => 2,
+        ThemeJson::TITLE => 'Experimental Theme',
+        ThemeJson::DESCRIPTION => 'Experimental Theme',
+        Settings::SECTION => [
             'layout' => [
                 'contentSize' => '620px',
                 'wideSize' => '1000px',
@@ -314,7 +386,7 @@ return static function (ThemeJson $themeJson): void {
             'custom' => [...],
             [...] // All the rest of config
         ],
-        SectionNames::STYLES => [
+        Styles::SECTION => [
             'color' => [...],
             'typography' => [...],
             'spacing' => [...],
@@ -326,7 +398,7 @@ return static function (ThemeJson $themeJson): void {
 }
 ```
 
-In this example we provided soma basic configuration to the ThemeJson object, the `SectionNames` class is used to avoid typos and to keep the code clean and maintainable.
+In this example, class constants identify the root sections and properties, helping avoid typos.
 
 Later in this documentation we'll see more methods you can use from the `ThemeJson` class to simplify the process of adding the configuration.
 

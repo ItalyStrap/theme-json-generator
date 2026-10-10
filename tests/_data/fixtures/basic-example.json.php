@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace ItalyStrap\Tests;
 
-use ItalyStrap\ThemeJsonGenerator\SectionNames;
+use ItalyStrap\ThemeJsonGenerator\CustomTemplates;
+use ItalyStrap\ThemeJsonGenerator\Settings;
+use ItalyStrap\ThemeJsonGenerator\Styles;
+use ItalyStrap\ThemeJsonGenerator\TemplateParts;
 use ItalyStrap\ThemeJsonGenerator\ThemeJson;
 
 return static function (ThemeJson $themeJson): void {
     $themeJson->merge([
-        SectionNames::VERSION => 1,
-        SectionNames::TEMPLATE_PARTS => [
+        ThemeJson::VERSION => 1,
+        TemplateParts::SECTION => [
             [
                 'name' => 'header',
                 'area' => 'header',
@@ -20,7 +23,7 @@ return static function (ThemeJson $themeJson): void {
                 'area' => 'footer',
             ],
         ],
-        SectionNames::CUSTOM_TEMPLATES => [
+        CustomTemplates::SECTION => [
             [
                 'name' => 'blank',
                 'title' => 'Blank',
@@ -38,7 +41,7 @@ return static function (ThemeJson $themeJson): void {
                 ],
             ],
         ],
-        SectionNames::SETTINGS => [
+        Settings::SECTION => [
             'border' => [
                 'customColor' => true,
                 'customRadius' => true,
@@ -351,7 +354,7 @@ return static function (ThemeJson $themeJson): void {
                 ],
             ],
         ],
-        SectionNames::STYLES => [
+        Styles::SECTION => [
             'blocks' => [
                 'core/button' => [
                     'border' => [

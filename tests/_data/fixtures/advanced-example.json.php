@@ -4,30 +4,32 @@ declare(strict_types=1);
 
 namespace ItalyStrap\Tests;
 
-use ItalyStrap\ThemeJsonGenerator\SectionNames;
+use ItalyStrap\Config\Config;
+use ItalyStrap\ThemeJsonGenerator\Settings;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Color;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Duotone;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Gradient;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Palette;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Shadow;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\BoxShadow;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\Color;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\ColorModifier;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Utilities\LinearGradient;
-use ItalyStrap\ThemeJsonGenerator\Settings\Custom\CustomToPresets;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Transformers\ColorModifier;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\CssColor;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\LinearGradient;
+use ItalyStrap\ThemeJsonGenerator\Settings\Custom\Custom;
 use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
+use ItalyStrap\ThemeJsonGenerator\Settings\Shadow\Shadow;
+use ItalyStrap\ThemeJsonGenerator\Settings\Shadow\Utilities\BoxShadow;
 use ItalyStrap\ThemeJsonGenerator\Settings\Typography\FontFamily;
 use ItalyStrap\ThemeJsonGenerator\Settings\Typography\FontSize;
+use ItalyStrap\ThemeJsonGenerator\Styles;
 use ItalyStrap\ThemeJsonGenerator\ThemeJson;
 use Psr\Container\ContainerInterface;
 
 return static function (ThemeJson $themeJson, Presets $presets, ContainerInterface $container): void {
-    $baseClr = (new Color('#3986E0'))->toHsla();
-    $bodyText = (new Color('#000000'))->toHsla();
+    $baseClr = (new CssColor('#3986E0'))->toHsla();
+    $bodyText = (new CssColor('#000000'))->toHsla();
     $headingText = (new ColorModifier($bodyText))->lighten(20);
 
-    $baseClrPalette = new Palette('base', 'Brand base color', $baseClr);
-    $bodyClrPalette = new Palette('bodyColor', 'Color for text', $bodyText);
-    $headingClrPalette = new Palette('headingColor', 'Color for headings', $headingText);
+    $baseClrPalette = new Color('base', 'Brand base color', $baseClr);
+    $bodyClrPalette = new Color('bodyColor', 'Color for text', $bodyText);
+    $headingClrPalette = new Color('headingColor', 'Color for headings', $headingText);
 
     $presets
         ->add($baseClrPalette)
@@ -89,27 +91,24 @@ return static function (ThemeJson $themeJson, Presets $presets, ContainerInterfa
             // phpcs:enable
         ));
 
-    $collectionAdapter = new CustomToPresets([
-        'contentSize'   => 'clamp(16rem, 60vw, 60rem)',
-        'wideSize'      => 'clamp(16rem, 85vw, 70rem)',
-        'baseFontSize'  => "1rem",
-        'spacer'        => [
-            'base'  => '1rem',
-            // ... more spacers
-        ],
-    ]);
-
     $presets
-        ->addMultiple(
-            $collectionAdapter->toArray()
-        );
+        ->addMultiple([
+            new Custom('contentSize', 'clamp(16rem, 60vw, 60rem)'),
+            new Custom('wideSize', 'clamp(16rem, 85vw, 70rem)'),
+            new Custom('baseFontSize', '{{fontSize.base}}'),
+            new Custom('spacer.base', '1rem'),
+        ]);
+
+    $themeJson
+        ->schema('https://schemas.wp.org/trunk/theme.json')
+        ->version(2)
+        ->title('Experimental Theme')
+        ->description('Experimental Theme');
+
+    $styles = (new ThemeJson(new Config(), $presets))->styles();
 
     $themeJson->merge([
-        SectionNames::SCHEMA => 'https://schemas.wp.org/trunk/theme.json',
-        SectionNames::VERSION => 2,
-        SectionNames::TITLE => 'Experimental Theme',
-        SectionNames::DESCRIPTION => 'Experimental Theme',
-        SectionNames::SETTINGS => [
+        Settings::SECTION => [
             'color' => [
                 'custom'    => true,
                 'link'      => true,
@@ -126,25 +125,25 @@ return static function (ThemeJson $themeJson, Presets $presets, ContainerInterfa
                 'wideSize' => $presets->get('custom.wideSize')->var(),
             ],
         ],
-        SectionNames::STYLES => [
-            'color' => (new \ItalyStrap\ThemeJsonGenerator\Styles\Color())
+        Styles::SECTION => [
+            'color' => $styles->color()
                 ->background('var(--wp--preset--color--body-bg)')
                 ->text('var(--wp--preset--color--body-color)'),
-            'typography' => (new \ItalyStrap\ThemeJsonGenerator\Styles\Typography($presets))
+            'typography' => $styles->typography()
                 ->fontSize(FontSize::TYPE . '.base')
                 ->fontFamily(FontFamily::TYPE . '.base'),
             'elements' => [
                 'link' => [ // .wp-block-file a
-                    'color' => $container->get(\ItalyStrap\ThemeJsonGenerator\Styles\Color::class)
-                        ->text(Palette::TYPE . '.base')
+                    'color' => $styles->color()
+                        ->text(Color::TYPE . '.base')
                         ->background('transparent'),
                 ],
             ],
             'blocks' => [
                 'core/paragraph' => [
-                    'color' => (new \ItalyStrap\ThemeJsonGenerator\Styles\Color())
+                    'color' => $styles->color()
                         ->text('var(--wp--preset--color--body-color)'),
-                    'typography' => (new \ItalyStrap\ThemeJsonGenerator\Styles\Typography())
+                    'typography' => $styles->typography()
                         ->fontSize('var(--wp--preset--font-size--base)')
                         ->fontFamily('var(--wp--preset--font-family--base)'),
                 ],
