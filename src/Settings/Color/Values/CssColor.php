@@ -7,6 +7,7 @@ namespace ItalyStrap\ThemeJsonGenerator\Settings\Color\Values;
 use Spatie\Color\Color as SpatieColor;
 use Spatie\Color\Factory as ColorFactory;
 use Spatie\Color\Hsla;
+use Spatie\Color\Rgba;
 
 final class CssColor implements CssColorInterface
 {
@@ -16,6 +17,8 @@ final class CssColor implements CssColorInterface
 
     private readonly Hsla $hsla;
 
+    private readonly Rgba $rgba;
+
     private float|string $alpha = 1.0;
 
     /**
@@ -24,9 +27,9 @@ final class CssColor implements CssColorInterface
      */
     public const MEDIUM_LUMINANCE = 0.21951971807487;
 
-    public function __construct(string $color)
+    public function __construct(string|SpatieColor $color, ?Rgba $rgba = null)
     {
-        $this->spatieColor = ColorFactory::fromString($color);
+        $this->spatieColor = \is_string($color) ? ColorFactory::fromString($color) : $color;
 
         $reflected = new \ReflectionObject($this->spatieColor);
         $this->type = $reflected->getShortName();
@@ -45,6 +48,23 @@ final class CssColor implements CssColorInterface
 
         $alpha = $this->fromHexToFloat($this->alpha);
         $this->hsla = $this->spatieColor->toHsla($alpha);
+        $this->rgba = $rgba ?? $this->spatieColor->toRgba($alpha);
+    }
+
+    public function equals(string|CssColorInterface $color): bool
+    {
+        if (\is_string($color)) {
+            $color = new self($color);
+        }
+
+        $rgba = $color instanceof self
+            ? $color->rgba
+            : $color->toRgba($this->fromHexToFloat($color->alpha()));
+
+        return $this->rgba->red() === (int)$rgba->red()
+            && $this->rgba->green() === (int)$rgba->green()
+            && $this->rgba->blue() === (int)$rgba->blue()
+            && $this->rgba->alpha() === $this->fromHexToFloat($rgba->alpha());
     }
 
     public function isDark(): bool
@@ -159,29 +179,29 @@ final class CssColor implements CssColorInterface
 
     public function toHex(): self
     {
-        return new self((string) $this->spatieColor->toHex());
+        return new self($this->rgba->toHex());
     }
 
     public function toHsl(): self
     {
-        return new self((string) $this->spatieColor->toHsl());
+        return new self($this->spatieColor->toHsl(), $this->withAlpha(1.0));
     }
 
     public function toHsla(?float $alpha = null): self
     {
         $alpha ??= $this->fromHexToFloat($this->alpha);
-        return new self((string) $this->spatieColor->toHsla($alpha));
+        return new self($this->spatieColor->toHsla($alpha), $this->withAlpha($alpha));
     }
 
     public function toRgb(): self
     {
-        return new self((string) $this->spatieColor->toRgb());
+        return new self($this->rgba->toRgb());
     }
 
     public function toRgba(?float $alpha = null): self
     {
         $alpha ??= $this->fromHexToFloat($this->alpha);
-        return new self((string) $this->spatieColor->toRgba($alpha));
+        return new self($this->withAlpha($alpha));
     }
 
     public function __toString(): string
@@ -192,5 +212,10 @@ final class CssColor implements CssColorInterface
     private function fromHexToFloat(string|int|float $alpha): float
     {
         return \is_string($alpha) ? \hexdec($alpha) / 255 : (float)$alpha;
+    }
+
+    private function withAlpha(float $alpha): Rgba
+    {
+        return new Rgba($this->rgba->red(), $this->rgba->green(), $this->rgba->blue(), $alpha);
     }
 }

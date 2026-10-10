@@ -7,6 +7,11 @@ namespace ItalyStrap\ThemeJsonGenerator\Settings\Color\Values;
 // phpcs:ignore PHPCompatibility.Interfaces.NewInterfaces.stringableFound
 interface CssColorInterface extends \Stringable
 {
+    /**
+     * Compare normalized RGB channels and alpha without display rounding or tolerance.
+     */
+    public function equals(string|CssColorInterface $color): bool;
+
     public function isDark(): bool;
 
     public function isLight(): bool;

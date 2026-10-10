@@ -6,12 +6,109 @@ namespace ItalyStrap\Tests\Unit\PublicApi\Settings\Color\Values;
 
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\CssColor;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\CssColorInterface;
 
 final class CssColorTest extends UnitTestCase
 {
     protected function makeInstance(string $color): CssColor
     {
         return new CssColor($color);
+    }
+
+    public static function equivalentColorProvider(): \Generator
+    {
+        yield 'hex and rgb' => ['#ffc107', 'rgb(255,193,7)'];
+        yield 'red hsla' => ['#ff0000', 'hsla(0,100%,50%,1)'];
+        yield 'green hsla' => ['#00ff00', 'hsla(120,100%,50%,1)'];
+        yield 'blue hsl' => ['#0000ff', 'hsl(240,100%,50%)'];
+        yield 'full turn hue' => ['hsl(0,100%,50%)', 'hsl(360,100%,50%)'];
+        yield 'hex casing' => ['#FFC107', '#ffc107'];
+        yield 'rgb spacing' => ['rgb(255,0,0)', 'rgb(255, 0, 0)'];
+        yield 'opaque alpha' => ['#ff0000', 'rgba(255,0,0,1)'];
+        yield 'translucent alpha' => ['rgba(255,0,0,0.5)', 'hsla(0,100%,50%,0.5)'];
+        yield 'transparent alpha' => ['#00000000', 'rgba(0,0,0,0)'];
+        yield 'precise alpha' => ['rgba(255,0,0,0.501)', 'rgba(255, 0, 0, 0.501)'];
+    }
+
+    /**
+     * @dataProvider equivalentColorProvider
+     */
+    public function testItShouldCompareEquivalentStringsAndInstances(string $source, string $equivalent): void
+    {
+        $sut = $this->makeInstance($source);
+        $other = $this->makeInstance($equivalent);
+
+        $this->assertTrue($sut->equals($equivalent));
+        $this->assertTrue($sut->equals($other));
+        $this->assertTrue($other->equals($source));
+        $this->assertTrue($other->equals($sut));
+        $this->assertTrue($sut->equals($sut));
+    }
+
+    public static function differentColorProvider(): \Generator
+    {
+        yield 'red channel' => ['rgb(1,2,3)', 'rgb(2,2,3)'];
+        yield 'green channel' => ['rgb(1,2,3)', 'rgb(1,3,3)'];
+        yield 'blue channel' => ['rgb(1,2,3)', 'rgb(1,2,4)'];
+        yield 'alpha channel' => ['rgba(255,0,0,0.5)', 'rgba(255,0,0,1)'];
+        yield 'alpha below display precision' => ['rgba(255,0,0,0.501)', 'rgba(255,0,0,0.504)'];
+        yield 'hex alpha is not exactly half' => ['#ff000080', 'rgba(255,0,0,0.5)'];
+        yield 'transparent channels differ' => ['rgba(255,0,0,0)', 'rgba(0,0,255,0)'];
+        yield 'rounded yellow hsla' => ['#ffc107', 'hsla(45,100%,51%,1)'];
+        yield 'rounded red hsla' => ['#dc3545', 'hsla(354,70%,54%,1)'];
+    }
+
+    /**
+     * @dataProvider differentColorProvider
+     */
+    public function testItShouldRejectDifferentStringsAndInstances(string $source, string $different): void
+    {
+        $sut = $this->makeInstance($source);
+        $other = $this->makeInstance($different);
+
+        $this->assertFalse($sut->equals($different));
+        $this->assertFalse($sut->equals($other));
+        $this->assertFalse($other->equals($source));
+        $this->assertFalse($other->equals($sut));
+    }
+
+    public function testItShouldCompareAnotherColorInterfaceImplementation(): void
+    {
+        $rgba = $this->prophesize(CssColorInterface::class);
+        $rgba->red()->willReturn(255);
+        $rgba->green()->willReturn(0);
+        $rgba->blue()->willReturn(0);
+        $rgba->alpha()->willReturn(0.501);
+        $this->cssColor->alpha()->willReturn(0.501);
+        $this->cssColor->toRgba(0.501)->willReturn($rgba->reveal())->shouldBeCalledOnce();
+
+        $sut = $this->makeInstance('rgba(255,0,0,0.501)');
+
+        $this->assertTrue($sut->equals($this->makeCssColor()));
+    }
+
+    public function testItShouldPreserveChannelsAcrossConversionsBeforeStringSerialization(): void
+    {
+        $sut = $this->makeInstance('#ffc107');
+
+        $this->assertTrue($sut->equals($sut->toHsl()));
+        $this->assertTrue($sut->equals($sut->toHsla()));
+        $this->assertTrue($sut->equals($sut->toHsla()->toRgb()));
+        $this->assertTrue($sut->equals($sut->toHsla()->toHex()));
+        $this->assertFalse($sut->equals((string)$sut->toHsla()));
+    }
+
+    public function testItShouldPreserveAlphaAcrossConversionsBeforeStringSerialization(): void
+    {
+        $sut = $this->makeInstance('rgba(255,193,7,0.501)');
+
+        $this->assertTrue($sut->equals($sut->toHsla()));
+        $this->assertTrue($sut->equals($sut->toHsla()->toRgba()));
+        $this->assertFalse($sut->equals((string)$sut->toRgba()));
+        $this->assertFalse($sut->equals($sut->toHsla(0.5)));
+        $this->assertFalse($sut->equals($sut->toRgb()));
+        $this->assertFalse($sut->equals($sut->toHex()));
+        $this->assertFalse($sut->equals($sut->toHsl()));
     }
 
     public static function colorFormatProvider(): \Generator
@@ -106,8 +203,8 @@ final class CssColorTest extends UnitTestCase
         $this->assertStringMatchesFormat($rgb, (string) $sut->toHex()->toRgb(), '');
         $this->assertStringMatchesFormat($hsla, (string) $sut->toHex()->toHsla(), '');
 
-//      $this->assertStringMatchesFormat( $hex, (string) $sut->toHsla()->toHex(), '' );
-//      $this->assertStringMatchesFormat( $rgb, (string) $sut->toHsla()->toRgb(), '' );
+        $this->assertStringMatchesFormat($hex, (string) $sut->toHsla()->toHex(), '');
+        $this->assertStringMatchesFormat($rgb, (string) $sut->toHsla()->toRgb(), '');
     }
 
     public static function colorProvider(): \Generator
