@@ -5,15 +5,16 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator\Settings\Color\Generators\ColorWheel;
 
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Generators\ColorsGenerator;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Transformers\ColorModifierInterface;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Transformers\ColorModifier;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\CssColorInterface;
 
-final class MonochromaticColorsExperimental implements ColorsGenerator
+final class MonochromaticColors implements ColorsGenerator
 {
     /**
      * @param array<array-key, int|float> $steps
      */
     public function __construct(
-        private readonly ColorModifierInterface $colorModifier,
+        private readonly CssColorInterface $color,
         private array $steps
     ) {
         $this->assertValidSteps($steps);
@@ -21,21 +22,22 @@ final class MonochromaticColorsExperimental implements ColorsGenerator
 
     public function generate(): array
     {
+        $colorModifier = new ColorModifier($this->color);
         $stepsDescending = $this->steps;
         \rsort($stepsDescending);
 
         $colors = [];
         foreach ($stepsDescending as $weight) {
-            $colors[] = $this->colorModifier->tint((float)$weight);
+            $colors[] = $colorModifier->tint((float)$weight);
         }
 
-        $colors[] = $this->colorModifier->tint();
+        $colors[] = $colorModifier->tint();
 
         $stepsAscending = $this->steps;
         \sort($stepsAscending);
 
         foreach ($stepsAscending as $weight) {
-            $colors[] = $this->colorModifier->shade((float)$weight);
+            $colors[] = $colorModifier->shade((float)$weight);
         }
 
         return $colors;

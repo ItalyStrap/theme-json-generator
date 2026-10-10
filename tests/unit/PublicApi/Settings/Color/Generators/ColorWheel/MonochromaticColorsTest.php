@@ -5,16 +5,15 @@ declare(strict_types=1);
 namespace ItalyStrap\Tests\Unit\PublicApi\Settings\Color\Generators\ColorWheel;
 
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Generators\ColorWheel\MonochromaticColorsExperimental;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Transformers\ColorModifier;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Generators\ColorWheel\MonochromaticColors;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\CssColor;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\CssColorInterface;
 
 final class MonochromaticColorsTest extends UnitTestCase
 {
-    protected function makeInstance(CssColorInterface $color, array $steps): MonochromaticColorsExperimental
+    protected function makeInstance(CssColorInterface $color, array $steps): MonochromaticColors
     {
-        return new MonochromaticColorsExperimental(new ColorModifier($color), $steps);
+        return new MonochromaticColors($color, $steps);
     }
 
     public function testItShouldReturnArrayWithColorInfoInterface(): void

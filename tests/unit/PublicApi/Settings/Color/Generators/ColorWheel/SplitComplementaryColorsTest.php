@@ -5,16 +5,15 @@ declare(strict_types=1);
 namespace ItalyStrap\Tests\Unit\PublicApi\Settings\Color\Generators\ColorWheel;
 
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Generators\ColorWheel\SplitComplementaryColorsExperimental;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Transformers\ColorModifier;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Generators\ColorWheel\SplitComplementaryColors;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\CssColor;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\CssColorInterface;
 
 final class SplitComplementaryColorsTest extends UnitTestCase
 {
-    protected function makeInstance(string $color): SplitComplementaryColorsExperimental
+    protected function makeInstance(string $color): SplitComplementaryColors
     {
-        return new SplitComplementaryColorsExperimental(new ColorModifier(new CssColor($color)));
+        return new SplitComplementaryColors(new CssColor($color));
     }
 
     public function testItShouldReturnSplitComplementaryHueAngles(): void
@@ -23,8 +22,8 @@ final class SplitComplementaryColorsTest extends UnitTestCase
 
         $this->assertSame(
             [
-                'hsl(150,50%,50%)',
                 'hsl(0,50%,50%)',
+                'hsl(150,50%,50%)',
                 'hsl(210,50%,50%)',
             ],
             \array_map(static fn (CssColorInterface $color): string => (string)$color, $sut->generate())
@@ -33,15 +32,15 @@ final class SplitComplementaryColorsTest extends UnitTestCase
 
     public function testItShouldAcceptCustomAngle(): void
     {
-        $sut = new SplitComplementaryColorsExperimental(
-            new ColorModifier(new CssColor('hsl(0,50%,50%)')),
+        $sut = new SplitComplementaryColors(
+            new CssColor('hsl(0,50%,50%)'),
             135
         );
 
         $this->assertSame(
             [
-                'hsl(135,50%,50%)',
                 'hsl(0,50%,50%)',
+                'hsl(135,50%,50%)',
                 'hsl(225,50%,50%)',
             ],
             \array_map(static fn (CssColorInterface $color): string => (string)$color, $sut->generate())

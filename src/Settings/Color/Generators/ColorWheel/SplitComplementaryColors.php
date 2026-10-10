@@ -5,21 +5,20 @@ declare(strict_types=1);
 namespace ItalyStrap\ThemeJsonGenerator\Settings\Color\Generators\ColorWheel;
 
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Generators\ColorsGenerator;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Transformers\ColorModifierInterface;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\CssColorInterface;
 
-final readonly class SplitComplementaryColorsExperimental implements ColorsGenerator
+final readonly class SplitComplementaryColors implements ColorsGenerator
 {
     public function __construct(
-        private ColorModifierInterface $colorModifier,
+        private CssColorInterface $color,
         private int $angle = 150
     ) {
     }
 
     public function generate(): array
     {
-        return (new ColorWheelRotation($this->colorModifier))->colorsRotatedBy([
+        return (new ColorWheelRotation($this->color))->colorsRotatedBy([
             $this->angle,
-            0,
             -$this->angle,
         ]);
     }

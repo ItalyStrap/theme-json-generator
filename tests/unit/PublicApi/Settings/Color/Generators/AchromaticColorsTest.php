@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\Tests\Unit\PublicApi\Settings\Color\Generators\ColorWheel;
+namespace ItalyStrap\Tests\Unit\PublicApi\Settings\Color\Generators;
 
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Generators\ColorWheel\AchromaticColorsExperimental;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Generators\AchromaticColors;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\CssColorInterface;
 
 final class AchromaticColorsTest extends UnitTestCase
 {
-    protected function makeInstance(): AchromaticColorsExperimental
+    protected function makeInstance(): AchromaticColors
     {
-        return new AchromaticColorsExperimental();
+        return new AchromaticColors();
     }
 
     public function testItShouldReturnArrayWithColorInfoInterface(): void
