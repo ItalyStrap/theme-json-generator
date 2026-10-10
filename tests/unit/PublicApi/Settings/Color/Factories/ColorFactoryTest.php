@@ -24,7 +24,7 @@ final class ColorFactoryTest extends UnitTestCase
     public function testItShouldReturnColorInstanceFromColorInfo(): void
     {
         $sut = $this->makeInstance();
-        $color = $sut->fromColorInfo(new CssColor('#ffffff'));
+        $color = $sut->fromCssColor(new CssColor('#ffffff'));
         $this->assertInstanceOf(CssColor::class, $color, 'Should be an instance of Color');
         $this->assertSame('#ffffff', (string) $color, 'Should be equals');
     }

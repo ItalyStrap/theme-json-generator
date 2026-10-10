@@ -12,7 +12,7 @@ final class ColorFactory implements ColorFactoryInterface
     /**
      * @throws \Exception
      */
-    public function fromColorInfo(CssColorInterface $colorValue): CssColorInterface
+    public function fromCssColor(CssColorInterface $colorValue): CssColorInterface
     {
         return new CssColor((string) $colorValue);
     }
