@@ -24,6 +24,7 @@ use ItalyStrap\ThemeJsonGenerator\Settings\Spacing\SpacingSize;
 use ItalyStrap\ThemeJsonGenerator\Settings\Typography;
 use ItalyStrap\ThemeJsonGenerator\Settings\Typography\FontFamily;
 use ItalyStrap\ThemeJsonGenerator\Settings\Typography\FontSize;
+use ItalyStrap\ThemeJsonGenerator\Settings\Typography\TextShadow;
 
 final class PresetsToThemeJson
 {
@@ -42,6 +43,7 @@ final class PresetsToThemeJson
         SpacingSize::TYPE => [Spacing::SECTION, SpacingSize::SECTION],
         FontFamily::TYPE => [Typography::SECTION, FontFamily::SECTION],
         FontSize::TYPE => [Typography::SECTION, FontSize::SECTION],
+        TextShadow::TYPE => [Typography::SECTION, TextShadow::SECTION],
     ];
 
     /**

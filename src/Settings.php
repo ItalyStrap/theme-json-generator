@@ -6,6 +6,7 @@ namespace ItalyStrap\ThemeJsonGenerator;
 
 use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
 use ItalyStrap\ThemeJsonGenerator\Settings\Background;
+use ItalyStrap\ThemeJsonGenerator\Settings\BlockVisibility;
 use ItalyStrap\ThemeJsonGenerator\Settings\Border;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color;
 use ItalyStrap\ThemeJsonGenerator\Settings\Custom;
@@ -18,6 +19,7 @@ use ItalyStrap\ThemeJsonGenerator\Settings\PresetsInterface;
 use ItalyStrap\ThemeJsonGenerator\Settings\Shadow;
 use ItalyStrap\ThemeJsonGenerator\Settings\Spacing;
 use ItalyStrap\ThemeJsonGenerator\Settings\Typography;
+use ItalyStrap\ThemeJsonGenerator\Settings\Viewport;
 
 final readonly class Settings
 {
@@ -82,6 +84,20 @@ final readonly class Settings
     public function background(): Background
     {
         return new Background($this);
+    }
+
+    #[ThemeSchemaCoverage([self::SECTION, BlockVisibility::SECTION])]
+    public function blockVisibility(): BlockVisibility
+    {
+        $this->assertRootSettings(BlockVisibility::SECTION);
+        return new BlockVisibility($this);
+    }
+
+    #[ThemeSchemaCoverage([self::SECTION, Viewport::SECTION])]
+    public function viewport(): Viewport
+    {
+        $this->assertRootSettings(Viewport::SECTION);
+        return new Viewport($this);
     }
 
     #[ThemeSchemaCoverage([self::SECTION, Border::SECTION])]
@@ -185,5 +201,15 @@ final readonly class Settings
         }
 
         return $this->presets->get([self::BLOCKS_SECTION, $block, $type]);
+    }
+
+    private function assertRootSettings(string $section): void
+    {
+        if ($this->context->blockName() !== null) {
+            throw new \LogicException(\sprintf(
+                'The %s section is only supported at the root settings level.',
+                $section
+            ));
+        }
     }
 }

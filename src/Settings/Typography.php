@@ -9,6 +9,7 @@ use ItalyStrap\ThemeJsonGenerator\Settings;
 use ItalyStrap\ThemeJsonGenerator\Settings\Typography\Fluid;
 use ItalyStrap\ThemeJsonGenerator\Settings\Typography\FontFamily;
 use ItalyStrap\ThemeJsonGenerator\Settings\Typography\FontSize;
+use ItalyStrap\ThemeJsonGenerator\Settings\Typography\TextShadow;
 use ItalyStrap\ThemeJsonGenerator\Settings\Typography\Utilities\Fluid as FontSizeFluid;
 use ItalyStrap\ThemeJsonGenerator\Settings\Typography\Utilities\FontFace;
 
@@ -21,6 +22,10 @@ final readonly class Typography
     public const CUSTOM_FONT_SIZE = 'customFontSize';
 
     public const DEFAULT_FONT_SIZES = 'defaultFontSizes';
+
+    public const DEFAULT_TEXT_SHADOW_PRESETS = 'defaultTextShadowPresets';
+
+    public const TEXT_SHADOW = 'textShadow';
 
     public const DROP_CAP = 'dropCap';
 
@@ -61,6 +66,37 @@ final readonly class Typography
     public function disableDefaultFontSizes(): self
     {
         return $this->setBoolean(self::DEFAULT_FONT_SIZES, false);
+    }
+
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::TEXT_SHADOW])]
+    public function enableTextShadow(): self
+    {
+        return $this->setBoolean(self::TEXT_SHADOW, true);
+    }
+
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::TEXT_SHADOW])]
+    public function disableTextShadow(): self
+    {
+        return $this->setBoolean(self::TEXT_SHADOW, false);
+    }
+
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::DEFAULT_TEXT_SHADOW_PRESETS])]
+    public function enableDefaultTextShadowPresets(): self
+    {
+        return $this->setBoolean(self::DEFAULT_TEXT_SHADOW_PRESETS, true);
+    }
+
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::DEFAULT_TEXT_SHADOW_PRESETS])]
+    public function disableDefaultTextShadowPresets(): self
+    {
+        return $this->setBoolean(self::DEFAULT_TEXT_SHADOW_PRESETS, false);
+    }
+
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, TextShadow::SECTION])]
+    public function addTextShadow(string $slug, string $name, string $textShadow): self
+    {
+        $this->settings->addPreset(new TextShadow($slug, $name, $textShadow));
+        return $this;
     }
 
     #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::CUSTOM_FONT_SIZE])]

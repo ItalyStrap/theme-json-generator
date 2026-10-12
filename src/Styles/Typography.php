@@ -73,6 +73,8 @@ final class Typography implements ArrayableInterface, \JsonSerializable
      */
     public const TEXT_TRANSFORM = 'textTransform';
 
+    public const TEXT_SHADOW = 'textShadow';
+
     #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::FONT_FAMILY])]
     public function fontFamily(string $value): self
     {
@@ -143,5 +145,11 @@ final class Typography implements ArrayableInterface, \JsonSerializable
     public function textTransform(string $value): self
     {
         return $this->setProperty(self::TEXT_TRANSFORM, $value);
+    }
+
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::TEXT_SHADOW])]
+    public function textShadow(string $value): self
+    {
+        return $this->setProperty(self::TEXT_SHADOW, $value);
     }
 }

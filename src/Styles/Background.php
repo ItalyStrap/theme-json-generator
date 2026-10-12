@@ -38,6 +38,8 @@ final class Background implements ArrayableInterface, \JsonSerializable
      */
     public const BACKGROUND_ATTACHMENT = 'backgroundAttachment';
 
+    public const BACKGROUND_CLIP = 'backgroundClip';
+
     #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::BACKGROUND_IMAGE])]
     public function backgroundImage(string $value): self
     {
@@ -66,5 +68,11 @@ final class Background implements ArrayableInterface, \JsonSerializable
     public function backgroundAttachment(string $value): self
     {
         return $this->setProperty(self::BACKGROUND_ATTACHMENT, $value);
+    }
+
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION, self::BACKGROUND_CLIP])]
+    public function backgroundClip(string $value): self
+    {
+        return $this->setProperty(self::BACKGROUND_CLIP, $value);
     }
 }

@@ -16,6 +16,14 @@ final class TypographyTest extends UnitTestCase
         return $this->makeStyles()->typography();
     }
 
+    public function testItShouldWriteTextShadowValues(): void
+    {
+        $this->assertSame(
+            ['textShadow' => '0 2px 4px #000000, 0 4px 8px #333333'],
+            $this->makeInstance()->textShadow('0 2px 4px #000000, 0 4px 8px #333333')->toArray()
+        );
+    }
+
     public function testItShouldCreateCorrectArray(): void
     {
         $sut = $this->makeInstance();

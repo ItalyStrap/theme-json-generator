@@ -17,6 +17,10 @@ final readonly class Background
 
     public const BACKGROUND_SIZE = 'backgroundSize';
 
+    public const BACKGROUND_CLIP = 'backgroundClip';
+
+    private const BACKGROUND_CLIP_VALUES = ['text', 'padding-box', 'border-box', 'content-box'];
+
     public const GRADIENT = 'gradient';
 
     public function __construct(
@@ -46,6 +50,35 @@ final readonly class Background
     public function disableBackgroundSize(): self
     {
         return $this->setBoolean(self::BACKGROUND_SIZE, false);
+    }
+
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::BACKGROUND_CLIP])]
+    public function enableBackgroundClip(): self
+    {
+        return $this->setBoolean(self::BACKGROUND_CLIP, true);
+    }
+
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::BACKGROUND_CLIP])]
+    public function disableBackgroundClip(): self
+    {
+        return $this->setBoolean(self::BACKGROUND_CLIP, false);
+    }
+
+    #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::BACKGROUND_CLIP])]
+    public function backgroundClip(string ...$values): self
+    {
+        foreach ($values as $value) {
+            if (!\in_array($value, self::BACKGROUND_CLIP_VALUES, true)) {
+                throw new \InvalidArgumentException(\sprintf('Invalid background clip value "%s".', $value));
+            }
+        }
+
+        if (\count(\array_unique($values)) !== \count($values)) {
+            throw new \InvalidArgumentException('Background clip values must be unique.');
+        }
+
+        $this->set(self::BACKGROUND_CLIP, \array_values($values));
+        return $this;
     }
 
     #[ThemeSchemaCoverage([Settings::SECTION, self::SECTION, self::GRADIENT])]

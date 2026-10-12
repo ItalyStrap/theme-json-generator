@@ -14,6 +14,51 @@ use ItalyStrap\ThemeJsonGenerator\ThemeJson;
 
 final class TypographyTest extends UnitTestCase
 {
+    public function testItShouldToggleTextShadowControlsAndSerializeRootAndBlockPresets(): void
+    {
+        $presets = new Presets();
+        $config = new Config();
+        $themeJson = new ThemeJson($config, $presets);
+        $typography = $themeJson->settings()->typography();
+
+        $this->assertSame($typography, $typography->disableTextShadow()->enableDefaultTextShadowPresets());
+        $this->assertFalse($themeJson->get('settings.typography.textShadow'));
+        $this->assertTrue($themeJson->get('settings.typography.defaultTextShadowPresets'));
+        $typography->enableTextShadow()->disableDefaultTextShadowPresets()
+            ->addTextShadow('soft', 'Soft', '0 2px 4px #000000')
+            ->addTextShadow('strong', 'Strong', '{{textShadow.soft}}, 0 4px 8px #333333');
+        $themeJson->settings()->blocks('core/heading')->typography()
+            ->disableTextShadow()->addTextShadow('soft', 'Block Soft', '0 1px 2px #444444');
+        $themeJson->styles()->typography()->textShadow('textShadow.soft');
+        (new PresetsToThemeJson())($config, $presets);
+
+        $this->assertTrue($themeJson->get('settings.typography.textShadow'));
+        $this->assertFalse($themeJson->get('settings.typography.defaultTextShadowPresets'));
+        $this->assertSame([
+            ['slug' => 'soft', 'name' => 'Soft', 'textShadow' => '0 2px 4px #000000'],
+            [
+                'slug' => 'strong',
+                'name' => 'Strong',
+                'textShadow' => 'var(--wp--preset--text-shadow--soft), 0 4px 8px #333333',
+            ],
+        ], $themeJson->get('settings.typography.textShadowPresets'));
+        $this->assertSame([
+            ['slug' => 'soft', 'name' => 'Block Soft', 'textShadow' => '0 1px 2px #444444'],
+        ], $themeJson->get('settings.blocks.core/heading.typography.textShadowPresets'));
+        $this->assertFalse($themeJson->get('settings.blocks.core/heading.typography.textShadow'));
+        $this->assertSame('var(--wp--preset--text-shadow--soft)', $themeJson->get('styles.typography.textShadow'));
+    }
+
+    public function testItShouldRejectDuplicateTextShadowSlugs(): void
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Preset path textShadow.soft is already registered.');
+
+        (new ThemeJson(new Config(), new Presets()))->settings()->typography()
+            ->addTextShadow('soft', 'Soft', '0 2px 4px #000000')
+            ->addTextShadow('soft', 'Also Soft', '0 1px 2px #000000');
+    }
+
     public function testItShouldWriteTypographySettingsInsideBlockContext(): void
     {
         $presets = new Presets();

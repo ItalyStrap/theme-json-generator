@@ -24,6 +24,7 @@ final class BackgroundTest extends UnitTestCase
             ->backgroundRepeat('no-repeat')
             ->backgroundSize('cover')
             ->backgroundAttachment('fixed')
+            ->backgroundClip('text')
             ->toArray();
 
         $this->assertSame([
@@ -32,6 +33,7 @@ final class BackgroundTest extends UnitTestCase
             'backgroundRepeat' => 'no-repeat',
             'backgroundSize' => 'cover',
             'backgroundAttachment' => 'fixed',
+            'backgroundClip' => 'text',
         ], $result);
     }
 }
