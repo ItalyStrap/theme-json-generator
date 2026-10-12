@@ -8,8 +8,11 @@ use ItalyStrap\Config\Config;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Container\PresetsToThemeJson;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Color;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Generators\ShadesExperimental;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Factories\ColorPresetsFromGeneratorFactory;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Generators\Monochromatic\HslLightness;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\ColorVariationStep;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\CssColor;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\VariationDirection;
 use ItalyStrap\ThemeJsonGenerator\Settings\Custom\Custom;
 use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\Settings\Typography\FontSize;
@@ -34,8 +37,7 @@ final class PresetsIntegrationTest extends UnitTestCase
 
         $sut->add($bodyClrPalette);
 
-//        $sut->addMultiple(ShadesGeneratorExperimental::fromColorInfo($body_text, 'bodyColor')->toArray());
-        $sut->addMultiple(ShadesExperimental::fromColor($bodyClrPalette)->toArray());
+        $sut->addMultiple($this->lightnessPresetsFrom($bodyClrPalette));
 
         $sut->addMultiple([
             new Custom('contentSize', 'clamp(16rem, 60vw, 60rem)'),
@@ -198,7 +200,7 @@ EOF
         );
     }
 
-    public function testItHasShadesValueFromGenerator(): void
+    public function testItHasLightnessValuesFromGenerator(): void
     {
         $sut = $this->makeInstance();
 
@@ -207,8 +209,7 @@ EOF
 
         $sut->add($bodyClrPalette);
 
-//        $sut->addMultiple(ShadesGeneratorExperimental::fromColorInfo($body_text, 'bodyColor')->toArray());
-        $sut->addMultiple(ShadesExperimental::fromColor($bodyClrPalette)->toArray());
+        $sut->addMultiple($this->lightnessPresetsFrom($bodyClrPalette));
 
         $this->assertSame(
             'var(--wp--preset--color--body-color)',
@@ -249,5 +250,46 @@ EOF
             'hsla(0,0%,30%,1)',
             (string)$sut->get('color.bodyColor-300')->color()->toHsla()
         );
+
+        $this->assertSame([
+            [
+                'slug' => 'bodyColor',
+                'name' => 'Color for text',
+                'color' => 'hsla(0,0%,0%,1)',
+            ],
+            [
+                'slug' => 'bodyColor-100',
+                'name' => 'Color for text 100',
+                'color' => 'hsla(0,0%,10%,1)',
+            ],
+            [
+                'slug' => 'bodyColor-200',
+                'name' => 'Color for text 200',
+                'color' => 'hsla(0,0%,20%,1)',
+            ],
+            [
+                'slug' => 'bodyColor-300',
+                'name' => 'Color for text 300',
+                'color' => 'hsla(0,0%,30%,1)',
+            ],
+        ], $this->themeJsonFrom($sut)->get('settings.color.palette'));
+    }
+
+    /**
+     * @return array<array-key, Color>
+     */
+    private function lightnessPresetsFrom(Color $color): array
+    {
+        $generator = new HslLightness($color->color(), [
+            new ColorVariationStep('100', 10, VariationDirection::Lighter),
+            new ColorVariationStep('200', 20, VariationDirection::Lighter),
+            new ColorVariationStep('300', 30, VariationDirection::Lighter),
+        ]);
+
+        return (new ColorPresetsFromGeneratorFactory(
+            $generator,
+            $color->slug(),
+            $color->toArray()['name']
+        ))->create();
     }
 }

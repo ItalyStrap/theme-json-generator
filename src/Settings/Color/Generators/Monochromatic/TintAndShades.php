@@ -6,52 +6,67 @@ namespace ItalyStrap\ThemeJsonGenerator\Settings\Color\Generators\Monochromatic;
 
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Generators\ColorsGenerator;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Transformers\ColorModifier;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\ColorVariationStep;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\CssColorInterface;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\VariationDirection;
 
-final class TintAndShades implements ColorsGenerator
+/**
+ * Amounts are RGB mixing percentages: lighter mixes with white, darker with black.
+ * Each step applies to the original color. Output follows the supplied step order,
+ * with no implicit base color or removal of equal color values.
+ */
+final readonly class TintAndShades implements ColorsGenerator
 {
     /**
-     * @param array<array-key, int|float> $steps
+     * @param list<ColorVariationStep> $steps
      */
     public function __construct(
-        private readonly CssColorInterface $color,
+        private CssColorInterface $color,
         private array $steps
     ) {
-        $this->assertValidSteps($steps);
+        $this->assertUniqueIdentifiers($steps);
     }
 
+    /**
+     * @return array<array-key, CssColorInterface>
+     */
     public function generate(): array
     {
-        $colorModifier = new ColorModifier($this->color);
-        $stepsDescending = $this->steps;
-        \rsort($stepsDescending);
-
+        $modifier = new ColorModifier($this->color);
         $colors = [];
-        foreach ($stepsDescending as $weight) {
-            $colors[] = $colorModifier->tint((float)$weight);
-        }
 
-        $colors[] = $colorModifier->tint();
-
-        $stepsAscending = $this->steps;
-        \sort($stepsAscending);
-
-        foreach ($stepsAscending as $weight) {
-            $colors[] = $colorModifier->shade((float)$weight);
+        foreach ($this->steps as $step) {
+            $colors[$step->identifier] = $this->colorForStep($step, $modifier);
         }
 
         return $colors;
     }
 
-    /**
-     * @param array<array-key, int|float> $steps
-     */
-    private function assertValidSteps(array $steps): void
+    private function colorForStep(ColorVariationStep $step, ColorModifier $modifier): CssColorInterface
     {
+        if ($step->amount === 0.0) {
+            return $this->color;
+        }
+
+        return match ($step->direction) {
+            VariationDirection::Lighter => $modifier->tint($step->amount),
+            VariationDirection::Darker => $modifier->shade($step->amount),
+        };
+    }
+
+    /**
+     * @param list<ColorVariationStep> $steps
+     */
+    private function assertUniqueIdentifiers(array $steps): void
+    {
+        $identifiers = [];
+
         foreach ($steps as $step) {
-            if ($step < 0 || $step > 100) {
-                throw new \InvalidArgumentException('Step must be between 0 and 100.');
+            if (\array_key_exists($step->identifier, $identifiers)) {
+                throw new \InvalidArgumentException('Step identifiers must be unique.');
             }
+
+            $identifiers[$step->identifier] = true;
         }
     }
 }
