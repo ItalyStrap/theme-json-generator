@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\ThemeJsonGenerator\Settings\Color\Generators\ColorWheel;
+namespace ItalyStrap\ThemeJsonGenerator\Settings\Color\Generators\Monochromatic;
 
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Generators\ColorsGenerator;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Transformers\ColorModifier;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\CssColorInterface;
 
-final class MonochromaticColors implements ColorsGenerator
+final class TintAndShades implements ColorsGenerator
 {
     /**
      * @param array<array-key, int|float> $steps

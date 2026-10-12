@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace ItalyStrap\Tests\Unit\PublicApi\Settings\Color\Generators\ColorWheel;
+namespace ItalyStrap\Tests\Unit\PublicApi\Settings\Color\Generators\Monochromatic;
 
 use ItalyStrap\Tests\UnitTestCase;
-use ItalyStrap\ThemeJsonGenerator\Settings\Color\Generators\ColorWheel\MonochromaticColors;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Generators\Monochromatic\TintAndShades;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\CssColor;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\CssColorInterface;
 
-final class MonochromaticColorsTest extends UnitTestCase
+final class TintAndShadesTest extends UnitTestCase
 {
-    protected function makeInstance(CssColorInterface $color, array $steps): MonochromaticColors
+    protected function makeInstance(CssColorInterface $color, array $steps): TintAndShades
     {
-        return new MonochromaticColors($color, $steps);
+        return new TintAndShades($color, $steps);
     }
 
     public function testItShouldReturnArrayWithColorInfoInterface(): void
