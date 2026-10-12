@@ -85,7 +85,8 @@
             "ItalyStrap\\Tests\\": "tests/src/",
             "ItalyStrap\\Tests\\Unit\\": "tests/unit/",
             "ItalyStrap\\Tests\\Integration\\": "tests/integration/",
-            "ItalyStrap\\Tests\\Functional\\": "tests/functional/"
+            "ItalyStrap\\Tests\\Functional\\": "tests/functional/",
+            "ItalyStrap\\ThemeJsonGenerator\\Report\\": "report/src/"
         }
     },
     "suggest": {
