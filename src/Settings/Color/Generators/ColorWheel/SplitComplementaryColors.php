@@ -9,17 +9,24 @@ use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\CssColorInterface;
 
 final readonly class SplitComplementaryColors implements ColorsGenerator
 {
+    use ColorWheelRotationTrait;
+
+    /**
+     * @param list<string>|null $identifiers Base, positive rotation, negative rotation.
+     */
     public function __construct(
         private CssColorInterface $color,
-        private int $angle = 150
+        private int $angle = 150,
+        private ?array $identifiers = null
     ) {
+        $this->assertValidIdentifiers($this->identifiers, 3);
     }
 
     public function generate(): array
     {
-        return (new ColorWheelRotation($this->color))->colorsRotatedBy([
+        return $this->colorsRotatedBy($this->color, [
             $this->angle,
             -$this->angle,
-        ]);
+        ], $this->identifiers);
     }
 }

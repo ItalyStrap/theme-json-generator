@@ -59,9 +59,10 @@ loss; exact string round trips would require different parsing and formatting.
 
 ## Color Generators
 
-ColorWheelRotation is the generic engine: "given degrees, generate colors."
+`HueRotation` is the generic generator for explicit, named hue rotation steps.
+`ColorWheelRotationTrait` adapts predefined harmony rotations using private helpers.
 
-AnalogousColorsExperimental, TriadicColorsExperimental, etc. are semantic wrappers that provide known angle sets; we can call them "recipes".
+`AnalogousColors`, `TriadicColors`, etc. are semantic wrappers that provide known angle sets.
 
 That is a good design if callers may need both:
 

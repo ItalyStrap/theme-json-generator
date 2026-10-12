@@ -9,16 +9,23 @@ use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\CssColorInterface;
 
 final readonly class ComplementaryColors implements ColorsGenerator
 {
+    use ColorWheelRotationTrait;
+
+    /**
+     * @param list<string>|null $identifiers Base, rotated color.
+     */
     public function __construct(
         private CssColorInterface $color,
-        private int $angle = 180
+        private int $angle = 180,
+        private ?array $identifiers = null
     ) {
+        $this->assertValidIdentifiers($this->identifiers, 2);
     }
 
     public function generate(): array
     {
-        return (new ColorWheelRotation($this->color))->colorsRotatedBy([
+        return $this->colorsRotatedBy($this->color, [
             $this->angle,
-        ]);
+        ], $this->identifiers);
     }
 }
