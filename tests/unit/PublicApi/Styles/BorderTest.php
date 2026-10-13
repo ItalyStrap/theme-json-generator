@@ -26,7 +26,6 @@ final class BorderTest extends UnitTestCase
             ->radius('none')
             ->toArray();
 
-        $this->assertIsArray($result, '');
         $this->assertArrayHasKey('color', $result, '');
         $this->assertArrayHasKey('style', $result, '');
         $this->assertArrayHasKey('width', $result, '');
@@ -49,7 +48,7 @@ final class BorderTest extends UnitTestCase
 
         $this->assertJsonStringEqualsJsonString(
             '{"color":"#000000","style":"solid","width":"1px","radius":"none"}',
-            \json_encode($result),
+            \json_encode($result, \JSON_THROW_ON_ERROR),
             ''
         );
     }

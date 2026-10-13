@@ -58,6 +58,7 @@ final class PresetsIntegrationTest extends UnitTestCase
         return $themeJson;
     }
 
+    /** @return iterable<string, array{string: string, expected: string}> */
     public static function placeholdersProvider(): iterable
     {
         yield 'simple' => [
@@ -213,42 +214,42 @@ EOF
 
         $this->assertSame(
             'var(--wp--preset--color--body-color)',
-            $sut->get('color.bodyColor')->var()
+            $this->presetFrom($sut, 'color.bodyColor', Color::class)->var()
         );
 
         $this->assertSame(
             'hsla(0,0%,0%,1)',
-            (string)$sut->get('color.bodyColor')->color()->toHsla()
+            (string)$this->presetFrom($sut, 'color.bodyColor', Color::class)->color()->toHsla()
         );
 
         $this->assertSame(
             'var(--wp--preset--color--body-color-100)',
-            $sut->get('color.bodyColor-100')->var()
+            $this->presetFrom($sut, 'color.bodyColor-100', Color::class)->var()
         );
 
         $this->assertSame(
             'hsla(0,0%,10%,1)',
-            (string)$sut->get('color.bodyColor-100')->color()->toHsla()
+            (string)$this->presetFrom($sut, 'color.bodyColor-100', Color::class)->color()->toHsla()
         );
 
         $this->assertSame(
             'var(--wp--preset--color--body-color-200)',
-            $sut->get('color.bodyColor-200')->var()
+            $this->presetFrom($sut, 'color.bodyColor-200', Color::class)->var()
         );
 
         $this->assertSame(
             'hsla(0,0%,20%,1)',
-            (string)$sut->get('color.bodyColor-200')->color()->toHsla()
+            (string)$this->presetFrom($sut, 'color.bodyColor-200', Color::class)->color()->toHsla()
         );
 
         $this->assertSame(
             'var(--wp--preset--color--body-color-300)',
-            $sut->get('color.bodyColor-300')->var()
+            $this->presetFrom($sut, 'color.bodyColor-300', Color::class)->var()
         );
 
         $this->assertSame(
             'hsla(0,0%,30%,1)',
-            (string)$sut->get('color.bodyColor-300')->color()->toHsla()
+            (string)$this->presetFrom($sut, 'color.bodyColor-300', Color::class)->color()->toHsla()
         );
 
         $this->assertSame([

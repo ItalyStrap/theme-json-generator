@@ -29,12 +29,12 @@ trait CommonTests
 
         $this->assertStringMatchesFormat(
             '{"property":"value"}',
-            \json_encode($sut),
+            \json_encode($sut, \JSON_THROW_ON_ERROR),
             ''
         );
 
         $this->assertSame(
-            \json_encode($sut),
+            \json_encode($sut, \JSON_THROW_ON_ERROR),
             '{"property":"value"}',
             'Calling the second time should return the same result'
         );
@@ -44,12 +44,12 @@ trait CommonTests
 
         $this->assertStringMatchesFormat(
             '{"property":"another-value"}',
-            \json_encode($sut),
+            \json_encode($sut, \JSON_THROW_ON_ERROR),
             ''
         );
 
         $this->assertSame(
-            \json_encode($sut),
+            \json_encode($sut, \JSON_THROW_ON_ERROR),
             '{"property":"another-value"}',
             'Calling the second time should return the same result'
         );
@@ -83,17 +83,14 @@ trait CommonTests
             ],
         ];
 
+        /** @var Config<array-key, mixed> $config */
         $config = new Config($data);
-        new ThemeJson(
-            $config,
-            $this->makePresets(),
-        );
 
         $this->assertStringMatchesFormat(
             // phpcs:disable
             '{"styles":{"blocks":{"core/site-title":{"color":{"property":"core/site-title"},"typography":{"property":"core/site-title"}},"core/post-title":{"color":{"property":"core/post-title"},"typography":{"property":"core/post-title"}}}}}',
             // phpcs:enable
-            \json_encode($config, \JSON_UNESCAPED_SLASHES),
+            \json_encode($config, \JSON_UNESCAPED_SLASHES | \JSON_THROW_ON_ERROR),
             ''
         );
 
@@ -138,6 +135,7 @@ trait CommonTests
     {
         $reflection = new \ReflectionClass($this->makeInstance());
         $constructor = $reflection->getConstructor();
+        $this->assertNotNull($constructor, 'Style classes must have a constructor.');
         $parameters = $constructor->getParameters();
 
         $this->assertSame(

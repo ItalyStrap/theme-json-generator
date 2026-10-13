@@ -17,6 +17,7 @@ use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\LinearGradient;
 use ItalyStrap\ThemeJsonGenerator\Settings\Custom;
 use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
 use ItalyStrap\ThemeJsonGenerator\Settings\Typography;
+use ItalyStrap\ThemeJsonGenerator\Settings\Typography\FontSize;
 use ItalyStrap\ThemeJsonGenerator\Styles as StylesFacade;
 use ItalyStrap\ThemeJsonGenerator\ThemeJson;
 
@@ -32,7 +33,12 @@ final class ThemeJsonTest extends UnitTestCase
 
     public function testItShouldNotExposeInternalPresetHydrationMethod(): void
     {
-        $this->assertFalse(\method_exists($this->makeInstance(), 'setPresets'));
+        $reflection = new \ReflectionClass(ThemeJson::class);
+        $methods = \array_map(
+            static fn (\ReflectionMethod $method): string => $method->getName(),
+            $reflection->getMethods(\ReflectionMethod::IS_PUBLIC)
+        );
+        $this->assertNotContains('setPresets', $methods);
     }
 
     public function testItShouldExposeTopLevelRootMethods(): void
@@ -215,9 +221,12 @@ final class ThemeJsonTest extends UnitTestCase
         $this->assertFalse($sut->get('settings.shadow.defaultPresets'));
         $this->assertTrue($sut->get('settings.spacing.padding'));
         $this->assertTrue($sut->get('settings.typography.fontStyle'));
-        $this->assertSame('var(--wp--preset--font-size--body)', $presets->get('fontSize.body')->var());
-        $this->assertSame('1rem', (string)$presets->get('custom.spacing.base'));
-        $this->assertSame('3rem', (string)$presets->get('custom.spacing.large'));
+        $this->assertSame(
+            'var(--wp--preset--font-size--body)',
+            $this->presetFrom($presets, 'fontSize.body', FontSize::class)->var()
+        );
+        $this->assertSame('1rem', (string)$this->presetFrom($presets, 'custom.spacing.base', Custom\Custom::class));
+        $this->assertSame('3rem', (string)$this->presetFrom($presets, 'custom.spacing.large', Custom\Custom::class));
         $this->assertSame('#111111', $sut->get('settings.custom.brand.primary'));
     }
 
@@ -378,6 +387,7 @@ CSS,
         $this->assertSame($expected, $sut->get($path));
     }
 
+    /** @return iterable<string, array{callable(ThemeJson): mixed, string, mixed}> */
     public static function themeJsonBoolWriterProvider(): iterable
     {
         yield 'set' => [
@@ -407,6 +417,7 @@ CSS,
         $this->assertSame($expected, $sut->get($path));
     }
 
+    /** @return iterable<string, array{callable(StylesFacade): mixed, string, mixed}> */
     public static function stylesBoolWriterProvider(): iterable
     {
         yield 'css' => [

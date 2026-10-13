@@ -110,6 +110,7 @@ final class ColorWheelRotationTraitTest extends UnitTestCase
         $this->generatorFrom(new CssColor('#336699'), [30, -30], $identifiers)->generate();
     }
 
+    /** @return iterable<string, array{array<array-key, mixed>, string}> */
     public static function invalidIdentifiersProvider(): iterable
     {
         yield 'wrong count' => [['brand'], 'Identifier count must match the number of color positions.'];
@@ -133,7 +134,7 @@ final class ColorWheelRotationTraitTest extends UnitTestCase
 
     /**
      * @param int[] $degrees
-     * @param list<string>|null $identifiers
+     * @param array<array-key, mixed>|null $identifiers
      */
     private function generatorFrom(
         CssColorInterface $color,
@@ -145,7 +146,7 @@ final class ColorWheelRotationTraitTest extends UnitTestCase
 
             /**
              * @param int[] $degrees
-             * @param list<string>|null $identifiers
+             * @param array<array-key, mixed>|null $identifiers
              */
             public function __construct(
                 private CssColorInterface $color,

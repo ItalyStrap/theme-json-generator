@@ -19,7 +19,7 @@ final readonly class TetradicColors implements ColorsGenerator
         private int $angle = 90,
         private ?array $identifiers = null
     ) {
-        $this->assertValidIdentifiers($this->identifiers, 4);
+        $this->validateIdentifiers($this->identifiers, 4);
     }
 
     public function generate(): array

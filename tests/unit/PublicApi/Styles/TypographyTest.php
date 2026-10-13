@@ -42,7 +42,6 @@ final class TypographyTest extends UnitTestCase
             ->fontFamily('serif')
             ->toArray();
 
-        $this->assertIsArray($result, '');
         $this->assertArrayHasKey('textDecoration', $result, '');
         $this->assertArrayHasKey('lineHeight', $result, '');
         $this->assertArrayHasKey('textIndent', $result, '');
@@ -91,7 +90,7 @@ final class TypographyTest extends UnitTestCase
             // phpcs:disable
             '{"textDecoration":"none","lineHeight":"1","textIndent":"1rem","textAlign":"center","textColumns":"2","writingMode":"vertical-rl","fontSize":"25px","fontWeight":"800","textTransform":"uppercase","fontStyle":"value","letterSpacing":"1rem","fontFamily":"serif"}',
             // phpcs:enable
-            \json_encode($result),
+            \json_encode($result, \JSON_THROW_ON_ERROR),
             ''
         );
     }

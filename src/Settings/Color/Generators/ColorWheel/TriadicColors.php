@@ -19,7 +19,7 @@ final readonly class TriadicColors implements ColorsGenerator
         private int $angle = 120,
         private ?array $identifiers = null
     ) {
-        $this->assertValidIdentifiers($this->identifiers, 3);
+        $this->validateIdentifiers($this->identifiers, 3);
     }
 
     public function generate(): array

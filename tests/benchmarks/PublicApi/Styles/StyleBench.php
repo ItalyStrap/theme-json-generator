@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace ItalyStrap\Tests\Benchmarks\PublicApi\Styles;
 
-use ItalyStrap\ThemeJsonGenerator\Styles\CommonTrait;
+use ItalyStrap\Config\Config;
+use ItalyStrap\ThemeJsonGenerator\Settings\NullPresets;
+use ItalyStrap\ThemeJsonGenerator\Styles\Typography;
+use ItalyStrap\ThemeJsonGenerator\ThemeJson;
 
 final class StyleBench
 {
-    private object $styles;
+    private Typography $styles;
 
     public function init(): void
     {
-        $this->styles = new class {
-            use CommonTrait;
-        };
+        $this->styles = (new ThemeJson(new Config(), new NullPresets()))->styles()->typography();
     }
 
     /**

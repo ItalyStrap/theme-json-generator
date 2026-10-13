@@ -129,6 +129,7 @@ final class WordPressThemeJsonCustomCssTest extends IntegrationTestCase
         $this->assertNotSame($expectedPreservedAtRuleCss, $processedCss);
     }
 
+    /** @return iterable<string, array<string, string>> */
     public static function unsupportedAtRuleProvider(): iterable
     {
         yield '@media' => [
@@ -157,16 +158,11 @@ final class WordPressThemeJsonCustomCssTest extends IntegrationTestCase
 
     /**
      * @param array<string, mixed> $themeJson
-     */
-    /**
      * @param list<string> $types
      */
     private function getStylesheetFromThemeJson(array $themeJson, array $types = ['styles']): string
     {
         $wpThemeJson = new \WP_Theme_JSON($themeJson);
-        $result = $wpThemeJson->get_stylesheet($types);
-        $this->assertIsString($result);
-
-        return $result;
+        return $wpThemeJson->get_stylesheet($types);
     }
 }

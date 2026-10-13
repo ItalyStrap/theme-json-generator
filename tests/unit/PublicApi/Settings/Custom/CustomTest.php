@@ -39,6 +39,7 @@ final class CustomTest extends UnitTestCase
         new Custom($key, '1rem');
     }
 
+    /** @return iterable<string, array{list<string>|string, string}> */
     public static function invalidKeyProvider(): iterable
     {
         yield 'empty string' => ['', ''];
@@ -60,6 +61,7 @@ final class CustomTest extends UnitTestCase
         new Custom('spacing.base', $value);
     }
 
+    /** @return iterable<string, array{mixed}> */
     public static function invalidValueProvider(): iterable
     {
         yield 'null' => [null];

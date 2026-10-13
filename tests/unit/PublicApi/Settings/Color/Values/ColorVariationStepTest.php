@@ -39,6 +39,7 @@ final class ColorVariationStepTest extends UnitTestCase
         new ColorVariationStep($identifier, 20, VariationDirection::Lighter);
     }
 
+    /** @return iterable<string, array{string}> */
     public static function invalidIdentifierProvider(): iterable
     {
         yield 'empty' => [''];
@@ -56,6 +57,7 @@ final class ColorVariationStepTest extends UnitTestCase
         new ColorVariationStep('100', $amount, VariationDirection::Lighter);
     }
 
+    /** @return iterable<string, array{float}> */
     public static function invalidAmountProvider(): iterable
     {
         yield 'negative' => [-0.1];

@@ -19,12 +19,12 @@ final class CustomSectionTest extends UnitTestCase
 
         $themeJson->settings()->custom()->add(['spacing', 'base'], '1rem');
 
-        $this->assertSame('1rem', (string) $presets->get('custom.spacing.base'));
+        $this->assertSame('1rem', (string) $this->presetFrom($presets, 'custom.spacing.base', CustomPreset::class));
     }
 
     /**
      * @dataProvider invalidArrayKeyProvider
-     * @param array<array-key, mixed> $key
+     * @param list<string> $key
      */
     public function testItShouldRejectInvalidArrayKeyPaths(array $key, string $expectedKey): void
     {
@@ -37,6 +37,7 @@ final class CustomSectionTest extends UnitTestCase
         $this->makeThemeJson()->settings()->custom()->add($key, '1rem');
     }
 
+    /** @return iterable<string, array{list<string>, string}> */
     public static function invalidArrayKeyProvider(): iterable
     {
         yield 'empty path' => [[], '<empty>'];
@@ -63,6 +64,7 @@ final class CustomSectionTest extends UnitTestCase
         $this->makeThemeJson()->settings()->custom()->addMultiple(['spacing' => ['base' => $value]]);
     }
 
+    /** @return iterable<string, array{mixed}> */
     public static function invalidCustomValueProvider(): iterable
     {
         yield 'null' => [null];
@@ -82,7 +84,7 @@ final class CustomSectionTest extends UnitTestCase
             new CustomPreset('spacing.base', '1rem'),
         ]);
 
-        $this->assertSame('1rem', (string) $presets->get('custom.spacing.base'));
+        $this->assertSame('1rem', (string) $this->presetFrom($presets, 'custom.spacing.base', CustomPreset::class));
     }
 
     public function testItShouldRejectNestedCustomPreset(): void

@@ -101,6 +101,10 @@ CODE_SAMPLE
     {
         $variableRenames = [];
         foreach ($functionLike->getParams() as $param) {
+            if (!$param->var instanceof Variable) {
+                continue;
+            }
+
             $oldName = $this->parameterName($param);
             $newName = $this->camelCase($oldName);
 
@@ -118,7 +122,7 @@ CODE_SAMPLE
 
         $this->renameVariables($functionLike, $variableRenames);
 
-        return $functionLike instanceof Node ? $functionLike : null;
+        return $functionLike;
     }
 
     /**
@@ -208,11 +212,11 @@ CODE_SAMPLE
     private function functionLikeNodes(FunctionLike $functionLike): array
     {
         if ($functionLike instanceof Closure) {
-            return $functionLike->stmts;
+            return \array_values($functionLike->stmts);
         }
 
         if ($functionLike instanceof Function_ || $functionLike instanceof ClassMethod) {
-            return $functionLike->stmts ?? [];
+            return \array_values($functionLike->stmts ?? []);
         }
 
         return [];

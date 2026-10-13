@@ -1,18 +1,33 @@
+includes:
+    - vendor/jangregor/phpstan-prophecy/extension.neon
+
 parameters:
     level: 9
     paths:
         - bin
+        - report/bin
+        - report/src
         - functions
         - src
         - cli
+        - tests
+        - tools
+        - ecs.php
+        - namespace-bc-aliases.php
+        - rector.php
     bootstrapFiles:
         - vendor/symplify/easy-coding-standard/vendor/scoper-autoload.php
         - vendor/symplify/easy-coding-standard/vendor/squizlabs/php_codesniffer/autoload.php
     stubFiles:
         - stubs/auryn-injector.stub
         - stubs/container-interface.stub
+    scanFiles:
+        - stubs/wp-theme-json.stub
     excludePaths:
         analyse:
-            - src/**/*Experimental*.php
+            - '*Experimental*.php'
+            - tests/_data/*
+            - tests/_output/*
+            - tests/_support/*
     parallel:
         maximumNumberOfProcesses: 1

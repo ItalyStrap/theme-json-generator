@@ -20,6 +20,7 @@ final class HueRotationStepTest extends UnitTestCase
         $this->assertSame($degrees, $step->degrees);
     }
 
+    /** @return iterable<string, array{int}> */
     public static function degreesProvider(): iterable
     {
         yield 'zero' => [0];
@@ -42,6 +43,7 @@ final class HueRotationStepTest extends UnitTestCase
         new HueRotationStep($identifier, 30);
     }
 
+    /** @return iterable<string, array{string}> */
     public static function invalidIdentifierProvider(): iterable
     {
         yield 'empty' => [''];

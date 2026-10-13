@@ -207,6 +207,7 @@ CSS,
         $this->makeThemeJson()->styles()->blocks('core/button')->variations($variation);
     }
 
+    /** @return iterable<string, array{string}> */
     public static function invalidVariationSlugProvider(): iterable
     {
         yield 'empty' => [''];
@@ -238,6 +239,7 @@ CSS,
         $this->makeThemeJson()->styles()->elements('button')->state($state);
     }
 
+    /** @return iterable<string, array{string}> */
     public static function invalidStateProvider(): iterable
     {
         yield 'empty' => [''];
@@ -260,6 +262,7 @@ CSS,
         $this->makeThemeJson()->styles()->blocks($block);
     }
 
+    /** @return iterable<string, array{string}> */
     public static function invalidBlockNameProvider(): iterable
     {
         yield 'empty' => [''];
@@ -288,6 +291,7 @@ CSS,
         $transition($this->makeThemeJson());
     }
 
+    /** @return iterable<string, array{\Closure(ThemeJson): void, string}> */
     public static function invalidStructuralTransitionProvider(): iterable
     {
         yield 'elements from elements' => [

@@ -68,6 +68,7 @@ final class ColorWheelIdentifiersTest extends UnitTestCase
         $this->assertSame([$baseColor], (new $class($baseColor, angle: 0))->generate());
     }
 
+    /** @return iterable<string, array{class-string<ColorsGenerator>, list<string>, list<int>, list<int>}> */
     public static function harmonyProvider(): iterable
     {
         yield 'analogous' => [AnalogousColors::class, ['brand', 'highlight', 'accent'], [0, 30, 330], [0, 45, 315]];
@@ -103,6 +104,7 @@ final class ColorWheelIdentifiersTest extends UnitTestCase
         new $class(new CssColor('#336699'), identifiers: $identifiers);
     }
 
+    /** @return iterable<string, array{class-string<ColorsGenerator>, array<array-key, mixed>, string}> */
     public static function invalidIdentifiersProvider(): iterable
     {
         foreach (self::harmonyProvider() as $name => [$class, $identifiers]) {

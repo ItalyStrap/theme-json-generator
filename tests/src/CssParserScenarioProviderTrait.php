@@ -6,6 +6,7 @@ namespace ItalyStrap\Tests;
 
 trait CssParserScenarioProviderTrait
 {
+    /** @return iterable<string, array<string, string>> */
     public static function cssParserScenarioProvider(): iterable
     {
         // phpcs:disable Generic.Files.LineLength.TooLong

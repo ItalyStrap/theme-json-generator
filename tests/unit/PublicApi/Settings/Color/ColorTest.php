@@ -73,6 +73,7 @@ final class ColorTest extends UnitTestCase
         $this->assertSame($slug, $sut->slug());
     }
 
+    /** @return iterable<string, array{string}> */
     public static function validSlugProvider(): iterable
     {
         yield 'letters' => ['base'];
@@ -95,6 +96,7 @@ final class ColorTest extends UnitTestCase
         new Color($slug, 'Name', $this->makeCssColor());
     }
 
+    /** @return iterable<string, array{slug: string, expectedMessage: string}> */
     public static function invalidSlugProvider(): iterable
     {
         yield 'empty' => [

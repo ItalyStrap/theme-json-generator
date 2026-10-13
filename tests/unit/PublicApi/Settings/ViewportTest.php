@@ -36,6 +36,7 @@ final class ViewportTest extends UnitTestCase
         $this->assertSame(['mobile' => $width, 'tablet' => $width], $themeJson->get('settings.viewport'));
     }
 
+    /** @return iterable<string, array{string}> */
     public static function validWidthProvider(): iterable
     {
         yield 'pixels' => ['480px'];
@@ -68,6 +69,7 @@ final class ViewportTest extends UnitTestCase
         $this->assertSame('480px', $themeJson->get('settings.viewport.' . $method));
     }
 
+    /** @return iterable<string, array{string, string}> */
     public static function invalidWidthProvider(): iterable
     {
         $invalidWidths = [

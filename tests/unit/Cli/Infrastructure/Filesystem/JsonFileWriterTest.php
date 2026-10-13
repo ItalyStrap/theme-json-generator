@@ -25,6 +25,7 @@ final class JsonFileWriterTest extends UnitTestCase
         $sut = $this->makeInstance();
         $expected = '{"key": "value"}';
 
+        /** @var Config<array-key, mixed> $config */
         $config = new Config([
             'key' => 'value',
         ]);

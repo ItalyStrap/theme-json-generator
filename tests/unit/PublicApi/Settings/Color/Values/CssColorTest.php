@@ -284,6 +284,7 @@ final class CssColorTest extends UnitTestCase
 
     /**
      * @dataProvider colorProviderForArray
+     * @param array{string|int, string|int, string|int} $expected
      */
     public function testItShouldReturnArray(string $color, array $expected): void
     {

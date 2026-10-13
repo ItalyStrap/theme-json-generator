@@ -42,6 +42,7 @@ final class BoxShadowTest extends UnitTestCase
         (string)$sut;
     }
 
+    /** @return iterable<string, array{string}> */
     public static function incompleteOffsetsProvider(): iterable
     {
         yield 'missing offset-y' => ['offsetX'];

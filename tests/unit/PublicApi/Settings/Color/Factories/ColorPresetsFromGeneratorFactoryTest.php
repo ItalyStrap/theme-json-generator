@@ -187,9 +187,9 @@ final class ColorPresetsFromGeneratorFactoryTest extends UnitTestCase
         ], $themeJson->get('settings.color.palette'));
         $this->assertSame(
             'var(--wp--preset--color--primary-100)',
-            $presets->get('color.primary-100')->var()
+            $this->presetFrom($presets, 'color.primary-100', Color::class)->var()
         );
-        $this->assertSame($baseColor, $presets->get('color.primary-brand')->color());
+        $this->assertSame($baseColor, $this->presetFrom($presets, 'color.primary-brand', Color::class)->color());
     }
 
     /**

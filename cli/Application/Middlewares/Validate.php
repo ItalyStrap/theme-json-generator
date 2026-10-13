@@ -9,7 +9,6 @@ use ItalyStrap\Pipeline\MiddlewareInterface;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\ValidateMessage;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Filesystem\DataFromJsonTrait;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Filesystem\FilesFinder;
-use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Handler\ConsoleHandler;
 use JsonSchema\Validator;
 use ScssPhp\ScssPhp\Compiler;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -28,7 +27,6 @@ final readonly class Validate implements MiddlewareInterface
 
     /**
      * @phpstan-param ValidateMessage $message
-     * @phpstan-param ConsoleHandler $handler
      */
     public function process(object $message, HandlerInterface $handler): mixed
     {

@@ -36,6 +36,17 @@ final class DumpTest extends UnitTestCase
         $this->makeInstance()->process(new DumpMessage('', '', false, ''), $this->makeHandler());
     }
 
+    public function testItShouldRejectNonIntegerHandlerResults(): void
+    {
+        $this->filesFinder->find('', 'php')->willReturn([]);
+        $handler = new CallbackHandler(static fn (object $message): string => 'invalid');
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Expected middleware handler to return an integer exit code.');
+
+        $this->makeInstance()->process(new DumpMessage('', '', false, ''), $handler);
+    }
+
     public function testItShouldBasicExample(): void
     {
         $basicExample = new \SplFileInfo(\codecept_data_dir('fixtures/basic-example.json.php'));

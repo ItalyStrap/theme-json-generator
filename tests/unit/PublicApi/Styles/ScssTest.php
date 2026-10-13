@@ -45,6 +45,7 @@ final class ScssTest extends UnitTestCase
         );
     }
 
+    /** @return iterable<string, array{selector: string, actual: string, expected: string}> */
     public static function newStyleProvider(): iterable
     {
         yield 'selector used also as prefix for nested selectors' => [

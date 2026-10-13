@@ -25,7 +25,6 @@ final class ColorTest extends UnitTestCase
             ->gradient('value')
             ->toArray();
 
-        $this->assertIsArray($result, '');
         $this->assertArrayHasKey('text', $result, '');
         $this->assertArrayHasKey('background', $result, '');
         $this->assertArrayHasKey('gradient', $result, '');
@@ -45,7 +44,7 @@ final class ColorTest extends UnitTestCase
 
         $this->assertJsonStringEqualsJsonString(
             '{"text":"#000000","background":"transparent","gradient":"value"}',
-            \json_encode($result),
+            \json_encode($result, \JSON_THROW_ON_ERROR),
             ''
         );
     }

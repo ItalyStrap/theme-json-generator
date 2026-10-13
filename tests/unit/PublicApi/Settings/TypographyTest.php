@@ -270,6 +270,7 @@ final class TypographyTest extends UnitTestCase
         $typography->{$method}();
     }
 
+    /** @return iterable<string, array{string}> */
     public static function booleanFluidMethodProvider(): iterable
     {
         yield 'enable' => ['enableFluid'];
@@ -329,6 +330,7 @@ final class TypographyTest extends UnitTestCase
         );
     }
 
+    /** @return iterable<string, array{callable(Typography): mixed}> */
     public static function globalFluidConfigurationProvider(): iterable
     {
         yield 'enabled' => [

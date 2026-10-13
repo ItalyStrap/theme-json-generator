@@ -15,6 +15,7 @@ final class FilesFinderIntegrationTest extends UnitTestCase
         return new FilesFinder((new FinderFactory())->make());
     }
 
+    /** @return iterable<string, array{string}> */
     public static function extensionProvider(): iterable
     {
         yield 'PHP' => ['php'];

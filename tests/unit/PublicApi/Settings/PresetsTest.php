@@ -25,8 +25,8 @@ final class PresetsTest extends UnitTestCase
         $sut->addMultiple([$this->prepareFakeItem('1')]);
 
         $this->assertInstanceOf(PresetInterface::class, $sut->get('category1.slug1'));
-        $this->assertSame('var1', (string)$sut->get('category1.slug1'));
-        $this->assertSame('var1', (string)$sut->get(['category1', 'slug1']));
+        $this->assertSame('var1', (string)$this->presetFrom($sut, 'category1.slug1', PresetInterface::class));
+        $this->assertSame('var1', (string)$this->presetFrom($sut, ['category1', 'slug1'], PresetInterface::class));
         $this->assertNull($sut->get('category1.slug2'));
         $this->assertSame('default', $sut->get('category1.slug2', 'default'));
         $this->assertSame('default', $sut->get(['category1', 'slug2'], 'default'));
@@ -88,8 +88,10 @@ final class PresetsTest extends UnitTestCase
         $sut->add($this->prepareFakeItem('1'));
 
         $collection = $sut->collection();
+        $category = $collection['category1'];
+        $this->assertIsArray($category);
 
-        $this->assertSame($sut->get('category1.slug1'), $collection['category1']['slug1']);
+        $this->assertSame($sut->get('category1.slug1'), $category['slug1']);
     }
 
     public function testItShouldCreatePresetHelpers(): void
@@ -102,11 +104,14 @@ final class PresetsTest extends UnitTestCase
             new Custom('spacing.base', '1rem'),
         ]);
 
-        $this->assertSame('#ffffff', $sut->get('color.base')->toArray()['color']);
-        $this->assertSame('#ffffff', $sut->get(['color', 'base'])->toArray()['color']);
-        $this->assertSame('var(--wp--preset--font-size--base)', $sut->get('fontSize.base')->var());
-        $this->assertSame('1rem', (string)$sut->get('custom.spacing.base'));
-        $this->assertSame('1rem', (string)$sut->get(['custom', 'spacing', 'base']));
+        $this->assertSame('#ffffff', $this->presetFrom($sut, 'color.base', Color::class)->toArray()['color']);
+        $this->assertSame('#ffffff', $this->presetFrom($sut, ['color', 'base'], Color::class)->toArray()['color']);
+        $this->assertSame(
+            'var(--wp--preset--font-size--base)',
+            $this->presetFrom($sut, 'fontSize.base', FontSize::class)->var()
+        );
+        $this->assertSame('1rem', (string)$this->presetFrom($sut, 'custom.spacing.base', Custom::class));
+        $this->assertSame('1rem', (string)$this->presetFrom($sut, ['custom', 'spacing', 'base'], Custom::class));
     }
 
     public function testItShouldRejectDotNotationInStandardPresetSlug(): void
@@ -157,13 +162,16 @@ final class PresetsTest extends UnitTestCase
     public function testItShouldStoreBlockScopedPresetsWithoutOverwritingRootPresets(): void
     {
         $sut = $this->makeInstance();
-        $sut->add(new Color('base', 'Base', new CssColor('#ffffff')));
-        $sut->addToBlock('core/group', new Color('base', 'Block Base', new CssColor('#000000')));
+        $root = new Color('base', 'Base', new CssColor('#ffffff'));
+        $block = new Color('base', 'Block Base', new CssColor('#000000'));
+        $sut->add($root);
+        $sut->addToBlock('core/group', $block);
 
-        $collection = $sut->collection();
-
-        $this->assertSame('#ffffff', $sut->get('color.base')->toArray()['color']);
-        $this->assertSame('#000000', $collection['blocks']['core/group']['color']['base']->toArray()['color']);
+        $this->assertSame($root, $sut->get('color.base'));
+        $this->assertSame([
+            'color' => ['base' => $root],
+            'blocks' => ['core/group' => ['color' => ['base' => $block]]],
+        ], $sut->collection());
     }
 
     private function prepareFakeItem(string $val = ''): PresetInterface

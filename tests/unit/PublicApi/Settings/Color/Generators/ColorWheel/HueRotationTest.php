@@ -7,6 +7,7 @@ namespace ItalyStrap\Tests\Unit\PublicApi\Settings\Color\Generators\ColorWheel;
 use ItalyStrap\Config\Config;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Container\PresetsToThemeJson;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Color;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Factories\ColorPresetsFromGeneratorFactory;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Generators\ColorsGenerator;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Generators\ColorWheel\HueRotation;
@@ -177,7 +178,10 @@ final class HueRotationTest extends UnitTestCase
             ['slug' => 'primary-brand', 'name' => 'Primary brand', 'color' => '#336699'],
             ['slug' => 'primary-accent', 'name' => 'Primary accent', 'color' => '#996633'],
         ], $themeJson->get('settings.color.palette'));
-        $this->assertSame('var(--wp--preset--color--primary-accent)', $presets->get('color.primary-accent')->var());
-        $this->assertSame($baseColor, $presets->get('color.primary-brand')->color());
+        $this->assertSame(
+            'var(--wp--preset--color--primary-accent)',
+            $this->presetFrom($presets, 'color.primary-accent', Color::class)->var()
+        );
+        $this->assertSame($baseColor, $this->presetFrom($presets, 'color.primary-brand', Color::class)->color());
     }
 }

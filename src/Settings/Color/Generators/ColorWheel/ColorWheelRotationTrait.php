@@ -18,7 +18,7 @@ trait ColorWheelRotationTrait
      * HueRotation normalizes degrees and retains the original instance for full turns.
      *
      * @param int[] $degrees
-     * @param list<string>|null $identifiers
+     * @param array<array-key, mixed>|null $identifiers
      * @return array<array-key, CssColorInterface>
      */
     private function colorsRotatedBy(
@@ -35,7 +35,7 @@ trait ColorWheelRotationTrait
             $rotations[] = $degree;
         }
 
-        $this->assertValidIdentifiers($identifiers, \count($rotations));
+        $identifiers = $this->validateIdentifiers($identifiers, \count($rotations));
         $identifiers ??= \array_map(static fn (int $index): string => (string) $index, \array_keys($rotations));
 
         $steps = [];
@@ -48,11 +48,12 @@ trait ColorWheelRotationTrait
 
     /**
      * @param array<array-key, mixed>|null $identifiers
+     * @return list<string>|null
      */
-    private function assertValidIdentifiers(?array $identifiers, int $expectedCount): void
+    private function validateIdentifiers(?array $identifiers, int $expectedCount): ?array
     {
         if ($identifiers === null) {
-            return;
+            return null;
         }
 
         if (\count($identifiers) !== $expectedCount) {
@@ -64,6 +65,7 @@ trait ColorWheelRotationTrait
         }
 
         $seen = [];
+        $validated = [];
         foreach ($identifiers as $identifier) {
             if (!\is_string($identifier)) {
                 throw new \InvalidArgumentException('Identifiers must contain only strings.');
@@ -78,6 +80,9 @@ trait ColorWheelRotationTrait
             }
 
             $seen[$identifier] = true;
+            $validated[] = $identifier;
         }
+
+        return $validated;
     }
 }

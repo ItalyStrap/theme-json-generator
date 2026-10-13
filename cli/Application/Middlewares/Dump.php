@@ -12,7 +12,6 @@ use ItalyStrap\ThemeJsonGenerator\Cli\Application\ThemeJsonContainerFactoryInter
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Filesystem\FilesFinder;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Filesystem\JsonFileWriter;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Filesystem\ScssFileWriter;
-use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Handler\ConsoleHandler;
 use ItalyStrap\ThemeJsonGenerator\Settings\PresetsInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -34,7 +33,6 @@ final readonly class Dump implements MiddlewareInterface
 
     /**
      * @phpstan-param DumpMessage $message
-     * @phpstan-param ConsoleHandler $handler
      */
     public function process(object $message, HandlerInterface $handler): int
     {
@@ -70,7 +68,13 @@ final readonly class Dump implements MiddlewareInterface
             $output->writeln(self::M_NO_FILE_FOUND);
         }
 
-        return $handler->handle($message);
+        $result = $handler->handle($message);
+
+        if (!\is_int($result)) {
+            throw new \RuntimeException('Expected middleware handler to return an integer exit code.');
+        }
+
+        return $result;
     }
 
     /**

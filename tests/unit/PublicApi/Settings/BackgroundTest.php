@@ -44,6 +44,7 @@ final class BackgroundTest extends UnitTestCase
         (new ThemeJson(new Config(), new Presets()))->settings()->background()->backgroundClip(...$values);
     }
 
+    /** @return iterable<string, array{list<string>}> */
     public static function invalidClipProvider(): iterable
     {
         yield 'unknown' => [['invalid']];

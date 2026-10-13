@@ -23,7 +23,7 @@ final class SpacingTest extends UnitTestCase
 
         $this->assertJsonStringEqualsJsonString(
             '{"blockGap":"1rem"}',
-            \json_encode($result),
+            \json_encode($result, \JSON_THROW_ON_ERROR),
             ''
         );
     }

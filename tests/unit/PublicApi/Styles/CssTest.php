@@ -62,6 +62,7 @@ CSS;
         $this->makeInstance()->compressed()->parse($css, $selector);
     }
 
+    /** @return iterable<string, array<string, string>> */
     public static function unrelatedScopedSelectorProvider(): iterable
     {
         yield 'unrelated selector' => [

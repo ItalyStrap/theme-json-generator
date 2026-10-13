@@ -19,7 +19,7 @@ final readonly class SplitComplementaryColors implements ColorsGenerator
         private int $angle = 150,
         private ?array $identifiers = null
     ) {
-        $this->assertValidIdentifiers($this->identifiers, 3);
+        $this->validateIdentifiers($this->identifiers, 3);
     }
 
     public function generate(): array

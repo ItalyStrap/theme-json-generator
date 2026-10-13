@@ -19,7 +19,7 @@ final readonly class ComplementaryColors implements ColorsGenerator
         private int $angle = 180,
         private ?array $identifiers = null
     ) {
-        $this->assertValidIdentifiers($this->identifiers, 2);
+        $this->validateIdentifiers($this->identifiers, 2);
     }
 
     public function generate(): array

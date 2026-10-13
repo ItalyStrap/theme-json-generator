@@ -70,6 +70,11 @@ final class FontSizeTest extends UnitTestCase
             $fluid
         );
 
-        $this->assertSame($fluid, $sut->toArray()['fluid']);
+        $this->assertSame([
+            'slug' => 'fluid',
+            'name' => 'Fluid',
+            'size' => 'clamp(1rem, 2vw, 1.5rem)',
+            'fluid' => $fluid,
+        ], $sut->toArray());
     }
 }

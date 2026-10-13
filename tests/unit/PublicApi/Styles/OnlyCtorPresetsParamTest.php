@@ -18,6 +18,7 @@ use ItalyStrap\ThemeJsonGenerator\Styles\Typography;
 
 final class OnlyCtorPresetsParamTest extends UnitTestCase
 {
+    /** @return iterable<class-string, array{class-string}> */
     public static function classNameDataProvider(): iterable
     {
         yield Background::class => [Background::class];
@@ -34,11 +35,13 @@ final class OnlyCtorPresetsParamTest extends UnitTestCase
 
     /**
      * @dataProvider classNameDataProvider
+     * @param class-string $class
      */
     public function testClassesThatNeedPresetsAsParameter(string $class): void
     {
         $reflection = new \ReflectionClass($class);
         $constructor = $reflection->getConstructor();
+        $this->assertNotNull($constructor, 'Style classes must have a constructor.');
         $parameters = $constructor->getParameters();
 
         $this->assertNotEmpty($parameters, 'The constructor of ' . $class . ' is empty');

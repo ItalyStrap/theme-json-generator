@@ -7,14 +7,12 @@ namespace ItalyStrap\ThemeJsonGenerator\Cli\Application\Middlewares;
 use ItalyStrap\Pipeline\HandlerInterface;
 use ItalyStrap\Pipeline\MiddlewareInterface;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\ValidateMessage;
-use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Handler\ConsoleHandler;
 use Webimpress\SafeWriter\FileWriter;
 
 final class SchemaJson implements MiddlewareInterface
 {
     /**
      * @phpstan-param ValidateMessage $message
-     * @phpstan-param ConsoleHandler $handler
      */
     public function process(object $message, HandlerInterface $handler): int
     {
@@ -23,7 +21,13 @@ final class SchemaJson implements MiddlewareInterface
             $this->createFileSchema($schemaPath);
         }
 
-        return $handler->handle($message);
+        $result = $handler->handle($message);
+
+        if (!\is_int($result)) {
+            throw new \RuntimeException('Expected middleware handler to return an integer exit code.');
+        }
+
+        return $result;
     }
 
     private function isFileSchemaOlderThanOneWeek(string $schemaPath): bool

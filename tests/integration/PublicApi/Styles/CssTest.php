@@ -87,6 +87,7 @@ final class CssTest extends IntegrationTestCase
         $this->makeInstance()->compressed()->parse($actual, $selector);
     }
 
+    /** @return iterable<string, array{actual: string, atRuleName: string}> */
     public static function scopedAtRuleProvider(): iterable
     {
         yield '@media' => [

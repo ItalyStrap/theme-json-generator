@@ -32,6 +32,7 @@ final class SettingsTest extends UnitTestCase
         $this->makeThemeJson()->settings()->blocks($block);
     }
 
+    /** @return iterable<string, array{string}> */
     public static function invalidBlockNameProvider(): iterable
     {
         yield 'empty' => [''];

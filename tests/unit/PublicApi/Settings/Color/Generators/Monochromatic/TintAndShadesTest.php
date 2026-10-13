@@ -7,6 +7,7 @@ namespace ItalyStrap\Tests\Unit\PublicApi\Settings\Color\Generators\Monochromati
 use ItalyStrap\Config\Config;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Container\PresetsToThemeJson;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Color;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Factories\ColorPresetsFromGeneratorFactory;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Generators\ColorsGenerator;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Generators\Monochromatic\TintAndShades;
@@ -188,7 +189,7 @@ final class TintAndShadesTest extends UnitTestCase
         ], $themeJson->get('settings.color.palette'));
         $this->assertSame(
             'var(--wp--preset--color--primary-100)',
-            $presets->get('color.primary-100')->var()
+            $this->presetFrom($presets, 'color.primary-100', Color::class)->var()
         );
     }
 }

@@ -28,6 +28,7 @@ final class JsonFileWriterIntegrationTest extends UnitTestCase
 
     private ThemeJson $themeJson;
 
+    /** @var ConfigInterface<array-key, mixed> */
     private ConfigInterface $originalConfig;
 
     protected function makeInstance(): JsonFileWriter

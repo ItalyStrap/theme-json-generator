@@ -11,6 +11,10 @@ final class CommonTest extends UnitTestCase
 {
     use PresetTrait;
 
+    public const TYPE = 'color';
+
+    private string $slug = 'base';
+
     public static function invalidSlugProvider(): \Generator
     {
         yield 'empty' => ['', 'Preset slug must not be empty.'];
