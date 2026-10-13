@@ -1,6 +1,5 @@
 # Composer
 /vendor/
-/_others/
 
 # Codeception
 codeception.yml
@@ -27,6 +26,7 @@ PLAN.md
 # Agents file
 AGENTS.md
 
-# Internal refactor notes
+# Temporary files
 /docs/TODO-for-the-refactor.md
 /docs/code-review-src.md
+/migrate.php
