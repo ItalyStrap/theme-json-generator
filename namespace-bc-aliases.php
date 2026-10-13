@@ -2,10 +2,13 @@
 
 declare(strict_types=1);
 
+use ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint;
+use ItalyStrap\ThemeJsonGenerator\ThemeJson;
+
 $aliases = [
     // Old = New
-    'ItalyStrap\ThemeJsonGenerator\Application\Config\Blueprint' => 'ItalyStrap\ThemeJsonGenerator\ThemeJson',
-    'ItalyStrap\ThemeJsonGenerator\Api\ThemeJson' => 'ItalyStrap\ThemeJsonGenerator\ThemeJson',
+    Blueprint::class => ThemeJson::class,
+    \ItalyStrap\ThemeJsonGenerator\Api\ThemeJson::class => ThemeJson::class,
 ];
 
 foreach ($aliases as $alias => $class) {

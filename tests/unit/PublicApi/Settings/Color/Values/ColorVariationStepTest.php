@@ -15,7 +15,7 @@ final class ColorVariationStepTest extends UnitTestCase
         $step = new ColorVariationStep('brand-light', 12.5, VariationDirection::Lighter);
 
         $this->assertSame('brand-light', $step->identifier);
-        $this->assertSame(12.5, $step->amount);
+        $this->assertEqualsWithDelta(12.5, $step->amount, PHP_FLOAT_EPSILON);
         $this->assertSame(VariationDirection::Lighter, $step->direction);
     }
 
@@ -24,8 +24,8 @@ final class ColorVariationStepTest extends UnitTestCase
         $zero = new ColorVariationStep('brand', 0, VariationDirection::Darker);
         $maximum = new ColorVariationStep('900', 100, VariationDirection::Darker);
 
-        $this->assertSame(0.0, $zero->amount);
-        $this->assertSame(100.0, $maximum->amount);
+        $this->assertEqualsWithDelta(0.0, $zero->amount, PHP_FLOAT_EPSILON);
+        $this->assertEqualsWithDelta(100.0, $maximum->amount, PHP_FLOAT_EPSILON);
     }
 
     /**

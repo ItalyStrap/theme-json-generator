@@ -118,7 +118,11 @@ final readonly class AttributeThemeSchemaApiCoverageProvider implements ThemeSch
         );
 
         foreach ($iterator as $file) {
-            if (!$file instanceof \SplFileInfo || $file->getExtension() !== 'php') {
+            if (!$file instanceof \SplFileInfo) {
+                continue;
+            }
+
+            if ($file->getExtension() !== 'php') {
                 continue;
             }
 

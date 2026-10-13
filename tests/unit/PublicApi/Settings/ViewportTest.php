@@ -58,10 +58,10 @@ final class ViewportTest extends UnitTestCase
         try {
             $viewport->{$method}($width);
             $this->fail('Expected an invalid viewport width to be rejected.');
-        } catch (\InvalidArgumentException $exception) {
+        } catch (\InvalidArgumentException $invalidArgumentException) {
             $this->assertSame(
                 'Viewport width must be a non-negative length in px, em, or rem.',
-                $exception->getMessage()
+                $invalidArgumentException->getMessage()
             );
         }
 

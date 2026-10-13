@@ -135,8 +135,8 @@ final class TintAndShadesTest extends UnitTestCase
 
         $this->assertSame('rgba(153,153,153,0.50)', (string) $colors['light']);
         $this->assertSame('rgba(102,102,102,0.50)', (string) $colors['dark']);
-        $this->assertSame(0.5, $colors['light']->alpha());
-        $this->assertSame(0.5, $colors['dark']->alpha());
+        $this->assertEqualsWithDelta(0.5, $colors['light']->alpha(), PHP_FLOAT_EPSILON);
+        $this->assertEqualsWithDelta(0.5, $colors['dark']->alpha(), PHP_FLOAT_EPSILON);
     }
 
     public function testItShouldRejectDuplicateIdentifiersBeforeGenerating(): void

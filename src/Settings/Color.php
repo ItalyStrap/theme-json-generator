@@ -9,6 +9,7 @@ use ItalyStrap\ThemeJsonGenerator\Settings;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Color as ColorPreset;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Duotone;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Gradient;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\CssColor;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\CssColorInterface;
 use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\GradientInterface;
 
@@ -197,7 +198,7 @@ final readonly class Color
         $this->settings->addPreset(new ColorPreset(
             $slug,
             $name,
-            \is_string($color) ? new Color\Values\CssColor($color) : $color
+            \is_string($color) ? new CssColor($color) : $color
         ));
 
         return $this;
