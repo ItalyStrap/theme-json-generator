@@ -5,6 +5,9 @@ parameters:
         - functions
         - src
         - cli
+    bootstrapFiles:
+        - vendor/symplify/easy-coding-standard/vendor/scoper-autoload.php
+        - vendor/symplify/easy-coding-standard/vendor/squizlabs/php_codesniffer/autoload.php
     stubFiles:
         - stubs/auryn-injector.stub
         - stubs/container-interface.stub

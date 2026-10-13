@@ -55,6 +55,7 @@
         "squizlabs/php_codesniffer": "*",
         "phpcompatibility/php-compatibility": "*",
         "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+        "slevomat/coding-standard": "^8.18",
 
         "phpstan/phpstan": "^2.1",
 
