@@ -9,6 +9,7 @@ use ItalyStrap\ThemeJsonGenerator\Cli\Application\Commands\DumpCommand;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\Commands\InfoCommand;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\Commands\InitCommand;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\Commands\ValidateCommand;
+use ItalyStrap\ThemeJsonGenerator\Cli\Application\Commands\WorkflowCommand;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\CommandLoader\ContainerCommandLoader;
@@ -39,6 +40,7 @@ final class Bootstrap
             DumpCommand::NAME => DumpCommand::class,
             ValidateCommand::NAME => ValidateCommand::class,
             InfoCommand::NAME => InfoCommand::class,
+            WorkflowCommand::NAME => WorkflowCommand::class,
         ]);
 
         $application->setCommandLoader($commandLoader);

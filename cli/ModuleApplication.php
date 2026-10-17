@@ -10,6 +10,8 @@ use ItalyStrap\ThemeJsonGenerator\Cli\Application\Commands\DumpCommand;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\Commands\InfoCommand;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\Commands\InitCommand;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\Commands\ValidateCommand;
+use ItalyStrap\ThemeJsonGenerator\Cli\Application\Commands\WorkflowCommand;
+use ItalyStrap\ThemeJsonGenerator\Cli\Application\Middlewares\CopyWorkflowTemplate;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\Middlewares\DeleteSchemaJson;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\Middlewares\Dump;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\Middlewares\GenerateThemeJsonConfigFileFromThemeJson;
@@ -33,6 +35,11 @@ final class ModuleApplication implements ModuleInterface
                 ThemeJsonContainerFactoryInterface::class => ThemeJsonContainerFactory::class,
             ],
             AurynConfig::FACTORIES => [
+                WorkflowCommand::class
+                    => fn(ContainerInterface $container): WorkflowCommand
+                        => new WorkflowCommand(new ConsoleHandler(
+                            $container->get(CopyWorkflowTemplate::class)
+                        )),
                 InitCommand::class
                     => fn(ContainerInterface $container): InitCommand
                         => new InitCommand(new ConsoleHandler(

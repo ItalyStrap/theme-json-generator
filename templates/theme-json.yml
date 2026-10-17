@@ -1,0 +1,90 @@
+# Copied once by theme-json workflow:init. Customize this file for your project.
+# Assumes the theme is the repository root; change THEME_PATH for a nested theme.
+name: Generate theme JSON
+
+on:
+  push:
+    branches: ['**']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: theme-json-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    if: github.ref_type == 'branch'
+    runs-on: ubuntu-latest
+    env:
+      THEME_PATH: .
+      # Set a published tag or Composer dev-branch containing the features you use.
+      THEME_JSON_VERSION: REPLACE_WITH_VERSION
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.ref_name }}
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: composer:v2
+          coverage: none
+
+      - name: Install the generator globally
+        run: |
+          if [[ "$THEME_JSON_VERSION" == 'REPLACE_WITH_VERSION' ]]; then
+            echo 'Set THEME_JSON_VERSION to a published generator tag or dev-branch in this workflow.' >&2
+            exit 1
+          fi
+
+          # Keep the generator separate from both the theme and other global tools.
+          export COMPOSER_HOME="$RUNNER_TEMP/theme-json-composer"
+          mkdir -p "$COMPOSER_HOME"
+          # The generator currently has development-branch dependencies.
+          printf '%s\n' '{"minimum-stability":"dev","prefer-stable":true}' > "$COMPOSER_HOME/composer.json"
+          composer global require --no-interaction --prefer-dist --no-progress \
+            "italystrap/theme-json-generator:$THEME_JSON_VERSION"
+          composer global config bin-dir --absolute >> "$GITHUB_PATH"
+
+      - name: Generate JSON files
+        working-directory: ${{ env.THEME_PATH }}
+        run: |
+          test -f theme.json.php
+          theme-json dump
+          test -s theme.json
+
+      - name: Commit generated JSON files
+        working-directory: ${{ env.THEME_PATH }}
+        env:
+          TARGET_BRANCH: ${{ github.ref_name }}
+        run: |
+          # Stage only generator outputs, including outputs ignored by the theme.
+          git add -f -- theme.json
+          if [[ -d styles ]]; then
+            while IFS= read -r -d '' entrypoint; do
+              git add -f -- "${entrypoint%.php}"
+            done < <(find styles -type f -name '*.json.php' -print0)
+          fi
+
+          if git diff --cached --quiet; then
+            echo 'Generated JSON files are already up to date.'
+            exit 0
+          fi
+
+          git -c user.name='github-actions[bot]' \
+            -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
+            commit -m 'Build theme JSON'
+          git push origin "HEAD:$TARGET_BRANCH"
+
+      # Optional: install the theme's production dependencies before packaging.
+      # - name: Install production dependencies
+      #   working-directory: ${{ env.THEME_PATH }}
+      #   run: composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+
+      # Add your asset build, packaging, or deployment steps here.

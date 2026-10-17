@@ -58,6 +58,13 @@ final class DumpCommand extends Command
         $this->setHelp('This command generate theme.json file');
 
         $this->addOption(
+            'autoload',
+            null,
+            InputOption::VALUE_REQUIRED,
+            'Directory to scan for configuration classes, overriding entrypoint Autoload attributes.'
+        );
+
+        $this->addOption(
             'dry-run',
             null,
             InputOption::VALUE_NONE,
@@ -111,6 +118,7 @@ final class DumpCommand extends Command
     {
         $path = $input->getOption('path');
         $file = $input->getOption(self::FILE);
+        $autoload = $input->getOption('autoload');
 
         $rootFolder = $this->rootFolder(\is_string($path) ? $path : '');
 
@@ -118,7 +126,8 @@ final class DumpCommand extends Command
             $rootFolder,
             '',
             $input->getOption('dry-run') === true,
-            \is_string($file) ? $file : ''
+            \is_string($file) ? $file : '',
+            \is_string($autoload) ? $autoload : null
         );
 
         return $this->handler->handle($message);
