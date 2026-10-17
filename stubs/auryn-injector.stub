@@ -14,11 +14,11 @@ class Injector
     }
 
     /**
-     * @param callable $executable
+     * @param callable|class-string $executable
      * @param array<string, mixed> $args
      * @return mixed
      */
-    public function execute(callable $executable, array $args = array())
+    public function execute($executable, array $args = array())
     {
     }
 

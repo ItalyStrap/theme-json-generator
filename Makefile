@@ -53,6 +53,11 @@ down:	### Stop the containers inside the ./docker folder
 	@$(DOCKER_DIR) docker-compose down --remove-orphans --volumes
 	@echo "Containers stopped"
 
+.PHONY: restart
+restart: down	### Restart the containers with a fresh database
+	@$(MAKE) up
+	@echo "Containers restarted with a fresh database"
+
 .PHONY: db/create
 db/create: up	### Create the database for the tests
 	@echo "Creating the database for the tests"
@@ -135,9 +140,7 @@ functional: up	### Run the functional tests
 	@$(DOCKER_DIR) ./codecept run functional --debug
 
 .PHONY: acceptance
-acceptance: up	### Run the acceptance tests
-	@echo "Running the acceptance tests"
-	@$(DOCKER_DIR) ./codecept run acceptance
+acceptance: functional	### Run the functional tests (legacy alias)
 
 .PHONY: tests
 tests: unit	integration functional ### Run unit and integration tests
@@ -188,6 +191,16 @@ docker/metrics:	### Run the phpmetrics
 metrics: up	### Run the composer/metrics
 	@echo "Running phpmetrics"
 	@$(DOCKER_DIR) ./composer metrics
+
+.PHONY: report/api-inventory
+report/api-inventory: ### Generate the schema-based API inventory reports
+	@echo "Generating the schema-based API inventory reports"
+	@php ./report/bin/report-api-inventory.php
+
+.PHONY: report/api-inventory/assert
+report/api-inventory/assert: ### Generate the schema-based API inventory reports and fail when coverage is not clean
+	@echo "Generating the schema-based API inventory reports and asserting coverage is clean"
+	@php ./report/bin/report-api-inventory.php --assert-clean
 
 # Generate commands
 

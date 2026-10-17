@@ -6,7 +6,7 @@ namespace ItalyStrap\Tests\Functional;
 
 use FunctionalTester;
 use ItalyStrap\Tests\FunctionalTestCase;
-use ItalyStrap\ThemeJsonGenerator\Application\Middlewares\Dump;
+use ItalyStrap\ThemeJsonGenerator\Cli\Application\Middlewares\Dump;
 
 final class CommandsCest extends FunctionalTestCase
 {
@@ -22,6 +22,21 @@ final class CommandsCest extends FunctionalTestCase
 //        $i->runShellCommand('bin/theme-json dump --path="tests/_data/fixtures/themes/theme-flat/"');
         $i->dontSeeInShellOutput(Dump::M_NO_FILE_FOUND);
         $i->seeResultCodeIs(0);
+    }
+
+    public function testDumpDisplaysExceptionLocation(FunctionalTester $i): void
+    {
+        $data = \codecept_data_dir('fixtures-invalid-style-chain');
+        $i->runShellCommand(\sprintf(
+            'bin/theme-json dump --path="%s" --dry-run 2>&1',
+            $data
+        ), false);
+
+        $i->seeResultCodeIs(1);
+        $i->seeInShellOutput('In StyleContext.php line');
+        $i->seeInShellOutput('Cannot chain "elements()" after "elements()"');
+        $output = \str_replace(["\r", "\n", "\t", ' '], '', $i->grabShellOutput());
+        $i->assertStringContainsString('fixtures-invalid-style-chain/theme.json.php:8', $output);
     }
 
     public function testInit(FunctionalTester $i): void

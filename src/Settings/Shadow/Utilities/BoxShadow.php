@@ -1,0 +1,155 @@
+<?php
+
+declare(strict_types=1);
+
+namespace ItalyStrap\ThemeJsonGenerator\Settings\Shadow\Utilities;
+
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Color;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Factories\ColorFactory;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\CssColorInterface;
+
+final class BoxShadow implements \Stringable
+{
+    private bool $inset = false;
+
+    private string $x = '';
+
+    private string $y = '';
+
+    private string $blur = '';
+
+    private string $spread = '';
+
+    private string $color = '';
+
+    public function inset(bool $inset = true): self
+    {
+        $this->inset = $inset;
+        return $this;
+    }
+
+    public function offsetX(string $x): self
+    {
+        $this->assertIsUnique($this->x, 'offset-x');
+        $this->assertValidCssDimension($x);
+        $this->x = $x;
+        return $this;
+    }
+
+    public function offsetY(string $y): self
+    {
+        $this->assertIsUnique($this->y, 'offset-y');
+        $this->assertValidCssDimension($y);
+        $this->y = $y;
+        return $this;
+    }
+
+    public function blur(string $blur): self
+    {
+        $this->assertIsUnique($this->blur, 'blur');
+        $this->assertValidCssDimension($blur);
+        $this->blur = $blur;
+        return $this;
+    }
+
+    public function spread(string $spread): self
+    {
+        $this->assertIsUnique($this->spread, 'spread');
+        $this->assertValidCssDimension($spread);
+        $this->spread = $spread;
+        return $this;
+    }
+
+    /**
+     * @param Color|CssColorInterface|string $color
+     * @throws \Exception
+     */
+    public function color($color): self
+    {
+        $this->assertIsUnique($this->color, 'color');
+
+        if ($color instanceof Color) {
+            $this->color = $color->var((string)$color->color());
+            return $this;
+        }
+
+        if ($color instanceof CssColorInterface) {
+            $this->color = (string)$color;
+            return $this;
+        }
+
+        $this->color = (string)(new ColorFactory())->fromColorString($color);
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        if ($this->x === '' || $this->y === '') {
+            throw new \RuntimeException('Box shadow requires both offset-x and offset-y.');
+        }
+
+        $shadow = [
+            $this->inset ? 'inset' : '',
+            $this->x,
+            $this->y,
+            $this->blur,
+            $this->spread,
+            $this->color,
+        ];
+
+        return \trim(\implode(' ', \array_filter($shadow, static fn(string $value): bool => $value !== '')));
+    }
+
+    public function __clone()
+    {
+        $this->reset();
+    }
+
+    private function assertValidCssDimension(string $value): void
+    {
+        /**
+         * @TODO Maybe it's better to move this list to a separated helper so we can reuse it in other places.
+         */
+        $unit = \implode('|', [
+            'px',
+            'em',
+            'rem',
+            '%',
+            'in',
+            'cm',
+            'mm',
+            'pt',
+            'pc',
+            'ch',
+            'ex',
+            'vw',
+            'vh',
+            'vmin',
+            'vmax',
+        ]);
+
+        if (!\preg_match('/^(-?\d*\.?\d+)(' . $unit . ')$/', $value) && $value !== '0') {
+            throw new \RuntimeException('Invalid CSS dimension: given ' . $value);
+        }
+    }
+
+    private function assertIsUnique(string $param, string $name): void
+    {
+        if ($param !== '') {
+            throw new \RuntimeException('You can add only one value for ' . $name);
+        }
+    }
+
+    /**
+     * @return void
+     */
+    private function reset(): void
+    {
+        $this->inset = false;
+        $this->x = '';
+        $this->y = '';
+        $this->blur = '';
+        $this->spread = '';
+        $this->color = '';
+    }
+}

@@ -1,0 +1,55 @@
+<?php
+
+declare(strict_types=1);
+
+namespace ItalyStrap\Tests\Unit\PublicApi\Styles;
+
+use ItalyStrap\Tests\UnitTestCase;
+use ItalyStrap\ThemeJsonGenerator\Styles\Border;
+
+final class BorderTest extends UnitTestCase
+{
+    use CommonTests;
+
+    protected function makeInstance(): Border
+    {
+        return $this->makeStyles()->border();
+    }
+
+    public function testItShouldCreateCorrectArray(): void
+    {
+        $sut = $this->makeInstance();
+        $result = $sut
+            ->color('#000000')
+            ->style('solid')
+            ->width('1px')
+            ->radius('none')
+            ->toArray();
+
+        $this->assertArrayHasKey('color', $result, '');
+        $this->assertArrayHasKey('style', $result, '');
+        $this->assertArrayHasKey('width', $result, '');
+        $this->assertArrayHasKey('radius', $result, '');
+
+        $this->assertStringMatchesFormat('#000000', $result['color'], '');
+        $this->assertStringMatchesFormat('solid', $result['style'], '');
+        $this->assertStringMatchesFormat('1px', $result['width'], '');
+        $this->assertStringMatchesFormat('none', $result['radius'], '');
+    }
+
+    public function testItShouldCreateCorrectJson(): void
+    {
+        $sut = $this->makeInstance();
+        $result = $sut
+            ->color('#000000')
+            ->style('solid')
+            ->width('1px')
+            ->radius('none');
+
+        $this->assertJsonStringEqualsJsonString(
+            '{"color":"#000000","style":"solid","width":"1px","radius":"none"}',
+            \json_encode($result, \JSON_THROW_ON_ERROR),
+            ''
+        );
+    }
+}

@@ -8,26 +8,18 @@ Whether you're aiming to refine the settings with precise color schemes, typogra
 
 ## Understanding the Project Structure
 
-The ItalyStrap Theme Json Generator project is structured around Domain-Driven Design (DDD) concepts, focusing on clarity and modularity. At its core, the project is divided into three main directories:
+The public configuration API lives under `src/`, in the `ItalyStrap\ThemeJsonGenerator` namespace. CLI application and infrastructure code live under `cli/`.
 
-* **Application:** Contains service interfaces and application logic, orchestrating the flow of data and interactions.
-* **Domain:** The heart of the project, where the business logic resides. It's further split into:
-    * **Input:** Houses classes for configuring the JSON schema, including `settings` and `styles`. This is where developers will primarily interact to define theme configurations.
-    * **Output:** Encompasses the logic used by the CLI to execute commands, without direct involvement in the configuration process.
-* **Infrastructure:** Supports the application and domain with technical capabilities, such as data persistence and external services integration.
-
-This structure ensures a clean separation of concerns, facilitating easier maintenance, scalability, and a more intuitive setup for theme development.
-
-## The Input Directory Explained
+## The Configuration API
 
 > All classes with `Experimental` suffix may change the name and the logic in the future.
 
-The `Input` directory within the `Domain` is pivotal for theme developers. It is structured to mirror the `*.json` schema, ensuring an intuitive and direct mapping of your theme's configuration. Key subdirectories include:
+The configuration API mirrors the `theme.json` schema. Its main directories are:
 
 * **Settings:** Contains classes for detailed theme settings like color, typography, and custom presets, facilitating granular control over theme appearance.
 * **Styles:** Dedicated to defining the theme's visual styles, including border, color, typography, spacing and so on to configurations.
 
-By focusing on the `Input` directory, developers can effectively tailor the theme's JSON files to their specific design requirements, enhancing the theme's functionality and aesthetic appeal.
+Use the `ThemeJson` root object to access the settings, styles, and top-level collection APIs.
 
 ## Settings
 
@@ -43,7 +35,8 @@ declare(strict_types=1);
 
 namespace YourVendor\YourProject;
 
-use ItalyStrap\ThemeJsonGenerator\Api\ThemeJson;use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Presets;
+use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
+use ItalyStrap\ThemeJsonGenerator\ThemeJson;
 
 return static function (ThemeJson $themeJson, Presets $presets): void {
     // ...
@@ -56,32 +49,35 @@ Now we can add presets objects to the `$presets` instance.
 
 All `Preset` classes allow for the detailed customization of theme settings, facilitating the definition of color schemes, typography, and more through a structured approach.
 
-#### Palette
+#### Color Palette
 
-Define color palettes easily using the `Palette` class:
+Define color palettes using the `Color` preset class:
 
 ```php
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Palette;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\Color;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Color;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\CssColor;
 
 $presets
     // `add` method is used to add the preset instance to the collection
-    ->add(new Palette(
+    ->add(new Color(
         'base',
         'Brand Base Color',
-        new Color('#3986E0')
+        new CssColor('#3986E0')
+    ))
+    ->add(new Color(
+        'bodyColor',
+        'Body Text Color',
+        new CssColor('#000000')
     ));
 ```
 
-The `Color` class is a Value Object that represents a color in the CSS format, all CSS color formats are supported.
+`CssColor` represents a parsed CSS color using the formats supported by Spatie Color. `Color` wraps that value as a named WordPress preset.
 
-The `Color` class is a utility class under the utilities folder, you can find more utilities classes there.
-
-The `Palette` accepts three parameters:
+The `Color` preset accepts three parameters:
 
 1. string Slug.
 2. string Name.
-3. object `Color`.
+3. object implementing `CssColorInterface`.
 
 #### Gradient
 
@@ -89,31 +85,23 @@ Create gradients with the `Gradient` class:
 
 ```php
 
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Gradient;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\LinearGradient;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Gradient;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\LinearGradient;
 
 $presets
     ->add(new Gradient(
         'base-to-white',
         'Base to white',
-        new LinearGradient(
-            '135deg',
-            $presets->get('color.base'),
-            $presets->get('color.bodyColor')
-        )
+        (new LinearGradient())
+            ->direction('135deg')
+            ->colorStop($presets->get('color.base'))
+            ->colorStop('#ffffff')
     ));
 ```
 
 The `LinearGradient` is a Value Object that represents a linear gradient in the CSS format.
 
-It accepts three parameters:
-
-1. string Angle.
-2. object `Palette`.
-3. object `Palette`.
-4. ... more Palette colors.
-
-The `LinearGradient` class is another utility class under the utilities' folder.
+Set its direction with `direction()` and add at least two stops with `colorStop()`. Stops accept a `Color` preset, a `CssColorInterface` instance, or a supported color string. Preset stops retain their CSS variable references.
 
 The `Gradient` accepts three parameters:
 
@@ -122,7 +110,7 @@ The `Gradient` accepts three parameters:
 3. object that implements `GradientInterface`.
 
 As you can see in the example above we can access value from the `$presets` object using the `get` method.
-The `get` method accepts a string as a parameter and returns a `PresetInterface` object, in this case, a `Palette` object.
+The `get` method accepts a string as a parameter and returns a `PresetInterface` object, in this case, a `Color` preset.
 The string used as key has the form `type.slug` where `type` is the type of the preset and `slug` is the slug of the preset.
 
 #### Duotone
@@ -130,7 +118,7 @@ The string used as key has the form `type.slug` where `type` is the type of the 
 Create duotone colors with the `Duotone` class:
 
 ```php
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Duotone;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Duotone;
 
 $presets
     ->add(new Duotone(
@@ -141,20 +129,19 @@ $presets
     ));
 ```
 
-The `Duotone` accepts three parameters:
+The `Duotone` accepts a slug, a name, and at least two `Color` presets:
 
 1. string Slug.
 2. string Name.
-3. object `Palette`.
-4. ... more Palette colors.
+3. object `Color`.
+4. ... more `Color` presets.
 
 #### Typography Presets: FontFamily, and FontSize
 
 Configure typography presets with the `FontFamily` and `FontSize` classes:
 
 ```php
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\FontFamily;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Typography\FontSize;
+use ItalyStrap\ThemeJsonGenerator\Settings\Typography\FontFamily;use ItalyStrap\ThemeJsonGenerator\Settings\Typography\FontSize;
 
 $presets->add(new FontSize('base', 'Base Font Size', '16px'));
 
@@ -166,7 +153,7 @@ $presets->add(new FontFamily('default', 'Default Font Family', 'sans-serif'));
 Custom preset is a little bit different from the others:
 
 ```php
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Custom\Custom;
+use ItalyStrap\ThemeJsonGenerator\Settings\Custom\Custom;
 
 $presets->add(new Custom('contentSize', 'clamp(16rem, 60vw, 60rem)'));
 ```
@@ -176,72 +163,36 @@ The `Custom` class accepts two parameters:
 1. string Slug.
 2. string Value.
 
-Customs can be added using a Factory object, `CustomToPresets`:
+Customs can be added to the `$presets` collection using the `addMultiple` method, which accepts an array of `PresetInterface` objects:
 
 ```php
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Custom\CustomToPresets;
-
-$collectionAdapter = new CustomToPresets([
-    'contentSize'   => 'clamp(16rem, 60vw, 60rem)',
-    'wideSize'      => 'clamp(16rem, 85vw, 70rem)',
-    'baseFontSize'  => "1rem",
-    'spacer'        => [
-        'base'  => '1rem',
-        // ... more spacers
-    ],
-]);
+use ItalyStrap\ThemeJsonGenerator\Settings\Custom\Custom;
 
 $presets
-    ->addMultiple(
-        $collectionAdapter->toArray()
-    );
+    ->addMultiple([
+        new Custom('contentSize', 'clamp(16rem, 60vw, 60rem)'),
+        new Custom('wideSize', 'clamp(16rem, 85vw, 70rem)'),
+        new Custom('baseFontSize', '{{fontSize.base}}'),
+        new Custom('spacer.base', '1rem'),
+    ]);
 ```
-
-The `CustomToPresets` class accepts an array of customs values (strings) and returns an array of `Custom` objects with the method `toArray`.
 
 In the example above you see a method called `addMultiple` that accepts an array of `PresetInterface` objects.
-
-```php
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Custom\Custom;
-
-$presets
-    ->addMultiple(
-        [
-            new Custom('contentSize', 'clamp(16rem, 60vw, 60rem)'),
-            new Custom('wideSize', 'clamp(16rem, 85vw, 70rem)'),
-            new Custom('baseFontSize', "1rem"),
-            new Custom('spacer.base', "1rem"),
-            // ... more customs
-        ]
-    );
-```
-
-The example above is the same as the previous one, but in this case, we are adding the `Custom` objects one by one.
 
 Once you've added the various Preset instances to the `Presets` collection, the resulting object is internally utilized by the CLI. Developers need not take any further action; there's no need to manually integrate this object elsewhere in your project.
 
 ## Styles
 
-The `Styles` directory offers builder classes implementing the `Fluent Interface` pattern, enabling intuitive and chainable configuration of your theme's styles. Importantly, each class is immutable, ensuring robustness by returning new instance on every method call. This design allows for clear and concise style definitions within your entrypoint file.
+Access style builders through `$themeJson->styles()`. Their fluent methods write to the root object's configuration and return a builder for further calls.
 
 In this directory, you'll find classes tailored to different aspects of theme styling, aligned with the `theme.json` structure. These classes, such as `Border`, `Color`, `Css`, `Outline`, `Spacing`, `Typography`, and more, offer specific methods for configuring corresponding style properties, all method declared in each class follows the `theme.json` schema and each class has its own methods following the properties they represent.
 
-These classes support three primary methods of utilization, each offering a unique approach to styling:
-
-We will take the `Color` class as an example, but all the other classes follow the same pattern.
-
-Directly create an instance of a `Color::class`, and chain methods to define properties. This approach is straightforward and effective for setting styles directly:
+Use literal CSS values or variables directly:
 
 ```php
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Color;
-
-[
-    SectionNames::STYLES => [
-        'color' => (new Color())
-            ->background('var(--wp--preset--color--body-bg)')
-            ->text('var(--wp--preset--color--body-color)'),
-    ],
-];
+$themeJson->styles()->color()
+    ->background('var(--wp--preset--color--body-bg)')
+    ->text('var(--wp--preset--color--body-color)');
 ```
 
 As you can see in the example above the key passed to the method will be passed through and used as value in the JSON file.
@@ -259,18 +210,14 @@ As you can see in the example above the key passed to the method will be passed 
 
 But we made some effort to initialize all `Presets`, how can we use them in the `Styles` section?
 
-Pass the `$presets` collection to a style class constructor, this way you can access and use `Presets` value within your styles section, enhancing reusability and consistency:
+The root object already shares the preset collection with its style builders. Pass a registered preset key to resolve its CSS variable:
 
 ```php
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Color;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Color;
 
-[
-    SectionNames::STYLES => [
-        'color' => (new Color($presets))
-            ->background(Palette::TYPE . '.base')
-            ->text(Palette::TYPE . '.bodyColor'),
-    ],
-];
+$themeJson->styles()->color()
+    ->background(Color::TYPE . '.base')
+    ->text(Color::TYPE . '.bodyColor');
 ```
 
 In this case the key passed to the method will be used as a key in the `$presets` collection, the `key` has the format `type.slug` where `type` is the type of the preset and `slug` is the slug of the preset.
@@ -288,36 +235,15 @@ In JSON format:
 }
 ```
 
-If you also add a `ContainerInterface` to the signature of the entrypoint callable you can use a `$container` object to get the instance you need, for example:
+Use scoped builders for individual elements or blocks:
 
 ```php
 
-declare(strict_types=1);
-
-namespace YourVendor\YourProject;
-
-use ItalyStrap\ThemeJsonGenerator\Api\ThemeJson;use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Presets;use Psr\Container\ContainerInterface;
-
-return static function (ThemeJson $themeJson, Presets $presets, ContainerInterface $container): void {
-    // ...
-};
+$themeJson->styles()->elements('link')->color()->text('color.base');
+$themeJson->styles()->blocks('core/paragraph')->typography()->fontSize('fontSize.base');
 ```
 
-And this is the example using the `$container` object:
-
-```php
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Color;
-
-[
-    SectionNames::STYLES => [
-        'color' => $container->get(Color::class)
-            ->background(Palette::TYPE . '.base')
-            ->text(Palette::TYPE . '.bodyColor'),
-    ],
-];
-```
-
-As you can see with the `$container` object you can use a `Color` class without the need to pass the `$presets` object to the constructor because all the dependencies of the `Color` (and all other classes in the `Styles` directory) are already registered in the container.
+Each call to `styles()` starts at the root styles context. Retrieve builders through that API rather than constructing style classes without their required context.
 
 You can find an implementation example in the [tests/_data/fixtures/advanced-example.json.php](../tests/_data/fixtures/advanced-example.json.php) file.
 
@@ -331,7 +257,7 @@ More information about the `css` field can be found in:
 * [Global Settings and Styles](https://developer.wordpress.org/themes/global-settings-and-styles/).
 * [How to use custom CSS in theme.json - fullsiteediting.com](https://fullsiteediting.com/lessons/how-to-use-custom-css-in-theme-json/).
 
-The introduction of the `css` field in [WordPress 6.2](https://wordpress.org/news/2023/03/dolphy/) enables the addition of [custom CSS](https://make.wordpress.org/core/2023/03/06/custom-css-for-global-styles-and-per-block/) directly within the `theme.json` file, both globally under `styles.css` and per block within `styles.blocks.[block-name].css`. Utilizing the {`\ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Css`|`\ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Scss`} classes and theirs `parse(string $css, string $selector = ''): string` method, developers can now seamlessly integrate custom styles without the need to remember the format to use with `&` separator, just write your CSS (or Scss) as you would in a regular CSS|SCSS file and let the `Css`|`Scss` class handle the rest.
+The introduction of the `css` field in [WordPress 6.2](https://wordpress.org/news/2023/03/dolphy/) enables the addition of [custom CSS](https://make.wordpress.org/core/2023/03/06/custom-css-for-global-styles-and-per-block/) directly within the `theme.json` file, both globally under `styles.css` and per block within `styles.blocks.[block-name].css`. Use `ItalyStrap\ThemeJsonGenerator\Styles\Css` or `ItalyStrap\ThemeJsonGenerator\Styles\Scss` and their `parse(string $css, string $selector = ''): string` method to format rules using the `&` separator.
 
 This method accepts two parameters: the CSS to parse and an optional selector to scope the CSS rules accordingly.
 
@@ -351,17 +277,18 @@ echo (new Css($presets))->parse('.test-selector{height: 100%;}', '.test-selector
 echo (new Css($presets))->parse('.test-selector{height: 100%;width: 100%;color: red;}.test-selector:hover {color: red;}.test-selector::placeholder {color: red;}', '.test-selector');
 ```
 
-Like the other classes in the `Styles` directory, you can use the `Css` class directly or pass the `$presets` collection to the constructor or use the `$container` object to get the instance you need, the only exception is for the `Scss` class that need an instance of `Css` class and an instance of `ScssPhp\ScssPhp\Compiler` class to work, but if you use the `$container` object you don't need to worry about it because all the dependencies are already registered in the container.
+`Css` requires the preset collection. `Scss` requires a `Css` instance, a `ScssPhp\ScssPhp\Compiler` instance, and the preset collection. These services can also be retrieved through the injected container.
 
 As the name suggests, the `Scss` class is used to parse SCSS styles, so you are free to write your styles in SCSS format and let the class handle the conversion for you.
 
 Let's see it in action:
 
 ```php
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Css;
+use ItalyStrap\ThemeJsonGenerator\Styles;
+use ItalyStrap\ThemeJsonGenerator\Styles\Css;
 
 [
-    SectionNames::STYLES => [
+    Styles::SECTION => [
         'css' => $container->get(Css::class) // Or (new Css($presets)) or (new Scss(new Css($presets), $scssCompiler, $presets))
             ->parse('.test-selector{height: 100%;width: 100%;color: red;}.test-selector:hover {color: red;}.test-selector::placeholder {color: red;}', '.test-selector'),
     ],
@@ -371,10 +298,11 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Css;
 For block style:
 
 ```php
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Css;
+use ItalyStrap\ThemeJsonGenerator\Styles;
+use ItalyStrap\ThemeJsonGenerator\Styles\Css;
 
 [
-    SectionNames::STYLES => [
+    Styles::SECTION => [
         'blocks' => [
             'my-namespace/test-block' => [
                 'css' => $container->get(Css::class) // Or (new Css($presets)) or (new Scss(new Css($presets), $scssCompiler, $presets))
@@ -387,12 +315,12 @@ use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Css;
 
 All methods also support a special syntax to resolve value in the `$presets` collection, `{{type.slug}}`, this syntax will be used internally to find the value in the `$presets` collection registered before.
 
-
 ```php
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Styles\Css;
+use ItalyStrap\ThemeJsonGenerator\Styles;
+use ItalyStrap\ThemeJsonGenerator\Styles\Css;
 
 [
-    SectionNames::STYLES => [
+    Styles::SECTION => [
         'css' => $container->get(Css::class) // Or (new Css($presets))
             ->parse('.test-selector{color: {{color.base}};}', '.test-selector'),
     ],
@@ -441,7 +369,8 @@ declare(strict_types=1);
 
 namespace YourVendor\YourProject;
 
-use ItalyStrap\ThemeJsonGenerator\Api\ThemeJson;use Psr\Container\ContainerInterface;
+use ItalyStrap\ThemeJsonGenerator\ThemeJson;
+use Psr\Container\ContainerInterface;
 
 return static function (ThemeJson $themeJson, ContainerInterface $container): void {
 // Utilize the $themeJson and $container for your configuration
@@ -461,7 +390,8 @@ declare(strict_types=1);
 
 namespace YourVendor\YourProject;
 
-use ItalyStrap\ThemeJsonGenerator\Api\ThemeJson;use Psr\Container\ContainerInterface;
+use ItalyStrap\ThemeJsonGenerator\ThemeJson;
+use Psr\Container\ContainerInterface;
 
 return static function (ThemeJson $themeJson, ContainerInterface $container): void {
     /** @var SomeService $someService */

@@ -16,9 +16,13 @@
     <config name="testVersion" value="8.2-"/>
 
     <file>./bin/</file>
+    <file>./report/bin/</file>
+    <file>./report/src/</file>
     <file>./functions/</file>
     <file>./src/</file>
+    <file>./cli/</file>
     <file>./tests/</file>
+    <file>./tools/</file>
     <file>.phpstorm.meta.php</file>
     <file>ecs.php</file>
     <file>namespace-bc-aliases.php</file>
@@ -27,6 +31,11 @@
     <rule ref="PSR12">
     </rule>
 
+    <rule ref="SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses"/>
+
     <exclude-pattern>*/vendor/*</exclude-pattern>
+    <exclude-pattern>*Experimental*.php</exclude-pattern>
+    <exclude-pattern>*/tests/_data/*</exclude-pattern>
+    <exclude-pattern>*/tests/_output/*</exclude-pattern>
     <exclude-pattern>*/tests/_support/*</exclude-pattern>
 </ruleset>

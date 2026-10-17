@@ -1,0 +1,162 @@
+<?php
+
+declare(strict_types=1);
+
+namespace ItalyStrap\ThemeJsonGenerator\Styles;
+
+use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
+use ItalyStrap\ThemeJsonGenerator\Settings\NullPresets;
+use ItalyStrap\ThemeJsonGenerator\Settings\PresetsInterface;
+use ItalyStrap\ThemeJsonGenerator\Styles;
+use Sabberworm\CSS\Parser;
+use Sabberworm\CSS\Parsing\SourceException;
+use Sabberworm\CSS\Property\AtRule;
+use Sabberworm\CSS\Property\Selector;
+use Sabberworm\CSS\RuleSet\DeclarationBlock;
+
+/**
+ * @todo
+ * @link https://github.com/WordPress/wordpress-develop/blob/trunk/tests/phpunit/tests/theme/wpThemeJson.php
+ *
+ * @link https://www.google.it/search?q=php+inline+css+content&sca_esv=596560865&ei=mAicZaTCGp3Axc8Pq7yT8AQ&ved=0ahUKEwik7p-Rgs6DAxUdYPEDHSveBE4Q4dUDCBA&uact=5&oq=php+inline+css+content&gs_lp=Egxnd3Mtd2l6LXNlcnAiFnBocCBpbmxpbmUgY3NzIGNvbnRlbnQyBRAhGKABMgUQIRigATIIECEYFhgeGB0yCBAhGBYYHhgdMggQIRgWGB4YHUjvogFQmgdYwJcBcAF4AZABAJgBsQGgAZkSqgEEMC4xOLgBA8gBAPgBAcICChAAGEcY1gQYsAPCAgoQABiABBiKBRhDwgIFEAAYgATCAgYQABgWGB7CAgcQABiABBgTwgIIEAAYFhgeGBPiAwQYACBBiAYBkAYI&sclient=gws-wiz-serp#ip=1
+ * @link https://github.com/topics/inline-css?l=php
+ *
+ * @see CssTest
+ */
+final class Css implements CssInterface
+{
+    public const SECTION = 'css';
+
+    private readonly PresetsInterface $presets;
+
+    private bool $isCompressed = false;
+
+    public function __construct(
+        ?PresetsInterface $presets = null
+    ) {
+        $this->presets = $presets ?? new NullPresets();
+    }
+
+    public function expanded(): self
+    {
+        $this->isCompressed = false;
+        return $this;
+    }
+
+    public function compressed(): self
+    {
+        $this->isCompressed = true;
+        return $this;
+    }
+
+    /**
+     * @throws SourceException
+     */
+    #[ThemeSchemaCoverage([Styles::SECTION, self::SECTION])]
+    public function parse(string $css, string $selector = ''): string
+    {
+        return $this->parseResolved($this->presets->parse($css), $selector);
+    }
+
+    /**
+     * @internal
+     * @throws SourceException
+     */
+    public function parseResolved(string $css, string $selector = ''): string
+    {
+        $selector = \trim($selector);
+
+        if ($selector === '') {
+            return $css;
+        }
+
+        $parser = new Parser($css);
+        $doc = $parser->parse();
+
+        $rootRules = '';
+        $additionalSelectors = [];
+
+        $newLine = $this->isCompressed ? '' : PHP_EOL;
+        $newLineAfterBlock = $this->isCompressed ? '' : PHP_EOL . PHP_EOL;
+        $space = $this->isCompressed ? '' : \implode('', \array_fill(0, 4, ' '));
+        $spaceAfterSelector = $this->isCompressed ? '' : ' ';
+
+        foreach ($doc->getContents() as $declarationBlock) {
+            if ($declarationBlock instanceof AtRule) {
+                throw new \RuntimeException(\sprintf(
+                    CssInterface::M_AT_RULES_ARE_NOT_SUPPORTED_IN_SCOPED_CSS,
+                    $this->formatAtRuleName($declarationBlock)
+                ));
+            }
+
+            if (!$declarationBlock instanceof DeclarationBlock) {
+                continue;
+            }
+
+            foreach ($declarationBlock->getSelectors() as $cssSelector) {
+                if (\is_string($cssSelector)) {
+                    $cssSelector = new Selector($cssSelector);
+                }
+
+                if ($cssSelector->getSelector() === $selector) {
+                    foreach ($declarationBlock->getRules() as $rule) {
+                        $important = $rule->getIsImportant() ? ' !important' : '';
+                        // phpcs:disable
+                        $ruleText = $rule->getRule() . ': ' . (string)$rule->getValue() . $important . ';' . $newLine;
+                        // phpcs:enable
+                        $rootRules .= $ruleText;
+                    }
+
+                    continue;
+                }
+
+                $actualSelector = $cssSelector->getSelector();
+                if (!$this->selectorBelongsToScope($actualSelector, $selector)) {
+                    throw new \InvalidArgumentException(\sprintf(
+                        CssInterface::M_SELECTOR_IS_OUTSIDE_SCOPE,
+                        $actualSelector,
+                        $selector,
+                        $actualSelector
+                    ));
+                }
+
+                $newSelector = \substr($actualSelector, \strlen($selector));
+
+                $cssBlock = $newSelector . $spaceAfterSelector . '{' . $newLine;
+                foreach ($declarationBlock->getRules() as $rule) {
+                    $important = $rule->getIsImportant() ? ' !important' : '';
+                    // phpcs:disable
+                    $cssBlock .= $space . $rule->getRule() . ': ' . (string)$rule->getValue() . $important . ';' . $newLine;
+                    // phpcs:enable
+                }
+
+                $cssBlock .= '}' . $newLineAfterBlock;
+                $additionalSelectors[] = $cssBlock;
+            }
+        }
+
+        \array_unshift($additionalSelectors, $rootRules . $newLine);
+        return \trim(\implode('&', $additionalSelectors), "\t\n\r\0\x0B&");
+    }
+
+    private function formatAtRuleName(AtRule $atRule): string
+    {
+        $name = $atRule->atRuleName();
+
+        if ($name === null || $name === '') {
+            return 'at-rules';
+        }
+
+        return '@' . $name;
+    }
+
+    private function selectorBelongsToScope(string $actualSelector, string $selector): bool
+    {
+        if (!\str_starts_with($actualSelector, $selector)) {
+            return false;
+        }
+
+        $nextCharacter = \substr($actualSelector, \strlen($selector), 1);
+        return $nextCharacter === '' || \str_contains(' .:#[>+~*', $nextCharacter);
+    }
+}

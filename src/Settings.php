@@ -1,0 +1,215 @@
+<?php
+
+declare(strict_types=1);
+
+namespace ItalyStrap\ThemeJsonGenerator;
+
+use ItalyStrap\ThemeJsonGenerator\Schema\ThemeSchemaCoverage;
+use ItalyStrap\ThemeJsonGenerator\Settings\Background;
+use ItalyStrap\ThemeJsonGenerator\Settings\BlockVisibility;
+use ItalyStrap\ThemeJsonGenerator\Settings\Border;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color;
+use ItalyStrap\ThemeJsonGenerator\Settings\Custom;
+use ItalyStrap\ThemeJsonGenerator\Settings\Dimensions;
+use ItalyStrap\ThemeJsonGenerator\Settings\Layout;
+use ItalyStrap\ThemeJsonGenerator\Settings\Lightbox;
+use ItalyStrap\ThemeJsonGenerator\Settings\Position;
+use ItalyStrap\ThemeJsonGenerator\Settings\PresetInterface;
+use ItalyStrap\ThemeJsonGenerator\Settings\PresetsInterface;
+use ItalyStrap\ThemeJsonGenerator\Settings\Shadow;
+use ItalyStrap\ThemeJsonGenerator\Settings\Spacing;
+use ItalyStrap\ThemeJsonGenerator\Settings\Typography;
+use ItalyStrap\ThemeJsonGenerator\Settings\Viewport;
+
+final readonly class Settings
+{
+    /**
+     * @var string
+     */
+    public const SECTION = 'settings';
+
+    public const BLOCKS_SECTION = 'blocks';
+
+    /**
+     * @var string
+     */
+    public const APPEARANCE_TOOLS = 'appearanceTools';
+
+    /**
+     * @var string
+     */
+    public const USE_ROOT_PADDING_AWARE_ALIGNMENTS = 'useRootPaddingAwareAlignments';
+
+    public function __construct(
+        private PresetsInterface $presets,
+        private SettingsContext $context,
+    ) {
+    }
+
+    #[ThemeSchemaCoverage([self::SECTION, self::APPEARANCE_TOOLS])]
+    public function enableAppearanceTools(): self
+    {
+        $this->write(self::APPEARANCE_TOOLS, true);
+        return $this;
+    }
+
+    #[ThemeSchemaCoverage([self::SECTION, self::APPEARANCE_TOOLS])]
+    public function disableAppearanceTools(): self
+    {
+        $this->write(self::APPEARANCE_TOOLS, false);
+        return $this;
+    }
+
+    #[ThemeSchemaCoverage([self::SECTION, self::USE_ROOT_PADDING_AWARE_ALIGNMENTS])]
+    public function enableUseRootPaddingAwareAlignments(): self
+    {
+        $this->write(self::USE_ROOT_PADDING_AWARE_ALIGNMENTS, true);
+        return $this;
+    }
+
+    #[ThemeSchemaCoverage([self::SECTION, self::USE_ROOT_PADDING_AWARE_ALIGNMENTS])]
+    public function disableUseRootPaddingAwareAlignments(): self
+    {
+        $this->write(self::USE_ROOT_PADDING_AWARE_ALIGNMENTS, false);
+        return $this;
+    }
+
+    #[ThemeSchemaCoverage([self::SECTION, Color::SECTION])]
+    public function color(): Color
+    {
+        return new Color($this);
+    }
+
+    #[ThemeSchemaCoverage([self::SECTION, Background::SECTION])]
+    public function background(): Background
+    {
+        return new Background($this);
+    }
+
+    #[ThemeSchemaCoverage([self::SECTION, BlockVisibility::SECTION])]
+    public function blockVisibility(): BlockVisibility
+    {
+        $this->assertRootSettings(BlockVisibility::SECTION);
+        return new BlockVisibility($this);
+    }
+
+    #[ThemeSchemaCoverage([self::SECTION, Viewport::SECTION])]
+    public function viewport(): Viewport
+    {
+        $this->assertRootSettings(Viewport::SECTION);
+        return new Viewport($this);
+    }
+
+    #[ThemeSchemaCoverage([self::SECTION, Border::SECTION])]
+    public function border(): Border
+    {
+        return new Border($this);
+    }
+
+    #[ThemeSchemaCoverage([self::SECTION, Dimensions::SECTION])]
+    public function dimensions(): Dimensions
+    {
+        return new Dimensions($this);
+    }
+
+    #[ThemeSchemaCoverage([self::SECTION, Layout::SECTION])]
+    public function layout(): Layout
+    {
+        return new Layout($this, $this->presets);
+    }
+
+    #[ThemeSchemaCoverage([self::SECTION, Lightbox::SECTION])]
+    public function lightbox(): Lightbox
+    {
+        return new Lightbox($this);
+    }
+
+    #[ThemeSchemaCoverage([self::SECTION, Position::SECTION])]
+    public function position(): Position
+    {
+        return new Position($this);
+    }
+
+    #[ThemeSchemaCoverage([self::SECTION, Shadow::SECTION])]
+    public function shadow(): Shadow
+    {
+        return new Shadow($this);
+    }
+
+    #[ThemeSchemaCoverage([self::SECTION, Spacing::SECTION])]
+    public function spacing(): Spacing
+    {
+        return new Spacing($this);
+    }
+
+    #[ThemeSchemaCoverage([self::SECTION, Typography::SECTION])]
+    public function typography(): Typography
+    {
+        return new Typography($this);
+    }
+
+    #[ThemeSchemaCoverage([self::SECTION, Custom::SECTION])]
+    public function custom(): Custom
+    {
+        return new Custom($this);
+    }
+
+    #[ThemeSchemaCoverage([self::SECTION, self::BLOCKS_SECTION])]
+    #[ThemeSchemaCoverage([self::SECTION, self::BLOCKS_SECTION, '*'])]
+    public function blocks(string $block): self
+    {
+        return new self($this->presets, $this->context->blocks($block));
+    }
+
+    public function addPreset(PresetInterface $preset): void
+    {
+        $block = $this->context->blockName();
+        if ($block === null) {
+            $this->presets->add($preset);
+            return;
+        }
+
+        $this->presets->addToBlock($block, $preset);
+    }
+
+    /**
+     * @internal
+     * @param array<array-key, string|int>|string $path
+     */
+    public function write(array|string $path, mixed $value): bool
+    {
+        return $this->context->set($path, $value);
+    }
+
+    /**
+     * @internal
+     * @param array<array-key, string|int>|string $path
+     */
+    public function read(array|string $path, mixed $default = null): mixed
+    {
+        return $this->context->get($path, $default);
+    }
+
+    /**
+     * @internal
+     */
+    public function readPresets(string $type): mixed
+    {
+        $block = $this->context->blockName();
+        if ($block === null) {
+            return $this->presets->get($type);
+        }
+
+        return $this->presets->get([self::BLOCKS_SECTION, $block, $type]);
+    }
+
+    private function assertRootSettings(string $section): void
+    {
+        if ($this->context->blockName() !== null) {
+            throw new \LogicException(\sprintf(
+                'The %s section is only supported at the root settings level.',
+                $section
+            ));
+        }
+    }
+}

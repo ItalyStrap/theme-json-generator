@@ -1,0 +1,44 @@
+<?php
+
+declare(strict_types=1);
+
+namespace ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Container;
+
+use ItalyStrap\Config\Config;
+use ItalyStrap\Config\ConfigInterface;
+use ItalyStrap\Empress\AurynConfig;
+use ItalyStrap\Empress\ModuleInterface;
+use ItalyStrap\ThemeJsonGenerator\Settings\Presets;
+use ItalyStrap\ThemeJsonGenerator\Settings\PresetsInterface;
+use ItalyStrap\ThemeJsonGenerator\ThemeJson;
+
+final class ThemeJsonModule implements ModuleInterface
+{
+    /**
+     * @return array<string, mixed>
+     */
+    public function __invoke(): array
+    {
+        return [
+            AurynConfig::ALIASES => [
+                ConfigInterface::class => Config::class,
+                PresetsInterface::class => Presets::class,
+            ],
+            AurynConfig::SHARING => [
+                Presets::class,
+                ThemeJson::class,
+                Config::class,
+            ],
+            AurynConfig::FACTORIES => [
+                Config::class => static fn (): ConfigInterface => new Config([
+                    '$schema' => '',
+                    'version' => 0,
+                    'title' => '',
+                    'description' => '',
+                    'settings' => [],
+                    'styles' => [],
+                ]),
+            ],
+        ];
+    }
+}

@@ -25,7 +25,6 @@
 
         "mexitek/phpcolors": "^1.0",
         "spatie/color": "~1.5.0",
-        "phenx/php-font-lib": "^0.5.4",
 
         "justinrainbow/json-schema": "^5.2",
         "scssphp/scssphp": "^1.12.1",
@@ -55,8 +54,10 @@
         "squizlabs/php_codesniffer": "*",
         "phpcompatibility/php-compatibility": "*",
         "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+        "slevomat/coding-standard": "^8.18",
 
-        "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan": "^2.3.1",
+        "jangregor/phpstan-prophecy": "^2.3",
 
         "phpbench/phpbench": "^1.2",
         "phpmetrics/phpmetrics": "^2.8",
@@ -68,11 +69,13 @@
         "rector/swiss-knife": "^2.3",
         "symplify/easy-coding-standard": "^12.0",
 
-        "italystrap/debug": "dev-master"
+        "italystrap/debug": "dev-master",
+        "phenx/php-font-lib": "^0.5.6"
     },
     "autoload": {
         "psr-4": {
-            "ItalyStrap\\ThemeJsonGenerator\\": "src/"
+            "ItalyStrap\\ThemeJsonGenerator\\": "src/",
+            "ItalyStrap\\ThemeJsonGenerator\\Cli\\": "cli/"
         },
         "files": [
             "functions/autoload.php",
@@ -84,7 +87,8 @@
             "ItalyStrap\\Tests\\": "tests/src/",
             "ItalyStrap\\Tests\\Unit\\": "tests/unit/",
             "ItalyStrap\\Tests\\Integration\\": "tests/integration/",
-            "ItalyStrap\\Tests\\Functional\\": "tests/functional/"
+            "ItalyStrap\\Tests\\Functional\\": "tests/functional/",
+            "ItalyStrap\\ThemeJsonGenerator\\Report\\": "report/src/"
         }
     },
     "suggest": {

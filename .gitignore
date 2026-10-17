@@ -1,6 +1,5 @@
 # Composer
 /vendor/
-/_others/
 
 # Codeception
 codeception.yml
@@ -17,4 +16,17 @@ infection.json.dist
 c3.php
 
 # Theme JSON Schema
-theme.schema.json
+/theme.schema.json
+/theme.json
+/theme.json.php
+
+# Plan files
+PLAN.md
+
+# Agents file
+AGENTS.md
+
+# Temporary files
+/docs/TODO-for-the-refactor.md
+/docs/code-review-src.md
+/migrate.php

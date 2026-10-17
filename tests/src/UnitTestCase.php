@@ -6,13 +6,13 @@ namespace ItalyStrap\Tests;
 
 use Codeception\Test\Unit;
 use ItalyStrap\Config\ConfigInterface;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Palette;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\BoxShadow;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\ColorInterface;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\Color\Utilities\GradientInterface;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetInterface;
-use ItalyStrap\ThemeJsonGenerator\Domain\Input\Settings\PresetsInterface;
-use ItalyStrap\ThemeJsonGenerator\Infrastructure\Filesystem\FilesFinder;
+use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Filesystem\FilesFinder;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Color;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\CssColorInterface;
+use ItalyStrap\ThemeJsonGenerator\Settings\Color\Values\GradientInterface;
+use ItalyStrap\ThemeJsonGenerator\Settings\PresetInterface;
+use ItalyStrap\ThemeJsonGenerator\Settings\PresetsInterface;
+use ItalyStrap\ThemeJsonGenerator\Settings\Shadow\Utilities\BoxShadow;
 use JsonSchema\Validator;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -26,17 +26,20 @@ class UnitTestCase extends Unit
 
     protected UnitTester $tester;
 
+    /** @var array<string, mixed> */
     protected array $input_data;
 
     protected string $color;
 
     protected string $base_color = '';
 
+    /** @return array<string, mixed> */
     protected function inputData(): array
     {
         return $this->input_data;
     }
 
+    /** @var ObjectProphecy<PresetInterface> */
     protected ObjectProphecy $item;
 
     protected function makeItem(): PresetInterface
@@ -44,20 +47,24 @@ class UnitTestCase extends Unit
         return $this->item->reveal();
     }
 
+    /** @var ObjectProphecy<ConfigInterface<array-key, mixed>> */
     protected ObjectProphecy $config;
 
+    /** @return ConfigInterface<array-key, mixed> */
     public function makeConfig(): ConfigInterface
     {
         return $this->config->reveal();
     }
 
-    protected ObjectProphecy $colorInfo;
+    /** @var ObjectProphecy<CssColorInterface> */
+    protected ObjectProphecy $cssColor;
 
-    protected function makeColorInfo(): ColorInterface
+    protected function makeCssColor(): CssColorInterface
     {
-        return $this->colorInfo->reveal();
+        return $this->cssColor->reveal();
     }
 
+    /** @var ObjectProphecy<GradientInterface> */
     protected ObjectProphecy $gradient;
 
     protected function makeGradient(): GradientInterface
@@ -65,6 +72,7 @@ class UnitTestCase extends Unit
         return $this->gradient->reveal();
     }
 
+    /** @var ObjectProphecy<BoxShadow> */
     protected ObjectProphecy $boxShadow;
 
     protected function makeBoxShadow(): BoxShadow
@@ -72,13 +80,15 @@ class UnitTestCase extends Unit
         return $this->boxShadow->reveal();
     }
 
+    /** @var ObjectProphecy<Color> */
     protected ObjectProphecy $palette;
 
-    protected function makePalette(): Palette
+    protected function makePalette(): Color
     {
         return $this->palette->reveal();
     }
 
+    /** @var ObjectProphecy<EventDispatcherInterface> */
     protected ObjectProphecy $dispatcher;
 
     protected function makeDispatcher(): EventDispatcherInterface
@@ -86,6 +96,7 @@ class UnitTestCase extends Unit
         return $this->dispatcher->reveal();
     }
 
+    /** @var ObjectProphecy<FilesFinder> */
     protected ObjectProphecy $filesFinder;
 
     protected function makeFilesFinder(): FilesFinder
@@ -93,6 +104,7 @@ class UnitTestCase extends Unit
         return $this->filesFinder->reveal();
     }
 
+    /** @var ObjectProphecy<Validator> */
     protected ObjectProphecy $validator;
 
     protected function makeValidator(): Validator
@@ -100,6 +112,7 @@ class UnitTestCase extends Unit
         return $this->validator->reveal();
     }
 
+    /** @var ObjectProphecy<Compiler> */
     protected ObjectProphecy $compiler;
 
     protected function makeCompiler(): Compiler
@@ -107,6 +120,7 @@ class UnitTestCase extends Unit
         return $this->compiler->reveal();
     }
 
+    /** @var ObjectProphecy<PresetsInterface> */
     protected ObjectProphecy $presets;
 
     protected function makePresets(): PresetsInterface
@@ -114,16 +128,35 @@ class UnitTestCase extends Unit
         return $this->presets->reveal();
     }
 
+    /**
+     * @template TPreset of PresetInterface
+     * @param array<array-key, string|int>|string $key
+     * @param class-string<TPreset> $presetClass
+     * @return TPreset
+     */
+    protected function presetFrom(
+        PresetsInterface $presets,
+        array|string $key,
+        string $presetClass
+    ): PresetInterface {
+        $preset = $presets->get($key);
+        $this->assertInstanceOf($presetClass, $preset);
+
+        return $preset;
+    }
+
     // phpcs:ignore -- Method from Codeception
-    protected function _before()
+    protected function _before(): void
     {
         $this->item = $this->prophesize(PresetInterface::class);
-        $this->colorInfo = $this->prophesize(ColorInterface::class);
+        $this->cssColor = $this->prophesize(CssColorInterface::class);
         $this->gradient = $this->prophesize(GradientInterface::class);
         $this->boxShadow = $this->prophesize(BoxShadow::class);
-        $this->palette = $this->prophesize(Palette::class);
+        $this->palette = $this->prophesize(Color::class);
 
-        $this->config = $this->prophesize(ConfigInterface::class);
+        /** @var ObjectProphecy<ConfigInterface<array-key, mixed>> $config */
+        $config = $this->prophesize(ConfigInterface::class);
+        $this->config = $config;
         $this->dispatcher = $this->prophesize(EventDispatcherInterface::class);
         $this->filesFinder = $this->prophesize(FilesFinder::class);
         $this->validator = $this->prophesize(Validator::class);
@@ -136,7 +169,7 @@ class UnitTestCase extends Unit
     }
 
     // phpcs:ignore -- Method from Codeception
-    protected function _after()
+    protected function _after(): void
     {
         $this->getProphet()->checkPredictions();
     }

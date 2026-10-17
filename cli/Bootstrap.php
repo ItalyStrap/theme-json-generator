@@ -1,0 +1,48 @@
+<?php
+
+declare(strict_types=1);
+
+namespace ItalyStrap\ThemeJsonGenerator\Cli;
+
+use ItalyStrap\Empress\ContainerBuilder;
+use ItalyStrap\ThemeJsonGenerator\Cli\Application\Commands\DumpCommand;
+use ItalyStrap\ThemeJsonGenerator\Cli\Application\Commands\InfoCommand;
+use ItalyStrap\ThemeJsonGenerator\Cli\Application\Commands\InitCommand;
+use ItalyStrap\ThemeJsonGenerator\Cli\Application\Commands\ValidateCommand;
+use Psr\Container\ContainerInterface;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\CommandLoader\ContainerCommandLoader;
+
+final class Bootstrap
+{
+    public function container(): ContainerInterface
+    {
+        $builder = new ContainerBuilder();
+
+        /**
+         * The order of the modules is important
+         */
+        $builder->addModule(new ModuleInfrastructure());
+        $builder->addModule(new ModuleApplication());
+
+        return $builder->build();
+    }
+
+    public function run(): int
+    {
+        $container = $this->container();
+
+        $application = new Application('Theme JSON Generator', '0.1.0');
+
+        $commandLoader = new ContainerCommandLoader($container, [
+            InitCommand::NAME => InitCommand::class,
+            DumpCommand::NAME => DumpCommand::class,
+            ValidateCommand::NAME => ValidateCommand::class,
+            InfoCommand::NAME => InfoCommand::class,
+        ]);
+
+        $application->setCommandLoader($commandLoader);
+
+        return $application->run();
+    }
+}
