@@ -35,7 +35,8 @@ final class CommandsCest extends FunctionalTestCase
         $i->seeResultCodeIs(1);
         $i->seeInShellOutput('In StyleContext.php line');
         $i->seeInShellOutput('Cannot chain "elements()" after "elements()"');
-        $i->seeShellOutputMatches('/fixtures-invalid-style-chain\/theme\.jso\s+n\.php:8/');
+        $output = \str_replace(["\r", "\n", "\t", ' '], '', $i->grabShellOutput());
+        $i->assertStringContainsString('fixtures-invalid-style-chain/theme.json.php:8', $output);
     }
 
     public function testInit(FunctionalTester $i): void
