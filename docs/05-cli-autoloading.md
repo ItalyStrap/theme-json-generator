@@ -4,6 +4,9 @@ You can install the generator locally in each theme or globally for use across
 multiple themes. Both installations run the same CLI and read the same
 `theme.json.php` and `styles/*.json.php` entrypoints.
 
+To generate SCSS references automatically during `dump`, or export them from an
+existing JSON file, see [SCSS export](06-scss-export.md).
+
 For a local installation, run these commands from the theme root:
 
 ```shell

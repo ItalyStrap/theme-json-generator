@@ -4,46 +4,42 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Filesystem;
 
-use ItalyStrap\ThemeJsonGenerator\Settings\PresetsInterface;
 use Webimpress\SafeWriter\FileWriter;
 
 final readonly class ScssFileWriter
 {
     public function __construct(private string $path)
     {
+        if (!\str_ends_with($path, '.scss') || \is_dir($path) || \is_link($path)) {
+            throw new \InvalidArgumentException('SCSS output must be a regular .scss file: ' . $path);
+        }
     }
 
-    public function write(PresetsInterface $presets): void
+    public function isCurrent(string $content): bool
     {
-        FileWriter::writeFile(
-            $this->path,
-            $this->generateContent($presets)
-        );
-    }
-
-    private function generateContent(PresetsInterface $presets): string
-    {
-        $properties = [];
-
-        foreach ($presets->presets() as $preset) {
-            $properties[$preset->prop()] = true;
+        if (!\is_file($this->path)) {
+            return false;
         }
 
-        \ksort($properties);
+        $existing = \file_get_contents($this->path);
+        if ($existing === false) {
+            throw new \RuntimeException('Cannot read SCSS output: ' . $this->path);
+        }
 
-        return \implode('', \array_map(
-            $this->declaration(...),
-            \array_keys($properties)
-        ));
+        return $existing === $content;
     }
 
-    private function declaration(string $property): string
+    public function write(string $content): void
     {
-        return \sprintf(
-            '$%1$s: %2$s;%3$s',
-            \ltrim($property, '-'),
-            $property,
-            \PHP_EOL
-        );
+        $directory = \dirname($this->path);
+        if (!\is_dir($directory) && !@\mkdir($directory, 0777, true) && !\is_dir($directory)) {
+            throw new \RuntimeException('Cannot create SCSS output directory: ' . $directory);
+        }
+
+        if (!\is_writable($directory)) {
+            throw new \RuntimeException('SCSS output directory is not writable: ' . $directory);
+        }
+
+        FileWriter::writeFile($this->path, $content);
     }
 }

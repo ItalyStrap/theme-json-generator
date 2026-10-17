@@ -8,21 +8,17 @@ final readonly class DumpMessage
 {
     public function __construct(
         private string $rootFolder,
-        private string $sassFolder,
+        public ?string $scssDirectory,
         private bool $dryRun,
         private string $file,
-        private ?string $autoload = null
+        private ?string $autoload = null,
+        public bool $noScss = false
     ) {
     }
 
     public function getRootFolder(): string
     {
         return $this->rootFolder;
-    }
-
-    public function getSassFolder(): string
-    {
-        return \rtrim($this->sassFolder, DIRECTORY_SEPARATOR);
     }
 
     public function isDryRun(): bool

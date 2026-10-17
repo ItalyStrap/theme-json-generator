@@ -13,6 +13,9 @@ use ItalyStrap\ThemeJsonGenerator\Cli\Application\Middlewares\Dump;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Autoload\DirectoryAutoloader;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Autoload\EntrypointLoader;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Container\ThemeJsonContainerFactory;
+use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Scss\ScssExporter;
+use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Scss\ScssOutputResolver;
+use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Scss\ThemeJsonScss;
 use Prophecy\Argument;
 
 final class DumpTest extends UnitTestCase
@@ -23,6 +26,8 @@ final class DumpTest extends UnitTestCase
             $this->makeFilesFinder(),
             new ThemeJsonContainerFactory(),
             new EntrypointLoader(new DirectoryAutoloader(new ClassMapGenerator(), new ClassLoader())),
+            new ScssExporter(new ThemeJsonScss()),
+            new ScssOutputResolver(),
         );
     }
 
@@ -38,7 +43,7 @@ final class DumpTest extends UnitTestCase
             ->willReturn([])
             ->shouldBeCalledOnce();
 
-        $this->makeInstance()->process(new DumpMessage('', '', false, ''), $this->makeHandler());
+        $this->makeInstance()->process(new DumpMessage('', null, false, ''), $this->makeHandler());
     }
 
     public function testItShouldRejectNonIntegerHandlerResults(): void
@@ -49,7 +54,7 @@ final class DumpTest extends UnitTestCase
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Expected middleware handler to return an integer exit code.');
 
-        $this->makeInstance()->process(new DumpMessage('', '', false, ''), $handler);
+        $this->makeInstance()->process(new DumpMessage('', null, false, ''), $handler);
     }
 
     public function testItShouldBasicExample(): void
@@ -65,7 +70,7 @@ final class DumpTest extends UnitTestCase
             ->resolveJsonFile($basicExample, '')
             ->willReturn(\codecept_data_dir('fixtures/basic-example.json'));
 
-        $this->makeInstance()->process(new DumpMessage('', '', false, ''), $this->makeHandler());
+        $this->makeInstance()->process(new DumpMessage('', null, false, ''), $this->makeHandler());
 
         $generatedFile = new \SplFileInfo(\codecept_data_dir('fixtures/basic-example.json'));
         $this->assertFileExists($generatedFile->getPathname(), 'The file was not generated');
@@ -86,7 +91,7 @@ final class DumpTest extends UnitTestCase
             ->resolveJsonFile($advancedExample, '')
             ->willReturn(\codecept_data_dir('fixtures/advanced-example.json'));
 
-        $this->makeInstance()->process(new DumpMessage('', '', false, ''), $this->makeHandler());
+        $this->makeInstance()->process(new DumpMessage('', null, false, ''), $this->makeHandler());
 
         $generatedFile = new \SplFileInfo(\codecept_data_dir('fixtures/advanced-example.json'));
         $this->assertFileExists($generatedFile->getPathname(), 'The file was not generated');

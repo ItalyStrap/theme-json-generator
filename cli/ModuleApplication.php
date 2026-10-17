@@ -9,11 +9,13 @@ use ItalyStrap\Empress\ModuleInterface;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\Commands\DumpCommand;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\Commands\InfoCommand;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\Commands\InitCommand;
+use ItalyStrap\ThemeJsonGenerator\Cli\Application\Commands\ScssCommand;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\Commands\ValidateCommand;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\Commands\WorkflowCommand;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\Middlewares\CopyWorkflowTemplate;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\Middlewares\DeleteSchemaJson;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\Middlewares\Dump;
+use ItalyStrap\ThemeJsonGenerator\Cli\Application\Middlewares\GenerateScss;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\Middlewares\GenerateThemeJsonConfigFileFromThemeJson;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\Middlewares\Info;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\Middlewares\SchemaJson;
@@ -35,6 +37,11 @@ final class ModuleApplication implements ModuleInterface
                 ThemeJsonContainerFactoryInterface::class => ThemeJsonContainerFactory::class,
             ],
             AurynConfig::FACTORIES => [
+                ScssCommand::class
+                    => fn(ContainerInterface $container): ScssCommand
+                        => new ScssCommand(new ConsoleHandler(
+                            $container->get(GenerateScss::class)
+                        )),
                 WorkflowCommand::class
                     => fn(ContainerInterface $container): WorkflowCommand
                         => new WorkflowCommand(new ConsoleHandler(
