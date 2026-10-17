@@ -296,7 +296,7 @@ final class TypographyTest extends UnitTestCase
     {
         $themeJson = new ThemeJson(new Config(), new Presets());
 
-        $themeJson->settings()->typography()->fluid();
+        $this->assertInstanceOf(Typography\Fluid::class, $themeJson->settings()->typography()->fluid());
 
         $this->assertNull($themeJson->get('settings.typography.fluid'));
     }

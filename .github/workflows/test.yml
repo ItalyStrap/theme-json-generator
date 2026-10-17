@@ -99,6 +99,10 @@ jobs:
         working-directory: ${{env.APP_FOLDER_PATH}}/wp-content/${{env.PROJECT_KIND}}/${{ github.event.repository.name }}
         run: ./vendor/bin/codecept build
 
+      - name: Download current theme schema
+        working-directory: ${{env.APP_FOLDER_PATH}}/wp-content/${{env.PROJECT_KIND}}/${{ github.event.repository.name }}
+        run: curl --fail --show-error --silent --location --retry 3 https://raw.githubusercontent.com/WordPress/gutenberg/trunk/schemas/json/theme.json --output theme.schema.json
+
       - name: Run Unit & Integration test
         working-directory: ${{env.APP_FOLDER_PATH}}/wp-content/${{env.PROJECT_KIND}}/${{ github.event.repository.name }}
         run: |

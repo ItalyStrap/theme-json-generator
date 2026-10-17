@@ -60,8 +60,10 @@ trait CommonTests
         $sut = $this->makeInstance();
         $sut->property('property', 'value');
 
-        $this->assertSame(['property' => 'value'], $sut->toArray());
-        $this->assertSame(['property' => 'value'], $sut->toArray());
+        $this->assertSame(
+            [['property' => 'value'], ['property' => 'value']],
+            [$sut->toArray(), $sut->toArray()]
+        );
     }
 
     public function testItShouldBeImmutable(): void

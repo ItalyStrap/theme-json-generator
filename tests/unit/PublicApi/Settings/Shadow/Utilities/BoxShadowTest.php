@@ -96,8 +96,10 @@ final class BoxShadowTest extends UnitTestCase
             ->spread('0')
             ->color('#fff');
 
-        $this->assertSame('0 10px 0 0 #ffffff', (string)$sut);
-        $this->assertSame('0 10px 0 0 #ffffff', (string)$sut);
+        $this->assertSame(
+            ['0 10px 0 0 #ffffff', '0 10px 0 0 #ffffff'],
+            [(string)$sut, (string)$sut]
+        );
     }
 
     public function testWithColorObject(): void

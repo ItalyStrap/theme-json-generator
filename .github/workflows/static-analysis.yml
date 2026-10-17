@@ -27,5 +27,8 @@ jobs:
 
       - uses: ramsey/composer-install@v3
 
+      - name: Build Codeception helpers
+        run: ./vendor/bin/codecept build
+
       - name: PHPStan
         run: composer stan

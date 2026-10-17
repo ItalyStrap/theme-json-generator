@@ -344,7 +344,7 @@ final readonly class ThemeSchemaInventoryBuilder
 
         foreach ($properties as $name => $property) {
             if (\is_string($name) && \is_array($property)) {
-                $normalized[$name] = $property;
+                $normalized[$name] = \array_filter($property, '\is_string', \ARRAY_FILTER_USE_KEY);
             }
         }
 
@@ -367,7 +367,7 @@ final readonly class ThemeSchemaInventoryBuilder
 
         foreach ($allOf as $item) {
             if (\is_array($item)) {
-                $normalized[] = $item;
+                $normalized[] = \array_filter($item, '\is_string', \ARRAY_FILTER_USE_KEY);
             }
         }
 
@@ -390,7 +390,7 @@ final readonly class ThemeSchemaInventoryBuilder
 
         foreach ($definitions as $name => $definition) {
             if (\is_string($name) && \is_array($definition)) {
-                $normalized[$name] = $definition;
+                $normalized[$name] = \array_filter($definition, '\is_string', \ARRAY_FILTER_USE_KEY);
             }
         }
 
