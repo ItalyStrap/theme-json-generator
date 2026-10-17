@@ -76,6 +76,10 @@ This command changes the ownership of the theme directory and all its contents t
 
 ### Generating and Updating JSON Files: The dump Command
 
+For configuration classes shared by the root entrypoint and style variations,
+see [Configuration autoloading](./05-cli-autoloading.md). The same attributes work
+with local and global CLI installations.
+
 Once you've set up your environment with the `init` command, the `dump` command is your next step in the workflow. It's designed to take the configurations from your PHP entrypoint files and generate the corresponding JSON files for your theme.
 
 How to Use

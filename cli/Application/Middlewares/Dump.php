@@ -9,6 +9,7 @@ use ItalyStrap\Pipeline\HandlerInterface;
 use ItalyStrap\Pipeline\MiddlewareInterface;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\DumpMessage;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\ThemeJsonContainerFactoryInterface;
+use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Autoload\EntrypointLoader;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Filesystem\FilesFinder;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Filesystem\JsonFileWriter;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Filesystem\ScssFileWriter;
@@ -27,7 +28,8 @@ final readonly class Dump implements MiddlewareInterface
 
     public function __construct(
         private FilesFinder $filesFinder,
-        private ThemeJsonContainerFactoryInterface $containerFactory
+        private ThemeJsonContainerFactoryInterface $containerFactory,
+        private EntrypointLoader $entrypointLoader
     ) {
     }
 
@@ -43,13 +45,14 @@ final readonly class Dump implements MiddlewareInterface
 
         $count = 0;
 
-        /**
-         * Let's test the new workflow
-         * @example $name => $file
-         *         'theme' => 'theme.json'
-         */
-        foreach ($this->filesFinder->find($message->getRootFolder(), 'php') as $fileName => $file) {
-            $result = $this->containerFactory->execute(require $file);
+        $entries = $this->entrypointLoader->entries(
+            $this->filesFinder->find($message->getRootFolder(), 'php'),
+            $message->getRootFolder(),
+            $message->getAutoload(),
+            $message->getFile()
+        );
+        foreach ($entries as $fileName => [$file, $entrypoint]) {
+            $result = $this->containerFactory->execute($entrypoint);
             $count++;
 
             if ($message->isDryRun()) {
@@ -93,7 +96,7 @@ final readonly class Dump implements MiddlewareInterface
             $fileName . self::JSON_FILE_SUFFIX
         ));
 
-        (new JsonFileWriter($this->filesFinder->resolveJsonFile($file)))
+        (new JsonFileWriter($this->filesFinder->resolveJsonFile($file, $message->getRootFolder())))
             ->write($config);
 
         $output->writeln(\sprintf(

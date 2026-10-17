@@ -9,6 +9,7 @@ use ItalyStrap\Empress\ModuleInterface;
 use ItalyStrap\Finder\Finder;
 use ItalyStrap\Finder\FinderFactory;
 use ItalyStrap\Finder\FinderInterface;
+use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Filesystem\WorkflowTemplate;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
@@ -29,6 +30,8 @@ final class ModuleInfrastructure implements ModuleInterface
                 EventDispatcher::class
             ],
             AurynConfig::FACTORIES => [
+                WorkflowTemplate::class => fn (): WorkflowTemplate
+                    => new WorkflowTemplate(__DIR__ . '/../templates/theme-json.yml'),
                 Finder::class => static fn (): FinderInterface => (new FinderFactory())->make(),
             ],
         ];

@@ -37,7 +37,8 @@
         "symfony/polyfill-php80": "^1.22",
         "symfony/event-dispatcher": "^5.4",
         "webmozart/assert": "^1.11",
-        "overclokk/auryn": "dev-master"
+        "overclokk/auryn": "dev-master",
+        "composer/class-map-generator": "^1.6"
     },
     "require-dev": {
         "lucatume/wp-browser": "^4.5",

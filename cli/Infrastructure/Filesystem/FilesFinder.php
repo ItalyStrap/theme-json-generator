@@ -57,19 +57,18 @@ final readonly class FilesFinder
             ->allFiles(['*'], $extension, '.');
 
         foreach ($files as $file) {
+            if ($extension === 'php' && !\str_ends_with($file->getFilename(), '.json.php')) {
+                continue;
+            }
+
             yield $this->extractFileName($file) => $file;
         }
     }
 
-    public function resolveJsonFile(\SplFileInfo $file): string
+    public function resolveJsonFile(\SplFileInfo $file, ?string $rootFolder = null): string
     {
         $fileName = $this->extractFileName($file);
-        $themeRoot = (string)\getcwd();
-        $stylesFolder = '';
-        if ($fileName !== self::ROOT_FILE_NAME) {
-            $stylesFolder = self::STYLES_FOLDER;
-        }
-
+        $themeRoot = $rootFolder ?? (string)\getcwd();
         $styleCss = \implode(DIRECTORY_SEPARATOR, [
             $themeRoot,
             'style.css',
@@ -88,15 +87,11 @@ final readonly class FilesFinder
             throw new \RuntimeException('The style.css file is not a valid WordPress theme');
         }
 
-        return \implode(DIRECTORY_SEPARATOR, \array_filter([
-            $themeRoot,
-            $stylesFolder,
-            $fileName . self::JSON_FILE_SUFFIX,
-        ]));
+        return $file->getPath() . DIRECTORY_SEPARATOR . $fileName . self::JSON_FILE_SUFFIX;
     }
 
     private function extractFileName(\SplFileInfo $file): string
     {
-        return \explode('.', $file->getBasename())[0];
+        return \preg_replace('/\.json(?:\.php)?$/', '', $file->getBasename()) ?? $file->getBasename();
     }
 }

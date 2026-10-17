@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace ItalyStrap\Tests\Unit\Cli\Application\Middlewares;
 
+use Composer\Autoload\ClassLoader;
+use Composer\ClassMapGenerator\ClassMapGenerator;
 use ItalyStrap\Pipeline\CallbackHandler;
 use ItalyStrap\Tests\UnitTestCase;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\DumpMessage;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\Middlewares\Dump;
+use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Autoload\DirectoryAutoloader;
+use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Autoload\EntrypointLoader;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Container\ThemeJsonContainerFactory;
 use Prophecy\Argument;
 
@@ -18,6 +22,7 @@ final class DumpTest extends UnitTestCase
         return new Dump(
             $this->makeFilesFinder(),
             new ThemeJsonContainerFactory(),
+            new EntrypointLoader(new DirectoryAutoloader(new ClassMapGenerator(), new ClassLoader())),
         );
     }
 
@@ -57,7 +62,7 @@ final class DumpTest extends UnitTestCase
             ]);
 
         $this->filesFinder
-            ->resolveJsonFile($basicExample)
+            ->resolveJsonFile($basicExample, '')
             ->willReturn(\codecept_data_dir('fixtures/basic-example.json'));
 
         $this->makeInstance()->process(new DumpMessage('', '', false, ''), $this->makeHandler());
@@ -78,7 +83,7 @@ final class DumpTest extends UnitTestCase
             ]);
 
         $this->filesFinder
-            ->resolveJsonFile($advancedExample)
+            ->resolveJsonFile($advancedExample, '')
             ->willReturn(\codecept_data_dir('fixtures/advanced-example.json'));
 
         $this->makeInstance()->process(new DumpMessage('', '', false, ''), $this->makeHandler());

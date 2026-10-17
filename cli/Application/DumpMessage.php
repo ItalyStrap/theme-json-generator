@@ -10,7 +10,8 @@ final readonly class DumpMessage
         private string $rootFolder,
         private string $sassFolder,
         private bool $dryRun,
-        private string $file
+        private string $file,
+        private ?string $autoload = null
     ) {
     }
 
@@ -32,5 +33,10 @@ final readonly class DumpMessage
     public function getFile(): string
     {
         return $this->file;
+    }
+
+    public function getAutoload(): ?string
+    {
+        return $this->autoload;
     }
 }
