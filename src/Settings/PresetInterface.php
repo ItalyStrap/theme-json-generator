@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace ItalyStrap\ThemeJsonGenerator\Settings;
 
-// phpcs:ignore PHPCompatibility.Interfaces.NewInterfaces.stringableFound
 interface PresetInterface extends \Stringable
 {
     public function type(): string;
