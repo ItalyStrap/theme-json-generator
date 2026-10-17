@@ -38,11 +38,6 @@ final class DumpCommand extends Command
     /**
      * @var string
      */
-    public const PATH_FOR_THEME_SASS = 'path-for-theme-sass';
-
-    /**
-     * @var string
-     */
     public const FILE = 'file';
 
     public function __construct(
@@ -56,6 +51,14 @@ final class DumpCommand extends Command
         $this->setName(self::NAME);
         $this->setDescription(self::DESCRIPTION);
         $this->setHelp('This command generate theme.json file');
+
+        $this->addOption(
+            'scss',
+            null,
+            InputOption::VALUE_REQUIRED,
+            'SCSS output directory, overriding entrypoint attributes.'
+        );
+        $this->addOption('no-scss', null, InputOption::VALUE_NONE, 'Skip all SCSS export.');
 
         $this->addOption(
             'autoload',
@@ -119,15 +122,17 @@ final class DumpCommand extends Command
         $path = $input->getOption('path');
         $file = $input->getOption(self::FILE);
         $autoload = $input->getOption('autoload');
+        $scss = $input->getOption('scss');
 
         $rootFolder = $this->rootFolder(\is_string($path) ? $path : '');
 
         $message = new DumpMessage(
             $rootFolder,
-            '',
+            \is_string($scss) ? $scss : null,
             $input->getOption('dry-run') === true,
             \is_string($file) ? $file : '',
-            \is_string($autoload) ? $autoload : null
+            \is_string($autoload) ? $autoload : null,
+            $input->getOption('no-scss') === true
         );
 
         return $this->handler->handle($message);

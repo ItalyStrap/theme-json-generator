@@ -13,10 +13,17 @@ use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Autoload\EntrypointLoader;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Filesystem\FilesFinder;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Filesystem\JsonFileWriter;
 use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Filesystem\ScssFileWriter;
-use ItalyStrap\ThemeJsonGenerator\Settings\PresetsInterface;
+use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Scss\ScssExporter;
+use ItalyStrap\ThemeJsonGenerator\Cli\Infrastructure\Scss\ScssOutputResolver;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * @phpstan-type PreparedDump array{
+ *     name: string, file: \SplFileInfo, config: ConfigInterface<array-key, mixed>,
+ *     scss: ?string, content: string
+ * }
+ */
 final readonly class Dump implements MiddlewareInterface
 {
     /**
@@ -29,7 +36,9 @@ final readonly class Dump implements MiddlewareInterface
     public function __construct(
         private FilesFinder $filesFinder,
         private ThemeJsonContainerFactoryInterface $containerFactory,
-        private EntrypointLoader $entrypointLoader
+        private EntrypointLoader $entrypointLoader,
+        private ScssExporter $scssExporter,
+        private ScssOutputResolver $scssResolver
     ) {
     }
 
@@ -43,31 +52,25 @@ final readonly class Dump implements MiddlewareInterface
          */
         $output = new ConsoleOutput();
 
-        $count = 0;
-
-        $entries = $this->entrypointLoader->entries(
-            $this->filesFinder->find($message->getRootFolder(), 'php'),
-            $message->getRootFolder(),
-            $message->getAutoload(),
-            $message->getFile()
-        );
-        foreach ($entries as $fileName => [$file, $entrypoint]) {
-            $result = $this->containerFactory->execute($entrypoint);
-            $count++;
-
+        $entries = $this->prepare($message);
+        foreach ($entries as $entry) {
             if ($message->isDryRun()) {
                 $output->writeln(\sprintf(
                     '<comment>Dry run mode enabled, skipping file generation for %s</comment>',
-                    $fileName
+                    $entry['name']
                 ));
-                continue;
             }
 
-            $this->generateJsonFile($output, $message, $fileName, $file, $result->config);
-            $this->generateScssFile($output, $message, $fileName, $result->presets);
+            if (!$message->isDryRun()) {
+                $this->generateJsonFile($output, $message, $entry['name'], $entry['file'], $entry['config']);
+            }
+
+            if ($entry['scss'] !== null) {
+                $this->scssExporter->export($entry['scss'], $entry['content'], $message->isDryRun());
+            }
         }
 
-        if ($count === 0) {
+        if ($entries === []) {
             $output->writeln(self::M_NO_FILE_FOUND);
         }
 
@@ -78,6 +81,46 @@ final readonly class Dump implements MiddlewareInterface
         }
 
         return $result;
+    }
+
+    /** @return list<PreparedDump> */
+    private function prepare(DumpMessage $message): array
+    {
+        $prepared = [];
+        $destinations = [];
+        $entries = $this->entrypointLoader->entries(
+            $this->filesFinder->find($message->getRootFolder(), 'php'),
+            $message->getRootFolder(),
+            $message->getAutoload(),
+            $message->getFile()
+        );
+        foreach ($entries as $fileName => [$file, $entrypoint]) {
+            $path = $message->noScss ? null : $this->scssResolver->forEntrypoint(
+                $entrypoint,
+                $file,
+                $message->scssDirectory
+            );
+            if ($path !== null) {
+                new ScssFileWriter($path);
+                if (\array_key_exists($path, $destinations)) {
+                    throw new \InvalidArgumentException('Multiple entrypoints target the same SCSS file: ' . $path);
+                }
+
+                $destinations[$path] = true;
+            }
+
+            // Execute while the entrypoint loader's project autoloader is registered.
+            $result = $this->containerFactory->execute($entrypoint);
+            $prepared[] = [
+                'name' => $fileName,
+                'file' => $file,
+                'config' => $result->config,
+                'scss' => $path,
+                'content' => $path !== null ? $this->scssExporter->content($result->config->toArray()) : '',
+            ];
+        }
+
+        return $prepared;
     }
 
     /**
@@ -104,29 +147,5 @@ final readonly class Dump implements MiddlewareInterface
             $fileName . self::JSON_FILE_SUFFIX
         ));
         $output->writeln('========================');
-    }
-
-    private function generateScssFile(
-        OutputInterface $output,
-        DumpMessage $message,
-        string $fileName,
-        PresetsInterface $presets
-    ): void {
-        $path_for_theme_sass = $message->getRootFolder() . DIRECTORY_SEPARATOR . $message->getSassFolder();
-        if ($message->getSassFolder() !== '' && \is_writable($path_for_theme_sass)) {
-            $output->writeln(\sprintf(
-                '<info>Generating %s file</info>',
-                $fileName . '.scss'
-            ));
-
-            (new ScssFileWriter($path_for_theme_sass . DIRECTORY_SEPARATOR . $fileName . '.scss'))
-                ->write($presets);
-
-            $output->writeln(\sprintf(
-                '<info>Generated %s file</info>',
-                $fileName . '.scss'
-            ));
-            $output->writeln('========================');
-        }
     }
 }

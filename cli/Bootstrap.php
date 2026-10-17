@@ -8,6 +8,7 @@ use ItalyStrap\Empress\ContainerBuilder;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\Commands\DumpCommand;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\Commands\InfoCommand;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\Commands\InitCommand;
+use ItalyStrap\ThemeJsonGenerator\Cli\Application\Commands\ScssCommand;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\Commands\ValidateCommand;
 use ItalyStrap\ThemeJsonGenerator\Cli\Application\Commands\WorkflowCommand;
 use Psr\Container\ContainerInterface;
@@ -38,6 +39,7 @@ final class Bootstrap
         $commandLoader = new ContainerCommandLoader($container, [
             InitCommand::NAME => InitCommand::class,
             DumpCommand::NAME => DumpCommand::class,
+            ScssCommand::NAME => ScssCommand::class,
             ValidateCommand::NAME => ValidateCommand::class,
             InfoCommand::NAME => InfoCommand::class,
             WorkflowCommand::NAME => WorkflowCommand::class,

@@ -56,10 +56,22 @@ jobs:
         working-directory: ${{ env.THEME_PATH }}
         run: |
           test -f theme.json.php
+          # Also generates SCSS when entrypoints declare #[ScssOutput(...)].
           theme-json dump
           test -s theme.json
 
-      - name: Commit generated JSON files
+      # Optional: generate SCSS from existing JSON without a PHP entrypoint.
+      # Skip this step when dump already exports SCSS through an attribute.
+      # For a JSON-only project, replace the Generate JSON files step with this.
+      # - name: Generate SCSS aliases
+      #   working-directory: ${{ env.THEME_PATH }}
+      #   run: |
+      #     # Defaults to --input=theme.json and --output=_theme.scss.
+      #     theme-json scss
+      #     # Alternative: choose a variation and output path.
+      #     # theme-json scss --input=styles/dark.json --output=assets/scss/_dark.scss
+
+      - name: Commit generated files
         working-directory: ${{ env.THEME_PATH }}
         env:
           TARGET_BRANCH: ${{ github.ref_name }}
@@ -71,15 +83,19 @@ jobs:
               git add -f -- "${entrypoint%.php}"
             done < <(find styles -type f -name '*.json.php' -print0)
           fi
+          # Optional: uncomment and adapt to the SCSS paths generated above
+          # or configured through ScssOutput attributes.
+          # git add -f -- _theme.scss
+          # git add -f -- assets/scss/_dark.scss
 
           if git diff --cached --quiet; then
-            echo 'Generated JSON files are already up to date.'
+            echo 'Generated files are already up to date.'
             exit 0
           fi
 
           git -c user.name='github-actions[bot]' \
             -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
-            commit -m 'Build theme JSON'
+            commit -m 'Build theme assets'
           git push origin "HEAD:$TARGET_BRANCH"
 
       # Optional: install the theme's production dependencies before packaging.
