@@ -119,7 +119,7 @@ final class WorkflowTemplateTest extends Unit
         $this->write('styles/unrelated.json', '{}');
         $this->write('unrelated.txt', 'changed');
 
-        $script = $this->script('Commit generated JSON files');
+        $script = $this->script('Commit generated files');
         $first = $this->runScript($script);
 
         $this->assertSame(0, $first->getExitCode(), $first->getErrorOutput());
