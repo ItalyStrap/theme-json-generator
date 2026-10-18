@@ -3,83 +3,108 @@
 [![Tests Status](https://github.com/ItalyStrap/theme-json-generator/actions/workflows/test.yml/badge.svg)](https://github.com/ItalyStrap/theme-json-generator/actions/workflows/test.yml)
 [![Latest Stable Version](https://img.shields.io/packagist/v/italystrap/theme-json-generator.svg)](https://packagist.org/packages/italystrap/theme-json-generator)
 [![Total Downloads](https://img.shields.io/packagist/dt/italystrap/theme-json-generator.svg)](https://packagist.org/packages/italystrap/theme-json-generator)
-[![Latest Unstable Version](https://img.shields.io/packagist/vpre/italystrap/theme-json-generator.svg)](https://packagist.org/packages/italystrap/theme-json-generator)
-[![License](https://img.shields.io/packagist/l/italystrap/theme-json-generator.svg)](https://packagist.org/packages/italystrap/theme-json-generator)
-![PHP from Packagist](https://img.shields.io/packagist/php-v/italystrap/theme-json-generator)
+[![License](https://img.shields.io/packagist/l/italystrap/theme-json-generator.svg)](LICENSE)
 
-WordPress Theme JSON Generator: The OOP Way
+Write WordPress `theme.json` configuration in PHP. Define settings, presets, and
+styles through a fluent API, share configuration between variations, and generate
+JSON during development or CI.
 
-**Work in Progress:** This project is experimental and currently in development. As we navigate through the 0.x.x versions, please note that API changes may occur. For understanding versioning, refer to the [SemVer](http://semver.org/) specification.
+The package is experimental. These docs describe the current repository API;
+choose an installed version containing the features you need and review changes
+before upgrading.
 
-**Project Vision:** The aim is to revolutionize the way `theme.json` files (and other `*.json` files within the `styles` folder) are generated because JSON sucks 😁 (just kidding).
+## Install
 
-PHP offers the flexibility to divide configurations into multiple files, include comments, and generate dynamic content, overcoming the limitations of JSON.
+Requires PHP 8.2 or newer, the JSON extension, and Composer. From your theme root:
 
-**Who is This For?**
-- Ideal for those seeking a more maintainable and predictable method to generate JSON files for WordPress themes.
-- Perfect if you prefer writing your configurations once and reusing them efficiently.
-
-**Not Suited For:**
-- Users content with direct JSON file manipulation without the need for PHP generation.
-- Those who believe this approach complicates the JSON generation process.
-- Individuals are comfortable managing extensive JSON configurations manually.
-
-**Explore With Us:** Join us in exploring this CLI and WP_CLI tool for generating and validating JSON files for Block Themes and see how it can streamline your development process.
-
-**Important Considerations for Developers:**
-
-This package is designed with the development phase in mind and **should only be used for development purposes**. For performance reasons, it is not recommended to use this tool in production environments. JSON files should be generated in advance during the development process and considered as a form of cache in your project. Generating these files on the fly in a production environment is strongly discouraged. Therefore, **this package should not be used in production**.
-
-**Extending Functionality with CLI Commands:**
-
-To enhance your development workflow, this package includes CLI commands that simplify the initialization, generation, and validation of JSON files. These tools are crafted to streamline the creation and management of your theme’s configuration, ensuring a smooth and efficient development process.
-
-## Table Of Contents
-
-* [Installation](#installation)
-* [Documentation](#documentation)
-* [Contributing](#contributing)
-* [License](#license)
-* [Credits](#credits)
-* [Resources](#resources)
-
-## Installation
-
-The best way to use this package is through Composer:
-
-```CMD
-composer require italystrap/theme-json-generator --dev
+```shell
+composer require --dev italystrap/theme-json-generator
 ```
-This package adheres to the [SemVer](http://semver.org/) specification and will be fully backward compatible between minor versions.
+
+The current package requires some development-branch dependencies. See
+[installation](docs/getting-started/installation.md) for dependency stability,
+version selection, and global installation.
+
+## Generate your first configuration
+
+Create `theme.json.php` in a theme containing `style.css` with a `Theme Name:` header:
+
+```php
+<?php
+
+use ItalyStrap\ThemeJsonGenerator\ThemeJson;
+
+return static function (ThemeJson $themeJson): void {
+    $themeJson->schema('https://schemas.wp.org/wp/6.6/theme.json');
+    $themeJson->version(3);
+    $themeJson->title('Example Theme');
+
+    $themeJson->settings()->color()->addColor('primary', 'Primary', '#2457ab');
+    $themeJson->settings()->typography()->addFontSize('body', 'Body', '1rem');
+
+    $themeJson->styles()->color()->text('color.primary');
+    $themeJson->styles()->typography()->fontSize('fontSize.body');
+};
+```
+
+Choose a schema and format version for your target WordPress release. Then run:
+
+```shell
+vendor/bin/theme-json dump
+```
+
+The command writes `theme.json` beside the entrypoint, resolving preset keys to
+CSS variables. Edit PHP and regenerate; direct changes to generated JSON are
+overwritten. To import an existing `theme.json` into a PHP entrypoint, run `init`.
+For a complete walkthrough, follow the [quick start](docs/getting-started/quick-start.md).
+
+## What you can build
+
+- Configure editor controls, layout, typography, and reusable presets.
+- Apply global styles or target blocks, elements, states, and block style variations.
+- Organize configuration classes into ordered pipelines.
+- Generate variation JSON from `styles/*.json.php` entrypoints.
+- Add custom CSS or compile embedded SCSS into JSON.
+- Export SCSS references for use in a separate Sass build.
+- Start a customizable GitHub Actions generation workflow.
+
+Generate JSON and assets before deployment. WordPress consumes the output;
+this generator does not need to run during production requests.
 
 ## Documentation
 
-1. [Basic Usage](./docs/01-basic-usage.md)
-2. [Advanced Usage](./docs/02-advanced-usage.md)
+Start at the [documentation homepage](docs/README.md), or open a topic directly:
 
-[🆙](#table-of-contents)
+| Task | Guide |
+| --- | --- |
+| Understand inputs, outputs, and generation | [Workflow](docs/getting-started/workflow.md) |
+| Configure settings and reusable values | [Settings](docs/configuration/settings.md) · [Presets](docs/configuration/presets.md) |
+| Style a theme or block | [Styles and scopes](docs/configuration/styles.md) · [Custom CSS](docs/assets/custom-css.md) |
+| Split configuration into classes | [Configurators](docs/organization/configurators.md) · [Autoloading](docs/organization/autoloading.md) |
+| Add alternative theme styles | [Style variation files](docs/organization/style-variations.md) |
+| Work with generated references or palettes | [SCSS export](docs/assets/scss-export.md) · [Colors](docs/assets/colors.md) |
+| Automate a build | [Build integration](docs/automation/development.md) · [GitHub Actions](docs/automation/github-actions.md) |
+| Look up a command or method | [CLI](docs/reference/cli.md) · [API](docs/reference/api.md) |
+| Upgrade or solve a problem | [Migration](docs/reference/migration.md) · [Troubleshooting](docs/reference/troubleshooting.md) |
 
-## Changelog
-
-Until the first stable version is released, BC breaks may occur.
-
-`ItalyStrap\ThemeJsonGenerator\Application\Config\ThemeJson` to `\ItalyStrap\ThemeJsonGenerator\Domain\ThemeJson\ThemeJson`
-
-[🆙](#table-of-contents)
+Prefer typed configuration APIs. For unsupported paths, use the root
+`ThemeJson::set()`, `get()`, and `appendTo()` methods with explicit array paths;
+string paths use Config dot notation. Root metadata methods such as `schema()`,
+`version()`, `title()`, and `slug()` are covered in the [entrypoint guide](docs/configuration/entrypoints.md).
+`slug()` is primarily for style variation metadata.
 
 ## Contributing
 
-All feedback / bug reports / pull requests are welcome.
-
-## License
-
-Copyright (c) 2021 Enea Overclokk, ItalyStrap
-
-This code is licensed under the [MIT](LICENSE).
-
-## Credits
+See [Contributing](CONTRIBUTING.md) for development checks, source architecture,
+and documentation maintenance. For schema/API planning, `make report/api-inventory`
+generates Markdown and CSV reports in `report/`. See the [inventory instructions](CONTRIBUTING.md#schema-api-inventory)
+to map schema paths to typed methods.
 
 ## Resources
 
-* [Theme.json Documentation](https://developer.wordpress.org/themes/global-settings-and-styles/)
-* [Full Site Editing](https://fullsiteediting.com/)
+- [WordPress theme.json documentation](https://developer.wordpress.org/themes/global-settings-and-styles/)
+- [Issues and feature requests](https://github.com/ItalyStrap/theme-json-generator/issues)
+
+## License
+
+Copyright (c) 2021 Enea Overclokk, ItalyStrap. Licensed under the [MIT license](LICENSE).
