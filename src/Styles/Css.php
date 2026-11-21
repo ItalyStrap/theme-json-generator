@@ -64,7 +64,7 @@ final class Css implements CssInterface
      */
     public function parseResolved(string $css, string $selector = ''): string
     {
-        $selector = \trim($selector);
+        $selector = \trim($selector, " \n\r\t\v\x00");
 
         if ($selector === '') {
             return $css;

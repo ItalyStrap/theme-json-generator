@@ -125,9 +125,9 @@ final class WorkflowTemplateTest extends Unit
         $this->assertSame(0, $first->getExitCode(), $first->getErrorOutput());
         $this->assertSame(
             "styles/dark mode.json\ntheme.json",
-            \trim($this->git(['show', '--pretty=', '--name-only', 'HEAD']))
+            \trim($this->git(['show', '--pretty=', '--name-only', 'HEAD']), " \n\r\t\v\x00")
         );
-        $this->assertSame('unrelated.txt', \trim($this->git(['diff', '--name-only'])));
+        $this->assertSame('unrelated.txt', \trim($this->git(['diff', '--name-only']), " \n\r\t\v\x00"));
         $this->assertSame(
             '{"title":"Generated"}',
             $this->git(['--git-dir=' . $remote, 'show', 'main:theme.json'])

@@ -26,7 +26,7 @@ final class LinearGradient implements GradientInterface
         Color|CssColorInterface|string $color,
         string $stop = ''
     ): self {
-        if (\is_string($color) && \trim($color) === '') {
+        if (\is_string($color) && \trim($color, " \n\r\t\v\x00") === '') {
             throw new \InvalidArgumentException('Gradient color must not be empty.');
         }
 
@@ -43,7 +43,7 @@ final class LinearGradient implements GradientInterface
             $colorVar = (string)(new ColorFactory())->fromColorString($color);
         }
 
-        $result = \trim($colorVar . ' ' . $stop);
+        $result = \trim($colorVar . ' ' . $stop, " \n\r\t\v\x00");
 
         $this->colors[] = $result;
         return $this;

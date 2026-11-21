@@ -71,7 +71,7 @@ trait ColorWheelRotationTrait
                 throw new \InvalidArgumentException('Identifiers must contain only strings.');
             }
 
-            if (\trim($identifier) === '') {
+            if (\trim($identifier, " \n\r\t\v\x00") === '') {
                 throw new \InvalidArgumentException('Step identifier must not be blank.');
             }
 

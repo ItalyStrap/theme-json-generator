@@ -13,7 +13,7 @@ final readonly class HueRotationStep
         public string $identifier,
         public int $degrees
     ) {
-        if (\trim($identifier) === '') {
+        if (\trim($identifier, " \n\r\t\v\x00") === '') {
             throw new \InvalidArgumentException('Step identifier must not be blank.');
         }
     }
