@@ -45,13 +45,13 @@ final class Scss implements CssInterface
 
     public function parse(string $css, string $selector = ''): string
     {
-        if (\str_starts_with(\trim($css), '&')) {
+        if (\str_starts_with(\trim($css, " \n\r\t\v\x00"), '&')) {
             throw new \RuntimeException(CssInterface::M_AMPERSAND_MUST_NOT_BE_AT_THE_BEGINNING);
         }
 
         $css = $this->presets->parse($css);
 
-        $selector = \trim($selector);
+        $selector = \trim($selector, " \n\r\t\v\x00");
 
         $this->compiler->setOutputStyle($this->outputStyle);
         $cssCompiled = $this->compiler->compileString($css);

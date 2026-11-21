@@ -66,7 +66,6 @@ final class PresetsToThemeJson
                 continue;
             }
 
-            /** @phpstan-ignore-next-line Config accepts array paths, StoreInterface only advertises string keys. */
             $config->set([Settings::SECTION,  ...$path], $this->serializeCollection($presets, $type, $items));
         }
     }
@@ -87,7 +86,6 @@ final class PresetsToThemeJson
         foreach ($blocks as $block => $categories) {
             foreach ($categories as $type => $items) {
                 $config->set(
-                    /** @phpstan-ignore-next-line Config accepts array paths, StoreInterface only advertises string keys. */
                     [Settings::SECTION, Settings::BLOCKS_SECTION, $block, ...self::SETTINGS_PATH_BY_TYPE[$type]],
                     $this->serializeCollection($presets, $type, $items)
                 );

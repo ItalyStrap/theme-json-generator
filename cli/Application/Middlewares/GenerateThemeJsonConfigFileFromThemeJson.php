@@ -81,7 +81,7 @@ TEMPLATE;
             $dataExported = $this->exportFromThemeJsonIfExists($file);
             $content = \sprintf(
                 self::ENTRY_POINT_TEMPLATE,
-                \trim($dataExported)
+                \trim($dataExported, " \n\r\t\v\x00")
             );
 
             try {

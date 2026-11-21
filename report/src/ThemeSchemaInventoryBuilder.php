@@ -188,7 +188,7 @@ final readonly class ThemeSchemaInventoryBuilder
         $description = $property['description'] ?? null;
 
         if (\is_string($description) && $description !== '') {
-            return \trim($description);
+            return \trim($description, " \n\r\t\v\x00");
         }
 
         if (isset($property['$ref']) && \is_string($property['$ref'])) {
@@ -196,7 +196,7 @@ final readonly class ThemeSchemaInventoryBuilder
             $referenceDescription = $reference['description'] ?? null;
 
             if (\is_string($referenceDescription) && $referenceDescription !== '') {
-                return \trim($referenceDescription);
+                return \trim($referenceDescription, " \n\r\t\v\x00");
             }
         }
 

@@ -97,7 +97,10 @@ final class BoxShadow implements \Stringable
             $this->color,
         ];
 
-        return \trim(\implode(' ', \array_filter($shadow, static fn(string $value): bool => $value !== '')));
+        return \trim(
+            \implode(' ', \array_filter($shadow, static fn(string $value): bool => $value !== '')),
+            " \n\r\t\v\x00"
+        );
     }
 
     public function __clone()

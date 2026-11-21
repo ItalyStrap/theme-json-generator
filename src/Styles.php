@@ -72,7 +72,7 @@ final readonly class Styles
             $this->assertRootCssDoesNotStartWithAmpersand($css);
         }
 
-        if ($this->context->isScoped() && \trim($selector) === '') {
+        if ($this->context->isScoped() && \trim($selector, " \n\r\t\v\x00") === '') {
             $this->assertNestedSelectorsAreScoped($css);
         }
 
@@ -81,7 +81,7 @@ final readonly class Styles
 
     private function assertRootCssDoesNotStartWithAmpersand(string $css): void
     {
-        if (!\str_starts_with(\trim($css), '&')) {
+        if (!\str_starts_with(\trim($css, " \n\r\t\v\x00"), '&')) {
             return;
         }
 
@@ -113,7 +113,7 @@ final readonly class Styles
         }
 
         $separator = '';
-        $lastCharacter = \substr(\rtrim($currentCss), -1);
+        $lastCharacter = \substr(\rtrim($currentCss, " \n\r\t\v\x00"), -1);
         if ($lastCharacter !== ';' && $lastCharacter !== '}') {
             $separator = ';';
         }
@@ -142,7 +142,7 @@ final readonly class Styles
                 $selector = \substr($selector, $declarationEnd + 1);
             }
 
-            if (!\str_starts_with(\trim($selector), '&')) {
+            if (!\str_starts_with(\trim($selector, " \n\r\t\v\x00"), '&')) {
                 throw new \InvalidArgumentException(CssInterface::M_NESTED_SELECTORS_MUST_BE_SCOPED);
             }
 

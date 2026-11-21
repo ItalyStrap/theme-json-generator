@@ -143,7 +143,6 @@ final readonly class ThemeJson
      */
     public function get(string|array $key, mixed $default = null): mixed
     {
-        /** @phpstan-ignore-next-line Config accepts array paths, StoreInterface only advertises string keys. */
         return $this->config->get($key, $default);
     }
 
@@ -180,7 +179,6 @@ final readonly class ThemeJson
      */
     private function setConfigValue(string|array $key, mixed $value): bool
     {
-        /** @phpstan-ignore-next-line Config accepts array paths, StoreInterface only advertises string keys. */
         return $this->config->set($key, $value);
     }
 
