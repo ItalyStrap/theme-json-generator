@@ -18,8 +18,8 @@
         "php" : ">=8.2",
         "ext-json": "*",
 
-        "italystrap/config": "^2.4",
-        "italystrap/empress": "dev-modularized as 2.0.x-dev",
+        "italystrap/config": "^2.12",
+        "italystrap/empress": "^3.0",
         "italystrap/finder": "dev-master",
         "italystrap/pipeline": "dev-main",
 
@@ -36,7 +36,7 @@
         "symfony/process": "^v5.4",
         "symfony/event-dispatcher": "^5.4",
         "webmozart/assert": "^1.11",
-        "overclokk/auryn": "dev-master",
+        "overclokk/auryn": "^2.1",
         "composer/class-map-generator": "^1.6"
     },
     "require-dev": {
